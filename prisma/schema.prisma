@@ -1,0 +1,514 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  OWNER
+  CONSULTANT
+  CONTRACTOR
+  SUBCONTRACTOR
+  WORKSHOP
+  FREELANCER
+  SUPPLIER
+  TRADER
+  ADMIN
+}
+
+enum TenderStatus {
+  OPEN
+  CLOSED
+  AWARDED
+  CANCELLED
+}
+
+enum ProjectStatus {
+  PLANNING
+  IN_PROGRESS
+  COMPLETED
+  ON_HOLD
+}
+
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  FREELANCE
+}
+
+enum PostType {
+  TEXT
+  IMAGE
+  VIDEO
+  ARTICLE
+}
+
+enum DeliveryStatus {
+  REQUESTED
+  PENDING_DRIVER
+  DRIVER_ASSIGNED
+  PICKING_UP
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+enum VehicleType {
+  MOTORCYCLE
+  PICKUP
+  TRUCK_SMALL
+  TRUCK_MEDIUM
+  TRUCK_LARGE
+  FLATBED
+  CRANE_TRUCK
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  WALLET
+  TRANSFER
+}
+
+enum DeliveryPriority {
+  NORMAL
+  URGENT
+  SCHEDULED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  phone         String?
+  avatar        String?
+  role          UserRole
+  bio           String?
+  companyName   String?
+  companyLogo   String?
+  website       String?
+  location      String?
+  isVerified    Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  projectTenders       ProjectTender[]
+  materialTenders      MaterialTender[]
+  projectTenderBids    ProjectTenderBid[]
+  materialTenderBids   MaterialTenderBid[]
+  products             Product[]
+  projects             Project[]
+  jobs                 Job[]
+  jobApplications      JobApplication[] @relation("Applicant")
+  posts                Post[]
+  postComments         PostComment[]
+  postLikes            PostLike[]
+  messages             Message[] @relation("SentMessages")
+  receivedMessages     Message[] @relation("ReceivedMessages")
+  notifications        Notification[]
+  savedProducts        SavedProduct[]
+  savedProjects        SavedProject[]
+  savedJobs            SavedJob[]
+  reviewsGiven         Review[] @relation("ReviewAuthor")
+  reviewsReceived      Review[] @relation("ReviewTarget")
+
+  driverProfile        DriverProfile?
+  deliveryOrdersSent   DeliveryOrder[] @relation("DeliverySender")
+  deliveryOrdersReceived DeliveryOrder[] @relation("DeliveryReceiver")
+  deliveryReviews      DeliveryReview[] @relation("DeliveryReviewAuthor")
+}
+
+model ProjectTender {
+  id            String       @id @default(cuid())
+  title         String
+  description   String
+  category      String
+  location      String
+  budgetMin     Float?
+  budgetMax     Float?
+  deadline      DateTime
+  requirements  String?
+  attachments   String[]
+  status        TenderStatus @default(OPEN)
+  userId        String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user   User             @relation(fields: [userId], references: [id])
+  bids   ProjectTenderBid[]
+}
+
+model ProjectTenderBid {
+  id            String    @id @default(cuid())
+  amount        Float
+  proposal      String
+  duration      String?
+  status        BidStatus @default(PENDING)
+  projectTenderId String
+  userId        String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  projectTender ProjectTender @relation(fields: [projectTenderId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
+}
+
+model MaterialTender {
+  id            String       @id @default(cuid())
+  title         String
+  description   String
+  materialType  String
+  quantity      String
+  unit          String
+  specifications String?
+  deliveryDate  DateTime?
+  location      String
+  budgetMax     Float?
+  status        TenderStatus @default(OPEN)
+  userId        String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user  User                @relation(fields: [userId], references: [id])
+  bids  MaterialTenderBid[]
+}
+
+model MaterialTenderBid {
+  id            String    @id @default(cuid())
+  unitPrice     Float
+  totalPrice    Float
+  proposal      String
+  deliveryTime  String?
+  status        BidStatus @default(PENDING)
+  materialTenderId String
+  userId        String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  materialTender MaterialTender @relation(fields: [materialTenderId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  category      String
+  price         Float
+  unit          String
+  minQuantity   Int?
+  images        String[]
+  specifications String?
+  inStock       Boolean  @default(true)
+  location      String
+  userId        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user     User          @relation(fields: [userId], references: [id])
+  savedBy  SavedProduct[]
+}
+
+model SavedProduct {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+}
+
+model Project {
+  id            String       @id @default(cuid())
+  title         String
+  description   String
+  category      String
+  location      String
+  clientName    String?
+  budget        Float?
+  area          String?
+  startDate     DateTime?
+  endDate       DateTime?
+  images        String[]
+  status        ProjectStatus @default(PLANNING)
+  highlights    String?
+  userId        String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user     User          @relation(fields: [userId], references: [id])
+  savedBy  SavedProject[]
+}
+
+model SavedProject {
+  id        String   @id @default(cuid())
+  userId    String
+  projectId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
+}
+
+model Job {
+  id            String    @id @default(cuid())
+  title         String
+  description   String
+  category      String
+  jobType       JobType
+  salary        String?
+  salaryMin     Float?
+  salaryMax     Float?
+  location      String
+  requirements  String?
+  benefits      String?
+  vacancies     Int       @default(1)
+  isUrgent      Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  userId        String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  user         User            @relation(fields: [userId], references: [id])
+  applications JobApplication[] @relation("JobApplications")
+  savedBy      SavedJob[]
+}
+
+model JobApplication {
+  id        String   @id @default(cuid())
+  coverLetter String?
+  cv          String?
+  status      String   @default("pending")
+  jobId       String
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  job  Job  @relation("JobApplications", fields: [jobId], references: [id])
+  user User @relation("Applicant", fields: [userId], references: [id])
+}
+
+model SavedJob {
+  id        String   @id @default(cuid())
+  userId    String
+  jobId     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  job  Job  @relation(fields: [jobId], references: [id])
+
+  @@unique([userId, jobId])
+}
+
+model Post {
+  id            String   @id @default(cuid())
+  content       String
+  type          PostType @default(TEXT)
+  images        String[]
+  tags          String[]
+  likesCount    Int      @default(0)
+  commentsCount Int      @default(0)
+  userId        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user     User         @relation(fields: [userId], references: [id])
+  comments PostComment[]
+  likes    PostLike[]
+}
+
+model PostComment {
+  id        String   @id @default(cuid())
+  content   String
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([postId, userId])
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  content     String
+  senderId    String
+  receiverId  String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  type      String
+  isRead    Boolean  @default(false)
+  link      String?
+  userId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  authorId  String
+  targetId  String
+  createdAt DateTime @default(now())
+
+  author User @relation("ReviewAuthor", fields: [authorId], references: [id])
+  target User @relation("ReviewTarget", fields: [targetId], references: [id])
+}
+
+// ============================
+// Delivery System Models
+// ============================
+
+model DriverProfile {
+  id              String      @id @default(cuid())
+  userId          String      @unique
+  vehicleType     VehicleType
+  plateNumber     String
+  vehicleBrand    String
+  vehicleModel    String
+  vehicleYear     Int?
+  vehicleColor    String?
+  licenseNumber   String
+  licenseExpiry   DateTime
+  isAvailable     Boolean     @default(true)
+  isApproved      Boolean     @default(false)
+  currentLat      Float?
+  currentLng      Float?
+  totalDeliveries Int         @default(0)
+  totalEarnings   Float       @default(0)
+  avgRating       Float       @default(5.0)
+  totalRatings    Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user            User        @relation(fields: [userId], references: [id])
+  orders          DeliveryOrder[] @relation("DeliveryDriver")
+  deliveryReviews DeliveryReview[] @relation("DeliveryReviewDriver")
+}
+
+model DeliveryOrder {
+  id              String          @id @default(cuid())
+  orderNumber     String          @unique
+  status          DeliveryStatus  @default(REQUESTED)
+  priority        DeliveryPriority @default(NORMAL)
+  paymentMethod   PaymentMethod   @default(CASH)
+
+  senderId        String
+  receiverId      String?
+  driverId        String?
+
+  pickupName      String
+  pickupPhone     String
+  pickupAddress   String
+  pickupLat       Float?
+  pickupLng       Float?
+  pickupNotes     String?
+
+  deliveryName    String
+  deliveryPhone   String
+  deliveryAddress String
+  deliveryLat     Float?
+  deliveryLng     Float?
+  deliveryNotes   String?
+
+  materialType    String
+  description     String
+  weight          Float?
+  dimensions      String?
+  quantity        Int             @default(1)
+  fragile         Boolean         @default(false)
+  needsCrane      Boolean         @default(false)
+  preferredVehicleType VehicleType?
+
+  basePrice       Float
+  distanceFee     Float           @default(0)
+  weightFee       Float           @default(0)
+  urgentFee       Float           @default(0)
+  totalPrice      Float
+
+  scheduledDate   DateTime?
+  scheduledTime   String?
+  pickupTime      DateTime?
+  deliveryTime    DateTime?
+  estimatedTime   String?
+
+  cancelReason    String?
+  notes           String?
+  trackingCode    String          @unique @default(cuid())
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  sender          User            @relation("DeliverySender", fields: [senderId], references: [id])
+  receiver        User?           @relation("DeliveryReceiver", fields: [receiverId], references: [id])
+  driver          DriverProfile?  @relation("DeliveryDriver", fields: [driverId], references: [id])
+
+  reviews         DeliveryReview[]
+  statusHistory   DeliveryStatusHistory[]
+}
+
+model DeliveryStatusHistory {
+  id              String    @id @default(cuid())
+  orderId         String
+  status          DeliveryStatus
+  note            String?
+  lat             Float?
+  lng             Float?
+  createdAt       DateTime  @default(now())
+
+  order           DeliveryOrder @relation(fields: [orderId], references: [id])
+}
+
+model DeliveryReview {
+  id              String    @id @default(cuid())
+  orderId         String
+  authorId        String
+  driverId        String
+  rating          Int
+  comment         String?
+  createdAt       DateTime  @default(now())
+
+  order           DeliveryOrder @relation(fields: [orderId], references: [id])
+  author          User      @relation("DeliveryReviewAuthor", fields: [authorId], references: [id])
+  driver          DriverProfile @relation("DeliveryReviewDriver", fields: [driverId], references: [id])
+}
