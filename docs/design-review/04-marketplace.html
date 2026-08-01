@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketplace — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">السوق</span><span class="en">Marketplace</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="topbar">
+  <div class="mobile-only"><button onclick="previewSidebar()" style="font-size:20px">&#9776;</button></div>
+  <a class="logo" href="01-home.html"><span class="logo-mark">A</span> ABC</a>
+  <nav class="nav-links grow">
+    <a class="nav-link active" href="#"><span class="ar">السوق</span><span class="en">Marketplace</span></a>
+    <a class="nav-link" href="#"><span class="ar">المناقصات</span><span class="en">Tenders</span></a>
+    <a class="nav-link" href="#"><span class="ar">الوظائف</span><span class="en">Jobs</span></a>
+    <a class="nav-link" href="#"><span class="ar">التدريب</span><span class="en">Training</span></a>
+  </nav>
+  <button class="btn btn-outline btn-sm"><span class="ar">المفضلة</span><span class="en">Favorites</span></button>
+  <button class="btn btn-primary btn-sm"><span class="ar">دخول</span><span class="en">Sign in</span></button>
+</div>
+
+<div class="tabs" style="max-width:1180px; margin:16px auto 0; padding:0 24px; border:none">
+  <div class="tab active" data-pane="browse"><span class="ar">البحث</span><span class="en">Search</span></div>
+  <div class="tab" data-pane="detail"><span class="ar">تفاصيل المنتج</span><span class="en">Product details</span></div>
+  <div class="tab" data-pane="compare"><span class="ar">مقارنة الموردين</span><span class="en">Supplier comparison</span></div>
+  <div class="tab" data-pane="rfq"><span class="ar">إنشاء RFQ</span><span class="en">Create RFQ</span></div>
+</div>
+
+<div class="section" style="padding-top:16px">
+
+  <!-- ============ BROWSE / SEARCH ============ -->
+  <div class="pane active" id="browse">
+    <div class="card" style="padding:20px; margin-bottom:24px">
+      <div class="search-wrap" style="margin-bottom:16px">
+        <span class="search-icon">&#128269;</span>
+        <input class="input input-search" data-ph-ar="ابحث عن منتج، SKU، مورد…" data-ph-en="Search product, SKU, supplier…" placeholder="ابحث عن منتج، SKU، مورد…">
+      </div>
+      <div class="row wrap" style="gap:12px">
+        <select class="select" style="width:auto; min-width:180px"><option><span class="ar">كل الفئات</span><span class="en">All categories</span></option><option><span class="ar">أسمنت</span><span class="en">Cement</span></option><option><span class="ar">حديد</span><span class="en">Steel</span></option></select>
+        <select class="select" style="width:auto; min-width:140px"><option><span class="ar">السعر: من الأدنى</span><span class="en">Price: low to high</span></option><option><span class="ar">الأعلى تقييماً</span><span class="en">Top rated</span></option></select>
+        <label class="check-row"><input type="checkbox" checked> <span class="ar">متوفر فقط</span><span class="en">In stock only</span></label>
+        <label class="check-row"><input type="checkbox" checked> <span class="ar">مورد موثوق</span><span class="en">Trusted suppliers</span></label>
+        <div class="grow"></div>
+        <span class="small muted"><span class="ar">48,300 نتيجة</span><span class="en">48,300 results</span></span>
+      </div>
+    </div>
+    <div class="grid grid-4">
+      <div class="product-card">
+        <div class="ph"><span class="badge bg-success"><span class="ar">متوفر</span><span class="en">In stock</span></span>&#129513;</div>
+        <div class="pd">
+          <b><span class="ar">أسمنت بورتلاندي 50كجم</span><span class="en">Portland Cement 50kg</span></b>
+          <div class="brand">ABC Cement · <span class="vchip trusted">TRUSTED</span></div>
+          <div class="row"><span><b class="price">12.50</b> <span class="unit">SAR</span></span><span>&#9733; 4.8</span></div>
+          <div class="row"><button class="btn btn-primary btn-sm grow" data-pane="detail"><span class="ar">التفاصيل</span><span class="en">Details</span></button><button class="btn btn-ghost btn-sm" data-pane="compare">&#128269;</button></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="ph"><span class="badge bg-success"><span class="ar">متوفر</span><span class="en">In stock</span></span>&#129521;</div>
+        <div class="pd">
+          <b><span class="ar">حديد تسليح 16مم</span><span class="en">Rebar 16mm</span></b>
+          <div class="brand">Gulf Steel · <span class="vchip verified">VERIFIED</span></div>
+          <div class="row"><span><b class="price">2,850</b> <span class="unit">SAR/<span class="ar">طن</span><span class="en">ton</span></span></span><span>&#9733; 4.2</span></div>
+          <div class="row"><button class="btn btn-primary btn-sm grow" data-pane="detail"><span class="ar">التفاصيل</span><span class="en">Details</span></button><button class="btn btn-ghost btn-sm" data-pane="compare">&#128269;</button></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="ph"><span class="badge bg-warning"><span class="ar">مخزون منخفض</span><span class="en">Low stock</span></span>&#128268;</div>
+        <div class="pd">
+          <b><span class="ar">كابل نحاس 3×4مم</span><span class="en">Copper cable 3x4mm</span></b>
+          <div class="brand">Electric Co. · <span class="vchip verified">VERIFIED</span></div>
+          <div class="row"><span><b class="price">185</b> <span class="unit">SAR</span></span><span>&#9733; 4.5</span></div>
+          <div class="row"><button class="btn btn-primary btn-sm grow" data-pane="detail"><span class="ar">التفاصيل</span><span class="en">Details</span></button><button class="btn btn-ghost btn-sm" data-pane="compare">&#128269;</button></div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="ph"><span class="badge bg-info"><span class="ar">حسب الطلب</span><span class="en">Made to order</span></span>&#128703;</div>
+        <div class="pd">
+          <b><span class="ar">وحدات صحية خزفية</span><span class="en">Ceramic sanitary ware</span></b>
+          <div class="brand">Sanitec · <span class="vchip flagship">FLAGSHIP</span></div>
+          <div class="row"><span><b class="price">320</b> <span class="unit">SAR</span></span><span>&#9733; 4.9</span></div>
+          <div class="row"><button class="btn btn-primary btn-sm grow" data-pane="detail"><span class="ar">التفاصيل</span><span class="en">Details</span></button><button class="btn btn-ghost btn-sm" data-pane="compare">&#128269;</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PRODUCT DETAILS ============ -->
+  <div class="pane" id="detail">
+    <div class="breadcrumb" style="padding:0 0 16px">
+      <a href="#" data-pane="browse"><span class="ar">السوق</span><span class="en">Marketplace</span></a><span class="sep">/</span>
+      <a href="#"><span class="ar">أسمنت</span><span class="en">Cement</span></a><span class="sep">/</span>
+      <span><span class="ar">أسمنت بورتلاندي</span><span class="en">Portland cement</span></span>
+    </div>
+    <div class="grid" style="grid-template-columns: 1fr 1fr">
+      <div class="card">
+        <div style="height:320px; background:linear-gradient(135deg,var(--surface-100),var(--surface-200)); display:flex; align-items:center; justify-content:center; font-size:80px; color:var(--surface-400)">&#129513;</div>
+        <div class="row" style="padding:12px; gap:10px">
+          <div style="width:64px;height:64px;border-radius:8px;background:linear-gradient(135deg,var(--brand-100),var(--brand-200)); display:flex;align-items:center;justify-content:center;font-size:30px;border:2px solid var(--brand-500)">&#129513;</div>
+          <div style="width:64px;height:64px;border-radius:8px;background:var(--surface-100); display:flex;align-items:center;justify-content:center;font-size:30px">&#128230;</div>
+          <div style="width:64px;height:64px;border-radius:8px;background:var(--surface-100); display:flex;align-items:center;justify-content:center;font-size:30px">&#128196;</div>
+        </div>
+      </div>
+      <div>
+        <div class="row" style="gap:8px; margin-bottom:8px">
+          <span class="vchip trusted">TRUSTED</span>
+          <span class="badge bg-success"><span class="ar">متوفر</span><span class="en">In stock</span></span>
+          <span class="badge bg-neutral">SKU-100254</span>
+        </div>
+        <h2 class="h2" style="margin-bottom:6px"><span class="ar">أسمنت بورتلاندي عادي 50 كجم</span><span class="en">Ordinary Portland Cement 50kg</span></h2>
+        <div class="small muted" style="margin-bottom:12px"><span class="ar">المصنع:</span><span class="en">Manufacturer:</span> <b>ABC Cement</b> · <span class="ar">الوحدة:</span><span class="en">Unit:</span> <span class="mono">BAG</span></div>
+        <div class="row" style="gap:20px; margin-bottom:16px">
+          <div><div class="price" style="font-size:30px; font-weight:800">12.50 <span class="small muted">SAR</span></div><div class="xsmall muted"><span class="ar">من 4 موردين</span><span class="en">from 4 suppliers</span></div></div>
+          <div><b style="font-size:22px">4.8</b> <span style="color:var(--brand-500)">&#9733;&#9733;&#9733;&#9733;&#9733;</span><div class="xsmall muted">312 <span class="ar">تقييم</span><span class="en">reviews</span></div></div>
+        </div>
+        <div class="card" style="border:1px solid var(--surface-200); padding:14px; margin-bottom:16px">
+          <div class="small muted" style="margin-bottom:8px"><span class="ar">المواصفات التقنية</span><span class="en">Technical specifications</span></div>
+          <div class="grid grid-2" style="gap:4px; font-size:13px">
+            <div><span class="muted"><span class="ar">المقاومة:</span><span class="en">Strength:</span></span> 42.5 N/mm²</div>
+            <div><span class="muted"><span class="ar">الوزن:</span><span class="en">Weight:</span></span> 50 kg</div>
+            <div><span class="muted"><span class="ar">اللون:</span><span class="en">Color:</span></span> <span class="ar">رمادي</span><span class="en">Grey</span></div>
+            <div><span class="muted">ASTM:</span> C150</div>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn btn-primary btn-lg" data-pane="rfq"><span class="ar">اطلب عرض سعر (RFQ)</span><span class="en">Request a quote (RFQ)</span></button>
+          <button class="btn btn-outline btn-lg" data-pane="compare"><span class="ar">مقارنة الموردين</span><span class="en">Compare suppliers</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <div class="card-header"><div class="card-title"><span class="ar">عروض الموردين لهذا المنتج</span><span class="en">Supplier offerings</span></div></div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th><span class="ar">المورد</span><span class="en">Supplier</span></th><th class="th-num"><span class="ar">السعر</span><span class="en">Price</span></th><th class="th-num"><span class="ar">الكمية الدنيا</span><span class="en">MOQ</span></th><th class="th-num"><span class="ar">المدة</span><span class="en">Lead</span></th><th><span class="ar">المخزون</span><span class="en">Stock</span></th><th><span class="ar">التحقق</span><span class="en">Verification</span></th><th></th></tr></thead>
+          <tbody>
+            <tr><td><b><span class="ar">مصنع الخليج</span><span class="en">Gulf Factory</span></b></td><td class="num">12.50</td><td class="num">100</td><td class="num">2 <span class="ar">يوم</span><span class="en">d</span></td><td><span class="badge bg-success">105</span></td><td><span class="vchip trusted">TRUSTED</span></td><td><button class="btn btn-outline btn-sm" data-pane="rfq"><span class="ar">RFQ</span><span class="en">RFQ</span></button></td></tr>
+            <tr><td><b><span class="ar">البناء للتجارة</span><span class="en">Al-Bina Trading</span></b></td><td class="num">12.00</td><td class="num">500</td><td class="num">5 <span class="ar">أيام</span><span class="en">d</span></td><td><span class="badge bg-success">820</span></td><td><span class="vchip verified">VERIFIED</span></td><td><button class="btn btn-outline btn-sm" data-pane="rfq"><span class="ar">RFQ</span><span class="en">RFQ</span></button></td></tr>
+            <tr><td><b><span class="ar">التوريدات المتحدة</span><span class="en">United Supplies</span></b></td><td class="num">11.75</td><td class="num">1,000</td><td class="num">8 <span class="ar">أيام</span><span class="en">d</span></td><td><span class="badge bg-warning">24</span></td><td><span class="vchip basic">BASIC</span></td><td><button class="btn btn-outline btn-sm" data-pane="rfq"><span class="ar">RFQ</span><span class="en">RFQ</span></button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ COMPARE SUPPLIERS ============ -->
+  <div class="pane" id="compare">
+    <div class="page-title"><span class="ar">مقارنة الموردين — أسمنت بورتلاندي</span><span class="en">Compare suppliers — Portland cement</span></div>
+    <div class="page-sub"><span class="ar">قارن حتى 4 موردين لنفس المنتج جنباً إلى جنب</span><span class="en">Compare up to 4 suppliers for the same product side by side</span></div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="min-width:160px"><span class="ar">المعيار</span><span class="en">Criterion</span></th>
+            <th class="compare-col recommended"><div class="row"><b><span class="ar">مصنع الخليج</span><span class="en">Gulf Factory</span></b><span class="badge bg-brand"><span class="ar">موصى به</span><span class="en">Best</span></span></div></th>
+            <th class="compare-col"><b><span class="ar">البناء للتجارة</span><span class="en">Al-Bina Trading</span></b></th>
+            <th class="compare-col"><b><span class="ar">التوريدات المتحدة</span><span class="en">United Supplies</span></b></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="ar">السعر</span><span class="en">Price</span></td><td class="num"><b class="mono">12.50</b></td><td class="num mono">12.00</td><td class="num mono">11.75</td></tr>
+          <tr><td><span class="ar">الكمية الدنيا</span><span class="en">MOQ</span></td><td class="num">100</td><td class="num">500</td><td class="num">1,000</td></tr>
+          <tr><td><span class="ar">وقت التسليم</span><span class="en">Lead time</span></td><td>2 <span class="ar">يوم</span><span class="en">days</span></td><td>5 <span class="ar">أيام</span><span class="en">days</span></td><td>8 <span class="ar">أيام</span><span class="en">days</span></td></tr>
+          <tr><td><span class="ar">التقييم</span><span class="en">Rating</span></td><td>4.8 &#9733;</td><td>4.2 &#9733;</td><td>3.6 &#9733;</td></tr>
+          <tr><td><span class="ar">التحقق</span><span class="en">Verification</span></td><td><span class="vchip trusted">TRUSTED</span></td><td><span class="vchip verified">VERIFIED</span></td><td><span class="vchip basic">BASIC</span></td></tr>
+          <tr><td><span class="ar">المخزون</span><span class="en">Stock</span></td><td><span class="badge bg-success">105</span></td><td><span class="badge bg-success">820</span></td><td><span class="badge bg-warning">24</span></td></tr>
+          <tr><td></td>
+            <td><button class="btn btn-primary btn-sm grow" style="width:100%" data-pane="rfq"><span class="ar">RFQ</span><span class="en">RFQ</span></button></td>
+            <td><button class="btn btn-outline btn-sm grow" style="width:100%" data-pane="rfq"><span class="ar">RFQ</span><span class="en">RFQ</span></button></td>
+            <td><button class="btn btn-outline btn-sm grow" style="width:100%" data-pane="rfq"><span class="ar">RFQ</span><span class="en">RFQ</span></button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ RFQ FLOW ============ -->
+  <div class="pane" id="rfq">
+    <div class="page-title"><span class="ar">إنشاء طلب عرض سعر</span><span class="en">Create RFQ</span></div>
+    <div class="page-sub"><span class="ar">أسمنت بورتلاندي 50كجم — أرسل طلبك لموردين متعددين دفعة واحدة</span><span class="en">Portland Cement 50kg — send your request to multiple suppliers at once</span></div>
+    <div class="steps">
+      <div class="step current"><span class="dot">1</span><span class="lbl"><span class="ar">الكمية</span><span class="en">Quantity</span></span><span class="line"></span></div>
+      <div class="step"><span class="dot">2</span><span class="lbl"><span class="ar">الشروط</span><span class="en">Terms</span></span><span class="line"></span></div>
+      <div class="step"><span class="dot">3</span><span class="lbl"><span class="ar">الموردون</span><span class="en">Suppliers</span></span></div>
+    </div>
+    <div class="grid" style="grid-template-columns: 2fr 1fr">
+      <div class="card">
+        <div class="card-header"><div class="card-title"><span class="ar">بيانات الطلب</span><span class="en">Request details</span></div></div>
+        <div class="card-body">
+          <div class="grid grid-2">
+            <div class="field"><label><span class="ar">المنتج</span><span class="en">Product</span></label><input class="input" value="أسمنت بورتلاندي 50كجم" readonly></div>
+            <div class="field"><label><span class="ar">الكمية المطلوبة</span><span class="en">Required qty</span></label><input class="input" value="1,000"><span class="hint"><span class="ar">الوحدة: كيس (50كجم)</span><span class="en">Unit: bag (50kg)</span></span></div>
+            <div class="field"><label><span class="ar">موعد التسليم المطلوب</span><span class="en">Required delivery date</span></label><input class="input" type="date"></div>
+            <div class="field"><label><span class="ar">موقع التسليم</span><span class="en">Delivery location</span></label><input class="input" data-ph-ar="الرياض، حي العليا" data-ph-en="Riyadh, Al-Olaya" placeholder="الرياض، حي العليا"></div>
+            <div class="field" style="grid-column:1/-1"><label><span class="ar">ملاحظات / متطلبات</span><span class="en">Notes / requirements</span></label><textarea class="textarea" style="min-height:80px" data-ph-ar="اشتراطات جودة، ضمان، تعليمات…" data-ph-en="Quality requirements, warranty, instructions…" placeholder="اشتراطات جودة، ضمان، تعليمات…"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="align-self:start">
+        <div class="card-header"><div class="card-title"><span class="ar">الموردون المستهدفون</span><span class="en">Target suppliers</span></div></div>
+        <div class="card-body" style="display:flex; flex-direction:column; gap:8px">
+          <label class="check-row"><input type="checkbox" checked> <span class="ar">مصنع الخليج</span><span class="en">Gulf Factory</span> <span class="vchip trusted" style="margin-inline-start:auto">TRUSTED</span></label>
+          <label class="check-row"><input type="checkbox" checked> <span class="ar">البناء للتجارة</span><span class="en">Al-Bina Trading</span> <span class="vchip verified" style="margin-inline-start:auto">VERIFIED</span></label>
+          <label class="check-row"><input type="checkbox"> <span class="ar">التوريدات المتحدة</span><span class="en">United Supplies</span> <span class="vchip basic" style="margin-inline-start:auto">BASIC</span></label>
+          <button class="btn btn-outline btn-sm"><span class="ar">+ إضافة مورد</span><span class="en">+ Add supplier</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="justify-content:space-between; margin-top:20px">
+      <span class="small muted"><span class="ar">ستتلقى عروضاً خلال 24-48 ساعة</span><span class="en">Offers expected within 24-48 hours</span></span>
+      <button class="btn btn-primary btn-lg"><span class="ar">إرسال RFQ</span><span class="en">Send RFQ</span></button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

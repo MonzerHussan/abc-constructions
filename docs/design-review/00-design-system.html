@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABC Design System — Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag">Design System v1.0 · <span class="ar">معاينة فقط</span><span class="en">Preview only</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="section">
+
+  <!-- ============ LOGO ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">الشعار (Logo Placement)</span><span class="en">Logo Placement</span></div>
+    <div class="row wrap">
+      <div class="card" style="padding:20px; min-width:220px">
+        <div class="logo"><span class="logo-mark">A</span> ABC</div>
+        <div class="small muted" style="margin-top:8px"><span class="ar">Navbar — رئيسي</span><span class="en">Navbar — primary</span></div>
+      </div>
+      <div class="card" style="padding:20px; min-width:220px; background:var(--navy-900)">
+        <div class="logo" style="color:#fff"><span class="logo-mark">A</span> ABC</div>
+        <div class="small" style="margin-top:8px; opacity:.7"><span class="ar">خلفية داكنة — Footer/هيرو</span><span class="en">Dark bg — footer/hero</span></div>
+      </div>
+      <div class="card" style="padding:20px; min-width:220px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span class="logo-mark">A</span>
+          <div>
+            <b style="font-size:14px">ABC</b>
+            <div class="xsmall muted">All About Constructions</div>
+          </div>
+        </div>
+        <div class="small muted" style="margin-top:8px"><span class="ar">Sidebar — مع شعار نصي</span><span class="en">Sidebar — with wordmark</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ COLORS ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">نظام الألوان (Color System)</span><span class="en">Color System</span></div>
+    <div class="h4 small" style="color:var(--surface-500); margin-bottom:8px"><span class="ar">العنبر — العلامة التجارية</span><span class="en">Brand — Amber</span></div>
+    <div class="row wrap" style="margin-bottom:16px">
+      <div><div style="width:120px;height:44px;background:var(--brand-50);border:1px solid var(--surface-200);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">brand-50</div></div>
+      <div><div style="width:120px;height:44px;background:var(--brand-100);border:1px solid var(--surface-200);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">brand-100</div></div>
+      <div><div style="width:120px;height:44px;background:var(--brand-500);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">brand-500</div></div>
+      <div><div style="width:120px;height:44px;background:var(--brand-600);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">brand-600</div></div>
+      <div><div style="width:120px;height:44px;background:var(--brand-700);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">brand-700</div></div>
+    </div>
+    <div class="h4 small" style="color:var(--surface-500); margin-bottom:8px"><span class="ar">الكحلي — الثانوي</span><span class="en">Secondary — Navy</span></div>
+    <div class="row wrap" style="margin-bottom:16px">
+      <div><div style="width:120px;height:44px;background:var(--navy-700);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">navy-700</div></div>
+      <div><div style="width:120px;height:44px;background:var(--navy-800);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">navy-800</div></div>
+      <div><div style="width:120px;height:44px;background:var(--navy-900);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">navy-900</div></div>
+    </div>
+    <div class="h4 small" style="color:var(--surface-500); margin-bottom:8px"><span class="ar">الحالات الدلالية (Semantic)</span><span class="en">Semantic</span></div>
+    <div class="row wrap">
+      <div><div style="width:120px;height:44px;background:var(--success-500);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">success</div></div>
+      <div><div style="width:120px;height:44px;background:var(--warning-500);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">warning</div></div>
+      <div><div style="width:120px;height:44px;background:var(--danger-500);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">danger</div></div>
+      <div><div style="width:120px;height:44px;background:var(--info-500);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">info</div></div>
+      <div><div style="width:120px;height:44px;background:var(--flagship-500);border-radius:8px"></div><div class="xsmall muted" style="text-align:center">flagship</div></div>
+    </div>
+  </div>
+
+  <!-- ============ TYPOGRAPHY ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">الطباعة (Typography)</span><span class="en">Typography</span></div>
+    <div class="h1" style="margin-bottom:4px"><span class="ar">منصة البناء الرقمية</span><span class="en">Digital Construction Platform</span></div>
+    <div class="small muted" style="margin-bottom:16px">display — 40px</div>
+    <div class="h2" style="margin-bottom:4px"><span class="ar">سوق مواد البناء</span><span class="en">Construction Materials Marketplace</span></div>
+    <div class="small muted" style="margin-bottom:16px">heading-xl — 24px</div>
+    <div class="h3" style="margin-bottom:4px"><span class="ar">إدارة المشتريات</span><span class="en">Procurement Management</span></div>
+    <div class="small muted" style="margin-bottom:16px">heading-lg — 18px</div>
+    <div style="font-weight:700; margin-bottom:4px"><span class="ar">عرض أسعار من المورد أ</span><span class="en">Quotation from Supplier A</span></div>
+    <div class="small muted" style="margin-bottom:4px">body — 14px</div>
+    <div class="small" style="margin-bottom:4px"><span class="ar">التفاصيل الثانوية والتلميحات</span><span class="en">Secondary details and hints</span></div>
+    <div class="small muted" style="margin-bottom:4px">body-sm — 13px</div>
+    <div class="xsmall muted" style="margin-bottom:4px"><span class="ar">تسميات صغيرة وأرقام</span><span class="en">Captions and numbers</span></div>
+    <div class="small" style="margin-bottom:16px">caption — 12px</div>
+    <div class="mono">SKU-100254 · RFQ-0021 · 1,250.00 SAR</div>
+    <div class="small muted">mono — <span class="ar">الأكواد والكميات والأسعار</span><span class="en">codes, quantities &amp; prices</span></div>
+  </div>
+
+  <!-- ============ BUTTONS ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">الأزرار (Buttons)</span><span class="en">Buttons</span></div>
+    <div class="row wrap" style="margin-bottom:12px">
+      <button class="btn btn-primary"><span class="ar">إجراء أساسي</span><span class="en">Primary action</span></button>
+      <button class="btn btn-secondary"><span class="ar">إجراء ثانوي</span><span class="en">Secondary action</span></button>
+      <button class="btn btn-outline"><span class="ar">محدد</span><span class="en">Outline</span></button>
+      <button class="btn btn-ghost"><span class="ar">شفاف</span><span class="en">Ghost</span></button>
+      <button class="btn btn-danger"><span class="ar">حذف</span><span class="en">Delete</span></button>
+      <button class="btn btn-success"><span class="ar">اعتماد</span><span class="en">Approve</span></button>
+      <button class="btn btn-link"><span class="ar">رابط إجرائي</span><span class="en">Text link</span></button>
+    </div>
+    <div class="row wrap" style="margin-bottom:12px">
+      <button class="btn btn-primary btn-sm"><span class="ar">صغير</span><span class="en">Small</span></button>
+      <button class="btn btn-primary"><span class="ar">متوسط</span><span class="en">Medium</span></button>
+      <button class="btn btn-primary btn-lg"><span class="ar">كبير</span><span class="en">Large</span></button>
+      <button class="btn btn-primary" disabled><span class="ar">معطّل</span><span class="en">Disabled</span></button>
+      <button class="btn btn-primary"><span class="spinner"></span><span class="ar">جارٍ الحفظ…</span><span class="en">Saving…</span></button>
+      <button class="btn btn-outline" style="width:40px;height:40px;padding:0" aria-label="search">&#128269;</button>
+    </div>
+  </div>
+
+  <!-- ============ CARDS ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">البطاقات (Cards)</span><span class="en">Cards</span></div>
+    <div class="grid grid-4">
+      <div class="card card-pad card-hover">
+        <div class="small muted" style="margin-bottom:6px"><span class="ar">مثال بطاقة</span><span class="en">Example card</span></div>
+        <b><span class="ar">عنوان البطاقة</span><span class="en">Card title</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">وصف مختصر يوضح المحتوى داخل البطاقة.</span><span class="en">Short description of the card content.</span></p>
+        <button class="btn btn-primary btn-sm" style="margin-top:12px"><span class="ar">قراءة المزيد</span><span class="en">Read more</span></button>
+      </div>
+      <div class="stat-card card">
+        <div class="stat-icon">&#128200;</div>
+        <div>
+          <div class="stat-value">1,240</div>
+          <div class="stat-label"><span class="ar">طلبات نشطة</span><span class="en">Active RFQs</span></div>
+          <div class="stat-trend trend-up">+12%</div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="ph">
+          <span class="badge bg-success"><span class="ar">متوفر</span><span class="en">In stock</span></span>
+          &#128266;
+        </div>
+        <div class="pd">
+          <b><span class="ar">أسمنت بورتلاندي</span><span class="en">Portland Cement</span></b>
+          <div class="brand">brand: ABC Cement · <span class="vchip verified">VERIFIED</span></div>
+          <div class="row"><span><b class="price">12.50</b> <span class="unit">SAR/<span class="ar">كيس</span><span class="en">bag</span></span></span></div>
+        </div>
+      </div>
+      <div class="card card-pad">
+        <div class="h3" style="margin-bottom:8px"><span class="ar">بطاقة إحصائيّة</span><span class="en">KPI card</span></div>
+        <div class="row" style="margin-bottom:10px"><span class="small muted"><span class="ar">نسبة الإنجاز</span><span class="en">Completion</span></span><b style="margin-inline-start:auto">78%</b></div>
+        <div class="progress"><i style="width:78%"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ FORMS ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">النماذج (Forms)</span><span class="en">Forms</span></div>
+    <div class="grid grid-2">
+      <div>
+        <div class="field">
+          <label for="f1"><span class="ar">حقل نصي</span><span class="en">Text input</span></label>
+          <input class="input" id="f1" data-ph-ar="اكتب هنا…" data-ph-en="Type here…" placeholder="اكتب هنا…">
+          <span class="hint"><span class="ar">تلميح مساعد أسفل الحقل</span><span class="en">Helper hint below the field</span></span>
+        </div>
+        <div class="field">
+          <label for="f2"><span class="ar">حقل مع خطأ</span><span class="en">Input with error</span></label>
+          <input class="input invalid" id="f2" data-ph-ar="رقم الجوال" data-ph-en="Phone number" placeholder="رقم الجوال">
+          <span class="error"><span class="ar">يرجى إدخال رقم جوال صحيح</span><span class="en">Please enter a valid phone number</span></span>
+        </div>
+        <div class="field">
+          <label for="f3"><span class="ar">قائمة منسدلة</span><span class="en">Select</span></label>
+          <select class="select" id="f3">
+            <option><span class="ar">الفئة</span><span class="en">Category</span></option>
+            <option><span class="ar">أسمنت وخرسانة</span><span class="en">Cement &amp; Concrete</span></option>
+            <option><span class="ar">حديد تسليح</span><span class="en">Reinforcement Steel</span></option>
+            <option><span class="ar">مواد كهربائية</span><span class="en">Electrical</span></option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="search-wrap" style="margin-bottom:16px">
+          <span class="search-icon">&#128269;</span>
+          <input class="input input-search" data-ph-ar="ابحث عن منتج أو مورد…" data-ph-en="Search products or suppliers…" placeholder="ابحث عن منتج أو مورد…">
+        </div>
+        <div class="field">
+          <label><span class="ar">ملاحظات</span><span class="en">Notes</span></label>
+          <textarea class="textarea" data-ph-ar="اكتب وصفاً…" data-ph-en="Write a description…" placeholder="اكتب وصفاً…"></textarea>
+        </div>
+        <div class="row" style="gap:24px; flex-wrap:wrap">
+          <label class="check-row"><input type="checkbox" checked> <span class="ar">أوافق على الشروط</span><span class="en">I agree to the terms</span></label>
+          <label class="check-row"><input type="radio" name="r" checked> <span class="ar">فوري</span><span class="en">Immediate</span></label>
+          <label class="check-row"><input type="radio" name="r"> <span class="ar">لاحق</span><span class="en">Later</span></label>
+          <div class="check-row"><span class="ar">تفعيل</span><span class="en">Enable</span> <span class="switch on"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TABLES ============ -->
+  <div class="card" style="margin-bottom:24px">
+    <div class="card-header">
+      <div class="card-title"><span class="ar">جداول البيانات (Data Table)</span><span class="en">Data Table</span></div>
+      <div class="row">
+        <button class="btn btn-outline btn-sm"><span class="ar">تصدير</span><span class="en">Export</span></button>
+        <button class="btn btn-primary btn-sm"><span class="ar">إضافة</span><span class="en">Add</span></button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><span class="ar">المنتج</span><span class="en">Product</span></th>
+            <th><span class="ar">المورد</span><span class="en">Supplier</span></th>
+            <th class="th-num"><span class="ar">السعر</span><span class="en">Price</span></th>
+            <th class="th-num"><span class="ar">الكمية</span><span class="en">Qty</span></th>
+            <th><span class="ar">الحالة</span><span class="en">Status</span></th>
+            <th><span class="ar">إجراء</span><span class="en">Action</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>RFQ-0021</b></td>
+            <td><span class="ar">مصنع الخليج</span><span class="en">Gulf Factory</span></td>
+            <td class="num">12.50</td>
+            <td class="num">1,000</td>
+            <td><span class="badge bg-warning"><span class="dot"></span><span class="ar">معلّق</span><span class="en">Pending</span></span></td>
+            <td><button class="btn btn-link btn-sm"><span class="ar">عرض</span><span class="en">View</span></button></td>
+          </tr>
+          <tr>
+            <td><b>RFQ-0020</b></td>
+            <td><span class="ar">شركة البناء للتجارة</span><span class="en">Al-Bina Trading Co.</span></td>
+            <td class="num">18.00</td>
+            <td class="num">500</td>
+            <td><span class="badge bg-success"><span class="dot"></span><span class="ar">مقبول</span><span class="en">Accepted</span></span></td>
+            <td><button class="btn btn-link btn-sm"><span class="ar">عرض</span><span class="en">View</span></button></td>
+          </tr>
+          <tr>
+            <td><b>RFQ-0019</b></td>
+            <td><span class="ar">التوريدات المتحدة</span><span class="en">United Supplies</span></td>
+            <td class="num">9.75</td>
+            <td class="num">2,000</td>
+            <td><span class="badge bg-danger"><span class="dot"></span><span class="ar">مرفوض</span><span class="en">Rejected</span></span></td>
+            <td><button class="btn btn-link btn-sm"><span class="ar">عرض</span><span class="en">View</span></button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr><td colspan="2"><span class="ar">الإجمالي</span><span class="en">Total</span></td><td class="num">40.25</td><td class="num">3,500</td><td colspan="2"></td></tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============ BADGES & STATUS ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">الشارات والحالات (Badges &amp; Status)</span><span class="en">Badges &amp; Status</span></div>
+    <div class="h4 small" style="color:var(--surface-500); margin-bottom:8px"><span class="ar">حالات عامة</span><span class="en">General statuses</span></div>
+    <div class="row wrap" style="margin-bottom:16px">
+      <span class="badge bg-success"><span class="dot"></span>COMPLETED</span>
+      <span class="badge bg-warning"><span class="dot"></span>PENDING</span>
+      <span class="badge bg-danger"><span class="dot"></span>REJECTED</span>
+      <span class="badge bg-info"><span class="dot"></span>IN_PROGRESS</span>
+      <span class="badge bg-neutral"><span class="dot"></span>DRAFT</span>
+      <span class="badge bg-brand"><span class="dot"></span>AWARDED</span>
+    </div>
+    <div class="h4 small" style="color:var(--surface-500); margin-bottom:8px"><span class="ar">مستويات تحقق المورد (ADR-018)</span><span class="en">Supplier verification levels</span></div>
+    <div class="row wrap" style="margin-bottom:8px">
+      <span class="vchip unv">UNVERIFIED</span>
+      <span class="vchip basic">BASIC</span>
+      <span class="vchip verified">VERIFIED</span>
+      <span class="vchip trusted">TRUSTED</span>
+      <span class="vchip flagship">FLAGSHIP</span>
+    </div>
+    <div class="h4 small" style="color:var(--surface-500); margin-bottom:8px"><span class="ar">مخزون ودفع</span><span class="en">Stock &amp; payment</span></div>
+    <div class="row wrap">
+      <span class="badge bg-success">IN_STOCK</span>
+      <span class="badge bg-warning">LOW_STOCK</span>
+      <span class="badge bg-danger">OUT_OF_STOCK</span>
+      <span class="badge bg-info">NET30</span>
+    </div>
+  </div>
+
+  <!-- ============ NAVIGATION ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">التنقل (Navigation)</span><span class="en">Navigation</span></div>
+    <div class="small muted" style="margin-bottom:8px"><span class="ar">مبدّل اللغة بثلاث خيارات — متطلب معتمد (v1.1)</span><span class="en">Language switcher, 3 options — approved requirement (v1.1)</span></div>
+    <div class="lang-switcher" style="margin-bottom:16px">
+      <button class="ls-item active"><span class="ar">العربية</span><span class="en">العربية</span></button>
+      <button class="ls-item"><span class="ar">English</span><span class="en">English</span></button>
+      <button class="ls-item"><span class="ar">اردو</span><span class="en">اردو</span></button>
+    </div>
+    <div class="breadcrumb" style="padding:0; margin-bottom:16px">
+      <a href="#"><span class="ar">الرئيسية</span><span class="en">Home</span></a><span class="sep">/</span>
+      <a href="#"><span class="ar">السوق</span><span class="en">Marketplace</span></a><span class="sep">/</span>
+      <span><span class="ar">مواد البناء</span><span class="en">Materials</span></span>
+    </div>
+    <div class="tabs" style="border:1px solid var(--surface-200); border-bottom:1px solid var(--surface-200); padding:0 8px; margin-bottom:16px">
+      <div class="tab active"><span class="ar">نظرة عامة</span><span class="en">Overview</span></div>
+      <div class="tab"><span class="ar">المنتجات</span><span class="en">Products</span></div>
+      <div class="tab"><span class="ar">التقييمات</span><span class="en">Reviews</span></div>
+      <div class="tab"><span class="ar">الوثائق</span><span class="en">Documents</span></div>
+    </div>
+    <div class="steps">
+      <div class="step done"><span class="dot">&#10003;</span><span class="lbl"><span class="ar">طلبات الشراء</span><span class="en">PR</span></span><span class="line"></span></div>
+      <div class="step done"><span class="dot">&#10003;</span><span class="lbl">RFQ</span><span class="line"></span></div>
+      <div class="step current"><span class="dot">3</span><span class="lbl"><span class="ar">العروض</span><span class="en">Offers</span></span><span class="line"></span></div>
+      <div class="step"><span class="dot">4</span><span class="lbl"><span class="ar">أمر الشراء</span><span class="en">PO</span></span><span class="line"></span></div>
+      <div class="step"><span class="dot">5</span><span class="lbl"><span class="ar">التسليم</span><span class="en">Delivery</span></span></div>
+    </div>
+    <div class="row wrap">
+      <span class="badge bg-neutral">1</span>
+      <span class="badge bg-brand">2</span>
+      <span class="badge bg-neutral">3</span>
+      <span class="badge bg-neutral">4</span>
+      <button class="btn btn-outline btn-sm"><span class="ar">التالي</span><span class="en">Next</span></button>
+    </div>
+  </div>
+
+  <!-- ============ FEEDBACK ============ -->
+  <div class="card card-pad">
+    <div class="h3" style="margin-bottom:16px"><span class="ar">التغذية الراجعة (Feedback)</span><span class="en">Feedback</span></div>
+    <div class="grid grid-2">
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <div class="alert success"><span>&#10003;</span><span><b><span class="ar">تم الحفظ</span><span class="en">Saved</span></b> <span class="small"><span class="ar">تم تحديث بيانات المنتج بنجاح.</span><span class="en">Product data updated.</span></span></span></div>
+        <div class="alert warning"><span>&#9888;</span><span><b><span class="ar">انخفاض مخزون</span><span class="en">Low stock</span></b> <span class="small"><span class="ar">المخزون المتبقي 12 وحدة.</span><span class="en">Remaining stock is 12 units.</span></span></span></div>
+        <div class="alert danger"><span>&#10007;</span><span><b><span class="ar">فشل التحميل</span><span class="en">Upload failed</span></b> <span class="small"><span class="ar">الملف أكبر من الحجم المسموح.</span><span class="en">File exceeds allowed size.</span></span></span></div>
+        <div class="toast success"><span>&#10003;</span><span class="ar">تم إرسال عرض السعر</span><span class="en">Quotation submitted</span></div>
+      </div>
+      <div>
+        <div class="empty" style="border:1px dashed var(--surface-300); border-radius:12px">
+          <div class="ic">&#128193;</div>
+          <b><span class="ar">لا توجد عروض بعد</span><span class="en">No offers yet</span></b>
+          <p><span class="ar">أرسل RFQ إلى موردين وسيظهرون هنا.</span><span class="en">Send an RFQ to suppliers and they will appear here.</span></p>
+          <button class="btn btn-primary"><span class="ar">إنشاء RFQ</span><span class="en">Create RFQ</span></button>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:16px">
+          <div class="skeleton" style="width:60px;height:60px"></div>
+          <div style="flex:1">
+            <div class="skeleton" style="height:14px;width:80%;margin-bottom:8px"></div>
+            <div class="skeleton" style="height:12px;width:55%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

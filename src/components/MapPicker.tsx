@@ -35,7 +35,7 @@ export default function MapPicker({ value, onChange, placeholder, icon }: MapPic
       );
       const data = await res.json();
       setSuggestions(
-        data.map((item: any) => ({
+        data.map((item: { lat: string; lon: string; display_name: string }) => ({
           lat: parseFloat(item.lat),
           lng: parseFloat(item.lon),
           address: item.display_name,
@@ -81,7 +81,7 @@ export default function MapPicker({ value, onChange, placeholder, icon }: MapPic
   return (
     <div className="space-y-2">
       <div className="relative">
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400">
           {icon || <MapPin className="w-4 h-4" />}
         </div>
         <input
@@ -93,7 +93,7 @@ export default function MapPicker({ value, onChange, placeholder, icon }: MapPic
           }}
           onFocus={() => searchInput.length >= 3 && searchLocation(searchInput)}
           placeholder={placeholder}
-          className="w-full pr-10 pl-24 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+          className="w-full pr-10 pl-24 py-2.5 border border-surface-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
         />
         <button
           type="button"
@@ -105,13 +105,13 @@ export default function MapPicker({ value, onChange, placeholder, icon }: MapPic
       </div>
 
       {suggestions.length > 0 && (
-        <div className="border border-gray-200 rounded-xl bg-white shadow-lg max-h-48 overflow-y-auto z-20 relative">
+        <div className="border border-surface-200 rounded-xl bg-white shadow-lg max-h-48 overflow-y-auto z-20 relative">
           {suggestions.map((s, i) => (
             <button
               key={i}
               type="button"
               onClick={() => selectSuggestion(s)}
-              className="w-full text-right px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 border-b border-gray-100 last:border-0 transition-colors"
+              className="w-full text-right px-4 py-2.5 text-sm text-surface-700 hover:bg-amber-50 border-b border-surface-100 last:border-0 transition-colors"
             >
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
@@ -123,7 +123,7 @@ export default function MapPicker({ value, onChange, placeholder, icon }: MapPic
       )}
 
       {showMap && (
-        <div className="rounded-xl overflow-hidden border border-gray-200 relative">
+        <div className="rounded-xl overflow-hidden border border-surface-200 relative">
           <LeafletMap
             lat={coords?.lat}
             lng={coords?.lng}

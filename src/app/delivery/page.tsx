@@ -125,19 +125,19 @@ export default function DeliveryPage() {
   const [activeTab, setActiveTab] = useState<"all" | "active" | "completed">("all");
 
   const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-    REQUESTED: { label: t("available"), color: "bg-yellow-100 text-yellow-800" },
-    PENDING_DRIVER: { label: t("available"), color: "bg-blue-100 text-blue-800" },
-    DRIVER_ASSIGNED: { label: t("available"), color: "bg-indigo-100 text-indigo-800" },
-    PICKING_UP: { label: t("pickupInProgress"), color: "bg-purple-100 text-purple-800" },
-    IN_TRANSIT: { label: t("activeDelivery"), color: "bg-cyan-100 text-cyan-800" },
-    DELIVERED: { label: t("delivered"), color: "bg-green-100 text-green-800" },
-    CANCELLED: { label: t("closed"), color: "bg-red-100 text-red-800" },
+    REQUESTED: { label: t("available"), color: "bg-warning-100 text-warning-800" },
+    PENDING_DRIVER: { label: t("available"), color: "bg-info-100 text-info-800" },
+    DRIVER_ASSIGNED: { label: t("available"), color: "bg-flagship-100 text-flagship-800" },
+    PICKING_UP: { label: t("pickupInProgress"), color: "bg-flagship-100 text-flagship-800" },
+    IN_TRANSIT: { label: t("activeDelivery"), color: "bg-info-100 text-info-800" },
+    DELIVERED: { label: t("delivered"), color: "bg-success-100 text-success-800" },
+    CANCELLED: { label: t("closed"), color: "bg-danger-100 text-danger-800" },
   };
 
   const PRIORITY_LABELS: Record<string, { label: string; color: string }> = {
-    NORMAL: { label: t("normal"), color: "bg-gray-100 text-gray-800" },
-    URGENT: { label: t("urgent"), color: "bg-red-100 text-red-800" },
-    SCHEDULED: { label: t("scheduled"), color: "bg-blue-100 text-blue-800" },
+    NORMAL: { label: t("normal"), color: "bg-surface-100 text-surface-800" },
+    URGENT: { label: t("urgent"), color: "bg-danger-100 text-danger-800" },
+    SCHEDULED: { label: t("scheduled"), color: "bg-info-100 text-info-800" },
   };
 
   const VEHICLE_LABELS: Record<string, string> = {
@@ -151,9 +151,9 @@ export default function DeliveryPage() {
   };
 
   const stats = [
-    { label: t("activeDelivery"), value: "18", icon: Truck, color: "bg-blue-50 text-blue-600" },
-    { label: t("delivered"), value: "12", icon: CheckCircle2, color: "bg-green-50 text-green-600" },
-    { label: t("available"), value: "45", icon: Shield, color: "bg-purple-50 text-purple-600" },
+    { label: t("activeDelivery"), value: "18", icon: Truck, color: "bg-info-50 text-info-600" },
+    { label: t("delivered"), value: "12", icon: CheckCircle2, color: "bg-success-50 text-success-600" },
+    { label: t("available"), value: "45", icon: Shield, color: "bg-flagship-50 text-flagship-600" },
     { label: t("avgRating"), value: "4.8", icon: Star, color: "bg-amber-50 text-amber-600" },
   ];
 
@@ -164,7 +164,7 @@ export default function DeliveryPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-surface-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs items={[{ label: t("navDelivery") }]} />
@@ -172,11 +172,11 @@ export default function DeliveryPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-surface-900 flex items-center gap-2">
               <Truck className="w-7 h-7 text-emerald-600" />
               {t("deliveryTitle")}
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-surface-600 mt-1">
               {t("deliveryDescription")}
             </p>
           </div>
@@ -198,8 +198,8 @@ export default function DeliveryPage() {
                   <stat.icon className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                  <p className="text-xs text-gray-500">{stat.label}</p>
+                  <p className="text-2xl font-bold text-surface-900">{stat.value}</p>
+                  <p className="text-xs text-surface-500">{stat.label}</p>
                 </div>
               </div>
             </Card>
@@ -208,7 +208,7 @@ export default function DeliveryPage() {
 
         {/* How it works */}
         <Card className="p-6 mb-6">
-          <h2 className="font-bold text-gray-900 mb-4">{t("howItWorks")}</h2>
+          <h2 className="font-bold text-surface-900 mb-4">{t("howItWorks")}</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {[
               { icon: "1", title: t("step1Title"), desc: t("step1Desc") },
@@ -221,8 +221,8 @@ export default function DeliveryPage() {
                   {step.icon}
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900 text-sm">{step.title}</p>
-                  <p className="text-xs text-gray-500">{step.desc}</p>
+                  <p className="font-medium text-surface-900 text-sm">{step.title}</p>
+                  <p className="text-xs text-surface-500">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -231,12 +231,12 @@ export default function DeliveryPage() {
 
         {/* Vehicle types */}
         <Card className="p-6 mb-6">
-          <h2 className="font-bold text-gray-900 mb-4">{t("vehicleTypes")}</h2>
+          <h2 className="font-bold text-surface-900 mb-4">{t("vehicleTypes")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
             {Object.entries(VEHICLE_LABELS).map(([key, label]) => (
-              <div key={key} className="text-center p-3 bg-gray-50 rounded-xl">
-                <Truck className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-xs font-medium text-gray-700">{label}</p>
+              <div key={key} className="text-center p-3 bg-surface-50 rounded-xl">
+                <Truck className="w-8 h-8 text-surface-400 mx-auto mb-2" />
+                <p className="text-xs font-medium text-surface-700">{label}</p>
               </div>
             ))}
           </div>
@@ -244,12 +244,12 @@ export default function DeliveryPage() {
 
         {/* Track by code */}
         <Card className="p-6 mb-6">
-          <h2 className="font-bold text-gray-900 mb-4">{t("trackDelivery")}</h2>
+          <h2 className="font-bold text-surface-900 mb-4">{t("trackDelivery")}</h2>
           <div className="flex gap-3">
             <input
               type="text"
               placeholder="أدخل كود التتبع (مثال: TRK-ABC-001)"
-              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+              className="flex-1 px-4 py-2.5 border border-surface-300 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
             />
             <Link
               href="/delivery/track"
@@ -274,7 +274,7 @@ export default function DeliveryPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 activeTab === tab.key
                   ? "bg-emerald-500 text-white"
-                  : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                  : "bg-white text-surface-600 border border-surface-200 hover:bg-surface-50"
               }`}
             >
               {tab.label} ({tab.count})
@@ -289,40 +289,40 @@ export default function DeliveryPage() {
               <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-3 flex-wrap">
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="text-lg font-bold text-surface-900">
                       {order.orderNumber}
                     </h3>
                     <StatusBadge {...STATUS_LABELS[order.status]} />
                     <StatusBadge {...PRIORITY_LABELS[order.priority]} />
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                    <span className="text-xs text-surface-500 bg-surface-100 px-2 py-0.5 rounded-full">
                       {order.materialType}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                     <div className="flex items-start gap-2">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <div className="w-2 h-2 bg-green-500 rounded-full" />
+                      <div className="w-6 h-6 bg-success-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div className="w-2 h-2 bg-success-500 rounded-full" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">{t("pickupLocation")}</p>
-                        <p className="text-sm font-medium text-gray-900">{order.pickupAddress}</p>
+                        <p className="text-xs text-surface-500">{t("pickupLocation")}</p>
+                        <p className="text-sm font-medium text-surface-900">{order.pickupAddress}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-2">
-                      <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <MapPin className="w-3 h-3 text-red-500" />
+                      <div className="w-6 h-6 bg-danger-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <MapPin className="w-3 h-3 text-danger-500" />
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500">{t("deliveryLocation")}</p>
-                        <p className="text-sm font-medium text-gray-900">{order.deliveryAddress}</p>
+                        <p className="text-xs text-surface-500">{t("deliveryLocation")}</p>
+                        <p className="text-sm font-medium text-surface-900">{order.deliveryAddress}</p>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-sm text-gray-600 mb-3">{order.description}</p>
+                  <p className="text-sm text-surface-600 mb-3">{order.description}</p>
 
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-surface-500">
                     <span className="flex items-center gap-1">
                       <Package className="w-4 h-4" />
                       {order.quantity} وحدة • {order.weight} كجم
@@ -331,7 +331,7 @@ export default function DeliveryPage() {
                       <span className="flex items-center gap-1">
                         <Truck className="w-4 h-4" />
                         {order.driverName}
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                        <Star className="w-3 h-3 fill-warning-400 text-warning-400" />
                         {order.driverRating}
                       </span>
                     )}
@@ -341,7 +341,7 @@ export default function DeliveryPage() {
                         {order.estimatedTime}
                       </span>
                     )}
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-surface-400">
                       كود التتبع: {order.trackingCode}
                     </span>
                   </div>
@@ -352,7 +352,7 @@ export default function DeliveryPage() {
                     <span className="text-2xl font-bold text-emerald-600">
                       {order.totalPrice.toLocaleString("ar-EG")}
                     </span>
-                    <span className="text-sm text-gray-500 mr-1">{t("currency")}</span>
+                    <span className="text-sm text-surface-500 mr-1">{t("currency")}</span>
                   </div>
                   <Link
                     href={`/delivery/track?code=${order.trackingCode}`}
@@ -363,7 +363,7 @@ export default function DeliveryPage() {
                   </Link>
                   <Link
                     href={`/delivery/${order.id}`}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 border border-surface-300 text-surface-700 rounded-xl text-sm font-medium hover:bg-surface-50 transition-colors"
                   >
                     <Eye className="w-4 h-4" />
                     {t("viewDetails")}
@@ -385,7 +385,7 @@ export default function DeliveryPage() {
             </div>
             <Link
               href="/delivery/driver"
-              className="px-6 py-3 bg-white text-emerald-600 rounded-xl font-bold hover:bg-gray-100 transition-colors whitespace-nowrap"
+              className="px-6 py-3 bg-white text-emerald-600 rounded-xl font-bold hover:bg-surface-100 transition-colors whitespace-nowrap"
             >
               {t("registerAsDriver")}
             </Link>

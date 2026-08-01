@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -69,6 +70,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth()
+    if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+
     const body = await request.json();
     const {
       title,
@@ -82,10 +86,9 @@ export async function POST(request: NextRequest) {
       benefits,
       vacancies,
       isUrgent,
-      userId,
     } = body;
 
-    if (!title || !description || !category || !jobType || !location || !userId) {
+    if (!title || !description || !category || !jobType || !location) {
       return NextResponse.json(
         { error: "جميع الحقول المطلوبة يجب ملؤها" },
         { status: 400 }
@@ -105,7 +108,7 @@ export async function POST(request: NextRequest) {
         benefits,
         vacancies: vacancies ? parseInt(vacancies) : 1,
         isUrgent: isUrgent || false,
-        userId,
+        userId: session.user.id,
       },
       include: {
         user: {

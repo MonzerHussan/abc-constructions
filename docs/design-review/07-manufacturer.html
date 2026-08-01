@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manufacturer Portal — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">بوابة المصنع</span><span class="en">Manufacturer Portal</span> · <span class="ar">إضافة مراجعة</span><span class="en">review addition</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="topbar">
+  <div class="mobile-only"><button onclick="previewSidebar()" style="font-size:20px">&#9776;</button></div>
+  <a class="logo" href="#"><img class="logo-img" src="assets/logo/abc-logo.svg" alt="ABC"></a>
+  <div class="row grow" style="gap:8px">
+    <span class="badge bg-brand"><span class="ar">مصنع</span><span class="en">Manufacturer</span></span>
+    <b class="small"><span class="ar">مصنع الرياض للأسمنت</span><span class="en">Riyadh Cement Factory</span></b>
+  </div>
+  <div class="search-wrap desktop-only" style="width:260px">
+    <span class="search-icon">&#128269;</span>
+    <input class="input input-search" data-ph-ar="بحث…" data-ph-en="Search…" placeholder="بحث…">
+  </div>
+  <button style="font-size:18px; position:relative">&#128276;<span class="badge bg-danger" style="position:absolute; top:-4px; inset-inline-end:-6px; font-size:10px">4</span></button>
+  <div class="avatar amber">م</div>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="nav-item active" data-pane="dashboard">&#128200; <span><span class="ar">نظرة عامة</span><span class="en">Dashboard</span></span></div>
+    <div class="nav-item" data-pane="profile">&#128100; <span><span class="ar">ملف المصنع</span><span class="en">Factory profile</span></span></div>
+    <div class="nav-item" data-pane="brands">&#128218; <span><span class="ar">العلامات التجارية</span><span class="en">Brands</span></span><span class="count neutral">3</span></div>
+    <div class="nav-item" data-pane="products">&#128230; <span><span class="ar">المنتجات الرئيسية</span><span class="en">Product masters</span></span><span class="count neutral">28</span></div>
+    <div class="nav-item" data-pane="docs">&#128196; <span><span class="ar">المستندات الفنية</span><span class="en">Technical docs</span></span></div>
+    <div class="nav-sec"><span class="ar">شبكة التوزيع</span><span class="en">Distribution</span></div>
+    <div class="nav-item" data-pane="distributors">&#129309; <span><span class="ar">الموزعون المعتمدون</span><span class="en">Authorized distributors</span></span><span class="count neutral">12</span></div>
+    <div class="nav-sec"><span class="ar">الذكاء التجاري</span><span class="en">Business intelligence</span></div>
+    <div class="nav-item" data-pane="insights">&#128202; <span><span class="ar">رؤى السوق</span><span class="en">Market insights</span></span></div>
+  </aside>
+
+  <main class="shell-main">
+
+    <!-- ============ DASHBOARD ============ -->
+    <div class="pane active" id="dashboard">
+      <div class="page-title"><span class="ar">نظرة عامة — مصنع الرياض للأسمنت</span><span class="en">Overview — Riyadh Cement Factory</span></div>
+      <div class="page-sub"><span class="ar">أداء الإنتاج وتوزيع منتجاتك عبر شبكة الموردين</span><span class="en">Production output and product distribution via your supplier network</span></div>
+      <div class="kpi-grid">
+        <div class="stat-card card"><div class="stat-icon">&#128230;</div><div><div class="stat-value">28</div><div class="stat-label"><span class="ar">منتج رئيسي</span><span class="en">Product masters</span></div><div class="stat-trend trend-up">+3</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#129309;</div><div><div class="stat-value">12</div><div class="stat-label"><span class="ar">موزع معتمد</span><span class="en">Authorized distributors</span></div><div class="stat-trend trend-up">+2</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128717;</div><div><div class="stat-value">184</div><div class="stat-label"><span class="ar">عروض موردين نشطة</span><span class="en">Active supplier offerings</span></div><div class="stat-trend trend-up">+9%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128176;</div><div><div class="stat-value">9.2M</div><div class="stat-label"><span class="ar">قيمة مبيعات موزّعة (ر.س)</span><span class="en">Distributed sales (SAR)</span></div><div class="stat-trend trend-up">+14%</div></div></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">أعلى المنتجات طلباً</span><span class="en">Top products</span></div></div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th><span class="ar">المنتج</span><span class="en">Product</span></th><th class="th-num"><span class="ar">العروض</span><span class="en">Offerings</span></th><th class="th-num"><span class="ar">الحجم (شهر)</span><span class="en">Volume (month)</span></th><th><span class="ar">الحالة</span><span class="en">Status</span></th></tr></thead>
+              <tbody>
+                <tr><td><b><span class="ar">أسمنت بورتلاندي 50كجم</span><span class="en">Portland cement 50kg</span></b><div class="xsmall muted">SKU-100254</div></td><td class="num">8</td><td class="num">4,200 <span class="ar">طن</span><span class="en">ton</span></td><td><span class="badge bg-success">PUBLISHED</span></td></tr>
+                <tr><td><b><span class="ar">أسمنت مقاوم للكبريتات</span><span class="en">Sulfate-resistant cement</span></b></td><td class="num">5</td><td class="num">1,150 <span class="ar">طن</span><span class="en">ton</span></td><td><span class="badge bg-success">PUBLISHED</span></td></tr>
+                <tr><td><b><span class="ar">أسمنت أبيض</span><span class="en">White cement</span></b></td><td class="num">2</td><td class="num">410 <span class="ar">طن</span><span class="en">ton</span></td><td><span class="badge bg-warning">DRAFT</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:16px">
+          <div class="card">
+            <div class="card-header"><div class="card-title"><span class="ar">إجراءات سريعة</span><span class="en">Quick actions</span></div></div>
+            <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+              <button class="btn btn-primary" data-pane="products"><span class="ar">منتج رئيسي جديد</span><span class="en">New product master</span></button>
+              <button class="btn btn-outline" data-pane="docs"><span class="ar">رفع أوراق فنية (TDS/SDS)</span><span class="en">Upload TDS/SDS</span></button>
+              <button class="btn btn-outline" data-pane="distributors"><span class="ar">إدارة الموزعين</span><span class="en">Manage distributors</span></button>
+            </div>
+          </div>
+          <div class="alert info"><span>&#128161;</span><span><span class="ar"><b>سلسلة القيمة:</b> أنت مصدر المنتج، وموزعوك يضيفون العروض السعرية والمخزون، والسوق يعرضهم للمقاولين.</span><span class="en"><b>Value chain:</b> you own the product; distributors add offerings &amp; inventory; the marketplace exposes them to contractors.</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PROFILE ============ -->
+    <div class="pane" id="profile">
+      <div class="page-title"><span class="ar">ملف المصنع</span><span class="en">Factory profile</span></div>
+      <div class="page-sub"><span class="ar">بياناتك كمنشأة صناعية مع قدرات الإنتاج والتحقق</span><span class="en">Your data as a manufacturing facility with production capacity and verification</span></div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="row" style="gap:16px">
+              <div class="avatar amber" style="width:64px;height:64px;font-size:22px">م</div>
+              <div>
+                <b style="font-size:17px"><span class="ar">مصنع الرياض للأسمنت</span><span class="en">Riyadh Cement Factory</span></b>
+                <div class="small muted">Riyadh · <span class="ar">منذ 2008</span><span class="en">since 2008</span></div>
+                <div class="row" style="gap:6px; margin-top:6px"><span class="vchip flagship">FLAGSHIP</span><span class="badge bg-success"><span class="ar">مصنع معتمد</span><span class="en">Certified factory</span></span></div>
+              </div>
+            </div>
+            <div style="margin:16px 0">
+              <div class="row" style="margin-bottom:6px"><span class="small muted"><span class="ar">التحقق المؤسسي</span><span class="en">Organization verification</span></span><b class="xsmall">100%</b></div>
+              <div class="progress"><i style="width:100%"></i></div>
+            </div>
+            <div class="grid grid-2" style="gap:8px; font-size:13px">
+              <div class="card" style="border:1px solid var(--surface-200); padding:10px"><span class="muted"><span class="ar">قدرة شهرية</span><span class="en">Monthly capacity</span></span><br><b>18,000 <span class="ar">طن</span><span class="en">ton</span></b></div>
+              <div class="card" style="border:1px solid var(--surface-200); padding:10px"><span class="muted"><span class="ar">عدد العاملين</span><span class="en">Employees</span></span><br><b>320</b></div>
+              <div class="card" style="border:1px solid var(--surface-200); padding:10px"><span class="muted"><span class="ar">المنطقة الصناعية</span><span class="en">Industrial zone</span></span><br><b><span class="ar">الرياض الثانية</span><span class="en">Riyadh 2nd</span></b></div>
+              <div class="card" style="border:1px solid var(--surface-200); padding:10px"><span class="muted">ISO</span><br><b>9001 · 14001</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">الشهادات والرخص</span><span class="en">Certifications &amp; licenses</span></div></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+            <div class="card" style="border:1px solid var(--surface-200); padding:10px 12px"><div class="row"><b>ISO 9001</b><span class="vchip verified">VERIFIED</span></div><div class="small muted">Bureau Veritas · <span class="ar">ينتهي 2028</span><span class="en">expires 2028</span></div></div>
+            <div class="card" style="border:1px solid var(--surface-200); padding:10px 12px"><div class="row"><b><span class="ar">رخصة تصنيع</span><span class="en">Manufacturing license</span></b><span class="vchip verified">VERIFIED</span></div><div class="small muted">SASO · <span class="ar">سارية</span><span class="en">active</span></div></div>
+            <div class="card" style="border:1px solid var(--surface-200); padding:10px 12px"><div class="row"><b><span class="ar">شهادة جودة منتج</span><span class="en">Product quality cert</span></b><span class="vchip trusted">TRUSTED</span></div><div class="small muted">GCC · <span class="ar">موثقة</span><span class="en">documented</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ BRANDS ============ -->
+    <div class="pane" id="brands">
+      <div class="page-title"><span class="ar">العلامات التجارية</span><span class="en">Brands</span></div>
+      <div class="page-sub"><span class="ar">علاماتك المسجلة على المنتجات الرئيسية</span><span class="en">Your registered brands on product masters</span></div>
+      <div class="grid grid-3">
+        <div class="card card-hover">
+          <div style="height:100px; background:linear-gradient(135deg,var(--navy-700),var(--navy-900)); display:flex;align-items:center;justify-content:center; color:#fff; font-weight:800; font-size:20px">ABCCement</div>
+          <div class="card-pad">
+            <div class="row"><b><span class="ar">أسمنت ABC</span><span class="en">ABC Cement</span></b><span class="badge bg-success"><span class="ar">نشطة</span><span class="en">Active</span></span></div>
+            <div class="small muted" style="margin-top:4px">14 <span class="ar">منتجاً</span><span class="en">products</span></div>
+            <button class="btn btn-outline btn-sm" style="width:100%; margin-top:10px" data-pane="products"><span class="ar">عرض المنتجات</span><span class="en">View products</span></button>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div style="height:100px; background:linear-gradient(135deg,var(--brand-500),#fbbf24); display:flex;align-items:center;justify-content:center; color:#fff; font-weight:800; font-size:20px">GulfPro</div>
+          <div class="card-pad">
+            <div class="row"><b>GulfPro</b><span class="badge bg-success"><span class="ar">نشطة</span><span class="en">Active</span></span></div>
+            <div class="small muted" style="margin-top:4px">9 <span class="ar">منتجات</span><span class="en">products</span></div>
+            <button class="btn btn-outline btn-sm" style="width:100%; margin-top:10px" data-pane="products"><span class="ar">عرض المنتجات</span><span class="en">View products</span></button>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div style="height:100px; background:linear-gradient(135deg,var(--info-500),var(--info-600)); display:flex;align-items:center;justify-content:center; color:#fff; font-weight:800; font-size:20px">BuildTech</div>
+          <div class="card-pad">
+            <div class="row"><b>BuildTech</b><span class="badge bg-warning"><span class="ar">مسودة</span><span class="en">Draft</span></span></div>
+            <div class="small muted" style="margin-top:4px">5 <span class="ar">منتجات</span><span class="en">products</span></div>
+            <button class="btn btn-outline btn-sm" style="width:100%; margin-top:10px" data-pane="products"><span class="ar">إكمال الإعداد</span><span class="en">Finish setup</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PRODUCT MASTERS ============ -->
+    <div class="pane" id="products">
+      <div class="page-title"><span class="ar">المنتجات الرئيسية (Product Masters)</span><span class="en">Product masters</span></div>
+      <div class="page-sub"><span class="ar">أنت المصدر الوحيد لمواصفات هذه المنتجات — الموزعون يضيفون الأسعار والمخزون فقط</span><span class="en">You are the single source of specs — distributors add pricing and stock only</span></div>
+      <div class="row" style="justify-content:flex-end; margin-bottom:16px"><button class="btn btn-primary"><span class="ar">+ منتج رئيسي جديد</span><span class="en">+ New product master</span></button></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th><span class="ar">المنتج</span><span class="en">Product</span></th><th><span class="ar">العلامة</span><span class="en">Brand</span></th><th><span class="ar">الوحدة</span><span class="en">Unit</span></th><th class="th-num"><span class="ar">العروض</span><span class="en">Offerings</span></th><th><span class="ar">الحالة</span><span class="en">Status</span></th><th></th></tr></thead>
+            <tbody>
+              <tr><td><b><span class="ar">أسمنت بورتلاندي 50كجم</span><span class="en">Portland cement 50kg</span></b><div class="xsmall muted">SKU-100254</div></td><td><span class="ar">أسمنت ABC</span><span class="en">ABC Cement</span></td><td class="mono">BAG</td><td class="num">8</td><td><span class="badge bg-success">PUBLISHED</span></td><td><button class="btn btn-link btn-sm"><span class="ar">عرض</span><span class="en">View</span></button></td></tr>
+              <tr><td><b><span class="ar">أسمنت مقاوم للكبريتات</span><span class="en">Sulfate-resistant cement</span></b><div class="xsmall muted">SKU-100302</div></td><td><span class="ar">أسمنت ABC</span><span class="en">ABC Cement</span></td><td class="mono">BAG</td><td class="num">5</td><td><span class="badge bg-success">PUBLISHED</span></td><td><button class="btn btn-link btn-sm"><span class="ar">عرض</span><span class="en">View</span></button></td></tr>
+              <tr><td><b><span class="ar">أسمنت أبيض</span><span class="en">White cement</span></b><div class="xsmall muted">SKU-100118</div></td><td>GulfPro</td><td class="mono">BAG</td><td class="num">2</td><td><span class="badge bg-warning">DRAFT</span></td><td><button class="btn btn-link btn-sm"><span class="ar">إكمال</span><span class="en">Complete</span></button></td></tr>
+              <tr><td><b><span class="ar">جير مطفأ</span><span class="en">Hydrated lime</span></b><div class="xsmall muted">SKU-100477</div></td><td>GulfPro</td><td class="mono">TON</td><td class="num">3</td><td><span class="badge bg-neutral">ARCHIVED</span></td><td><button class="btn btn-link btn-sm"><span class="ar">عرض</span><span class="en">View</span></button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TECHNICAL DOCS ============ -->
+    <div class="pane" id="docs">
+      <div class="page-title"><span class="ar">المستندات الفنية</span><span class="en">Technical documents</span></div>
+      <div class="page-sub"><span class="ar">أوراق البيانات الفنية (TDS) وأوراق السلامة (SDS) لكل منتج</span><span class="en">Technical Data Sheets (TDS) and Safety Data Sheets (SDS) per product</span></div>
+      <div class="row" style="justify-content:flex-end; margin-bottom:16px"><button class="btn btn-primary"><span class="ar">رفع مستند</span><span class="en">Upload document</span></button></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th><span class="ar">المستند</span><span class="en">Document</span></th><th><span class="ar">النوع</span><span class="en">Type</span></th><th><span class="ar">اللغة</span><span class="en">Language</span></th><th><span class="ar">المنتج</span><span class="en">Product</span></th><th><span class="ar">الآخر تحديث</span><span class="en">Updated</span></th></tr></thead>
+            <tbody>
+              <tr><td><b>portland_cement_tds_ar.pdf</b></td><td><span class="badge bg-info">TDS</span></td><td>AR</td><td><span class="ar">أسمنت بورتلاندي</span><span class="en">Portland cement</span></td><td>12 <span class="ar">يوليو</span><span class="en">Jul</span></td></tr>
+              <tr><td><b>portland_cement_tds_en.pdf</b></td><td><span class="badge bg-info">TDS</span></td><td>EN</td><td><span class="ar">أسمنت بورتلاندي</span><span class="en">Portland cement</span></td><td>12 <span class="ar">يوليو</span><span class="en">Jul</span></td></tr>
+              <tr><td><b>cement_sds_msds.pdf</b></td><td><span class="badge bg-warning">SDS</span></td><td>AR/EN</td><td><span class="ar">أسمنت بورتلاندي</span><span class="en">Portland cement</span></td><td>01 <span class="ar">يوليو</span><span class="en">Jul</span></td></tr>
+              <tr><td><b>sulfate_resistant_tds.pdf</b></td><td><span class="badge bg-info">TDS</span></td><td>EN</td><td><span class="ar">مقاوم للكبريتات</span><span class="en">Sulfate-resistant</span></td><td>28 <span class="ar">يونيو</span><span class="en">Jun</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ DISTRIBUTORS ============ -->
+    <div class="pane" id="distributors">
+      <div class="page-title"><span class="ar">الموزعون المعتمدون</span><span class="en">Authorized distributors</span></div>
+      <div class="page-sub"><span class="ar">شبكة من يبيع منتجاتك — يضيفون الأسعار والمخزون لمنتجاتك</span><span class="en">Your sales network — they add pricing and stock to your products</span></div>
+      <div class="row" style="justify-content:flex-end; margin-bottom:16px"><button class="btn btn-primary"><span class="ar">إضافة موزع</span><span class="en">Add distributor</span></button></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th><span class="ar">الموزع</span><span class="en">Distributor</span></th><th><span class="ar">المنطقة</span><span class="en">Region</span></th><th class="th-num"><span class="ar">منتجات مفوضة</span><span class="en">Authorized products</span></th><th><span class="ar">التفويض</span><span class="en">Authorization</span></th><th><span class="ar">الحالة</span><span class="en">Status</span></th></tr></thead>
+            <tbody>
+              <tr><td><b><span class="ar">مصنع الخليج</span><span class="en">Gulf Factory</span></b><div class="xsmall muted"><span class="ar">مورد</span><span class="en">Supplier</span></div></td><td>Riyadh</td><td class="num">6</td><td><span class="vchip verified"><span class="ar">مفوَّض</span><span class="en">Authorized</span></span></td><td><span class="badge bg-success">ACTIVE</span></td></tr>
+              <tr><td><b><span class="ar">البناء للتجارة</span><span class="en">Al-Bina Trading</span></b></td><td>Jeddah</td><td class="num">4</td><td><span class="vchip verified"><span class="ar">مفوَّض</span><span class="en">Authorized</span></span></td><td><span class="badge bg-success">ACTIVE</span></td></tr>
+              <tr><td><b><span class="ar">التوريدات المتحدة</span><span class="en">United Supplies</span></b></td><td>Dammam</td><td class="num">2</td><td><span class="vchip basic"><span class="ar">قيد التفويض</span><span class="en">Pending</span></span></td><td><span class="badge bg-warning">PENDING</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MARKET INSIGHTS ============ -->
+    <div class="pane" id="insights">
+      <div class="page-title"><span class="ar">رؤى السوق</span><span class="en">Market insights</span></div>
+      <div class="page-sub"><span class="ar">قراءة مبسطة لبيانات السوق المحسوبة من منظومة ABC</span><span class="en">A simple read of market data computed from the ABC ecosystem</span></div>
+      <div class="kpi-grid">
+        <div class="stat-card card"><div class="stat-icon">&#128200;</div><div><div class="stat-value">+18%</div><div class="stat-label"><span class="ar">نمو طلب فئة الأسمنت</span><span class="en">Cement demand growth</span></div><div class="stat-trend trend-up"><span class="ar">شهري</span><span class="en">monthly</span></div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128176;</div><div><div class="stat-value">310</div><div class="stat-label"><span class="ar">متوسط سعر الطن (ر.س)</span><span class="en">Avg price/ton (SAR)</span></div><div class="stat-trend trend-up">+4%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#129309;</div><div><div class="stat-value">4</div><div class="stat-label"><span class="ar">مناطق تحتاج تغطية</span><span class="en">Regions needing coverage</span></div><div class="stat-trend trend-down">-1</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#127968;</div><div><div class="stat-value">120</div><div><span class="ar">طلب مشاريع نشط يطابق منتجاتك</span><span class="en">Active project demand matching your products</span></div></div></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">توزيع الطلب حسب المنطقة</span><span class="en">Demand by region</span></div></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+            <div><div class="row" style="justify-content:space-between"><span class="small">Riyadh</span><b class="small">42%</b></div><div class="progress" style="margin-top:4px"><i style="width:42%"></i></div></div>
+            <div><div class="row" style="justify-content:space-between"><span class="small">Jeddah</span><b class="small">28%</b></div><div class="progress" style="margin-top:4px"><i style="width:28%"></i></div></div>
+            <div><div class="row" style="justify-content:space-between"><span class="small">Dammam</span><b class="small">18%</b></div><div class="progress" style="margin-top:4px"><i style="width:18%"></i></div></div>
+            <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">أخرى</span><span class="en">Other</span></span><b class="small">12%</b></div><div class="progress" style="margin-top:4px"><i style="width:12%"></i></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">فرص مقترحة (AI Insights — Phase 3)</span><span class="en">Suggested opportunities (AI Insights — Phase 3)</span></div></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+            <div class="alert info"><span>&#128161;</span><div><b><span class="ar">تغطية جدة</span><span class="en">Jeddah coverage</span></b><div class="xsmall"><span class="ar">الطلب في جدة ينمو 22% بدون موزع نشط لمنتجك الأعلى.</span><span class="en">Jeddah demand is growing 22% with no active distributor for your top product.</span></div></div></div>
+            <div class="alert warning"><span>&#9888;</span><div><b><span class="ar">فجوة سعرية</span><span class="en">Price gap</span></b><div class="xsmall"><span class="ar">متوسط سعر الموزعين أقل 6% من متوسط السوق.</span><span class="en">Distributor average is 6% below market average.</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

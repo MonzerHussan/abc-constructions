@@ -4,23 +4,215 @@
 :root {
   --background: #f8f9fa;
   --foreground: #171717;
-  --amber-50: #fffbeb;
+
+  /* ABC brand tokens — Design System v1.0 (§2) */
+  --brand-50: #fffbeb;
+  --brand-100: #fef3c7;
+  --brand-200: #fde68a;
+  --brand-500: #f59e0b;
+  --brand-600: #d97706;
+  --brand-700: #b45309;
+
   --amber-100: #fef3c7;
+  --amber-200: #fde68a;
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
   --amber-500: #f59e0b;
   --amber-600: #d97706;
+  --amber-700: #b45309;
+  --amber-800: #92400e;
+
+  --navy-600: #1e3a5f;
+  --navy-700: #1e3a5f;
+  --navy-800: #0f172a;
+  --navy-900: #0a1128;
+
+  --surface-0: #ffffff;
+  --surface-50: #f8f9fa;
+  --surface-100: #f1f3f5;
+  --surface-200: #e9ecef;
+  --surface-300: #dee2e6;
+  --surface-400: #ced4da;
+  --surface-500: #adb5bd;
+  --surface-600: #6c757d;
+  --surface-700: #495057;
+  --surface-800: #343a40;
+  --surface-900: #212529;
+
+  --success-50: #ecfdf5;
+  --success-100: #d1fae5;
+  --success-200: #bbf7d0;
+  --success-300: #86efac;
+  --success-400: #4ade80;
+  --success-500: #16a34a;
+  --success-600: #15803d;
+  --success-700: #166534;
+  --success-800: #14532d;
+
+  --warning-50: #fffbeb;
+  --warning-100: #fef3c7;
+  --warning-200: #fef08a;
+  --warning-300: #fde047;
+  --warning-400: #facc15;
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  --warning-700: #b45309;
+  --warning-800: #854d0e;
+
+  --danger-50: #fef2f2;
+  --danger-100: #fee2e2;
+  --danger-200: #fecaca;
+  --danger-300: #fca5a5;
+  --danger-400: #f87171;
+  --danger-500: #dc2626;
+  --danger-600: #b91c1c;
+  --danger-700: #991b1b;
+  --danger-800: #7f1d1d;
+
+  --info-50: #eff6ff;
+  --info-100: #dbeafe;
+  --info-200: #bfdbfe;
+  --info-300: #93c5fd;
+  --info-400: #60a5fa;
+  --info-500: #2563eb;
+  --info-600: #1d4ed8;
+  --info-700: #1e40af;
+  --info-800: #172554;
+
+  --flagship-50: #faf5ff;
+  --flagship-100: #ede9fe;
+  --flagship-200: #ddd6fe;
+  --flagship-300: #c4b5fd;
+  --flagship-400: #a78bfa;
+  --flagship-500: #7c3aed;
+  --flagship-600: #6d28d9;
+  --flagship-700: #5b21b6;
+  --flagship-800: #4c1d95;
+
+  /* Radius & motion (§2.1) */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+
+  /* Font strategy (§3.1): flipped per language via html[lang] */
+  --font-active: var(--font-cairo);
 }
+
+/* Trilingual font strategy — Arabic (Naskh) / Latin / Urdu (Nastaliq) */
+html[lang="ar"] { --font-active: var(--font-cairo); }
+html[lang="en"] { --font-active: var(--font-inter); }
+html[lang="ur"] { --font-active: var(--font-nastaliq); }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-active);
   --font-mono: var(--font-geist-mono);
+
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+
+  --color-amber-100: var(--amber-100);
+  --color-amber-200: var(--amber-200);
+  --color-amber-300: var(--amber-300);
+  --color-amber-400: var(--amber-400);
+  --color-amber-500: var(--amber-500);
+  --color-amber-600: var(--amber-600);
+  --color-amber-700: var(--amber-700);
+  --color-amber-800: var(--amber-800);
+
+  --color-navy-600: var(--navy-600);
+  --color-navy-700: var(--navy-700);
+  --color-navy-800: var(--navy-800);
+  --color-navy-900: var(--navy-900);
+
+  --color-surface-0: var(--surface-0);
+  --color-surface-50: var(--surface-50);
+  --color-surface-100: var(--surface-100);
+  --color-surface-200: var(--surface-200);
+  --color-surface-300: var(--surface-300);
+  --color-surface-400: var(--surface-400);
+  --color-surface-500: var(--surface-500);
+  --color-surface-600: var(--surface-600);
+  --color-surface-700: var(--surface-700);
+  --color-surface-800: var(--surface-800);
+  --color-surface-900: var(--surface-900);
+
+  --color-success-50: var(--success-50);
+  --color-success-100: var(--success-100);
+  --color-success-200: var(--success-200);
+  --color-success-300: var(--success-300);
+  --color-success-400: var(--success-400);
+  --color-success-500: var(--success-500);
+  --color-success-600: var(--success-600);
+  --color-success-700: var(--success-700);
+  --color-success-800: var(--success-800);
+
+  --color-warning-50: var(--warning-50);
+  --color-warning-100: var(--warning-100);
+  --color-warning-200: var(--warning-200);
+  --color-warning-300: var(--warning-300);
+  --color-warning-400: var(--warning-400);
+  --color-warning-500: var(--warning-500);
+  --color-warning-600: var(--warning-600);
+  --color-warning-700: var(--warning-700);
+  --color-warning-800: var(--warning-800);
+
+  --color-danger-50: var(--danger-50);
+  --color-danger-100: var(--danger-100);
+  --color-danger-200: var(--danger-200);
+  --color-danger-300: var(--danger-300);
+  --color-danger-400: var(--danger-400);
+  --color-danger-500: var(--danger-500);
+  --color-danger-600: var(--danger-600);
+  --color-danger-700: var(--danger-700);
+  --color-danger-800: var(--danger-800);
+
+  --color-info-50: var(--info-50);
+  --color-info-100: var(--info-100);
+  --color-info-200: var(--info-200);
+  --color-info-300: var(--info-300);
+  --color-info-400: var(--info-400);
+  --color-info-500: var(--info-500);
+  --color-info-600: var(--info-600);
+  --color-info-700: var(--info-700);
+  --color-info-800: var(--info-800);
+
+  --color-flagship-50: var(--flagship-50);
+  --color-flagship-100: var(--flagship-100);
+  --color-flagship-200: var(--flagship-200);
+  --color-flagship-300: var(--flagship-300);
+  --color-flagship-400: var(--flagship-400);
+  --color-flagship-500: var(--flagship-500);
+  --color-flagship-600: var(--flagship-600);
+  --color-flagship-700: var(--flagship-700);
+  --color-flagship-800: var(--flagship-800);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  font-family: var(--font-active);
+}
+
+/* Arabic & Urdu: higher line-height, no letter-spacing (§8 / §3.2) */
+html[lang="ar"] body,
+html[lang="ur"] body {
+  line-height: 1.6;
+}
+
+/* Nastaliq requires extra breathing room (§8.2) */
+html[lang="ur"] body {
+  line-height: 1.7;
 }
 
 * {

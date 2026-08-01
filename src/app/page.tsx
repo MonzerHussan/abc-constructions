@@ -27,7 +27,7 @@ export default function HomePage() {
       title: t("modProjectTenders"),
       description: t("modProjectTendersDesc"),
       href: "/tenders/projects",
-      color: "from-blue-500 to-blue-600",
+      color: "from-info-500 to-info-600",
       stat: "120+ مناقصة نشطة",
     },
     {
@@ -35,7 +35,7 @@ export default function HomePage() {
       title: t("modMaterialTenders"),
       description: t("modMaterialTendersDesc"),
       href: "/tenders/materials",
-      color: "from-green-500 to-green-600",
+      color: "from-success-500 to-success-600",
       stat: "85+ طلب شراء",
     },
     {
@@ -43,7 +43,7 @@ export default function HomePage() {
       title: t("modMarketplace"),
       description: t("modMarketplaceDesc"),
       href: "/marketplace",
-      color: "from-amber-500 to-orange-500",
+      color: "from-amber-500 to-amber-500",
       stat: "500+ منتج متاح",
     },
     {
@@ -51,7 +51,7 @@ export default function HomePage() {
       title: t("modProjects"),
       description: t("modProjectsDesc"),
       href: "/projects",
-      color: "from-purple-500 to-purple-600",
+      color: "from-flagship-500 to-flagship-600",
       stat: "200+ مشروع معروض",
     },
     {
@@ -67,7 +67,7 @@ export default function HomePage() {
       title: t("modDelivery"),
       description: t("modDeliveryDesc"),
       href: "/delivery",
-      color: "from-emerald-500 to-green-600",
+      color: "from-emerald-500 to-success-600",
       stat: "45+ سائق متاح",
     },
     {
@@ -75,7 +75,7 @@ export default function HomePage() {
       title: t("modTraining"),
       description: t("modTrainingDesc"),
       href: "/training",
-      color: "from-rose-500 to-rose-600",
+      color: "from-danger-500 to-danger-600",
       stat: "45+ دورة تدريبية",
     },
   ];
@@ -151,8 +151,8 @@ export default function HomePage() {
                 <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mx-auto mb-3">
                   <stat.icon className="w-6 h-6 text-amber-600" />
                 </div>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                <p className="text-sm text-gray-500">{stat.label}</p>
+                <p className="text-2xl font-bold text-surface-900">{stat.value}</p>
+                <p className="text-sm text-surface-500">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -163,31 +163,31 @@ export default function HomePage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-surface-900 mb-4">
               {t("servicesTitle")}
             </h2>
-            <p className="text-gray-600 max-w-xl mx-auto">
+            <p className="text-surface-600 max-w-xl mx-auto">
               {t("servicesDescription")}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {modules.map((mod) => (
               <Link key={mod.href} href={mod.href}>
-                <div className="bg-white rounded-2xl border border-gray-200 p-6 card-hover h-full">
+                <div className="bg-white rounded-2xl border border-surface-200 p-6 card-hover h-full">
                   <div
                     className={`w-14 h-14 rounded-xl bg-gradient-to-br ${mod.color} flex items-center justify-center mb-4`}
                   >
                     <mod.icon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  <h3 className="text-lg font-bold text-surface-900 mb-2">
                     {mod.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4">{mod.description}</p>
+                  <p className="text-sm text-surface-600 mb-4">{mod.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
                       {mod.stat}
                     </span>
-                    <ArrowLeft className="w-5 h-5 text-gray-400" />
+                    <ArrowLeft className="w-5 h-5 text-surface-400" />
                   </div>
                 </div>
               </Link>
@@ -197,13 +197,13 @@ export default function HomePage() {
       </section>
 
       {/* Roles */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-surface-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-surface-900 mb-4">
               {t("forEveryoneTitle")}
             </h2>
-            <p className="text-gray-600">
+            <p className="text-surface-600">
               {t("forEveryoneDescription")}
             </p>
           </div>
@@ -211,13 +211,13 @@ export default function HomePage() {
             {roles.map((role) => (
               <div
                 key={role.name}
-                className="bg-white rounded-xl border border-gray-200 p-4 text-center card-hover"
+                className="bg-white rounded-xl border border-surface-200 p-4 text-center card-hover"
               >
                 <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-3">
                   <Star className="w-6 h-6 text-amber-500" />
                 </div>
-                <h4 className="font-bold text-gray-900 text-sm mb-1">{role.name}</h4>
-                <p className="text-xs text-gray-500">{role.desc}</p>
+                <h4 className="font-bold text-surface-900 text-sm mb-1">{role.name}</h4>
+                <p className="text-xs text-surface-500">{role.desc}</p>
               </div>
             ))}
           </div>
@@ -247,7 +247,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      <footer className="bg-surface-900 text-surface-400 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -257,7 +257,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <span className="text-xl font-bold text-white">{t("appName")}</span>
-                  <span className="text-xs block text-gray-500">
+                  <span className="text-xs block text-surface-500">
                     {t("appFullName")}
                   </span>
                 </div>
@@ -325,7 +325,7 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+          <div className="border-t border-surface-800 mt-8 pt-8 text-center text-sm">
             <p>© 2026 {t("appName")} - {t("appFullName")}. {t("allRights")}</p>
           </div>
         </div>

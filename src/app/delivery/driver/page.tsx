@@ -52,20 +52,20 @@ export default function DriverPage() {
   const [activeTab, setActiveTab] = useState<"available" | "active" | "completed">("available");
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-surface-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs items={[{ label: t("navDelivery"), href: "/delivery" }, { label: t("driverDashboard") }]} />
 
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-surface-900 flex items-center gap-2">
               <Truck className="w-7 h-7 text-emerald-600" />
               {t("driverDashboard")}
             </h1>
-            <p className="text-gray-600 mt-1">Ahmed Al-Rashed</p>
+            <p className="text-surface-600 mt-1">Ahmed Al-Rashed</p>
           </div>
-          <button onClick={() => setIsOnline(!isOnline)} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-colors ${isOnline ? "bg-green-500 text-white" : "bg-gray-200 text-gray-600"}`}>
+          <button onClick={() => setIsOnline(!isOnline)} className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm transition-colors ${isOnline ? "bg-success-500 text-white" : "bg-surface-200 text-surface-600"}`}>
             {isOnline ? <ToggleRight className="w-5 h-5" /> : <ToggleLeft className="w-5 h-5" />}
             {isOnline ? t("available") : t("unavailable")}
           </button>
@@ -74,26 +74,26 @@ export default function DriverPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <Card className="p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center"><Wallet className="w-5 h-5 text-green-600" /></div>
-              <div><p className="text-2xl font-bold text-gray-900">{mockDriverStats.todayEarnings}</p><p className="text-xs text-gray-500">{t("earnings")} ({t("currency")})</p></div>
+              <div className="w-10 h-10 bg-success-100 rounded-lg flex items-center justify-center"><Wallet className="w-5 h-5 text-success-600" /></div>
+              <div><p className="text-2xl font-bold text-surface-900">{mockDriverStats.todayEarnings}</p><p className="text-xs text-surface-500">{t("earnings")} ({t("currency")})</p></div>
             </div>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center"><Truck className="w-5 h-5 text-blue-600" /></div>
-              <div><p className="text-2xl font-bold text-gray-900">{mockDriverStats.todayTrips}</p><p className="text-xs text-gray-500">{t("todayTrips")}</p></div>
+              <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center"><Truck className="w-5 h-5 text-info-600" /></div>
+              <div><p className="text-2xl font-bold text-surface-900">{mockDriverStats.todayTrips}</p><p className="text-xs text-surface-500">{t("todayTrips")}</p></div>
             </div>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center"><Star className="w-5 h-5 text-yellow-600" /></div>
-              <div><p className="text-2xl font-bold text-gray-900">{mockDriverStats.avgRating}</p><p className="text-xs text-gray-500">{t("avgRating")}</p></div>
+              <div className="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center"><Star className="w-5 h-5 text-warning-600" /></div>
+              <div><p className="text-2xl font-bold text-surface-900">{mockDriverStats.avgRating}</p><p className="text-xs text-surface-500">{t("avgRating")}</p></div>
             </div>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center"><TrendingUp className="w-5 h-5 text-purple-600" /></div>
-              <div><p className="text-2xl font-bold text-gray-900">{mockDriverStats.completionRate}%</p><p className="text-xs text-gray-500">{t("completionRate")}</p></div>
+              <div className="w-10 h-10 bg-flagship-100 rounded-lg flex items-center justify-center"><TrendingUp className="w-5 h-5 text-flagship-600" /></div>
+              <div><p className="text-2xl font-bold text-surface-900">{mockDriverStats.completionRate}%</p><p className="text-xs text-surface-500">{t("completionRate")}</p></div>
             </div>
           </Card>
         </div>
@@ -101,22 +101,22 @@ export default function DriverPage() {
         {mockActiveOrder && (
           <Card className="p-6 mb-6 border-2 border-emerald-200 bg-emerald-50/50">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold text-gray-900 flex items-center gap-2">
+              <h2 className="font-bold text-surface-900 flex items-center gap-2">
                 <Navigation className="w-5 h-5 text-emerald-600 animate-pulse" />
                 {t("activeDelivery")}
               </h2>
               <StatusBadge label={t("activeDelivery")} color="bg-emerald-100 text-emerald-800" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div><p className="text-sm text-gray-500">{t("deliveryLocation")}</p><p className="font-medium">{mockActiveOrder.deliveryAddress}</p></div>
-              <div><p className="text-sm text-gray-500">{t("receiverName")}</p><p className="font-medium">{mockActiveOrder.deliveryName}</p></div>
-              <div><p className="text-sm text-gray-500">{t("remainingTime")}</p><p className="font-medium text-emerald-600">{mockActiveOrder.distance}</p></div>
-              <div><p className="text-sm text-gray-500">{t("remainingTime")}</p><p className="font-medium text-emerald-600">{mockActiveOrder.estimatedTime}</p></div>
+              <div><p className="text-sm text-surface-500">{t("deliveryLocation")}</p><p className="font-medium">{mockActiveOrder.deliveryAddress}</p></div>
+              <div><p className="text-sm text-surface-500">{t("receiverName")}</p><p className="font-medium">{mockActiveOrder.deliveryName}</p></div>
+              <div><p className="text-sm text-surface-500">{t("remainingTime")}</p><p className="font-medium text-emerald-600">{mockActiveOrder.distance}</p></div>
+              <div><p className="text-sm text-surface-500">{t("remainingTime")}</p><p className="font-medium text-emerald-600">{mockActiveOrder.estimatedTime}</p></div>
             </div>
             <div className="flex gap-2">
               <a href={`tel:${mockActiveOrder.deliveryPhone}`} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-medium hover:bg-emerald-600">{t("call")}</a>
               <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-emerald-300 text-emerald-700 rounded-xl text-sm font-medium hover:bg-emerald-50">{t("track")}</button>
-              <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50">{t("delivered")} ✓</button>
+              <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-surface-300 text-surface-700 rounded-xl text-sm font-medium hover:bg-surface-50">{t("delivered")} ✓</button>
             </div>
           </Card>
         )}
@@ -127,7 +127,7 @@ export default function DriverPage() {
             { key: "active" as const, label: t("active"), count: 1 },
             { key: "completed" as const, label: t("completed"), count: 342 },
           ].map((tab) => (
-            <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === tab.key ? "bg-emerald-500 text-white" : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"}`}>
+            <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === tab.key ? "bg-emerald-500 text-white" : "bg-white text-surface-600 border border-surface-200 hover:bg-surface-50"}`}>
               {tab.label} ({tab.count})
             </button>
           ))}
@@ -141,26 +141,26 @@ export default function DriverPage() {
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <h3 className="font-bold text-gray-900">{order.orderNumber}</h3>
-                        <StatusBadge label={order.priority === "URGENT" ? t("urgent") : t("normal")} color={order.priority === "URGENT" ? "bg-red-100 text-red-800" : "bg-gray-100 text-gray-800"} />
+                        <h3 className="font-bold text-surface-900">{order.orderNumber}</h3>
+                        <StatusBadge label={order.priority === "URGENT" ? t("urgent") : t("normal")} color={order.priority === "URGENT" ? "bg-danger-100 text-danger-800" : "bg-surface-100 text-surface-800"} />
                         <span className="text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-medium">{order.distance}</span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                         <div className="flex items-start gap-2">
-                          <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><div className="w-2 h-2 bg-green-500 rounded-full" /></div>
-                          <p className="text-gray-700">{order.pickupAddress}</p>
+                          <div className="w-5 h-5 bg-success-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><div className="w-2 h-2 bg-success-500 rounded-full" /></div>
+                          <p className="text-surface-700">{order.pickupAddress}</p>
                         </div>
                         <div className="flex items-start gap-2">
-                          <MapPin className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                          <p className="text-gray-700">{order.deliveryAddress}</p>
+                          <MapPin className="w-4 h-4 text-danger-500 flex-shrink-0 mt-0.5" />
+                          <p className="text-surface-700">{order.deliveryAddress}</p>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-500 mt-2">{order.description} • {order.weight} kg</p>
-                      <p className="text-xs text-gray-400 mt-1">{order.createdAt}</p>
+                      <p className="text-sm text-surface-500 mt-2">{order.description} • {order.weight} kg</p>
+                      <p className="text-xs text-surface-400 mt-1">{order.createdAt}</p>
                     </div>
                     <div className="flex flex-col items-end gap-2 lg:min-w-[140px]">
                       <p className="text-2xl font-bold text-emerald-600">{order.totalPrice} {t("currency")}</p>
-                      <p className="text-xs text-gray-500">{order.estimatedTime}</p>
+                      <p className="text-xs text-surface-500">{order.estimatedTime}</p>
                       <button className="w-full px-4 py-2.5 bg-emerald-500 text-white rounded-xl text-sm font-medium hover:bg-emerald-600 transition-colors">{t("acceptOrder")}</button>
                     </div>
                   </div>
@@ -168,24 +168,24 @@ export default function DriverPage() {
               ))
             ) : (
               <Card className="p-12 text-center">
-                <Truck className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">{t("unavailable")}</p>
-                <p className="text-sm text-gray-400 mt-1">{t("available")}</p>
+                <Truck className="w-16 h-16 text-surface-300 mx-auto mb-4" />
+                <p className="text-surface-500">{t("unavailable")}</p>
+                <p className="text-sm text-surface-400 mt-1">{t("available")}</p>
               </Card>
             )}
           </div>
         )}
 
         <Card className="p-6 mt-6">
-          <h2 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <h2 className="font-bold text-surface-900 mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-emerald-600" />
             {t("earningsSummary")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-xl"><p className="text-2xl font-bold text-gray-900">{mockDriverStats.totalEarnings}</p><p className="text-xs text-gray-500">{t("totalEarnings")}</p></div>
-            <div className="text-center p-4 bg-gray-50 rounded-xl"><p className="text-2xl font-bold text-gray-900">{mockDriverStats.totalTrips}</p><p className="text-xs text-gray-500">{t("totalTrips")}</p></div>
-            <div className="text-center p-4 bg-gray-50 rounded-xl"><p className="text-2xl font-bold text-gray-900">{mockDriverStats.onlineHours}h</p><p className="text-xs text-gray-500">{t("onlineHours")}</p></div>
-            <div className="text-center p-4 bg-gray-50 rounded-xl"><p className="text-2xl font-bold text-gray-900">{(mockDriverStats.totalEarnings / mockDriverStats.totalTrips).toFixed(0)}</p><p className="text-xs text-gray-500">{t("avgEarningsPerTrip")}</p></div>
+            <div className="text-center p-4 bg-surface-50 rounded-xl"><p className="text-2xl font-bold text-surface-900">{mockDriverStats.totalEarnings}</p><p className="text-xs text-surface-500">{t("totalEarnings")}</p></div>
+            <div className="text-center p-4 bg-surface-50 rounded-xl"><p className="text-2xl font-bold text-surface-900">{mockDriverStats.totalTrips}</p><p className="text-xs text-surface-500">{t("totalTrips")}</p></div>
+            <div className="text-center p-4 bg-surface-50 rounded-xl"><p className="text-2xl font-bold text-surface-900">{mockDriverStats.onlineHours}h</p><p className="text-xs text-surface-500">{t("onlineHours")}</p></div>
+            <div className="text-center p-4 bg-surface-50 rounded-xl"><p className="text-2xl font-bold text-surface-900">{(mockDriverStats.totalEarnings / mockDriverStats.totalTrips).toFixed(0)}</p><p className="text-xs text-surface-500">{t("avgEarningsPerTrip")}</p></div>
           </div>
         </Card>
       </div>

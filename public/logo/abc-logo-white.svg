@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="64" viewBox="0 0 140 64" role="img" aria-label="ABC - All About Constructions">
+  <defs>
+    <linearGradient id="abcLockWGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <!-- ABC Brand Lockup v2 (dark background) -->
+  <g transform="translate(4,10) scale(0.4583333)">
+    <rect x="4" y="4" width="88" height="88" rx="22" fill="url(#abcLockWGrad)"/>
+    <g fill="#ffffff">
+      <rect x="16" y="58" width="18" height="26" rx="5"/>
+      <rect x="39" y="46" width="18" height="38" rx="5"/>
+      <rect x="62" y="34" width="18" height="50" rx="5"/>
+    </g>
+    <g fill="#0f172a" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-weight="800" text-anchor="middle">
+      <text x="25" y="78" font-size="20">A</text>
+      <text x="48" y="72" font-size="20">B</text>
+      <text x="71" y="66" font-size="20">C</text>
+    </g>
+  </g>
+  <text x="56" y="41" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="1" fill="#ffffff">ABC</text>
+</svg>

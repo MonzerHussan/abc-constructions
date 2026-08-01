@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -63,6 +64,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth()
+    if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+
     const body = await request.json();
     const {
       title,
@@ -76,10 +80,9 @@ export async function POST(request: NextRequest) {
       endDate,
       status,
       highlights,
-      userId,
     } = body;
 
-    if (!title || !description || !category || !location || !userId) {
+    if (!title || !description || !category || !location) {
       return NextResponse.json(
         { error: "جميع الحقول المطلوبة يجب ملؤها" },
         { status: 400 }
@@ -99,7 +102,7 @@ export async function POST(request: NextRequest) {
         endDate: endDate ? new Date(endDate) : null,
         status: status || "PLANNING",
         highlights,
-        userId,
+        userId: session.user.id,
       },
       include: {
         user: {

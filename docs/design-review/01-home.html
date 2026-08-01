@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABC Home — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">الرئيسية</span><span class="en">Home</span> · Landing</span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="topbar">
+  <div class="mobile-only"><button onclick="previewSidebar()" style="font-size:20px">&#9776;</button></div>
+  <a class="logo" href="#"><span class="logo-mark">A</span> ABC</a>
+  <nav class="nav-links grow">
+    <a class="nav-link" href="#"><span class="ar">السوق</span><span class="en">Marketplace</span></a>
+    <a class="nav-link" href="#"><span class="ar">المناقصات</span><span class="en">Tenders</span></a>
+    <a class="nav-link" href="#"><span class="ar">الوظائف</span><span class="en">Jobs</span></a>
+    <a class="nav-link" href="#"><span class="ar">التدريب</span><span class="en">Training</span></a>
+    <a class="nav-link" href="#"><span class="ar">المشاريع</span><span class="en">Projects</span></a>
+  </nav>
+  <div class="row">
+    <button class="btn btn-ghost"><span class="ar">دخول</span><span class="en">Sign in</span></button>
+    <button class="btn btn-primary"><span class="ar">انضم الآن</span><span class="en">Join now</span></button>
+  </div>
+</div>
+
+<div class="hero">
+  <h1><span class="ar">المنصة الرقمية لكل ما يخص <span class="gradient-text">البناء والإنشاءات</span></span><span class="en">The digital platform for <span class="gradient-text">everything construction</span></span></h1>
+  <p><span class="ar">اربط المقاولين والموردين والمصنعين والمهندسين والقوى العاملة في منظومة واحدة: مناقصات، مواد، مشتريات، وظائف، وتدريب.</span><span class="en">Connect contractors, suppliers, manufacturers, engineers and workforce in one ecosystem: tenders, materials, procurement, jobs and training.</span></p>
+  <div class="hero-search">
+    <div class="search-wrap grow">
+      <span class="search-icon">&#128269;</span>
+      <input class="input" data-ph-ar="ابحث عن منتج، مورد، وظيفة، دورة…" data-ph-en="Search products, suppliers, jobs, courses…" placeholder="ابحث عن منتج، مورد، وظيفة، دورة…">
+    </div>
+    <button class="btn btn-primary btn-lg"><span class="ar">بحث</span><span class="en">Search</span></button>
+  </div>
+  <div class="hero-stats">
+    <div class="st"><b>12k+</b><span><span class="ar">مورد ومصنع</span><span class="en">Suppliers &amp; factories</span></span></div>
+    <div class="st"><b>48k+</b><span><span class="ar">منتج بناء</span><span class="en">Construction products</span></span></div>
+    <div class="st"><b>5.6k</b><span><span class="ar">مقاول واستشاري</span><span class="en">Contractors &amp; consultants</span></span></div>
+    <div class="st"><b>9k+</b><span><span class="ar">عامل ووظيفة</span><span class="en">Workers &amp; jobs</span></span></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">
+    <h2><span class="ar">تصفح الفئات الرئيسية</span><span class="en">Browse top categories</span></h2>
+    <p><span class="ar">كل ما يحتاجه موقع البناء من مواد ومعدات وخدمات</span><span class="en">Everything a construction site needs</span></p>
+  </div>
+  <div class="cat-grid">
+    <div class="cat"><span class="ic">&#129513;</span><b><span class="ar">أسمنت وخرسانة</span><span class="en">Cement &amp; Concrete</span></b><span>1,240</span></div>
+    <div class="cat"><span class="ic">&#129521;</span><b><span class="ar">حديد تسليح</span><span class="en">Reinforcement Steel</span></b><span>860</span></div>
+    <div class="cat"><span class="ic">&#128268;</span><b><span class="ar">مواد كهربائية</span><span class="en">Electrical</span></b><span>2,100</span></div>
+    <div class="cat"><span class="ic">&#128703;</span><b><span class="ar">أدوات صحية</span><span class="en">Plumbing</span></b><span>1,530</span></div>
+    <div class="cat"><span class="ic">&#128207;</span><b><span class="ar">دهانات</span><span class="en">Paints</span></b><span>690</span></div>
+    <div class="cat"><span class="ic">&#129726;</span><b><span class="ar">معدات ثقيلة</span><span class="en">Heavy Equipment</span></b><span>310</span></div>
+    <div class="cat"><span class="ic">&#128737;</span><b><span class="ar">عزل حراري</span><span class="en">Insulation</span></b><span>420</span></div>
+    <div class="cat"><span class="ic">&#128739;</span><b><span class="ar">أدوات يدوية</span><span class="en">Hand Tools</span></b><span>980</span></div>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="section-title">
+    <h2><span class="ar">لماذا ABC؟</span><span class="en">Why ABC?</span></h2>
+  </div>
+  <div class="grid grid-4">
+    <div class="card card-pad card-hover">
+      <div style="font-size:30px; margin-bottom:10px">&#128179;</div>
+      <b><span class="ar">تجارة آمنة</span><span class="en">Trusted commerce</span></b>
+      <p class="small muted" style="margin-top:6px"><span class="ar">تحقق KYC/KYB متدرج ودفع محمي لحساب الضمان حتى استلام المواد.</span><span class="en">Tiered KYC/KYB verification and escrow-protected payment until receipt.</span></p>
+    </div>
+    <div class="card card-pad card-hover">
+      <div style="font-size:30px; margin-bottom:10px">&#128230;</div>
+      <b><span class="ar">مقارنة ذكية</span><span class="en">Smart comparison</span></b>
+      <p class="small muted" style="margin-top:6px"><span class="ar">قارن العروض والمنتجات حسب السعر والمدة والتقييم ومستوى التحقق.</span><span class="en">Compare offers by price, lead time, rating and verification.</span></p>
+    </div>
+    <div class="card card-pad card-hover">
+      <div style="font-size:30px; margin-bottom:10px">&#128200;</div>
+      <b><span class="ar">قرارات بالبيانات</span><span class="en">Data-driven decisions</span></b>
+      <p class="small muted" style="margin-top:6px"><span class="ar">مؤشرات أداء ومشتريات موثقة لكل طرف في المنظومة.</span><span class="en">Documented performance and procurement metrics for every party.</span></p>
+    </div>
+    <div class="card card-pad card-hover">
+      <div style="font-size:30px; margin-bottom:10px">&#128296;</div>
+      <b><span class="ar">منظومة متكاملة</span><span class="en">Full ecosystem</span></b>
+      <p class="small muted" style="margin-top:6px"><span class="ar">من BOQ إلى RFQ إلى التوريد، ومن الوظائف إلى الشهادات التدريبية.</span><span class="en">From BOQ to RFQ to delivery, and from jobs to training certificates.</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="section-title">
+    <h2><span class="ar">منتجات مختارة</span><span class="en">Featured products</span></h2>
+  </div>
+  <div class="grid grid-4">
+    <div class="product-card">
+      <div class="ph"><span class="badge bg-success"><span class="ar">متوفر</span><span class="en">In stock</span></span>&#129513;</div>
+      <div class="pd">
+        <b><span class="ar">أسمنت بورتلاندي 50كجم</span><span class="en">Portland Cement 50kg</span></b>
+        <div class="brand">ABC Cement · <span class="vchip trusted">TRUSTED</span></div>
+        <div class="row"><span><b class="price">12.50</b> <span class="unit">SAR</span></span><span class="vchip basic">BASIC</span></div>
+        <div class="row"><button class="btn btn-primary btn-sm grow"><span class="ar">اطلب سعراً</span><span class="en">Request quote</span></button></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="ph"><span class="badge bg-success"><span class="ar">متوفر</span><span class="en">In stock</span></span>&#129521;</div>
+      <div class="pd">
+        <b><span class="ar">حديد تسليح 16مم</span><span class="en">Rebar 16mm</span></b>
+        <div class="brand">Gulf Steel · <span class="vchip verified">VERIFIED</span></div>
+        <div class="row"><span><b class="price">2,850</b> <span class="unit">SAR/<span class="ar">طن</span><span class="en">ton</span></span></span></div>
+        <div class="row"><button class="btn btn-primary btn-sm grow"><span class="ar">اطلب سعراً</span><span class="en">Request quote</span></button></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="ph"><span class="badge bg-warning"><span class="ar">مخزون منخفض</span><span class="en">Low stock</span></span>&#128268;</div>
+      <div class="pd">
+        <b><span class="ar">كابل نحاس 3×4مم</span><span class="en">Copper cable 3x4mm</span></b>
+        <div class="brand">Electric Co. · <span class="vchip verified">VERIFIED</span></div>
+        <div class="row"><span><b class="price">185</b> <span class="unit">SAR</span></span></div>
+        <div class="row"><button class="btn btn-primary btn-sm grow"><span class="ar">اطلب سعراً</span><span class="en">Request quote</span></button></div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="ph"><span class="badge bg-info"><span class="ar">حسب الطلب</span><span class="en">Made to order</span></span>&#128703;</div>
+      <div class="pd">
+        <b><span class="ar">وحدات صحية خزفية</span><span class="en">Ceramic sanitary ware</span></b>
+        <div class="brand">Sanitec · <span class="vchip flagship">FLAGSHIP</span></div>
+        <div class="row"><span><b class="price">320</b> <span class="unit">SAR</span></span></div>
+        <div class="row"><button class="btn btn-primary btn-sm grow"><span class="ar">اطلب سعراً</span><span class="en">Request quote</span></button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="section-title">
+    <h2><span class="ar">كيف تعمل المنصة</span><span class="en">How it works</span></h2>
+  </div>
+  <div class="grid grid-3">
+    <div class="card card-pad" style="text-align:center">
+      <div style="font-size:34px;margin-bottom:10px">&#128462;</div>
+      <b><span class="ar">1. انضم ووثّق</span><span class="en">1. Join &amp; verify</span></b>
+      <p class="small muted" style="margin-top:6px"><span class="ar">أنشئ حساب المؤسسة وأكمل التحقق (KYC/KYB) لبناء ملف موثوق.</span><span class="en">Create your organization account and complete verification.</span></p>
+    </div>
+    <div class="card card-pad" style="text-align:center">
+      <div style="font-size:34px;margin-bottom:10px">&#128273;</div>
+      <b><span class="ar">2. اطلب واعرض</span><span class="en">2. Request &amp; quote</span></b>
+      <p class="small muted" style="margin-top:6px"><span class="ar">ارفع BOQ أو أنشئ RFQ وستصل عروض موردين موثوقين للمقارنة.</span><span class="en">Upload a BOQ or create an RFQ and compare trusted offers.</span></p>
+    </div>
+    <div class="card card-pad" style="text-align:center">
+      <div style="font-size:34px;margin-bottom:10px">&#128230;</div>
+      <b><span class="ar">3. رسِّ وادفع</span><span class="en">3. Award &amp; pay</span></b>
+      <p class="small muted" style="margin-top:6px"><span class="ar">رسِّ على أفضل عرض، وتابع التوريد حتى الفاتورة والدفع الآمن.</span><span class="en">Award the best offer, track delivery to invoice and secure payment.</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="padding-top:0">
+  <div class="section-title">
+    <h2><span class="ar">منظومة متكاملة لسبعة أدوار</span><span class="en">One ecosystem, seven roles</span></h2>
+  </div>
+  <div class="cat-grid">
+    <div class="cat"><span class="ic">&#128739;</span><b><span class="ar">المقاولون</span><span class="en">Contractors</span></b></div>
+    <div class="cat"><span class="ic">&#128230;</span><b><span class="ar">الموردون</span><span class="en">Suppliers</span></b></div>
+    <div class="cat"><span class="ic">&#127981;</span><b><span class="ar">المصنعون</span><span class="en">Manufacturers</span></b></div>
+    <div class="cat"><span class="ic">&#128209;</span><b><span class="ar">المهندسون</span><span class="en">Engineers</span></b></div>
+    <div class="cat"><span class="ic">&#128104;</span><b><span class="ar">القوى العاملة</span><span class="en">Workforce</span></b></div>
+    <div class="cat"><span class="ic">&#127891;</span><b><span class="ar">مزودو التدريب</span><span class="en">Training providers</span></b></div>
+    <div class="cat"><span class="ic">&#128221;</span><b><span class="ar">مالكو المشاريع</span><span class="en">Project owners</span></b></div>
+    <div class="cat"><span class="ic">&#128737;</span><b><span class="ar">شركات النقل</span><span class="en">Logistics</span></b></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="grid">
+    <div>
+      <div class="logo" style="color:#fff"><span class="logo-mark">A</span> ABC</div>
+      <p style="margin-top:12px; opacity:.8"><span class="ar">المنصة الرقمية الشاملة لكل ما يتعلق بالبناء والإنشاءات.</span><span class="en">The all-in-one digital construction platform.</span></p>
+    </div>
+    <div><h4><span class="ar">المنصة</span><span class="en">Platform</span></h4><a href="#"><span class="ar">السوق</span><span class="en">Marketplace</span></a><a href="#"><span class="ar">المناقصات</span><span class="en">Tenders</span></a><a href="#"><span class="ar">المشتريات</span><span class="en">Procurement</span></a></div>
+    <div><h4><span class="ar">المهن</span><span class="en">Careers</span></h4><a href="#"><span class="ar">الوظائف</span><span class="en">Jobs</span></a><a href="#"><span class="ar">التدريب</span><span class="en">Training</span></a><a href="#"><span class="ar">الشهادات</span><span class="en">Certificates</span></a></div>
+    <div><h4><span class="ar">الدعم</span><span class="en">Support</span></h4><a href="#"><span class="ar">تواصل معنا</span><span class="en">Contact us</span></a><a href="#"><span class="ar">الشروط</span><span class="en">Terms</span></a><a href="#"><span class="ar">الخصوصية</span><span class="en">Privacy</span></a></div>
+  </div>
+  <div style="margin-top:28px; border-top:1px solid rgba(255,255,255,.15); padding-top:16px; opacity:.6">© 2026 ABC Platform</div>
+</div>
+
+</body>
+</html>

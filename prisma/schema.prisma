@@ -17,6 +17,7 @@ enum UserRole {
   SUPPLIER
   TRADER
   ADMIN
+  SUPER_ADMIN
 }
 
 enum TenderStatus {
@@ -87,139 +88,582 @@ enum DeliveryPriority {
   SCHEDULED
 }
 
+// ============================
+// Procurement Enums
+// ============================
+
+enum PRPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum PRStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+  ORDERED
+}
+
+enum RFQStatus {
+  DRAFT
+  SENT
+  OPEN
+  CLOSED
+  AWARDED
+  CANCELLED
+}
+
+enum QuotationStatus {
+  DRAFT
+  SUBMITTED
+  WITHDRAWN
+  ACCEPTED
+  REJECTED
+}
+
+enum EvalStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum AwardStatus {
+  PENDING_ACCEPTANCE
+  ACCEPTED
+  DECLINED
+  CANCELLED
+}
+
+enum POStatus {
+  DRAFT
+  ISSUED
+  ACKNOWLEDGED
+  PARTIALLY_RECEIVED
+  COMPLETED
+  CANCELLED
+}
+
+enum GRStatus {
+  PENDING
+  PARTIAL
+  COMPLETE
+  INSPECTED
+  REJECTED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SUBMITTED
+  VERIFIED
+  MATCHED
+  PARTIALLY_MATCHED
+  APPROVED
+  AUTHORIZED
+  REJECTED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// ============================
+// Organization & RBAC Enums
+// ============================
+
+enum OrganizationType {
+  PROJECT_OWNER
+  CONSULTANT
+  MAIN_CONTRACTOR
+  SUBCONTRACTOR
+  WORKSHOP
+  FREELANCER
+  SUPPLIER
+  PLATFORM_ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  PARTIALLY_VERIFIED
+  REJECTED
+  EXPIRED
+  SUSPENDED
+}
+
+enum VerificationDocType {
+  NATIONAL_ID
+  PASSPORT
+  SELFIE
+  ADDRESS_PROOF
+  COMMERCIAL_REGISTER
+  TAX_CERTIFICATE
+  COMPANY_LICENSE
+  BANK_ACCOUNT
+  PROFESSIONAL_CERT
+  ENGINEERING_LICENSE
+  CONTRACTOR_CLASSIFICATION
+  AUTHORIZATION_LETTER
+  VEHICLE_LICENSE
+  OPERATING_PERMIT
+  PORTFOLIO
+  OTHER
+}
+
+enum AuditAction {
+  LOGIN
+  LOGOUT
+  CREATE
+  UPDATE
+  DELETE
+  APPROVE
+  REJECT
+  VERIFY
+  SUSPEND
+  ACTIVATE
+  DEACTIVATE
+  ASSIGN_ROLE
+  REVOKE_ROLE
+  SUBMIT_BID
+  AWARD_TENDER
+  MAKE_PAYMENT
+  APPROVE_PAYMENT
+  UPLOAD_DOCUMENT
+  CREATE_CAMPAIGN
+  PUBLISH_CAMPAIGN
+  SEND_INVITATION
+  EXPORT_DATA
+  GENERATE_INSIGHT
+}
+
+model Organization {
+  id                 String           @id @default(cuid())
+  name               String
+  nameAr             String?
+  type               OrganizationType
+  logo               String?
+  website            String?
+  location           String?
+  about              String?
+  taxNumber          String?
+  commercialRegister String?
+  isVerified         Boolean          @default(false)
+  verificationLevel  Int              @default(0)
+  isActive           Boolean          @default(true)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  users            UserOrganization[]
+  roles            Role[]
+  verifications    Verification[]
+  auditLogs        AuditLog[]
+  tendersCreated   ProjectTender[]    @relation("TenderOrg")
+  materialTenders  MaterialTender[]   @relation("MaterialTenderOrg")
+  projects         Project[]          @relation("ProjectOrg")
+  jobs             Job[]              @relation("JobOrg")
+  purchaseRequests PurchaseRequest[]  @relation("PROrganization")
+  rfqs             RFQ[]              @relation("RFQOrganization")
+  rfqSuppliers     RFQSupplier[]      @relation("RFQSupplierOrganization")
+  quotations       Quotation[]        @relation("QuotationOrganization")
+  purchaseOrders   PurchaseOrder[]    @relation("POOrganization")
+  crmLeads         Lead[]
+  crmContacts      CrmContact[]
+  crmOpportunities Opportunity[]
+  crmActivities    CrmActivity[]
+  crmTasks         CrmTask[]
+  crmMeetings      CrmMeeting[]
+  crmNotes         CrmNote[]
+  supplierProfile     SupplierProfile?
+  supplierRatings     SupplierRating[]        @relation("OrgSupplierRating")
+  buyerOrgRelationships SupplierRelationship[]  @relation("OrgBuyerRelationship")
+  manufacturedProducts  ProductMaster[]          @relation("ManufacturerProducts")
+  productReviews        ProductReview[]          @relation("OrgProductReviews")
+  supplierReviews       SupplierReview[]         @relation("OrgSupplierReviews")
+  favoriteProducts      FavoriteProduct[]        @relation("OrgFavoriteProducts")
+  favoriteSuppliers     FavoriteSupplier[]       @relation("OrgFavoriteSuppliers")
+}
+
+model UserOrganization {
+  id             String   @id @default(cuid())
+  userId         String
+  organizationId String
+  roleId         String?
+  title          String?
+  isPrimary      Boolean  @default(false)
+  isActive       Boolean  @default(true)
+  joinedAt       DateTime @default(now())
+
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+  role         Role?        @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, organizationId])
+}
+
+model Role {
+  id               String           @id @default(cuid())
+  name             String
+  nameAr           String?
+  description      String?
+  organizationType OrganizationType
+  isSystem         Boolean          @default(false)
+  isActive         Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  permissions RolePermission[]
+  users       UserOrganization[]
+}
+
+model Permission {
+  id          String  @id @default(cuid())
+  key         String  @unique
+  name        String
+  nameAr      String?
+  module      String
+  description String?
+
+  roles RolePermission[]
+}
+
+model RolePermission {
+  id           String @id @default(cuid())
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@unique([roleId, permissionId])
+}
+
+model Verification {
+  id             String             @id @default(cuid())
+  userId         String
+  organizationId String?
+  type           OrganizationType?
+  level          Int                @default(0)
+  status         VerificationStatus @default(PENDING)
+  reviewedBy     String?
+  reviewedAt     DateTime?
+  notes          String?
+  submittedAt    DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  user         User                   @relation(fields: [userId], references: [id])
+  organization Organization?          @relation(fields: [organizationId], references: [id])
+  documents    VerificationDocument[]
+}
+
+model VerificationDocument {
+  id             String              @id @default(cuid())
+  verificationId String
+  docType        VerificationDocType
+  fileName       String
+  fileUrl        String
+  status         VerificationStatus  @default(PENDING)
+  notes          String?
+  expiresAt      DateTime?
+  createdAt      DateTime            @default(now())
+
+  verification Verification @relation(fields: [verificationId], references: [id])
+}
+
+model AuditLog {
+  id             String      @id @default(cuid())
+  action         AuditAction
+  entity         String
+  entityId       String?
+  details        Json?
+  ip             String?
+  userAgent      String?
+  userId         String?
+  organizationId String?
+  createdAt      DateTime    @default(now())
+
+  user         User?         @relation(fields: [userId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  @@index([userId])
+  @@index([organizationId])
+  @@index([action])
+  @@index([createdAt])
+}
+
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  password      String
-  name          String
-  phone         String?
-  avatar        String?
-  role          UserRole
-  bio           String?
-  companyName   String?
-  companyLogo   String?
-  website       String?
-  location      String?
-  isVerified    Boolean   @default(false)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  email          String    @unique
+  password       String?
+  name           String
+  phone          String?
+  avatar         String?
+  role           UserRole  @default(OWNER)
+  bio            String?
+  companyName    String?
+  companyLogo    String?
+  website        String?
+  location       String?
+  isVerified     Boolean   @default(false)
+  isActive       Boolean   @default(true)
+  emailVerified  DateTime?
+  mfaEnabled     Boolean   @default(false)
+  mfaSecret      String?
+  mfaBackupCodes String?
+  mfaToken       String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  projectTenders       ProjectTender[]
-  materialTenders      MaterialTender[]
-  projectTenderBids    ProjectTenderBid[]
-  materialTenderBids   MaterialTenderBid[]
-  products             Product[]
-  projects             Project[]
-  jobs                 Job[]
-  jobApplications      JobApplication[] @relation("Applicant")
-  posts                Post[]
-  postComments         PostComment[]
-  postLikes            PostLike[]
-  messages             Message[] @relation("SentMessages")
-  receivedMessages     Message[] @relation("ReceivedMessages")
-  notifications        Notification[]
-  savedProducts        SavedProduct[]
-  savedProjects        SavedProject[]
-  savedJobs            SavedJob[]
-  reviewsGiven         Review[] @relation("ReviewAuthor")
-  reviewsReceived      Review[] @relation("ReviewTarget")
+  accounts Account[]
+  sessions Session[]
 
-  driverProfile        DriverProfile?
-  deliveryOrdersSent   DeliveryOrder[] @relation("DeliverySender")
-  deliveryOrdersReceived DeliveryOrder[] @relation("DeliveryReceiver")
-  deliveryReviews      DeliveryReview[] @relation("DeliveryReviewAuthor")
+  projectTenders     ProjectTender[]
+  materialTenders    MaterialTender[]
+  projectTenderBids  ProjectTenderBid[]
+  materialTenderBids MaterialTenderBid[]
+  products           Product[]
+  projects           Project[]
+  jobs               Job[]
+  jobApplications    JobApplication[]    @relation("Applicant")
+  posts              Post[]
+  postComments       PostComment[]
+  postLikes          PostLike[]
+  messages           Message[]           @relation("SentMessages")
+  receivedMessages   Message[]           @relation("ReceivedMessages")
+  notifications      Notification[]
+  savedProducts      SavedProduct[]
+  savedProjects      SavedProject[]
+  savedJobs          SavedJob[]
+  reviewsGiven       Review[]            @relation("ReviewAuthor")
+  reviewsReceived    Review[]            @relation("ReviewTarget")
+
+  driverProfile          DriverProfile?
+  deliveryOrdersSent     DeliveryOrder[]  @relation("DeliverySender")
+  deliveryOrdersReceived DeliveryOrder[]  @relation("DeliveryReceiver")
+  deliveryReviews        DeliveryReview[] @relation("DeliveryReviewAuthor")
+
+  organizations UserOrganization[]
+  verifications Verification[]
+  auditLogs     AuditLog[]
+  courses       Course[]
+  enrollments   CourseEnrollment[]
+  certificates  Certificate[]
+
+  purchaseRequestsRequested PurchaseRequest[] @relation("PRRequestedBy")
+  purchaseRequestsApproved  PurchaseRequest[] @relation("PRApprovedBy")
+  rfqsCreated               RFQ[]             @relation("RFQCreatedBy")
+  rfqSupplierInvitations    RFQSupplier[]     @relation("RFQSupplierSupplier")
+  quotationsSupplier        Quotation[]       @relation("QuotationSupplier")
+  evaluationsAssigned       Evaluation[]        @relation("EvaluationEvaluator")
+  quotationEvaluationsAssigned QuotationEvaluation[] @relation("QuotationEvaluator")
+  approvalRequestsRequested   ApprovalRequest[]     @relation("ApprovalRequester")
+  approvalActions             ApprovalHistory[]     @relation("ApprovalActor")
+  awardsReceived            Award[]           @relation("AwardSupplier")
+  awardsAwarded             Award[]           @relation("AwardAwarder")
+  purchaseOrdersSupplier    PurchaseOrder[]   @relation("POSupplier")
+  purchaseOrdersCreated     PurchaseOrder[]   @relation("POCreatedBy")
+  goodsReceiptsSupplier     GoodsReceipt[]    @relation("GRSupplier")
+  goodsReceiptsReceived     GoodsReceipt[]    @relation("GRReceiver")
+  deliveriesSupplier        Delivery[]        @relation("DeliverySupplier")
+  deliveriesCreated         Delivery[]        @relation("DeliveryCreator")
+  invoicesSupplier          Invoice[]         @relation("InvoiceSupplier")
+  invoicesBuyer             Invoice[]         @relation("InvoiceBuyer")
+  paymentsMade              Payment[]         @relation("PaymentPayer")
+  ratingsGiven              SupplierRating[]  @relation("RatingRater")
+  ratingsReceived           SupplierRating[]  @relation("RatingSupplier")
+  supplierProfile           SupplierProfile?
+  verifiedSupplierDocs      SupplierDocument[] @relation("DocumentVerifiedBy")
+  inventoryTransactions     InventoryTransaction[]
+  inventoryImports          InventoryImport[]
+
+  researchCampaigns       ResearchCampaign[]
+  researchParticipants    ResearchParticipant[]
+  surveyResponses         SurveyResponse[]
+  featureRequests         FeatureRequest[]
+  featureVotes            FeatureVote[]
+  feedback                Feedback[]
+  bugReports              BugReport[]
+  npsScores               NpsScore[]
+  csatScores              CsatScore[]
+  cesScores               CesScore[]
+  journeyEvents           CustomerJourneyEvent[]
+  crmLinkedContacts       CrmContact[]
+  crmLeads                Lead[]                 @relation("LeadAssignee")
+  crmLeadsCreated         Lead[]                 @relation("LeadCreator")
+  crmOwnedContacts        CrmContact[]           @relation("ContactOwner")
+  crmOwnedOpportunities   Opportunity[]          @relation("OpportunityOwner")
+  crmCreatedOpportunities Opportunity[]          @relation("OpportunityCreator")
+  crmAssignedActivities   CrmActivity[]          @relation("ActivityAssignee")
+  crmCreatedActivities    CrmActivity[]          @relation("ActivityCreator")
+  crmAssignedTasks        CrmTask[]              @relation("TaskAssignee")
+  crmCreatedTasks         CrmTask[]              @relation("TaskCreator")
+  crmOrganizedMeetings    CrmMeeting[]           @relation("MeetingOrganizer")
+  crmCreatedNotes         CrmNote[]              @relation("NoteCreator")
+
+  qualityInspections      Inspection[]           @relation("QualityInspector")
+  qualityNCRs             NCR[]                  @relation("NCRCreator")
+  qualityCertificates     AcceptanceCertificate[] @relation("CertificateAcceptor")
+  qualityAttachments      InspectionAttachment[] @relation("AttachmentUploader")
+
+  paymentReservationsSupplier PaymentReservation[] @relation("PaymentSupplier")
+  paymentReservationsBuyer    PaymentReservation[] @relation("PaymentBuyer")
+  paymentReleases             PaymentRelease[]     @relation("PaymentReleaseActor")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model ProjectTender {
-  id            String       @id @default(cuid())
-  title         String
-  description   String
-  category      String
-  location      String
-  budgetMin     Float?
-  budgetMax     Float?
-  deadline      DateTime
-  requirements  String?
-  attachments   String[]
-  status        TenderStatus @default(OPEN)
-  userId        String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id             String       @id @default(cuid())
+  title          String
+  description    String
+  category       String
+  location       String
+  budgetMin      Float?
+  budgetMax      Float?
+  deadline       DateTime
+  requirements   String?
+  attachments    String[]
+  status         TenderStatus @default(OPEN)
+  userId         String
+  organizationId String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
-  user   User             @relation(fields: [userId], references: [id])
-  bids   ProjectTenderBid[]
+  user         User               @relation(fields: [userId], references: [id])
+  organization Organization?      @relation("TenderOrg", fields: [organizationId], references: [id])
+  bids         ProjectTenderBid[]
 }
 
 model ProjectTenderBid {
-  id            String    @id @default(cuid())
-  amount        Float
-  proposal      String
-  duration      String?
-  status        BidStatus @default(PENDING)
+  id              String    @id @default(cuid())
+  amount          Float
+  proposal        String
+  duration        String?
+  status          BidStatus @default(PENDING)
   projectTenderId String
-  userId        String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  userId          String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   projectTender ProjectTender @relation(fields: [projectTenderId], references: [id])
   user          User          @relation(fields: [userId], references: [id])
 }
 
 model MaterialTender {
-  id            String       @id @default(cuid())
-  title         String
-  description   String
-  materialType  String
-  quantity      String
-  unit          String
+  id             String       @id @default(cuid())
+  title          String
+  description    String
+  materialType   String
+  categoryId     String?
+  subcategoryId  String?
+  brandId        String?
+  quantity       String
+  unit           String
   specifications String?
-  deliveryDate  DateTime?
-  location      String
-  budgetMax     Float?
-  status        TenderStatus @default(OPEN)
-  userId        String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  deliveryDate   DateTime?
+  location       String
+  budgetMax      Float?
+  status         TenderStatus @default(OPEN)
+  userId         String
+  organizationId String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
-  user  User                @relation(fields: [userId], references: [id])
-  bids  MaterialTenderBid[]
+  user              User                     @relation(fields: [userId], references: [id])
+  organization      Organization?            @relation("MaterialTenderOrg", fields: [organizationId], references: [id])
+  category          MaterialCategory?        @relation(fields: [categoryId], references: [id])
+  subcategory       MaterialSubcategory?     @relation(fields: [subcategoryId], references: [id])
+  brand             Brand?                   @relation(fields: [brandId], references: [id])
+  bids              MaterialTenderBid[]
+  tags              MaterialTenderTag[]
+  supplierInterests SupplierTenderInterest[]
 }
 
 model MaterialTenderBid {
-  id            String    @id @default(cuid())
-  unitPrice     Float
-  totalPrice    Float
-  proposal      String
-  deliveryTime  String?
-  status        BidStatus @default(PENDING)
+  id               String    @id @default(cuid())
+  unitPrice        Float
+  totalPrice       Float
+  proposal         String
+  deliveryTime     String?
+  status           BidStatus @default(PENDING)
   materialTenderId String
-  userId        String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  userId           String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   materialTender MaterialTender @relation(fields: [materialTenderId], references: [id])
   user           User           @relation(fields: [userId], references: [id])
 }
 
 model Product {
-  id            String   @id @default(cuid())
-  name          String
-  description   String
-  category      String
-  price         Float
-  unit          String
-  minQuantity   Int?
-  images        String[]
+  id             String   @id @default(cuid())
+  name           String
+  description    String
+  category       String
+  price          Float
+  unit           String
+  minQuantity    Int?
+  images         String[]
   specifications String?
-  inStock       Boolean  @default(true)
-  location      String
-  userId        String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  inStock        Boolean  @default(true)
+  location       String
+  userId         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  user     User          @relation(fields: [userId], references: [id])
-  savedBy  SavedProduct[]
+  user                  User                 @relation(fields: [userId], references: [id])
+  savedBy               SavedProduct[]
+  materialSubcategory   MaterialSubcategory? @relation(fields: [materialSubcategoryId], references: [id])
+  materialSubcategoryId String?
+  brand                 Brand?               @relation(fields: [brandId], references: [id])
+  brandId               String?
+  productTags           ProductTag[]
 }
 
 model SavedProduct {
@@ -235,25 +679,31 @@ model SavedProduct {
 }
 
 model Project {
-  id            String       @id @default(cuid())
-  title         String
-  description   String
-  category      String
-  location      String
-  clientName    String?
-  budget        Float?
-  area          String?
-  startDate     DateTime?
-  endDate       DateTime?
-  images        String[]
-  status        ProjectStatus @default(PLANNING)
-  highlights    String?
-  userId        String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id             String        @id @default(cuid())
+  title          String
+  description    String
+  category       String
+  location       String
+  clientName     String?
+  budget         Float?
+  area           String?
+  startDate      DateTime?
+  endDate        DateTime?
+  images         String[]
+  status         ProjectStatus @default(PLANNING)
+  highlights     String?
+  userId         String
+  organizationId String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
-  user     User          @relation(fields: [userId], references: [id])
-  savedBy  SavedProject[]
+  user         User           @relation(fields: [userId], references: [id])
+  organization Organization?  @relation("ProjectOrg", fields: [organizationId], references: [id])
+  savedBy      SavedProject[]
+
+  purchaseRequests PurchaseRequest[] @relation("PRProject")
+  rfqs             RFQ[]             @relation("RFQProject")
+  purchaseOrders   PurchaseOrder[]   @relation("POProject")
 }
 
 model SavedProject {
@@ -269,31 +719,33 @@ model SavedProject {
 }
 
 model Job {
-  id            String    @id @default(cuid())
-  title         String
-  description   String
-  category      String
-  jobType       JobType
-  salary        String?
-  salaryMin     Float?
-  salaryMax     Float?
-  location      String
-  requirements  String?
-  benefits      String?
-  vacancies     Int       @default(1)
-  isUrgent      Boolean   @default(false)
-  isActive      Boolean   @default(true)
-  userId        String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             String   @id @default(cuid())
+  title          String
+  description    String
+  category       String
+  jobType        JobType
+  salary         String?
+  salaryMin      Float?
+  salaryMax      Float?
+  location       String
+  requirements   String?
+  benefits       String?
+  vacancies      Int      @default(1)
+  isUrgent       Boolean  @default(false)
+  isActive       Boolean  @default(true)
+  userId         String
+  organizationId String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  user         User            @relation(fields: [userId], references: [id])
+  user         User             @relation(fields: [userId], references: [id])
+  organization Organization?    @relation("JobOrg", fields: [organizationId], references: [id])
   applications JobApplication[] @relation("JobApplications")
   savedBy      SavedJob[]
 }
 
 model JobApplication {
-  id        String   @id @default(cuid())
+  id          String   @id @default(cuid())
   coverLetter String?
   cv          String?
   status      String   @default("pending")
@@ -330,7 +782,7 @@ model Post {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  user     User         @relation(fields: [userId], references: [id])
+  user     User          @relation(fields: [userId], references: [id])
   comments PostComment[]
   likes    PostLike[]
 }
@@ -359,12 +811,12 @@ model PostLike {
 }
 
 model Message {
-  id          String   @id @default(cuid())
-  content     String
-  senderId    String
-  receiverId  String
-  isRead      Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  content    String
+  senderId   String
+  receiverId String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
 
   sender   User @relation("SentMessages", fields: [senderId], references: [id])
   receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
@@ -396,6 +848,761 @@ model Review {
 }
 
 // ============================
+// Academy / Training Models
+// ============================
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum LessonType {
+  VIDEO
+  PDF
+  QUIZ
+  ASSIGNMENT
+}
+
+model Course {
+  id              String       @id @default(cuid())
+  title           String
+  titleEn         String?
+  titleUr         String?
+  description     String
+  descriptionEn   String?
+  descriptionUr   String?
+  category        String
+  level           CourseLevel  @default(BEGINNER)
+  price           Float        @default(0)
+  originalPrice   Float?
+  thumbnail       String?
+  duration        String?
+  lessonsCount    Int          @default(0)
+  studentsCount   Int          @default(0)
+  rating          Float        @default(0)
+  reviewsCount    Int          @default(0)
+  instructorId    String
+  instructorName  String
+  instructorTitle String?
+  tags            String[]
+  isPublished     Boolean      @default(false)
+  isBestseller    Boolean      @default(false)
+  status          CourseStatus @default(DRAFT)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  instructor   User               @relation(fields: [instructorId], references: [id])
+  lessons      CourseLesson[]
+  enrollments  CourseEnrollment[]
+  certificates Certificate[]
+}
+
+model CourseLesson {
+  id          String     @id @default(cuid())
+  title       String
+  titleEn     String?
+  description String?
+  lessonType  LessonType @default(VIDEO)
+  videoUrl    String?
+  pdfUrl      String?
+  duration    String?
+  orderIndex  Int        @default(0)
+  isFree      Boolean    @default(false)
+  courseId    String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@index([courseId, orderIndex])
+}
+
+model CourseEnrollment {
+  id               String    @id @default(cuid())
+  userId           String
+  courseId         String
+  progress         Float     @default(0)
+  completedLessons Int       @default(0)
+  isCompleted      Boolean   @default(false)
+  completedAt      DateTime?
+  enrolledAt       DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id])
+  course      Course       @relation(fields: [courseId], references: [id])
+  certificate Certificate?
+
+  @@unique([userId, courseId])
+}
+
+model Certificate {
+  id             String    @id @default(cuid())
+  title          String
+  userId         String
+  courseId       String
+  enrollmentId   String    @unique
+  certificateUrl String?
+  issuedAt       DateTime  @default(now())
+  expiresAt      DateTime?
+
+  user       User             @relation(fields: [userId], references: [id])
+  course     Course           @relation(fields: [courseId], references: [id])
+  enrollment CourseEnrollment @relation(fields: [enrollmentId], references: [id])
+}
+
+// ============================
+// Procurement Core Models
+// ============================
+
+model PurchaseRequest {
+  id               String     @id @default(cuid())
+  title            String
+  description      String?
+  category         String
+  priority         PRPriority @default(MEDIUM)
+  status           PRStatus   @default(DRAFT)
+  requestedById    String
+  approvedById     String?
+  projectId        String?
+  organizationId   String?
+  expectedDelivery DateTime?
+  deliveryLocation String?
+  attachments      String[]
+  notes            String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  requestedBy  User          @relation("PRRequestedBy", fields: [requestedById], references: [id])
+  approvedBy   User?         @relation("PRApprovedBy", fields: [approvedById], references: [id])
+  project      Project?      @relation("PRProject", fields: [projectId], references: [id])
+  organization Organization? @relation("PROrganization", fields: [organizationId], references: [id])
+
+  rfqs  RFQ[]
+  items PurchaseRequestItem[]
+
+  @@index([status])
+  @@index([requestedById])
+  @@index([organizationId])
+  @@index([createdAt])
+}
+
+model PurchaseRequestItem {
+  id                String  @id @default(cuid())
+  purchaseRequestId String
+  materialName      String
+  description       String?
+  quantity          Float
+  unit              String
+  estimatedPrice    Float?
+  total             Float?
+
+  purchaseRequest PurchaseRequest @relation(fields: [purchaseRequestId], references: [id])
+
+  @@index([purchaseRequestId])
+}
+
+model RFQ {
+  id                 String    @id @default(cuid())
+  title              String
+  description        String?
+  referenceNumber    String    @unique
+  status             RFQStatus @default(DRAFT)
+  purchaseRequestId  String?
+  projectId          String?
+  organizationId     String?
+  issueDate          DateTime?
+  deadlineDate       DateTime
+  deliveryDate       DateTime?
+  deliveryLocation   String?
+  termsAndConditions String?
+  attachments        String[]
+  createdById        String
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  purchaseRequest PurchaseRequest? @relation(fields: [purchaseRequestId], references: [id])
+  project         Project?         @relation("RFQProject", fields: [projectId], references: [id])
+  organization    Organization?    @relation("RFQOrganization", fields: [organizationId], references: [id])
+  createdBy       User             @relation("RFQCreatedBy", fields: [createdById], references: [id])
+
+  items               RFQItem[]
+  suppliers           RFQSupplier[]
+  quotations          Quotation[]
+  evaluations         Evaluation[]
+  evaluationCriteria  EvaluationCriterion[]
+  awards              Award[]
+  purchaseOrders      PurchaseOrder[]
+
+  @@index([status])
+  @@index([referenceNumber])
+  @@index([createdById])
+  @@index([organizationId])
+  @@index([createdAt])
+}
+
+model RFQItem {
+  id             String  @id @default(cuid())
+  rfqId          String
+  materialName   String
+  description    String?
+  quantity       Float
+  unit           String
+  specifications String?
+
+  rfq RFQ @relation(fields: [rfqId], references: [id])
+
+  quotationItems QuotationItem[]
+
+  @@index([rfqId])
+}
+
+model RFQSupplier {
+  id             String    @id @default(cuid())
+  rfqId          String
+  supplierId     String
+  organizationId String?
+  invitedAt      DateTime  @default(now())
+  respondedAt    DateTime?
+  responded      Boolean   @default(false)
+
+  rfq          RFQ           @relation(fields: [rfqId], references: [id])
+  supplier     User          @relation("RFQSupplierSupplier", fields: [supplierId], references: [id])
+  organization Organization? @relation("RFQSupplierOrganization", fields: [organizationId], references: [id])
+
+  @@index([rfqId])
+  @@index([supplierId])
+  @@index([responded])
+}
+
+model Quotation {
+  id              String          @id @default(cuid())
+  rfqId           String
+  supplierId      String
+  organizationId  String?
+  referenceNumber String          @unique
+  status          QuotationStatus @default(DRAFT)
+  coverLetter     String?
+  deliveryTime    String?
+  validUntil      DateTime?
+  totalAmount     Float
+  taxAmount       Float           @default(0)
+  grandTotal      Float
+  currency        String          @default("SAR")
+  notes           String?
+  submittedAt     DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  rfq          RFQ           @relation(fields: [rfqId], references: [id])
+  supplier     User          @relation("QuotationSupplier", fields: [supplierId], references: [id])
+  organization Organization? @relation("QuotationOrganization", fields: [organizationId], references: [id])
+
+  items               QuotationItem[]
+  awards              Award[]
+  purchaseOrders      PurchaseOrder[]
+  quotationEvaluations QuotationEvaluation[]
+
+  @@index([rfqId])
+  @@index([supplierId])
+  @@index([status])
+  @@index([referenceNumber])
+}
+
+model QuotationItem {
+  id           String  @id @default(cuid())
+  quotationId  String
+  rfqItemId    String?
+  materialName String
+  description  String?
+  quantity     Float
+  unit         String
+  unitPrice    Float
+  totalPrice   Float
+
+  quotation Quotation @relation(fields: [quotationId], references: [id])
+  rfqItem   RFQItem?  @relation(fields: [rfqItemId], references: [id])
+
+  @@index([quotationId])
+}
+
+model EvaluationCriterion {
+  id          String  @id @default(cuid())
+  rfqId       String?
+  name        String
+  description String?
+  maxScore    Float
+  weight      Float   @default(1.0)
+  orderIndex  Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rfq    RFQ?              @relation(fields: [rfqId], references: [id])
+  scores EvaluationScore[]
+
+  @@index([rfqId])
+}
+
+model EvaluationScore {
+  id                   String              @id @default(cuid())
+  quotationEvaluationId String
+  criterionId          String
+  score                Float
+  comment              String?
+  createdAt            DateTime            @default(now())
+
+  quotationEvaluation QuotationEvaluation @relation(fields: [quotationEvaluationId], references: [id])
+  criterion           EvaluationCriterion @relation(fields: [criterionId], references: [id])
+
+  @@index([quotationEvaluationId])
+  @@index([criterionId])
+}
+
+model QuotationEvaluation {
+  id           String     @id @default(cuid())
+  quotationId  String
+  evaluatorId  String
+  status       EvalStatus @default(PENDING)
+  totalScore   Float?
+  notes        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  quotation       Quotation         @relation(fields: [quotationId], references: [id])
+  evaluator       User              @relation("QuotationEvaluator", fields: [evaluatorId], references: [id])
+  scores          EvaluationScore[]
+  approvalRequest ApprovalRequest?
+
+  @@index([quotationId])
+  @@index([evaluatorId])
+  @@index([status])
+}
+
+model ApprovalRequest {
+  id                     String         @id @default(cuid())
+  quotationEvaluationId  String         @unique
+  requestedById          String
+  status                 ApprovalStatus @default(PENDING)
+  notes                  String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+
+  quotationEvaluation QuotationEvaluation @relation(fields: [quotationEvaluationId], references: [id])
+  requestedBy         User                @relation("ApprovalRequester", fields: [requestedById], references: [id])
+  history             ApprovalHistory[]
+}
+
+model ApprovalHistory {
+  id                String         @id @default(cuid())
+  approvalRequestId String
+  action            ApprovalStatus
+  comment           String?
+  actionById        String
+  createdAt         DateTime       @default(now())
+
+  approvalRequest ApprovalRequest @relation(fields: [approvalRequestId], references: [id])
+  actionBy        User            @relation("ApprovalActor", fields: [actionById], references: [id])
+
+  @@index([approvalRequestId])
+}
+
+model Evaluation {
+  id          String     @id @default(cuid())
+  rfqId       String
+  evaluatorId String
+  status      EvalStatus @default(PENDING)
+  criteria    Json?
+  totalScore  Float?
+  notes       String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  rfq       RFQ  @relation(fields: [rfqId], references: [id])
+  evaluator User @relation("EvaluationEvaluator", fields: [evaluatorId], references: [id])
+
+  @@index([rfqId])
+  @@index([evaluatorId])
+  @@index([status])
+}
+
+model Award {
+  id          String      @id @default(cuid())
+  rfqId       String
+  quotationId String
+  supplierId  String
+  awardedById String
+  awardDate   DateTime    @default(now())
+  totalAmount Float
+  notes       String?
+  status      AwardStatus @default(PENDING_ACCEPTANCE)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  rfq       RFQ       @relation(fields: [rfqId], references: [id])
+  quotation Quotation @relation(fields: [quotationId], references: [id])
+  supplier  User      @relation("AwardSupplier", fields: [supplierId], references: [id])
+  awardedBy User      @relation("AwardAwarder", fields: [awardedById], references: [id])
+
+  purchaseOrders PurchaseOrder[]
+
+  @@index([rfqId])
+  @@index([supplierId])
+  @@index([status])
+}
+
+model PurchaseOrder {
+  id                   String    @id @default(cuid())
+  poNumber             String    @unique
+  rfqId                String?
+  quotationId          String?
+  awardId              String?
+  projectId            String?
+  supplierId           String
+  organizationId       String?
+  status               POStatus  @default(DRAFT)
+  orderDate            DateTime  @default(now())
+  expectedDelivery     DateTime?
+  deliveryDate         DateTime?
+  subtotal             Float
+  taxAmount            Float     @default(0)
+  totalAmount          Float
+  deliveryAddress      String?
+  deliveryInstructions String?
+  paymentTerms         String?
+  notes                String?
+  createdById          String
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  rfq          RFQ?          @relation(fields: [rfqId], references: [id])
+  quotation    Quotation?    @relation(fields: [quotationId], references: [id])
+  award        Award?        @relation(fields: [awardId], references: [id])
+  project      Project?      @relation("POProject", fields: [projectId], references: [id])
+  supplier     User          @relation("POSupplier", fields: [supplierId], references: [id])
+  organization Organization? @relation("POOrganization", fields: [organizationId], references: [id])
+  createdBy    User          @relation("POCreatedBy", fields: [createdById], references: [id])
+
+  items           POItem[]
+  goodsReceipts   GoodsReceipt[]
+  deliveries      Delivery[]
+  paymentReservations PaymentReservation[]
+  invoices        Invoice[]
+  payments        Payment[]
+  supplierRatings SupplierRating[]
+
+  @@index([status])
+  @@index([supplierId])
+  @@index([organizationId])
+  @@index([createdById])
+  @@index([createdAt])
+}
+
+model POItem {
+  id                String   @id @default(cuid())
+  purchaseOrderId   String
+  materialName      String
+  description       String?
+  quantity          Float
+  unit              String
+  unitPrice         Float
+  totalPrice        Float
+  deliveredQuantity Float    @default(0)
+  balanceQuantity   Float
+  batchNumber       String?
+  lotNumber         String?
+  serialNumber      String?
+  manufacturer      String?
+  countryOfOrigin   String?
+  productionDate    DateTime?
+  expiryDate        DateTime?
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+
+  goodsReceipts      GoodsReceipt[]
+  deliveryItems      DeliveryItem[]
+  invoiceItems       InvoiceItem[]
+  inspectionItems    InspectionItem[]
+
+  @@index([purchaseOrderId])
+}
+
+model GoodsReceipt {
+  id              String   @id @default(cuid())
+  receiptNumber   String   @unique
+  purchaseOrderId String
+  deliveryId      String?
+  poItemId        String?
+  supplierId      String
+  status          GRStatus @default(PENDING)
+  receivedDate    DateTime @default(now())
+  receivedById    String
+  notes           String?
+  attachments     String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  delivery      Delivery?     @relation(fields: [deliveryId], references: [id])
+  poItem        POItem?       @relation(fields: [poItemId], references: [id])
+  supplier      User          @relation("GRSupplier", fields: [supplierId], references: [id])
+  receivedBy    User          @relation("GRReceiver", fields: [receivedById], references: [id])
+
+  @@index([purchaseOrderId])
+  @@index([deliveryId])
+  @@index([supplierId])
+  @@index([status])
+  @@index([receiptNumber])
+}
+
+enum PODeliveryStatus {
+  SCHEDULED
+  DISPATCHED
+  IN_TRANSIT
+  ARRIVED
+  PARTIALLY_RECEIVED
+  COMPLETED
+  CANCELLED
+}
+
+enum InspectionStatus {
+  PENDING
+  IN_PROGRESS
+  PASSED
+  FAILED
+  PARTIAL
+  NCR_CREATED
+  ACCEPTED
+}
+
+enum InspectionItemResult {
+  PASS
+  FAIL
+  N_A
+}
+
+enum NCRSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum NCRStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum PaymentReservationStatus {
+  RESERVED
+  HELD
+  PARTIALLY_RELEASED
+  RELEASED
+  REFUNDED
+  CANCELLED
+}
+
+enum PaymentReleaseType {
+  PARTIAL
+  FULL
+  REFUND
+}
+
+model Delivery {
+  id             String           @id @default(cuid())
+  deliveryNumber String           @unique
+  purchaseOrderId String
+  supplierId     String
+  driverName     String?
+  driverPhone    String?
+  vehicleNumber  String?
+  status         PODeliveryStatus @default(SCHEDULED)
+  scheduledDate  DateTime?
+  dispatchedAt   DateTime?
+  arrivedAt      DateTime?
+  notes          String?
+  createdById    String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  supplier      User          @relation("DeliverySupplier", fields: [supplierId], references: [id])
+  createdBy     User          @relation("DeliveryCreator", fields: [createdById], references: [id])
+  items         DeliveryItem[]
+  goodsReceipts GoodsReceipt[]
+
+  @@index([purchaseOrderId])
+  @@index([supplierId])
+  @@index([status])
+}
+
+model DeliveryItem {
+  id         String @id @default(cuid())
+  deliveryId String
+  poItemId   String
+  quantity   Float
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  delivery Delivery @relation(fields: [deliveryId], references: [id])
+  poItem   POItem   @relation(fields: [poItemId], references: [id])
+
+  inspections InspectionItem[]
+
+  @@index([deliveryId])
+  @@index([poItemId])
+}
+
+model Invoice {
+  id              String        @id @default(cuid())
+  invoiceNumber   String        @unique
+  purchaseOrderId String
+  supplierId      String
+  buyerId         String?
+  status          InvoiceStatus @default(DRAFT)
+  invoiceDate     DateTime      @default(now())
+  dueDate         DateTime?
+  amount          Float
+  taxAmount       Float         @default(0)
+  totalAmount     Float
+  paidAmount      Float         @default(0)
+  balanceAmount   Float
+  attachment      String?
+  notes           String?
+  submittedAt     DateTime?
+  verifiedAt      DateTime?
+  matchedAt       DateTime?
+  authorizedAt    DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  supplier      User          @relation("InvoiceSupplier", fields: [supplierId], references: [id])
+  buyer         User?         @relation("InvoiceBuyer", fields: [buyerId], references: [id])
+
+  items    InvoiceItem[]
+  payments Payment[]
+  matches  InvoiceMatch[]
+
+  @@index([purchaseOrderId])
+  @@index([supplierId])
+  @@index([status])
+  @@index([invoiceNumber])
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  poItemId    String?
+  deliveryItemId String?
+  description String?
+  quantity    Float
+  unitPrice   Float
+  totalPrice  Float
+  taxRate     Float   @default(0)
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+  poItem  POItem? @relation(fields: [poItemId], references: [id])
+
+  @@index([invoiceId])
+  @@index([poItemId])
+}
+
+enum MatchStatus {
+  MATCHED
+  MISMATCH
+  PENDING
+}
+
+model InvoiceMatch {
+  id               String      @id @default(cuid())
+  invoiceId        String
+  referenceType    String      // PO, DELIVERY, INSPECTION
+  referenceId      String
+  status           MatchStatus @default(PENDING)
+  poQuantity       Float?
+  deliveryQuantity Float?
+  acceptedQuantity Float?
+  invoiceQuantity  Float?
+  poAmount         Float?
+  deliveryAmount   Float?
+  invoiceAmount    Float?
+  varianceQuantity Float?
+  varianceAmount   Float?
+  notes            String?
+  matchedAt        DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id])
+
+  @@index([invoiceId])
+  @@index([referenceType, referenceId])
+  @@unique([invoiceId, referenceType, referenceId])
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  paymentNumber   String        @unique
+  invoiceId       String
+  purchaseOrderId String?
+  paidById        String
+  amount          Float
+  method          PaymentMethod @default(CASH)
+  status          PaymentStatus @default(PENDING)
+  transactionId   String?
+  referenceNumber String?
+  notes           String?
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  invoice       Invoice        @relation(fields: [invoiceId], references: [id])
+  purchaseOrder PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
+  paidBy        User           @relation("PaymentPayer", fields: [paidById], references: [id])
+
+  @@index([invoiceId])
+  @@index([paidById])
+  @@index([status])
+  @@index([paymentNumber])
+}
+
+model SupplierRating {
+  id                String   @id @default(cuid())
+  supplierId        String
+  supplierProfileId String?
+  purchaseOrderId   String?
+  organizationId    String?
+  ratedById         String
+  rating            Int
+  quality           Int?
+  delivery          Int?
+  communication     Int?
+  price             Int?
+  comment           String?
+  createdAt         DateTime @default(now())
+
+  supplier        User             @relation("RatingSupplier", fields: [supplierId], references: [id])
+  supplierProfile SupplierProfile? @relation(fields: [supplierProfileId], references: [id])
+  purchaseOrder   PurchaseOrder?   @relation(fields: [purchaseOrderId], references: [id])
+  ratedBy         User             @relation("RatingRater", fields: [ratedById], references: [id])
+  organization    Organization?    @relation("OrgSupplierRating", fields: [organizationId], references: [id])
+
+  @@index([supplierId])
+  @@index([supplierProfileId])
+  @@index([ratedById])
+  @@index([organizationId])
+  @@index([purchaseOrderId])
+}
+
+// ============================
 // Delivery System Models
 // ============================
 
@@ -421,28 +1628,28 @@ model DriverProfile {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
-  user            User        @relation(fields: [userId], references: [id])
-  orders          DeliveryOrder[] @relation("DeliveryDriver")
+  user            User             @relation(fields: [userId], references: [id])
+  orders          DeliveryOrder[]  @relation("DeliveryDriver")
   deliveryReviews DeliveryReview[] @relation("DeliveryReviewDriver")
 }
 
 model DeliveryOrder {
-  id              String          @id @default(cuid())
-  orderNumber     String          @unique
-  status          DeliveryStatus  @default(REQUESTED)
-  priority        DeliveryPriority @default(NORMAL)
-  paymentMethod   PaymentMethod   @default(CASH)
+  id            String           @id @default(cuid())
+  orderNumber   String           @unique
+  status        DeliveryStatus   @default(REQUESTED)
+  priority      DeliveryPriority @default(NORMAL)
+  paymentMethod PaymentMethod    @default(CASH)
 
-  senderId        String
-  receiverId      String?
-  driverId        String?
+  senderId   String
+  receiverId String?
+  driverId   String?
 
-  pickupName      String
-  pickupPhone     String
-  pickupAddress   String
-  pickupLat       Float?
-  pickupLng       Float?
-  pickupNotes     String?
+  pickupName    String
+  pickupPhone   String
+  pickupAddress String
+  pickupLat     Float?
+  pickupLng     Float?
+  pickupNotes   String?
 
   deliveryName    String
   deliveryPhone   String
@@ -451,64 +1658,2137 @@ model DeliveryOrder {
   deliveryLng     Float?
   deliveryNotes   String?
 
-  materialType    String
-  description     String
-  weight          Float?
-  dimensions      String?
-  quantity        Int             @default(1)
-  fragile         Boolean         @default(false)
-  needsCrane      Boolean         @default(false)
+  materialType         String
+  description          String
+  weight               Float?
+  dimensions           String?
+  quantity             Int          @default(1)
+  fragile              Boolean      @default(false)
+  needsCrane           Boolean      @default(false)
   preferredVehicleType VehicleType?
 
-  basePrice       Float
-  distanceFee     Float           @default(0)
-  weightFee       Float           @default(0)
-  urgentFee       Float           @default(0)
-  totalPrice      Float
+  basePrice   Float
+  distanceFee Float @default(0)
+  weightFee   Float @default(0)
+  urgentFee   Float @default(0)
+  totalPrice  Float
 
-  scheduledDate   DateTime?
-  scheduledTime   String?
-  pickupTime      DateTime?
-  deliveryTime    DateTime?
-  estimatedTime   String?
+  scheduledDate DateTime?
+  scheduledTime String?
+  pickupTime    DateTime?
+  deliveryTime  DateTime?
+  estimatedTime String?
 
-  cancelReason    String?
-  notes           String?
-  trackingCode    String          @unique @default(cuid())
+  cancelReason String?
+  notes        String?
+  trackingCode String  @unique @default(cuid())
 
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  sender          User            @relation("DeliverySender", fields: [senderId], references: [id])
-  receiver        User?           @relation("DeliveryReceiver", fields: [receiverId], references: [id])
-  driver          DriverProfile?  @relation("DeliveryDriver", fields: [driverId], references: [id])
+  sender   User           @relation("DeliverySender", fields: [senderId], references: [id])
+  receiver User?          @relation("DeliveryReceiver", fields: [receiverId], references: [id])
+  driver   DriverProfile? @relation("DeliveryDriver", fields: [driverId], references: [id])
 
-  reviews         DeliveryReview[]
-  statusHistory   DeliveryStatusHistory[]
+  reviews       DeliveryReview[]
+  statusHistory DeliveryStatusHistory[]
 }
 
 model DeliveryStatusHistory {
-  id              String    @id @default(cuid())
-  orderId         String
-  status          DeliveryStatus
-  note            String?
-  lat             Float?
-  lng             Float?
-  createdAt       DateTime  @default(now())
+  id        String         @id @default(cuid())
+  orderId   String
+  status    DeliveryStatus
+  note      String?
+  lat       Float?
+  lng       Float?
+  createdAt DateTime       @default(now())
 
-  order           DeliveryOrder @relation(fields: [orderId], references: [id])
+  order DeliveryOrder @relation(fields: [orderId], references: [id])
 }
 
 model DeliveryReview {
-  id              String    @id @default(cuid())
-  orderId         String
-  authorId        String
-  driverId        String
-  rating          Int
-  comment         String?
-  createdAt       DateTime  @default(now())
+  id        String   @id @default(cuid())
+  orderId   String
+  authorId  String
+  driverId  String
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
 
-  order           DeliveryOrder @relation(fields: [orderId], references: [id])
-  author          User      @relation("DeliveryReviewAuthor", fields: [authorId], references: [id])
-  driver          DriverProfile @relation("DeliveryReviewDriver", fields: [driverId], references: [id])
+  order  DeliveryOrder @relation(fields: [orderId], references: [id])
+  author User          @relation("DeliveryReviewAuthor", fields: [authorId], references: [id])
+  driver DriverProfile @relation("DeliveryReviewDriver", fields: [driverId], references: [id])
+}
+
+// ============================
+// Supplier Classification & Marketplace Models
+// ============================
+
+enum SupplierType {
+  MANUFACTURER
+  AUTHORIZED_DISTRIBUTOR
+  WHOLESALER
+  RETAIL_SUPPLIER
+  IMPORTER
+  SERVICE_SUPPLIER
+  DISTRIBUTOR
+  DEALER
+  SUPPLIER
+  RENTAL_COMPANY
+  MAINTENANCE_COMPANY
+  TRADER
+}
+
+// ============================
+// Material Categories (18 Main Categories)
+// ============================
+
+model MaterialCategory {
+  id          String   @id @default(cuid())
+  name        String
+  nameAr      String
+  description String?
+  slug        String   @unique
+  icon        String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  subcategories      MaterialSubcategory[]
+  supplierCategories SupplierCategory[]
+  tenders            MaterialTender[]
+  tags               CategoryTag[]
+  productMasterProducts ProductMaster[]
+}
+
+model MaterialSubcategory {
+  id          String   @id @default(cuid())
+  name        String
+  nameAr      String
+  description String?
+  slug        String
+  categoryId  String
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category MaterialCategory @relation(fields: [categoryId], references: [id])
+  products Product[]
+  tenders  MaterialTender[]
+  productMasterProducts ProductMaster[]
+
+  @@unique([slug, categoryId])
+  @@index([categoryId])
+}
+
+// ============================
+// Brand Management
+// ============================
+
+model Brand {
+  id              String   @id @default(cuid())
+  name            String
+  nameAr          String?
+  description     String?
+  logo            String?
+  website         String?
+  countryOfOrigin String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  supplierBrands  SupplierBrand[]
+  products        Product[]
+  materialTenders MaterialTender[]
+  productMasterProducts ProductMaster[]
+}
+
+model SupplierBrand {
+  id           String   @id @default(cuid())
+  supplierId   String
+  brandId      String
+  isAuthorized Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id])
+  brand    Brand           @relation(fields: [brandId], references: [id])
+
+  @@unique([supplierId, brandId])
+  @@index([supplierId])
+  @@index([brandId])
+}
+
+// ============================
+// Tags System
+// ============================
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String
+  nameAr    String?
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  products           ProductTag[]
+  categories         CategoryTag[]
+  materialTenderTags MaterialTenderTag[]
+}
+
+model CategoryTag {
+  id         String   @id @default(cuid())
+  categoryId String
+  tagId      String
+  createdAt  DateTime @default(now())
+
+  category MaterialCategory @relation(fields: [categoryId], references: [id])
+  tag      Tag              @relation(fields: [tagId], references: [id])
+
+  @@unique([categoryId, tagId])
+}
+
+model ProductTag {
+  id        String   @id @default(cuid())
+  productId String
+  tagId     String
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+  tag     Tag     @relation(fields: [tagId], references: [id])
+
+  @@unique([productId, tagId])
+}
+
+// ============================
+// Supplier Profile (Extended)
+// ============================
+
+model SupplierProfile {
+  id                 String             @id @default(cuid())
+  userId             String             @unique
+  organizationId     String?            @unique
+  supplierType       SupplierType[]
+  supplierTypeOther  String?
+  companyName        String
+  companyNameAr      String?
+  companyNameUr      String?
+  commercialLicense  String?
+  licenseNumber      String?
+  taxNumber          String?
+  vatRegistered      Boolean            @default(false)
+  yearEstablished    Int?
+  employeeCount      Int?
+  country            String?
+  emirate            String?
+  city               String?
+  countryId          String?
+  cityId             String?
+  location           String?
+  website            String?
+  about              String?
+  aboutAr            String?
+  aboutUr            String?
+  logo               String?
+  coverImage         String?
+  minOrderValue      Float?
+  maxDailyCapacity   Float?
+  monthlyCapacity    Float?
+  leadTimeDays       Int?
+  transportTypes     String[]
+  countriesServed    String[]
+  workingHours       String?
+  hasWarehouses      Boolean            @default(false)
+  hasBranches        Boolean            @default(false)
+  verificationStatus VerificationStatus @default(PENDING)
+  verificationLevel  SupplierVerificationLevel @default(UNVERIFIED)
+  performanceScore   Float              @default(0)
+  totalOrders        Int                @default(0)
+  completedOrders    Int                @default(0)
+  onTimeDeliveryRate Float              @default(0)
+  avgRating          Float              @default(0)
+  totalRatings       Int                @default(0)
+  avgResponseTime    Int?
+  avgResponseTimeHours Int?
+  winRate            Float              @default(0)
+  totalSpend         Float              @default(0)
+  isActive           Boolean            @default(true)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  user                    User                           @relation(fields: [userId], references: [id])
+  organization            Organization?                  @relation(fields: [organizationId], references: [id])
+  branches                SupplierBranch[]
+  categories              SupplierCategory[]
+  brands                  SupplierBrand[]
+  supplierTenderInterests SupplierTenderInterest[]
+  documents               SupplierDocument[]
+  certifications          SupplierCertification[]
+  bankingInfo             SupplierBanking?
+  coverageAreas           SupplierCoverageArea[]
+  capabilities            SupplierCapability[]
+  projectRefs             SupplierProjectReference[]
+  relationships           SupplierRelationship[]         @relation("SupplierProfileRelationship")
+  ratings                 SupplierRating[]
+  productOfferings        SupplierProductOffering[]
+  warehouses              Warehouse[]
+  inventoryImports        InventoryImport[]
+  reviews                 SupplierReview[]
+  favoriteByOrganizations FavoriteSupplier[]
+
+  @@index([supplierType])
+  @@index([verificationStatus])
+  @@index([verificationLevel])
+  @@index([performanceScore])
+  @@index([emirate])
+  @@index([avgRating])
+}
+
+model SupplierBranch {
+  id          String   @id @default(cuid())
+  supplierId  String
+  name        String
+  nameAr      String?
+  address     String
+  city        String
+  emirate     String?
+  country     String
+  cityId      String?
+  countryId   String?
+  phone       String?
+  email       String?
+  managerName String?
+  lat         Float?
+  lng         Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@index([supplierId])
+  @@index([cityId])
+}
+
+model SupplierCategory {
+  id            String   @id @default(cuid())
+  supplierId    String
+  categoryId    String
+  subcategoryId String?
+  isPrimary     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  supplier SupplierProfile  @relation(fields: [supplierId], references: [id])
+  category MaterialCategory @relation(fields: [categoryId], references: [id])
+
+  @@unique([supplierId, categoryId, subcategoryId])
+  @@index([supplierId])
+  @@index([categoryId])
+}
+
+// ============================
+// Material Tender Enhancements (linking to categories)
+// ============================
+
+// We need to add category relation to existing MaterialTender
+// Note: MaterialTender already exists, we add optional relations
+
+// Add tags to MaterialTender through a join table
+model MaterialTenderTag {
+  id        String   @id @default(cuid())
+  tenderId  String
+  tagId     String
+  createdAt DateTime @default(now())
+
+  tender MaterialTender @relation(fields: [tenderId], references: [id])
+  tag    Tag            @relation(fields: [tagId], references: [id])
+
+  @@unique([tenderId, tagId])
+  @@index([tenderId])
+  @@index([tagId])
+}
+
+// Supplier Tender Interest (for recommendation engine)
+model SupplierTenderInterest {
+  id            String   @id @default(cuid())
+  supplierId    String
+  tenderId      String
+  interestLevel Float    @default(0)
+  isNotified    Boolean  @default(false)
+  isViewed      Boolean  @default(false)
+  isApplied     Boolean  @default(false)
+  matchReason   String?
+  createdAt     DateTime @default(now())
+
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id])
+  tender   MaterialTender  @relation(fields: [tenderId], references: [id])
+
+  @@unique([supplierId, tenderId])
+  @@index([supplierId])
+  @@index([tenderId])
+}
+
+// ============================
+// Supplier Network (Phase 2)
+// ============================
+
+// New models added to existing SupplierProfile, SupplierBranch, SupplierRating
+
+enum SupplierVerificationLevel {
+  UNVERIFIED
+  BASIC
+  VERIFIED
+  TRUSTED
+  FLAGSHIP
+}
+
+enum SupplierDocType {
+  TRADE_LICENSE
+  VAT_CERTIFICATE
+  COMPANY_LICENSE
+  TAX_CERTIFICATE
+  BANK_ACCOUNT_CONFIRMATION
+  INSURANCE_CERTIFICATE
+  ISO_CERTIFICATE
+  ENGINEERING_LICENSE
+  CONTRACTOR_CLASSIFICATION
+  AUTHORIZATION_LETTER
+  PROFESSIONAL_CERT
+  PORTFOLIO
+  OTHER
+}
+
+enum DocumentStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  EXPIRED
+}
+
+enum CapabilityLevel {
+  PRIMARY
+  SECONDARY
+  SPECIALIZED
+  EMERGING
+}
+
+enum SupplierRelationshipType {
+  PREFERRED
+  APPROVED
+  STRATEGIC
+  PROSPECTIVE
+  BLACKLISTED
+}
+
+enum RelationshipStatus {
+  ACTIVE
+  PENDING
+  SUSPENDED
+  TERMINATED
+}
+
+model SupplierDocument {
+  id           String         @id @default(cuid())
+  supplierId   String
+  docType      SupplierDocType
+  title        String
+  fileName     String
+  fileUrl      String
+  mimeType     String?
+  status       DocumentStatus @default(PENDING)
+  notes        String?
+  issuedAt     DateTime?
+  expiresAt    DateTime?
+  verifiedAt   DateTime?
+  verifiedById String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  supplier   SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  verifiedBy User?           @relation("DocumentVerifiedBy", fields: [verifiedById], references: [id])
+
+  @@index([supplierId])
+  @@index([expiresAt])
+  @@index([docType, status])
+}
+
+model SupplierCertification {
+  id                String   @id @default(cuid())
+  supplierId        String
+  name              String
+  issuingBody       String
+  certificateNumber String?
+  issueDate         DateTime
+  expiryDate        DateTime?
+  fileUrl           String?
+  isVerified        Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@index([supplierId])
+  @@index([expiryDate])
+}
+
+model SupplierBanking {
+  id            String   @id @default(cuid())
+  supplierId    String   @unique
+  bankName      String
+  accountName   String
+  accountNumber String
+  iban          String
+  swiftCode     String?
+  currency      String   @default("SAR")
+  isVerified    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+}
+
+model SupplierCoverageArea {
+  id         String  @id @default(cuid())
+  supplierId String
+  countryId  String?
+  cityId     String?
+  isPrimary  Boolean @default(false)
+
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@unique([supplierId, countryId, cityId])
+  @@index([supplierId])
+}
+
+model SupplierCapability {
+  id              String   @id @default(cuid())
+  supplierId      String
+  category        String
+  level           CapabilityLevel @default(SECONDARY)
+  capacityMonthly Float?
+  maxProjectValue Float?
+  currency        String   @default("SAR")
+  notes           String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  coverageAreas SupplierCapabilityCoverage[]
+
+  @@unique([supplierId, category])
+  @@index([supplierId])
+  @@index([category])
+  @@index([level])
+}
+
+model SupplierCapabilityCoverage {
+  id           String @id @default(cuid())
+  capabilityId String
+  countryId    String?
+  cityId       String?
+  isPrimary    Boolean @default(false)
+
+  capability SupplierCapability @relation(fields: [capabilityId], references: [id], onDelete: Cascade)
+
+  @@unique([capabilityId, countryId, cityId])
+  @@index([capabilityId])
+}
+
+model SupplierProjectReference {
+  id             String   @id @default(cuid())
+  supplierId     String
+  projectName    String
+  clientName     String?
+  description    String?
+  value          Float?
+  currency       String   @default("SAR")
+  completionDate DateTime?
+  category       String?
+  fileUrl        String?
+  createdAt      DateTime @default(now())
+
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@index([supplierId])
+  @@index([category])
+}
+
+model SupplierRelationship {
+  id                String                     @id @default(cuid())
+  buyerOrgId        String
+  supplierId        String
+  relationshipType  SupplierRelationshipType   @default(APPROVED)
+  status            RelationshipStatus         @default(ACTIVE)
+  creditLimit       Float?
+  currency          String                     @default("SAR")
+  paymentTerms      String?
+  contractRef       String?
+  contractStartDate DateTime?
+  contractEndDate   DateTime?
+  relationshipScore Float?
+  notes             String?
+  createdById       String
+  createdAt         DateTime                   @default(now())
+  updatedAt         DateTime                   @updatedAt
+
+  buyerOrg Organization    @relation("OrgBuyerRelationship", fields: [buyerOrgId], references: [id])
+  supplier SupplierProfile @relation("SupplierProfileRelationship", fields: [supplierId], references: [id])
+
+  @@unique([buyerOrgId, supplierId])
+  @@index([buyerOrgId])
+  @@index([supplierId])
+  @@index([relationshipType])
+  @@index([status])
+}
+
+// ============================
+// Product Catalog (Phase 2, Sprint 5.2)
+// ============================
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum OfferingStatus {
+  ACTIVE
+  DISCONTINUED
+  OUT_OF_STOCK
+  COMING_SOON
+}
+
+enum AvailabilityType {
+  IN_STOCK
+  MADE_TO_ORDER
+  PRE_ORDER
+  DISCONTINUED
+}
+
+enum DeliveryTerm {
+  EXW
+  FOB
+  CIF
+  CFR
+  CPT
+  CIP
+  DAP
+  DPU
+  DDP
+}
+
+model UnitOfMeasure {
+  id       String  @id @default(cuid())
+  name     String
+  nameAr   String?
+  symbol   String
+  category String
+  isActive Boolean @default(true)
+
+  products ProductMaster[]
+
+  @@unique([name])
+}
+
+model ProductMaster {
+  id              String        @id @default(cuid())
+  sku             String        @unique
+  name            String
+  nameAr          String?
+  nameUr          String?
+  description     String?
+  descriptionAr   String?
+  descriptionUr   String?
+  manufacturerId  String
+  brandId         String?
+  categoryId      String?
+  subcategoryId   String?
+  unitId          String?
+  barcode         String?
+  qrCode          String?
+  gtin            String?
+  status          ProductStatus @default(DRAFT)
+  isActive        Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  manufacturer  Organization          @relation("ManufacturerProducts", fields: [manufacturerId], references: [id])
+  brand         Brand?                @relation(fields: [brandId], references: [id])
+
+  category      MaterialCategory?     @relation(fields: [categoryId], references: [id])
+
+  subcategory   MaterialSubcategory?  @relation(fields: [subcategoryId], references: [id])
+
+  unit          UnitOfMeasure?        @relation(fields: [unitId], references: [id])
+
+  variants       ProductVariant[]
+  specifications ProductSpecification[]
+  dataSheets     ProductDataSheet[]
+  safetySheets   ProductSafetySheet[]
+  images         ProductImage[]
+  offerings      SupplierProductOffering[]
+  reviews        ProductReview[]
+  favorites      FavoriteProduct[]
+
+  @@index([manufacturerId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([sku])
+  @@index([barcode])
+}
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  name      String
+  sku       String  @unique
+  barcode   String?
+  attributes Json?
+  price     Float?
+  isActive  Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product ProductMaster  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  images  ProductImage[]
+
+  @@index([productId])
+}
+
+model ProductSpecification {
+  id        String  @id @default(cuid())
+  productId String
+  name      String
+  nameAr    String?
+  value     String
+  valueAr   String?
+  sortOrder Int     @default(0)
+
+  product ProductMaster @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model ProductDataSheet {
+  id        String   @id @default(cuid())
+  productId String
+  title     String
+  fileUrl   String
+  language  String   @default("en")
+  createdAt DateTime @default(now())
+
+  product ProductMaster @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model ProductSafetySheet {
+  id        String   @id @default(cuid())
+  productId String
+  title     String
+  fileUrl   String
+  language  String   @default("en")
+  createdAt DateTime @default(now())
+
+  product ProductMaster @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String?
+  variantId String?
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+  isPrimary Boolean @default(false)
+
+  product ProductMaster?  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variant ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@index([productId])
+}
+
+model SupplierProductOffering {
+  id              String         @id @default(cuid())
+  productId       String
+  supplierId      String
+  supplierSku     String?
+  status          OfferingStatus @default(ACTIVE)
+
+  // Pricing
+  price           Float
+  currency        String         @default("SAR")
+  taxRate         Float          @default(0)
+  contractPrice   Float?
+  contractMinQty  Float?
+  tierPricing     Json?
+
+  // Availability
+  minOrderQty     Float          @default(1)
+  maxOrderQty     Float?
+  packSize        Float?
+  moqUnit         String?
+  leadTimeDays    Int?
+  availability    AvailabilityType @default(IN_STOCK)
+
+  // Delivery
+  deliveryTerms   DeliveryTerm[]
+  deliveryTimeDays Int?
+  shippingCost    Float?
+
+  // Commercial
+  isAuthorized    Boolean        @default(false)
+  authorizationDoc String?
+  warrantyPeriod  Int?
+  returnPolicy    String?
+  validFrom       DateTime?
+  validUntil      DateTime?
+
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  product  ProductMaster   @relation(fields: [productId], references: [id])
+  supplier SupplierProfile @relation(fields: [supplierId], references: [id])
+  stock    StockItem[]
+
+  @@unique([supplierId, productId])
+  @@index([productId])
+  @@index([supplierId])
+  @@index([price])
+  @@index([status])
+  @@index([validFrom, validUntil])
+}
+
+// ============================
+// Inventory & Warehouse (Phase 2, Sprint 5.3)
+// ============================
+
+enum WarehouseStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  CLOSED
+}
+
+enum InventoryTransactionType {
+  RECEIVED
+  SHIPPED
+  ADJUSTED
+  RESERVED
+  UNRESERVED
+  RETURNED
+  TRANSFERRED_IN
+  TRANSFERRED_OUT
+  DAMAGED
+  EXPIRED
+}
+
+enum ImportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  PARTIALLY_COMPLETED
+  FAILED
+}
+
+model Warehouse {
+  id              String          @id @default(cuid())
+  supplierId      String
+  name            String
+  nameAr          String?
+  address         String
+  cityId          String?
+  countryId       String?
+  lat             Float?
+  lng             Float?
+  phone           String?
+  managerName     String?
+  status          WarehouseStatus @default(ACTIVE)
+  isPrimary       Boolean         @default(false)
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  supplier   SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  stockItems StockItem[]
+
+  @@index([supplierId])
+  @@index([status])
+}
+
+model StockItem {
+  id              String   @id @default(cuid())
+  warehouseId     String
+  offeringId      String
+  physicalQty     Float    @default(0)
+  reservedQty     Float    @default(0)
+  availableQty    Float    @default(0)
+  damagedQty      Float    @default(0)
+  minStockLevel   Float    @default(0)
+  reorderPoint    Float    @default(0)
+  maxStockQty     Float?
+  unitCost        Float?
+  currency        String   @default("SAR")
+  batch           String?
+  lotNumber       String?
+  expiryDate      DateTime?
+  lastCountedAt   DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  warehouse   Warehouse               @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  offering    SupplierProductOffering @relation(fields: [offeringId], references: [id])
+  transactions InventoryTransaction[]
+
+  @@unique([warehouseId, offeringId])
+  @@index([offeringId])
+  @@index([expiryDate])
+  @@index([reorderPoint])
+}
+
+model InventoryTransaction {
+  id              String                   @id @default(cuid())
+  stockItemId     String
+  type            InventoryTransactionType
+  quantity        Float
+  referenceType   String?
+  referenceId     String?
+  notes           String?
+  createdById     String
+  createdAt       DateTime                 @default(now())
+
+  stockItem StockItem @relation(fields: [stockItemId], references: [id], onDelete: Cascade)
+  createdBy User      @relation(fields: [createdById], references: [id])
+
+  @@index([stockItemId])
+  @@index([referenceType, referenceId])
+  @@index([createdAt])
+}
+
+model InventoryImport {
+  id            String       @id @default(cuid())
+  supplierId    String
+  fileName      String
+  fileUrl       String
+  format        String       @default("xlsx")
+  status        ImportStatus @default(PENDING)
+  totalRows     Int          @default(0)
+  successRows   Int          @default(0)
+  errorRows     Int          @default(0)
+  errors        Json?
+  completedAt   DateTime?
+  createdById   String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  supplier  SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  createdBy User            @relation(fields: [createdById], references: [id])
+
+  @@index([supplierId])
+  @@index([status])
+}
+
+// ============================
+// Marketplace (Phase 2, Sprint 5.4)
+// ============================
+
+model ProductReview {
+  id             String   @id @default(cuid())
+  productId      String
+  offeringId     String?
+  organizationId String
+  rating         Int
+  title          String?
+  comment        String?
+  images         String[]
+  isVerified     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  product      ProductMaster @relation(fields: [productId], references: [id], onDelete: Cascade)
+  organization Organization  @relation("OrgProductReviews", fields: [organizationId], references: [id])
+
+  @@unique([productId, organizationId])
+  @@index([productId])
+  @@index([organizationId])
+  @@index([rating])
+}
+
+model SupplierReview {
+  id             String   @id @default(cuid())
+  supplierId     String
+  organizationId String
+  rating         Int
+  title          String?
+  comment        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  supplier     SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  organization Organization    @relation("OrgSupplierReviews", fields: [organizationId], references: [id])
+
+  @@unique([supplierId, organizationId])
+  @@index([supplierId])
+  @@index([organizationId])
+  @@index([rating])
+}
+
+model FavoriteProduct {
+  id             String   @id @default(cuid())
+  organizationId String
+  productId      String
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation("OrgFavoriteProducts", fields: [organizationId], references: [id])
+  product      ProductMaster @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, productId])
+  @@index([organizationId])
+}
+
+model FavoriteSupplier {
+  id             String   @id @default(cuid())
+  organizationId String
+  supplierId     String
+  createdAt      DateTime @default(now())
+
+  organization Organization    @relation("OrgFavoriteSuppliers", fields: [organizationId], references: [id])
+  supplier     SupplierProfile @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, supplierId])
+  @@index([organizationId])
+}
+
+// ============================
+// Research Lab Enums
+// ============================
+
+enum ResearchCampaignType {
+  MARKET_RESEARCH
+  PROBLEM_DISCOVERY
+  PRICING_RESEARCH
+  COMPETITOR_BENCHMARKING
+  PRODUCT_VALIDATION
+  FEATURE_VALIDATION
+  BETA_TESTING
+  CUSTOMER_SATISFACTION
+  NPS
+  CSAT
+  CES
+  PRODUCT_FEEDBACK
+  FEATURE_REQUESTS
+  BUG_REPORTS
+  UX_RESEARCH
+  INTERVIEW
+  FOCUS_GROUP
+  OTHER
+}
+
+enum ResearchCampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  CLOSED
+  ARCHIVED
+}
+
+enum ResearchSegmentType {
+  PROJECT_OWNER
+  CONSULTANT
+  MAIN_CONTRACTOR
+  SUBCONTRACTOR
+  WORKSHOP
+  SUPPLIER
+  FACTORY
+  TRANSPORT_COMPANY
+  FREELANCER
+  JOB_SEEKER
+  GOVERNMENT
+  OTHER
+}
+
+enum ResearchParticipantStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+}
+
+enum ResearchParticipantType {
+  GUEST
+  REGISTERED
+}
+
+enum QuestionType {
+  TEXT
+  TEXTAREA
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  DROPDOWN
+  LINEAR_SCALE
+  RATING
+  YES_NO
+  EMAIL
+  PHONE
+  DATE
+  FILE_UPLOAD
+  MATRIX
+  NET_PROMOTER_SCORE
+  CSAT
+  CES
+  RANKING
+  SECTION_BREAK
+  INFO_TEXT
+}
+
+enum SurveyResponseStatus {
+  PARTIAL
+  COMPLETED
+  DISQUALIFIED
+}
+
+enum InsightType {
+  PAIN_POINT
+  FEATURE_REQUEST
+  SENTIMENT
+  SEGMENT_INSIGHT
+  PRICING_INSIGHT
+  PRIORITY
+  TREND
+  PREDICTION
+  RECOMMENDATION
+}
+
+enum FoundingMemberTier {
+  PIONEER
+  EARLY_ADOPTER
+  BETA_TESTER
+  INSIDER
+}
+
+// ============================
+// Research Lab Core Models
+// ============================
+
+model ResearchCampaign {
+  id                       String                 @id @default(cuid())
+  title                    String
+  titleEn                  String?
+  titleAr                  String?
+  titleUr                  String?
+  description              String?
+  descriptionEn            String?
+  descriptionAr            String?
+  descriptionUr            String?
+  campaignType             ResearchCampaignType
+  status                   ResearchCampaignStatus @default(DRAFT)
+  slug                     String                 @unique
+  coverImage               String?
+  landingPage              String?
+  welcomeMessage           String?
+  thankYouMessage          String?
+  allowGuestParticipation  Boolean                @default(true)
+  requireEmailVerification Boolean                @default(false)
+  maxResponses             Int?
+  startDate                DateTime?
+  endDate                  DateTime?
+  targetResponses          Int?
+  isPublic                 Boolean                @default(false)
+  isFeatured               Boolean                @default(false)
+  metadata                 Json?
+  createdById              String
+  createdAt                DateTime               @default(now())
+  updatedAt                DateTime               @updatedAt
+
+  createdBy            User                      @relation(fields: [createdById], references: [id])
+  segments             ResearchCampaignSegment[]
+  surveys              Survey[]
+  responses            SurveyResponse[]
+  interviews           Interview[]
+  focusGroups          FocusGroup[]
+  featureRequests      FeatureRequest[]
+  pricingResearch      PricingResearch[]
+  competitorResearch   CompetitorResearch[]
+  npsScores            NpsScore[]
+  csatScores           CsatScore[]
+  cesScores            CesScore[]
+  aiInsights           AiInsight[]
+  campaignParticipants CampaignParticipant[]
+
+  @@index([status])
+  @@index([campaignType])
+  @@index([createdById])
+  @@index([slug])
+  @@index([createdAt])
+}
+
+model ResearchSegment {
+  id          String              @id @default(cuid())
+  name        String
+  nameEn      String?
+  nameUr      String?
+  description String?
+  segmentType ResearchSegmentType @default(OTHER)
+  icon        String?
+  color       String?
+  isActive    Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  campaigns    ResearchCampaignSegment[]
+  participants ResearchParticipant[]
+  aiInsights   AiInsight[]
+
+  @@index([segmentType])
+}
+
+model ResearchCampaignSegment {
+  id         String   @id @default(cuid())
+  campaignId String
+  segmentId  String
+  createdAt  DateTime @default(now())
+
+  campaign ResearchCampaign @relation(fields: [campaignId], references: [id])
+  segment  ResearchSegment  @relation(fields: [segmentId], references: [id])
+
+  @@unique([campaignId, segmentId])
+  @@index([campaignId])
+  @@index([segmentId])
+}
+
+model CampaignParticipant {
+  id            String   @id @default(cuid())
+  campaignId    String
+  participantId String
+  status        String   @default("ACTIVE")
+  role          String   @default("RESPONDENT")
+  joinedAt      DateTime @default(now())
+
+  campaign    ResearchCampaign    @relation(fields: [campaignId], references: [id])
+  participant ResearchParticipant @relation(fields: [participantId], references: [id])
+
+  @@unique([campaignId, participantId])
+  @@index([campaignId])
+  @@index([participantId])
+}
+
+model ResearchParticipant {
+  id              String                    @id @default(cuid())
+  email           String?
+  phone           String?
+  name            String?
+  company         String?
+  jobTitle        String?
+  country         String?
+  city            String?
+  segmentId       String?
+  linkedUserId    String?
+  status          ResearchParticipantStatus @default(ACTIVE)
+  participantType ResearchParticipantType?
+  tags            String[]
+  metadata        Json?
+  consentGiven    Boolean                   @default(false)
+  consentDate     DateTime?
+  source          String?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  segment              ResearchSegment?       @relation(fields: [segmentId], references: [id])
+  linkedUser           User?                  @relation(fields: [linkedUserId], references: [id])
+  responses            SurveyResponse[]
+  interviews           Interview[]
+  feedback             Feedback[]
+  bugReports           BugReport[]
+  npsScores            NpsScore[]
+  csatScores           CsatScore[]
+  cesScores            CesScore[]
+  journeyEvents        CustomerJourneyEvent[]
+  foundingMember       FoundingMember?
+  featureRequests      FeatureRequest[]
+  featureVotes         FeatureVote[]
+  pricingResearch      PricingResearch[]
+  competitorResearch   CompetitorResearch[]
+  campaignParticipants CampaignParticipant[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([linkedUserId])
+  @@index([segmentId])
+  @@index([status])
+}
+
+model FoundingMember {
+  id                 String             @id @default(cuid())
+  participantId      String             @unique
+  tier               FoundingMemberTier @default(INSIDER)
+  badge              String?
+  earlyAccess        Boolean            @default(false)
+  betaAccess         Boolean            @default(false)
+  discountPercent    Float?
+  freeSubscription   Boolean            @default(false)
+  subscriptionMonths Int?
+  specialOffers      Json?
+  joinedAt           DateTime           @default(now())
+  notes              String?
+
+  participant ResearchParticipant @relation(fields: [participantId], references: [id])
+
+  @@index([tier])
+}
+
+model Survey {
+  id            String   @id @default(cuid())
+  title         String
+  titleEn       String?
+  titleAr       String?
+  titleUr       String?
+  description   String?
+  descriptionEn String?
+  descriptionAr String?
+  descriptionUr String?
+  campaignId    String
+  sortOrder     Int      @default(0)
+  timeEstimate  Int?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  campaign  ResearchCampaign @relation(fields: [campaignId], references: [id])
+  sections  SurveySection[]
+  responses SurveyResponse[]
+
+  @@index([campaignId])
+}
+
+model SurveySection {
+  id                 String   @id @default(cuid())
+  title              String
+  titleEn            String?
+  titleAr            String?
+  titleUr            String?
+  description        String?
+  surveyId           String
+  sortOrder          Int      @default(0)
+  repeatable         Boolean  @default(false)
+  randomizeQuestions Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  survey    Survey           @relation(fields: [surveyId], references: [id])
+  questions SurveyQuestion[]
+
+  @@index([surveyId])
+}
+
+model SurveyQuestion {
+  id               String       @id @default(cuid())
+  title            String
+  titleEn          String?
+  titleAr          String?
+  titleUr          String?
+  description      String?
+  questionType     QuestionType
+  sectionId        String
+  sortOrder        Int          @default(0)
+  isRequired       Boolean      @default(true)
+  hasOtherOption   Boolean      @default(false)
+  otherOptionLabel String?
+  randomizeOptions Boolean      @default(false)
+  maxSelections    Int?
+  minSelections    Int?
+  lowLabel         String?
+  highLabel        String?
+  lowValue         Int?
+  highValue        Int?
+  stepValue        Int?
+  matrixRows       Json?
+  matrixColumns    Json?
+  validationRules  Json?
+  visibilityLogic  Json?
+  metadata         Json?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  section SurveySection    @relation(fields: [sectionId], references: [id])
+  options QuestionOption[]
+  answers ResponseAnswer[]
+
+  @@index([sectionId])
+}
+
+model QuestionOption {
+  id         String   @id @default(cuid())
+  questionId String
+  label      String
+  labelEn    String?
+  labelUr    String?
+  value      String
+  sortOrder  Int      @default(0)
+  hasCustom  Boolean  @default(false)
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  question SurveyQuestion @relation(fields: [questionId], references: [id])
+
+  @@index([questionId])
+}
+
+model SurveyResponse {
+  id            String               @id @default(cuid())
+  campaignId    String
+  surveyId      String
+  participantId String?
+  linkedUserId  String?
+  status        SurveyResponseStatus @default(PARTIAL)
+  isComplete    Boolean              @default(false)
+  ipAddress     String?
+  userAgent     String?
+  source        String?
+  timeStarted   DateTime?
+  timeCompleted DateTime?
+  duration      Int?
+  metadata      Json?
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  campaign    ResearchCampaign     @relation(fields: [campaignId], references: [id])
+  survey      Survey               @relation(fields: [surveyId], references: [id])
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser  User?                @relation(fields: [linkedUserId], references: [id])
+
+  answers ResponseAnswer[]
+
+  @@index([campaignId])
+  @@index([surveyId])
+  @@index([participantId])
+  @@index([linkedUserId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ResponseAnswer {
+  id          String   @id @default(cuid())
+  responseId  String
+  questionId  String
+  value       String?
+  values      String[]
+  valueNumber Float?
+  valueJson   Json?
+  timeSpent   Int?
+  createdAt   DateTime @default(now())
+
+  response SurveyResponse @relation(fields: [responseId], references: [id])
+  question SurveyQuestion @relation(fields: [questionId], references: [id])
+
+  @@index([responseId])
+  @@index([questionId])
+}
+
+model FeatureRequest {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  category      String   @default("NEW_FEATURE")
+  status        String   @default("UNDER_REVIEW")
+  priority      String   @default("MEDIUM")
+  campaignId    String?
+  participantId String?
+  linkedUserId  String?
+  metadata      Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  campaign    ResearchCampaign?    @relation(fields: [campaignId], references: [id])
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser  User?                @relation(fields: [linkedUserId], references: [id])
+
+  votes FeatureVote[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([campaignId])
+  @@index([createdAt])
+}
+
+model FeatureVote {
+  id               String   @id @default(cuid())
+  featureRequestId String
+  participantId    String?
+  linkedUserId     String?
+  vote             Int      @default(1)
+  createdAt        DateTime @default(now())
+
+  featureRequest FeatureRequest       @relation(fields: [featureRequestId], references: [id])
+  participant    ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser     User?                @relation(fields: [linkedUserId], references: [id])
+
+  @@unique([featureRequestId, participantId])
+  @@index([featureRequestId])
+}
+
+model Feedback {
+  id            String   @id @default(cuid())
+  content       String
+  category      String?
+  participantId String?
+  linkedUserId  String?
+  source        String?
+  isPublic      Boolean  @default(false)
+  metadata      Json?
+  createdAt     DateTime @default(now())
+
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser  User?                @relation(fields: [linkedUserId], references: [id])
+
+  @@index([participantId])
+  @@index([linkedUserId])
+  @@index([category])
+}
+
+model BugReport {
+  id               String   @id @default(cuid())
+  title            String
+  description      String
+  stepsToReproduce String?
+  severity         String   @default("MEDIUM")
+  status           String   @default("REPORTED")
+  attachment       String?
+  participantId    String?
+  linkedUserId     String?
+  metadata         Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser  User?                @relation(fields: [linkedUserId], references: [id])
+
+  @@index([status])
+  @@index([severity])
+}
+
+model NpsScore {
+  id            String   @id @default(cuid())
+  score         Int
+  reason        String?
+  campaignId    String?
+  participantId String?
+  linkedUserId  String?
+  createdAt     DateTime @default(now())
+
+  campaign    ResearchCampaign?    @relation(fields: [campaignId], references: [id])
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser  User?                @relation(fields: [linkedUserId], references: [id])
+
+  @@index([campaignId])
+  @@index([participantId])
+  @@index([linkedUserId])
+}
+
+model CsatScore {
+  id            String   @id @default(cuid())
+  score         Int
+  reason        String?
+  campaignId    String?
+  participantId String?
+  linkedUserId  String?
+  createdAt     DateTime @default(now())
+
+  campaign    ResearchCampaign?    @relation(fields: [campaignId], references: [id])
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser  User?                @relation(fields: [linkedUserId], references: [id])
+
+  @@index([campaignId])
+  @@index([participantId])
+  @@index([linkedUserId])
+}
+
+model CesScore {
+  id            String   @id @default(cuid())
+  score         Int
+  reason        String?
+  campaignId    String?
+  participantId String?
+  linkedUserId  String?
+  createdAt     DateTime @default(now())
+
+  campaign    ResearchCampaign?    @relation(fields: [campaignId], references: [id])
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser  User?                @relation(fields: [linkedUserId], references: [id])
+
+  @@index([campaignId])
+  @@index([participantId])
+  @@index([linkedUserId])
+}
+
+model Interview {
+  id            String    @id @default(cuid())
+  title         String
+  description   String?
+  campaignId    String
+  participantId String?
+  interviewerId String?
+  scheduledAt   DateTime?
+  conductedAt   DateTime?
+  duration      Int?
+  notes         String?
+  transcript    String?
+  recordingUrl  String?
+  keyFindings   Json?
+  status        String    @default("SCHEDULED")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  campaign    ResearchCampaign     @relation(fields: [campaignId], references: [id])
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+
+  @@index([campaignId])
+  @@index([participantId])
+  @@index([status])
+}
+
+model FocusGroup {
+  id             String    @id @default(cuid())
+  title          String
+  description    String?
+  campaignId     String
+  moderatorId    String?
+  scheduledAt    DateTime?
+  conductedAt    DateTime?
+  duration       Int?
+  participantIds String[]
+  notes          String?
+  transcript     String?
+  recordingUrl   String?
+  keyFindings    Json?
+  status         String    @default("SCHEDULED")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  campaign ResearchCampaign @relation(fields: [campaignId], references: [id])
+
+  @@index([campaignId])
+  @@index([status])
+}
+
+model PricingResearch {
+  id              String   @id @default(cuid())
+  campaignId      String
+  modelType       String
+  pricePoint      Float?
+  currency        String   @default("SAR")
+  willingness     Int?
+  feedback        String?
+  competitorPrice Float?
+  participantId   String?
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  campaign    ResearchCampaign     @relation(fields: [campaignId], references: [id])
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+
+  @@index([campaignId])
+  @@index([modelType])
+}
+
+model CompetitorResearch {
+  id             String   @id @default(cuid())
+  campaignId     String
+  competitorName String
+  competitorUrl  String?
+  strengths      String?
+  weaknesses     String?
+  pricing        String?
+  marketShare    String?
+  features       Json?
+  rating         Int?
+  participantId  String?
+  notes          String?
+  createdAt      DateTime @default(now())
+
+  campaign    ResearchCampaign     @relation(fields: [campaignId], references: [id])
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+
+  @@index([campaignId])
+  @@index([competitorName])
+}
+
+model CustomerJourneyEvent {
+  id            String   @id @default(cuid())
+  participantId String?
+  linkedUserId  String?
+  eventType     String
+  eventData     Json?
+  source        String?
+  createdAt     DateTime @default(now())
+
+  participant ResearchParticipant? @relation(fields: [participantId], references: [id])
+  linkedUser  User?                @relation(fields: [linkedUserId], references: [id])
+
+  @@index([participantId])
+  @@index([linkedUserId])
+  @@index([eventType])
+  @@index([createdAt])
+}
+
+model AiInsight {
+  id           String      @id @default(cuid())
+  insightType  InsightType
+  title        String
+  titleEn      String?
+  titleAr      String?
+  titleUr      String?
+  description  String?
+  data         Json?
+  confidence   Float?
+  sourceModel  String?
+  campaignId   String?
+  segmentId    String?
+  isReviewed   Boolean     @default(false)
+  isActionable Boolean     @default(false)
+  priority     Int         @default(0)
+  generatedAt  DateTime    @default(now())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  campaign ResearchCampaign? @relation(fields: [campaignId], references: [id])
+  segment  ResearchSegment?  @relation(fields: [segmentId], references: [id])
+
+  @@index([insightType])
+  @@index([campaignId])
+  @@index([segmentId])
+  @@index([generatedAt])
+}
+
+// ─── CRM Module ───────────────────────────────────────────────────────────
+enum LeadSource {
+  WEBSITE
+  REFERRAL
+  SOCIAL_MEDIA
+  COLD_CALL
+  EVENT
+  ADVERTISEMENT
+  PARTNER
+  MARKETPLACE
+  OTHER
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+  DISQUALIFIED
+}
+
+enum OpportunityStage {
+  DISCOVERY
+  QUALIFIED
+  PROPOSAL
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+  ON_HOLD
+}
+
+enum CrmActivityType {
+  CALL
+  EMAIL
+  MEETING
+  NOTE
+  TASK
+  WHATSAPP
+  SMS
+  SOCIAL
+  OTHER
+}
+
+enum CrmTaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum CrmTaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DEFERRED
+}
+
+model Lead {
+  id                   String     @id @default(cuid())
+  organizationId       String
+  firstName            String
+  lastName             String
+  email                String?
+  phone                String?
+  company              String?
+  jobTitle             String?
+  source               LeadSource @default(OTHER)
+  status               LeadStatus @default(NEW)
+  score                Int        @default(0)
+  tags                 String[]
+  notes                String?
+  convertedToContactId String?
+  assignedToId         String?
+  createdById          String
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  assignedTo   User?        @relation("LeadAssignee", fields: [assignedToId], references: [id])
+  createdBy    User         @relation("LeadCreator", fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([assignedToId])
+  @@index([status])
+  @@index([email])
+}
+
+model CrmContact {
+  id             String     @id @default(cuid())
+  organizationId String
+  firstName      String
+  lastName       String
+  email          String?
+  phone          String?
+  jobTitle       String?
+  company        String?
+  linkedUserId   String?
+  ownerId        String?
+  source         LeadSource @default(OTHER)
+  tags           String[]
+  notes          String?
+  avatar         String?
+  isActive       Boolean    @default(true)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  linkedUser   User?         @relation(fields: [linkedUserId], references: [id])
+  owner        User?         @relation("ContactOwner", fields: [ownerId], references: [id])
+
+  @@index([organizationId])
+  @@index([ownerId])
+  @@index([linkedUserId])
+  @@index([email])
+}
+
+model Opportunity {
+  id                String           @id @default(cuid())
+  organizationId    String
+  name              String
+  amount            Decimal          @default(0)
+  currency          String           @default("SAR")
+  stage             OpportunityStage @default(DISCOVERY)
+  probability       Int              @default(0)
+  expectedCloseDate DateTime?
+  actualCloseDate   DateTime?
+  source            LeadSource       @default(OTHER)
+  notes             String?
+  tags              String[]
+  leadId            String?
+  contactId         String?
+  companyName       String?
+  ownerId           String?
+  createdById       String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  owner        User?        @relation("OpportunityOwner", fields: [ownerId], references: [id])
+  createdBy    User         @relation("OpportunityCreator", fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([ownerId])
+  @@index([stage])
+  @@index([leadId])
+  @@index([contactId])
+}
+
+model CrmActivity {
+  id              String          @id @default(cuid())
+  organizationId  String
+  type            CrmActivityType
+  subject         String
+  description     String?
+  outcome         String?
+  scheduledAt     DateTime?
+  completedAt     DateTime?
+  durationMinutes Int?
+  assignedToId    String?
+  createdById     String
+  leadId          String?
+  contactId       String?
+  opportunityId   String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  assignedTo   User?        @relation("ActivityAssignee", fields: [assignedToId], references: [id])
+  createdBy    User         @relation("ActivityCreator", fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([assignedToId])
+  @@index([type])
+  @@index([leadId])
+  @@index([contactId])
+  @@index([opportunityId])
+}
+
+model CrmTask {
+  id             String          @id @default(cuid())
+  organizationId String
+  subject        String
+  description    String?
+  status         CrmTaskStatus   @default(PENDING)
+  priority       CrmTaskPriority @default(MEDIUM)
+  dueDate        DateTime?
+  completedAt    DateTime?
+  assignedToId   String?
+  createdById    String
+  leadId         String?
+  contactId      String?
+  opportunityId  String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  assignedTo   User?        @relation("TaskAssignee", fields: [assignedToId], references: [id])
+  createdBy    User         @relation("TaskCreator", fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([assignedToId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+model CrmMeeting {
+  id             String    @id @default(cuid())
+  organizationId String
+  title          String
+  description    String?
+  startTime      DateTime
+  endTime        DateTime?
+  location       String?
+  meetingLink    String?
+  status         String    @default("SCHEDULED")
+  outcome        String?
+  organizerId    String?
+  leadId         String?
+  contactId      String?
+  opportunityId  String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  organizer    User?        @relation("MeetingOrganizer", fields: [organizerId], references: [id])
+
+  @@index([organizationId])
+  @@index([organizerId])
+  @@index([startTime])
+}
+
+model CrmNote {
+  id             String   @id @default(cuid())
+  organizationId String
+  content        String
+  pinned         Boolean  @default(false)
+  leadId         String?
+  contactId      String?
+  opportunityId  String?
+  createdById    String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+  createdBy    User         @relation("NoteCreator", fields: [createdById], references: [id])
+
+  @@index([organizationId])
+  @@index([leadId])
+  @@index([contactId])
+  @@index([opportunityId])
+  @@index([pinned])
+}
+
+model Inspection {
+  id              String           @id @default(cuid())
+  inspectionNumber String          @unique
+  type             String
+  status           InspectionStatus @default(PENDING)
+  referenceType    String
+  referenceId      String
+  inspectorId      String
+  scheduledAt      DateTime?
+  completedAt      DateTime?
+  notes            String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  inspector    User               @relation("QualityInspector", fields: [inspectorId], references: [id])
+  items        InspectionItem[]
+  attachments  InspectionAttachment[]
+  ncrs         NCR[]
+  certificates AcceptanceCertificate[]
+
+  @@index([referenceType, referenceId])
+  @@index([inspectorId])
+  @@index([status])
+  @@index([inspectionNumber])
+}
+
+model InspectionItem {
+  id             String              @id @default(cuid())
+  inspectionId   String
+  deliveryItemId String?
+  poItemId       String
+  specification  String
+  expectedValue  String?
+  actualValue    String?
+  result         InspectionItemResult?
+  remarks        String?
+  createdAt      DateTime            @default(now())
+
+  inspection    Inspection @relation(fields: [inspectionId], references: [id])
+  deliveryItem  DeliveryItem? @relation(fields: [deliveryItemId], references: [id])
+  poItem        POItem       @relation(fields: [poItemId], references: [id])
+
+  @@index([inspectionId])
+  @@index([deliveryItemId])
+  @@index([poItemId])
+}
+
+model InspectionAttachment {
+  id           String   @id @default(cuid())
+  inspectionId String
+  type         String
+  url          String
+  fileName     String
+  uploadedById String
+  createdAt    DateTime @default(now())
+
+  inspection Inspection @relation(fields: [inspectionId], references: [id])
+  uploadedBy User       @relation("AttachmentUploader", fields: [uploadedById], references: [id])
+
+  @@index([inspectionId])
+  @@index([uploadedById])
+}
+
+model NCR {
+  id              String    @id @default(cuid())
+  ncrNumber       String    @unique
+  inspectionId    String
+  severity        NCRSeverity @default(MEDIUM)
+  category        String
+  description     String
+  correctiveAction String?
+  dueDate         DateTime?
+  status          NCRStatus @default(OPEN)
+  createdById     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  inspection Inspection @relation(fields: [inspectionId], references: [id])
+  createdBy  User       @relation("NCRCreator", fields: [createdById], references: [id])
+
+  @@index([inspectionId])
+  @@index([status])
+  @@index([ncrNumber])
+}
+
+model AcceptanceCertificate {
+  id              String   @id @default(cuid())
+  certificateNumber String @unique
+  inspectionId    String
+  acceptedById    String
+  acceptedAt      DateTime @default(now())
+  remarks         String?
+  createdAt       DateTime @default(now())
+
+  inspection Inspection @relation(fields: [inspectionId], references: [id])
+  acceptedBy User       @relation("CertificateAcceptor", fields: [acceptedById], references: [id])
+
+  @@index([inspectionId])
+  @@index([acceptedById])
+  @@index([certificateNumber])
+}
+
+model PaymentReservation {
+  id               String                  @id @default(cuid())
+  reservationNumber String                 @unique
+  purchaseOrderId  String
+  supplierId       String
+  buyerId          String
+  totalAmount      Float
+  heldAmount       Float                   @default(0)
+  releasedAmount   Float                   @default(0)
+  currency         String                  @default("SAR")
+  status           PaymentReservationStatus @default(RESERVED)
+  notes            String?
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  purchaseOrder PurchaseOrder   @relation(fields: [purchaseOrderId], references: [id])
+  supplier      User            @relation("PaymentSupplier", fields: [supplierId], references: [id])
+  buyer         User            @relation("PaymentBuyer", fields: [buyerId], references: [id])
+  releases      PaymentRelease[]
+
+  @@index([purchaseOrderId])
+  @@index([supplierId])
+  @@index([buyerId])
+  @@index([status])
+}
+
+model PaymentRelease {
+  id              String              @id @default(cuid())
+  reservationId   String
+  amount          Float
+  type            PaymentReleaseType
+  notes           String?
+  releasedById    String
+  releasedAt      DateTime            @default(now())
+  createdAt       DateTime            @default(now())
+
+  reservation PaymentReservation @relation(fields: [reservationId], references: [id])
+  releasedBy  User               @relation("PaymentReleaseActor", fields: [releasedById], references: [id])
+
+  @@index([reservationId])
+  @@index([releasedById])
+}
+
+enum WorkflowHistoryResult {
+  SUCCESS
+  BLOCKED_BY_GUARD
+  INVALID_TRANSITION
+  ERROR
+}
+
+model WorkflowHistory {
+  id          String                @id @default(cuid())
+  entityType  String
+  entityId    String
+  action      String
+  fromStatus  String
+  toStatus    String?
+  result      WorkflowHistoryResult @default(SUCCESS)
+  guardName   String?
+  reason      String?
+  actorId     String?
+  actorRole   String?
+  metadata    Json?
+  createdAt   DateTime              @default(now())
+
+  @@index([entityType, entityId])
+  @@index([entityType, entityId, createdAt])
+  @@index([actorId])
+  @@index([result])
+  @@index([createdAt])
 }

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workforce &amp; Training — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">القوى العاملة والتدريب</span><span class="en">Workforce &amp; Training</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="topbar">
+  <div class="mobile-only"><button onclick="previewSidebar()" style="font-size:20px">&#9776;</button></div>
+  <a class="logo" href="#"><span class="logo-mark">A</span> ABC</a>
+  <div class="row grow" style="gap:8px">
+    <span class="badge bg-brand"><span class="ar">عامل / مستقل</span><span class="en">Worker / Freelancer</span></span>
+    <b class="small"><span class="ar">أحمد الحربي</span><span class="en">Ahmed Al-Harbi</span></b>
+  </div>
+  <button class="btn btn-outline btn-sm"><span class="ar">ملفي العام</span><span class="en">Public profile</span></button>
+  <div class="avatar blue">أ</div>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="nav-item active" data-pane="profile"><span class="ar">ملف المهارات</span><span class="en">Skills profile</span></div>
+    <div class="nav-item" data-pane="jobs">&#128188; <span class="ar">الوظائف</span><span class="en">Jobs</span><span class="count neutral">6</span></div>
+    <div class="nav-item" data-pane="training">&#127891; <span class="ar">التدريب</span><span class="en">Training</span></div>
+    <div class="nav-item" data-pane="certs">&#127875; <span class="ar">الشهادات</span><span class="en">Certificates</span></div>
+    <div class="nav-sec"><span class="ar">سجلي</span><span class="en">My records</span></div>
+    <div class="nav-item" data-pane="apps"><span class="ar">تقديماتي</span><span class="en">Applications</span></div>
+    <div class="nav-item" data-pane="history"><span class="ar">سجل العمل</span><span class="en">Work history</span></div>
+  </aside>
+
+  <main class="shell-main">
+
+    <!-- ============ SKILLS PROFILE ============ -->
+    <div class="pane active" id="profile">
+      <div class="page-title"><span class="ar">ملف المهارات</span><span class="en">Skills profile</span></div>
+      <div class="page-sub"><span class="ar">أحمد الحربي — حدادة وتسليح</span><span class="en">Ahmed Al-Harbi — Steel fixing</span></div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="row" style="gap:16px">
+              <div class="avatar blue" style="width:64px;height:64px;font-size:24px">أ</div>
+              <div>
+                <b style="font-size:17px"><span class="ar">أحمد الحربي</span><span class="en">Ahmed Al-Harbi</span></b>
+                <div class="small muted"><span class="ar">حدّاد / عامل تسليح</span><span class="en">Steel fixer</span> · 8 <span class="ar">سنوات خبرة</span><span class="en">years experience</span></div>
+                <div class="row" style="gap:6px; margin-top:6px"><span class="badge bg-success"><span class="ar">متاح للعمل</span><span class="en">Available</span></span><span class="badge bg-neutral">Riyadh</span><span class="badge bg-neutral"><span class="ar">ينقل للجوال</span><span class="en">Site-based</span></span></div>
+              </div>
+            </div>
+            <div style="margin:16px 0">
+              <div class="row" style="margin-bottom:6px"><span class="small muted"><span class="ar">اكتمال الملف</span><span class="en">Profile completeness</span></span><b class="xsmall">80%</b></div>
+              <div class="progress"><i style="width:80%"></i></div>
+            </div>
+            <div class="h4 small" style="color:var(--surface-500); margin-bottom:8px"><span class="ar">المهارات والرخص</span><span class="en">Skills &amp; licenses</span></div>
+            <div class="row wrap" style="gap:6px">
+              <span class="badge bg-brand"><span class="ar">حدادة تسليح</span><span class="en">Rebar fixing</span></span>
+              <span class="badge bg-brand"><span class="ar">قراءة مخططات</span><span class="en">Blueprint reading</span></span>
+              <span class="badge bg-neutral"><span class="ar">تشغيل معدات</span><span class="en">Equipment</span></span>
+              <span class="badge bg-neutral"><span class="ar">لحام أساسي</span><span class="en">Basic welding</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">الشهادات</span><span class="en">Certifications</span></div></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+            <div class="card" style="border:1px solid var(--surface-200); padding:10px 12px">
+              <div class="row"><b><span class="ar">شهادة سلامة الموقع</span><span class="en">Site safety cert</span></b><span class="vchip verified">VERIFIED</span></div>
+              <div class="small muted"><span class="ar">أكاديمية ABC · 2025 · تنتهي 2027</span><span class="en">ABC Academy · 2025 · expires 2027</span></div>
+            </div>
+            <div class="card" style="border:1px solid var(--surface-200); padding:10px 12px">
+              <div class="row"><b><span class="ar">تسليح متقدم</span><span class="en">Advanced rebar</span></b><span class="vchip verified">VERIFIED</span></div>
+              <div class="small muted"><span class="ar">معهد التدريب الفني · 2024</span><span class="en">Technical institute · 2024</span></div>
+            </div>
+            <div class="card" style="border:1px dashed var(--surface-300); padding:10px 12px">
+              <div class="row"><b class="muted"><span class="ar">إدارة مشاريع أساسية</span><span class="en">Basic project mgmt</span></b><span class="vchip unv">—</span></div>
+              <div class="small muted"><span class="ar">أكمل الدورة في سوق التدريب</span><span class="en">Take the course in training marketplace</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-header"><div class="card-title"><span class="ar">معرض الأعمال</span><span class="en">Portfolio</span></div><button class="btn btn-outline btn-sm"><span class="ar">إضافة</span><span class="en">Add</span></button></div>
+        <div class="card-body grid grid-4">
+          <div style="height:120px; border-radius:10px; background:linear-gradient(135deg,var(--surface-200),var(--surface-300)); display:flex;align-items:center;justify-content:center; font-size:26px;color:var(--surface-500)">&#127959;</div>
+          <div style="height:120px; border-radius:10px; background:linear-gradient(135deg,var(--brand-100),var(--brand-200)); display:flex;align-items:center;justify-content:center; font-size:26px;color:var(--brand-700)">&#129521;</div>
+          <div style="height:120px; border-radius:10px; background:linear-gradient(135deg,var(--info-100),var(--info-200)); display:flex;align-items:center;justify-content:center; font-size:26px;color:var(--info-700)">&#128207;</div>
+          <div style="height:120px; border-radius:10px; background:var(--surface-50); border:1px dashed var(--surface-300); display:flex;align-items:center;justify-content:center; font-size:26px;color:var(--surface-400)">+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ JOBS ============ -->
+    <div class="pane" id="jobs">
+      <div class="page-title"><span class="ar">الوظائف المتاحة</span><span class="en">Available jobs</span></div>
+      <div class="page-sub"><span class="ar">فرص عمل تناسب مهاراتك</span><span class="en">Opportunities matching your skills</span></div>
+      <div class="card" style="padding:16px; margin-bottom:16px">
+        <div class="row wrap" style="gap:10px">
+          <select class="select" style="width:auto; min-width:160px"><option><span class="ar">كل التخصصات</span><span class="en">All trades</span></option><option><span class="ar">حدادة</span><span class="en">Steel fixing</span></option><option><span class="ar">نجارة</span><span class="en">Carpentry</span></option></select>
+          <select class="select" style="width:auto; min-width:140px"><option><span class="ar">الرياض</span><span class="en">Riyadh</span></option><option><span class="ar">جدة</span><span class="en">Jeddah</span></option></select>
+          <select class="select" style="width:auto; min-width:140px"><option><span class="ar">كل الأنواع</span><span class="en">All types</span></option><option><span class="ar">عقد</span><span class="en">Contract</span></option><option><span class="ar">يومي</span><span class="en">Daily</span></option></select>
+          <div class="grow"></div>
+          <span class="small muted">12 <span class="ar">وظيفة</span><span class="en">jobs</span></span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <div class="card card-hover">
+          <div class="card-body">
+            <div class="row">
+              <div class="avatar amber" style="width:44px;height:44px">ب</div>
+              <div class="grow">
+                <b><span class="ar">عامل تسليح — برج الواحة</span><span class="en">Steel fixer — Al-Waha Tower</span></b>
+                <div class="small muted"><span class="ar">شركة البناء المتقدمة · الرياض ·</span><span class="en">Advanced Construction · Riyadh ·</span> <span class="badge bg-brand"><span class="ar">مستعجل</span><span class="en">Urgent</span></span></div>
+              </div>
+              <div style="text-align:end">
+                <b>350 <span class="small muted">SAR/<span class="ar">يوم</span><span class="en">day</span></span></b>
+                <div><span class="badge bg-neutral"><span class="ar">عقد 6 أشهر</span><span class="en">6-month contract</span></span></div>
+              </div>
+            </div>
+            <div class="row wrap" style="gap:6px; margin-top:10px">
+              <span class="badge bg-neutral"><span class="ar">خبرة 5+ سنوات</span><span class="en">5+ years</span></span>
+              <span class="badge bg-neutral"><span class="ar">رخصة سلامة</span><span class="en">Safety license</span></span>
+              <span class="badge bg-neutral"><span class="ar">سكن متوفر</span><span class="en">Accommodation</span></span>
+            </div>
+            <div class="row" style="justify-content:flex-end; margin-top:12px">
+              <button class="btn btn-primary"><span class="ar">تقديم طلب</span><span class="en">Apply now</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div class="card-body">
+            <div class="row">
+              <div class="avatar green" style="width:44px;height:44px">م</div>
+              <div class="grow">
+                <b><span class="ar">عامل تسليح — مجمع سكني</span><span class="en">Steel fixer — Residential compound</span></b>
+                <div class="small muted"><span class="ar">شركة المرسى للإنشاء · الدمام</span><span class="en">Al-Marsa Construction · Dammam</span></div>
+              </div>
+              <div style="text-align:end">
+                <b>300 <span class="small muted">SAR/<span class="ar">يوم</span><span class="en">day</span></span></b>
+                <div><span class="badge bg-neutral"><span class="ar">عقد 3 أشهر</span><span class="en">3-month contract</span></span></div>
+              </div>
+            </div>
+            <div class="row wrap" style="gap:6px; margin-top:10px">
+              <span class="badge bg-neutral"><span class="ar">خبرة 3+ سنوات</span><span class="en">3+ years</span></span>
+              <span class="badge bg-neutral"><span class="ar">نقل متوفر</span><span class="en">Transport provided</span></span>
+            </div>
+            <div class="row" style="justify-content:flex-end; margin-top:12px">
+              <button class="btn btn-primary"><span class="ar">تقديم طلب</span><span class="en">Apply now</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TRAINING ============ -->
+    <div class="pane" id="training">
+      <div class="page-title"><span class="ar">سوق التدريب</span><span class="en">Training marketplace</span></div>
+      <div class="page-sub"><span class="ar">ارفع مهاراتك وشهاداتك لتحسين فرص العمل</span><span class="en">Upskill and get certified to improve job opportunities</span></div>
+      <div class="grid grid-3">
+        <div class="card card-hover">
+          <div style="height:110px; background:linear-gradient(135deg,var(--navy-700),var(--navy-900)); display:flex;align-items:center;justify-content:center; color:#fff; font-size:34px">&#127891;</div>
+          <div class="card-pad">
+            <div class="row"><b><span class="ar">تسليح متقدم</span><span class="en">Advanced rebar</span></b><span class="badge bg-brand"><span class="ar">موصى به</span><span class="en">Recommended</span></span></div>
+            <div class="small muted" style="margin:4px 0">ABC Academy · 12 <span class="ar">درساً</span><span class="en">lessons</span></div>
+            <div class="row" style="justify-content:space-between"><b>450 <span class="small muted">SAR</span></b><span>&#9733; 4.9</span></div>
+            <button class="btn btn-primary btn-sm grow" style="width:100%; margin-top:10px"><span class="ar">سجّل الآن</span><span class="en">Enroll</span></button>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div style="height:110px; background:linear-gradient(135deg,var(--brand-500),#fbbf24); display:flex;align-items:center;justify-content:center; color:#fff; font-size:34px">&#128737;</div>
+          <div class="card-pad">
+            <b><span class="ar">سلامة الموقع OSHA</span><span class="en">Site safety OSHA</span></b>
+            <div class="small muted" style="margin:4px 0"><span class="ar">مركز السلامة المهنية · شهادة معتمدة</span><span class="en">Occupational safety center · certified</span></div>
+            <div class="row" style="justify-content:space-between"><b>320 <span class="small muted">SAR</span></b><span>&#9733; 4.7</span></div>
+            <button class="btn btn-primary btn-sm grow" style="width:100%; margin-top:10px"><span class="ar">سجّل الآن</span><span class="en">Enroll</span></button>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div style="height:110px; background:linear-gradient(135deg,var(--info-500),var(--info-600)); display:flex;align-items:center;justify-content:center; color:#fff; font-size:34px">&#128220;</div>
+          <div class="card-pad">
+            <b><span class="ar">قراءة المخططات</span><span class="en">Blueprint reading</span></b>
+            <div class="small muted" style="margin:4px 0"><span class="ar">معهد البناء الفني · 8 دروس</span><span class="en">Technical institute · 8 lessons</span></div>
+            <div class="row" style="justify-content:space-between"><b>280 <span class="small muted">SAR</span></b><span>&#9733; 4.5</span></div>
+            <button class="btn btn-primary btn-sm grow" style="width:100%; margin-top:10px"><span class="ar">سجّل الآن</span><span class="en">Enroll</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <div class="card-header"><div class="card-title"><span class="ar">دوراتي الحالية</span><span class="en">My courses</span></div></div>
+        <div class="card-body">
+          <div class="row" style="margin-bottom:10px"><b class="grow"><span class="ar">سلامة الموقع OSHA</span><span class="en">Site safety OSHA</span></b><span class="badge bg-info"><span class="ar">قيد التقدم</span><span class="en">In progress</span></span></div>
+          <div class="progress"><i style="width:60%"></i></div>
+          <div class="xsmall muted" style="margin-top:6px">6/10 <span class="ar">دروس مكتملة</span><span class="en">lessons completed</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ CERTS ============ -->
+    <div class="pane" id="certs">
+      <div class="page-title"><span class="ar">شهاداتي</span><span class="en">My certificates</span></div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-body" style="text-align:center">
+            <div style="font-size:40px; margin-bottom:8px">&#127875;</div>
+            <b><span class="ar">شهادة سلامة الموقع</span><span class="en">Site safety certificate</span></b>
+            <div class="small muted"><span class="ar">ABC Academy · 2025</span><span class="en">ABC Academy · 2025</span></div>
+            <div class="row" style="justify-content:center; margin-top:10px; gap:6px">
+              <button class="btn btn-outline btn-sm"><span class="ar">مشاركة</span><span class="en">Share</span></button>
+              <button class="btn btn-outline btn-sm"><span class="ar">تحميل PDF</span><span class="en">Download PDF</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" style="text-align:center">
+            <div style="font-size:40px; margin-bottom:8px">&#127875;</div>
+            <b><span class="ar">تسليح متقدم</span><span class="en">Advanced rebar</span></b>
+            <div class="small muted"><span class="ar">معهد التدريب الفني · 2024</span><span class="en">Technical institute · 2024</span></div>
+            <div class="row" style="justify-content:center; margin-top:10px; gap:6px">
+              <button class="btn btn-outline btn-sm"><span class="ar">مشاركة</span><span class="en">Share</span></button>
+              <button class="btn btn-outline btn-sm"><span class="ar">تحميل PDF</span><span class="en">Download PDF</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ APPS ============ -->
+    <div class="pane" id="apps">
+      <div class="page-title"><span class="ar">تقديماتي</span><span class="en">My applications</span></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th><span class="ar">الوظيفة</span><span class="en">Job</span></th><th><span class="ar">الشركة</span><span class="en">Company</span></th><th><span class="ar">التاريخ</span><span class="en">Date</span></th><th><span class="ar">الحالة</span><span class="en">Status</span></th></tr></thead>
+            <tbody>
+              <tr><td><b><span class="ar">عامل تسليح — برج الواحة</span><span class="en">Steel fixer — Al-Waha Tower</span></b></td><td><span class="ar">شركة البناء المتقدمة</span><span class="en">Advanced Construction</span></td><td>28 <span class="ar">يوليو</span><span class="en">Jul</span></td><td><span class="badge bg-warning"><span class="dot"></span><span class="ar">قيد المراجعة</span><span class="en">In review</span></span></td></tr>
+              <tr><td><b><span class="ar">عامل تسليح — مجمع سكني</span><span class="en">Steel fixer — Compound</span></b></td><td><span class="ar">شركة المرسى</span><span class="en">Al-Marsa</span></td><td>20 <span class="ar">يوليو</span><span class="en">Jul</span></td><td><span class="badge bg-success"><span class="dot"></span><span class="ar">تم القبول</span><span class="en">Accepted</span></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@/lib/auth';
+import { getEffectiveOrgId } from '@/lib/rbac';
+import { marketplaceService } from '@/modules/marketplace';
+import { createSupplierReviewSchema } from '@/modules/marketplace/validators/marketplace-schemas';
+import { success, error, createRequestId } from '@/modules/shared/utils/response-envelope';
+import { MarketplaceErrors } from '@/modules/shared/errors/marketplace.errors';
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth();
+    const orgId = session?.user?.id ? await getEffectiveOrgId(session.user.id) : null;
+    if (!orgId) {
+      return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
+    }
+    const body = await request.json();
+    const parsed = createSupplierReviewSchema.parse(body);
+    const review = await marketplaceService.createSupplierReview(orgId, parsed);
+    return NextResponse.json(success(review, createRequestId()), { status: 201 });
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      if (err.message === MarketplaceErrors.MARKETPLACE_SUPPLIER_NOT_FOUND) {
+        return NextResponse.json(error(MarketplaceErrors.MARKETPLACE_SUPPLIER_NOT_FOUND, 'Supplier not found'), { status: 404 });
+      }
+      if (err.message === MarketplaceErrors.MARKETPLACE_SUPPLIER_REVIEW_DUPLICATE) {
+        return NextResponse.json(error(MarketplaceErrors.MARKETPLACE_SUPPLIER_REVIEW_DUPLICATE, 'You already reviewed this supplier'), { status: 409 });
+      }
+      if (err.message === MarketplaceErrors.MARKETPLACE_REVIEW_INVALID_RATING) {
+        return NextResponse.json(error(MarketplaceErrors.MARKETPLACE_REVIEW_INVALID_RATING, 'Rating must be 1-5'), { status: 400 });
+      }
+    }
+    return NextResponse.json(error('INTERNAL_ERROR', 'Error creating review'), { status: 500 });
+  }
+}

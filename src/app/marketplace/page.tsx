@@ -112,29 +112,29 @@ export default function MarketplacePage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-surface-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs items={[{ label: t("navMarketplace") }]} />
 
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-surface-900 flex items-center gap-2">
               <Store className="w-7 h-7 text-amber-600" />
               {t("marketplaceTitle")}
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-surface-600 mt-1">
               {t("marketplaceDescription")}
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex bg-gray-100 rounded-lg p-1">
+            <div className="flex bg-surface-100 rounded-lg p-1">
               <button
                 onClick={() => setViewMode("grid")}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium ${
                   viewMode === "grid"
-                    ? "bg-white shadow text-gray-900"
-                    : "text-gray-500"
+                    ? "bg-white shadow text-surface-900"
+                    : "text-surface-500"
                 }`}
               >
                 {t("gridView")}
@@ -143,8 +143,8 @@ export default function MarketplacePage() {
                 onClick={() => setViewMode("list")}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium ${
                   viewMode === "list"
-                    ? "bg-white shadow text-gray-900"
-                    : "text-gray-500"
+                    ? "bg-white shadow text-surface-900"
+                    : "text-surface-500"
                 }`}
               >
                 {t("listView")}
@@ -165,30 +165,30 @@ export default function MarketplacePage() {
           <Card className="p-4">
             <div className="flex items-center gap-2">
               <Package className="w-5 h-5 text-amber-600" />
-              <p className="text-sm text-gray-500">{t("totalProducts")}</p>
+              <p className="text-sm text-surface-500">{t("totalProducts")}</p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 mt-1">524</p>
+            <p className="text-2xl font-bold text-surface-900 mt-1">524</p>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-2">
-              <Store className="w-5 h-5 text-green-600" />
-              <p className="text-sm text-gray-500">{t("activeSuppliers2")}</p>
+              <Store className="w-5 h-5 text-success-600" />
+              <p className="text-sm text-surface-500">{t("activeSuppliers2")}</p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 mt-1">128</p>
+            <p className="text-2xl font-bold text-surface-900 mt-1">128</p>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-2">
-              <Star className="w-5 h-5 text-yellow-500" />
-              <p className="text-sm text-gray-500">{t("avgRating")}</p>
+              <Star className="w-5 h-5 text-warning-500" />
+              <p className="text-sm text-surface-500">{t("avgRating")}</p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 mt-1">4.6</p>
+            <p className="text-2xl font-bold text-surface-900 mt-1">4.6</p>
           </Card>
           <Card className="p-4">
             <div className="flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5 text-blue-600" />
-              <p className="text-sm text-gray-500">{t("todayOrders")}</p>
+              <ShoppingCart className="w-5 h-5 text-info-600" />
+              <p className="text-sm text-surface-500">{t("todayOrders")}</p>
             </div>
-            <p className="text-2xl font-bold text-gray-900 mt-1">32</p>
+            <p className="text-2xl font-bold text-surface-900 mt-1">32</p>
           </Card>
         </div>
 
@@ -203,18 +203,18 @@ export default function MarketplacePage() {
             <Card key={product.id} hover className={viewMode === "grid" ? "" : "p-4"}>
               {viewMode === "grid" ? (
                 <>
-                  <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center relative">
-                    <Package className="w-16 h-16 text-gray-300" />
+                  <div className="h-48 bg-gradient-to-br from-surface-100 to-surface-200 flex items-center justify-center relative">
+                    <Package className="w-16 h-16 text-surface-300" />
                     {!product.inStock && (
-                      <div className="absolute top-3 right-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                      <div className="absolute top-3 right-3 bg-danger-500 text-white text-xs px-2 py-1 rounded-full">
                         {t("outOfStock")}
                       </div>
                     )}
                     <button
                       className={`absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center ${
                         product.isFavorited
-                          ? "bg-red-50 text-red-500"
-                          : "bg-white/80 text-gray-400 hover:text-red-500"
+                          ? "bg-danger-50 text-danger-500"
+                          : "bg-white/80 text-surface-400 hover:text-danger-500"
                       }`}
                     >
                       <Heart
@@ -229,15 +229,15 @@ export default function MarketplacePage() {
                       <span className="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
                         {product.category}
                       </span>
-                      <span className="flex items-center gap-1 text-xs text-gray-500">
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <span className="flex items-center gap-1 text-xs text-surface-500">
+                        <Star className="w-3 h-3 fill-warning-400 text-warning-400" />
                         {product.user.rating}
                       </span>
                     </div>
-                    <h3 className="font-bold text-gray-900 mb-1 line-clamp-1">
+                    <h3 className="font-bold text-surface-900 mb-1 line-clamp-1">
                       {product.name}
                     </h3>
-                    <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                    <p className="text-sm text-surface-600 line-clamp-2 mb-3">
                       {product.description}
                     </p>
                     <div className="flex items-center justify-between mb-3">
@@ -245,17 +245,17 @@ export default function MarketplacePage() {
                         <span className="text-xl font-bold text-amber-600">
                           {formatCurrency(product.price)}
                         </span>
-                        <span className="text-sm text-gray-500 mr-1">
+                        <span className="text-sm text-surface-500 mr-1">
                           {t("currency")}/{product.unit}
                         </span>
                       </div>
-                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <span className="text-xs text-surface-500 flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
                         {product.location}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-surface-500">
                         {t("minOrder")}: {product.minQuantity} {product.unit}
                       </span>
                       <Link
@@ -267,13 +267,13 @@ export default function MarketplacePage() {
                       </Link>
                     </div>
                     <div className="border-t mt-3 pt-3 flex items-center gap-2">
-                      <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs font-medium">
+                      <div className="w-6 h-6 bg-surface-200 rounded-full flex items-center justify-center text-xs font-medium">
                         {product.user.name[0]}
                       </div>
-                      <span className="text-xs text-gray-600">
+                      <span className="text-xs text-surface-600">
                         {product.user.name}
                       </span>
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-surface-400">
                         ({product.user.reviews} {t("reviews")})
                       </span>
                     </div>
@@ -281,29 +281,29 @@ export default function MarketplacePage() {
                 </>
               ) : (
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Package className="w-8 h-8 text-gray-300" />
+                  <div className="w-20 h-20 bg-surface-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Package className="w-8 h-8 text-surface-300" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-bold text-gray-900">{product.name}</h3>
+                      <h3 className="font-bold text-surface-900">{product.name}</h3>
                       <span className="text-xs text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
                         {product.category}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 line-clamp-1">
+                    <p className="text-sm text-surface-600 line-clamp-1">
                       {product.description}
                     </p>
                     <div className="flex items-center gap-4 mt-2 text-sm">
                       <span className="font-bold text-amber-600">
                         {formatCurrency(product.price)} {t("currency")}/{product.unit}
                       </span>
-                      <span className="text-gray-500 flex items-center gap-1">
+                      <span className="text-surface-500 flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
                         {product.location}
                       </span>
-                      <span className="flex items-center gap-1 text-gray-500">
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <span className="flex items-center gap-1 text-surface-500">
+                        <Star className="w-3 h-3 fill-warning-400 text-warning-400" />
                         {product.user.rating}
                       </span>
                     </div>

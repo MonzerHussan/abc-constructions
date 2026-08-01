@@ -10,8 +10,17 @@
 !.yarn/releases
 !.yarn/versions
 
+# database dumps / backups (may contain sensitive data)
+/prisma/*.dump
+/prisma/backups/
+/prisma/backup-*
+
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # next.js
 /.next/

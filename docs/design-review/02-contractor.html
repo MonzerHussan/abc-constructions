@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contractor Portal — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">بوابة المقاول</span><span class="en">Contractor Portal</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="topbar">
+  <div class="mobile-only"><button onclick="previewSidebar()" style="font-size:20px">&#9776;</button></div>
+  <a class="logo" href="#"><span class="logo-mark">A</span> ABC</a>
+  <div class="row grow" style="gap:8px">
+    <span class="badge bg-brand"><span class="ar">مقاول</span><span class="en">Contractor</span></span>
+    <b class="small"><span class="ar">شركة البناء المتقدمة</span><span class="en">Advanced Construction Co.</span></b>
+  </div>
+  <div class="search-wrap desktop-only" style="width:280px">
+    <span class="search-icon">&#128269;</span>
+    <input class="input input-search" data-ph-ar="بحث سريع…" data-ph-en="Quick search…" placeholder="بحث سريع…">
+  </div>
+  <button style="font-size:18px; position:relative">&#128276;<span class="badge bg-danger" style="position:absolute; top:-4px; inset-inline-end:-6px; font-size:10px">3</span></button>
+  <div class="avatar amber">خ</div>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="nav-item active" data-pane="dashboard">&#128200; <span><span class="ar">نظرة عامة</span><span class="en">Dashboard</span></span></div>
+    <div class="nav-item" data-pane="projects">&#127959; <span><span class="ar">المشاريع</span><span class="en">Projects</span></span><span class="count neutral">4</span></div>
+    <div class="nav-item" data-pane="boq">&#128196; <span>BOQ</span></div>
+    <div class="nav-item" data-pane="rfq">&#128230; <span>RFQ</span></div>
+    <div class="nav-item" data-pane="offers">&#128273; <span><span class="ar">العروض</span><span class="en">Offers</span></span><span class="count">2</span></div>
+    <div class="nav-sec"><span class="ar">التنفيذ</span><span class="en">Execution</span></div>
+    <div class="nav-item" data-pane="orders">&#128717; <span><span class="ar">أوامر الشراء</span><span class="en">Purchase orders</span></span></div>
+    <div class="nav-item" data-pane="suppliers">&#129466; <span><span class="ar">الموردون</span><span class="en">Suppliers</span></span></div>
+    <div class="nav-item" data-pane="team">&#128101; <span><span class="ar">الفريق</span><span class="en">Team</span></span></div>
+  </aside>
+
+  <main class="shell-main">
+
+    <!-- ============ DASHBOARD ============ -->
+    <div class="pane active" id="dashboard">
+      <div class="page-title"><span class="ar">مرحباً، خالد</span><span class="en">Welcome, Khalid</span></div>
+      <div class="page-sub"><span class="ar">نظرة على مشاريعك وطلبات الشراء الجارية</span><span class="en">Overview of your projects and active RFQs</span></div>
+      <div class="kpi-grid">
+        <div class="stat-card card"><div class="stat-icon">&#127959;</div><div><div class="stat-value">12</div><div class="stat-label"><span class="ar">مشروع نشط</span><span class="en">Active projects</span></div><div class="stat-trend trend-up">+3</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128230;</div><div><div class="stat-value">8</div><div class="stat-label"><span class="ar">RFQs جارية</span><span class="en">Open RFQs</span></div><div class="stat-trend trend-up">+2</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128273;</div><div><div class="stat-value">5</div><div class="stat-label"><span class="ar">عروض واردة</span><span class="en">Offers received</span></div><div class="stat-trend trend-up">2 <span class="ar">جديد</span><span class="en">new</span></div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128176;</div><div><div class="stat-value">2.4M</div><div class="stat-label"><span class="ar">قيمة الترسيات (ر.س)</span><span class="en">Awarded value (SAR)</span></div><div class="stat-trend trend-up">+18%</div></div></div>
+      </div>
+
+      <div class="grid grid-2" style="grid-template-columns: 2fr 1fr">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">المشاريع النشطة</span><span class="en">Active projects</span></div><button class="btn btn-link btn-sm" data-pane="projects"><span class="ar">عرض الكل</span><span class="en">View all</span></button></div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th><span class="ar">المشروع</span><span class="en">Project</span></th><th><span class="ar">التقدم</span><span class="en">Progress</span></th><th><span class="ar">الحالة</span><span class="en">Status</span></th><th></th></tr></thead>
+              <tbody>
+                <tr><td><b><span class="ar">برج الواحة — 22 طابقاً</span><span class="en">Al-Waha Tower — 22 floors</span></b><div class="xsmall muted">Riyadh · <span class="ar">مشتريات</span><span class="en">Procurement</span></div></td><td style="min-width:110px"><div class="progress"><i style="width:65%"></i></div><div class="xsmall muted" style="margin-top:4px">65%</div></td><td><span class="badge bg-info"><span class="dot"></span><span class="ar">قيد التنفيذ</span><span class="en">In progress</span></span></td><td><button class="btn btn-ghost btn-sm">&#8230;</button></td></tr>
+                <tr><td><b><span class="ar">مستودع المنطقة الصناعية</span><span class="en">Industrial Zone Warehouse</span></b><div class="xsmall muted">Jeddah · <span class="ar">الخرسانة</span><span class="en">Concrete</span></div></td><td style="min-width:110px"><div class="progress"><i style="width:30%"></i></div><div class="xsmall muted" style="margin-top:4px">30%</div></td><td><span class="badge bg-warning"><span class="dot"></span><span class="ar">إيقاف مؤقت</span><span class="en">On hold</span></span></td><td><button class="btn btn-ghost btn-sm">&#8230;</button></td></tr>
+                <tr><td><b><span class="ar">مجمع سكني 300 وحدة</span><span class="en">Residential Compound 300 units</span></b><div class="xsmall muted">Dammam · <span class="ar">التشطيبات</span><span class="en">Finishing</span></div></td><td style="min-width:110px"><div class="progress"><i style="width:82%"></i></div><div class="xsmall muted" style="margin-top:4px">82%</div></td><td><span class="badge bg-info"><span class="dot"></span><span class="ar">قيد التنفيذ</span><span class="en">In progress</span></span></td><td><button class="btn btn-ghost btn-sm">&#8230;</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card" style="align-self:start">
+          <div class="card-header"><div class="card-title"><span class="ar">إجراءات سريعة</span><span class="en">Quick actions</span></div></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+            <button class="btn btn-primary" data-pane="boq"><span class="ar">رفع BOQ لمشروع</span><span class="en">Upload project BOQ</span></button>
+            <button class="btn btn-outline" data-pane="rfq"><span class="ar">إنشاء RFQ</span><span class="en">Create RFQ</span></button>
+            <button class="btn btn-outline" data-pane="offers"><span class="ar">مقارنة العروض</span><span class="en">Compare offers</span></button>
+            <button class="btn btn-outline"><span class="ar">إضافة مورد</span><span class="en">Add supplier</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PROJECTS ============ -->
+    <div class="pane" id="projects">
+      <div class="page-title"><span class="ar">المشاريع</span><span class="en">Projects</span></div>
+      <div class="page-sub"><span class="ar">إدارة مشاريعك من الإنشاء إلى التنفيذ</span><span class="en">Manage your projects from creation to execution</span></div>
+      <div class="row" style="justify-content:flex-end; margin-bottom:16px"><button class="btn btn-primary"><span class="ar">مشروع جديد</span><span class="en">New project</span></button></div>
+      <div class="grid grid-3">
+        <div class="card card-hover">
+          <div style="height:110px; background:linear-gradient(135deg,var(--navy-700),var(--navy-900)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:30px">&#127959;</div>
+          <div class="card-pad">
+            <div class="row"><b><span class="ar">برج الواحة</span><span class="en">Al-Waha Tower</span></b><span class="badge bg-info"><span class="ar">قيد التنفيذ</span><span class="en">In progress</span></span></div>
+            <div class="small muted" style="margin:6px 0">Riyadh · <span class="ar">22 طابقاً</span><span class="en">22 floors</span></div>
+            <div class="row"><span class="xsmall muted"><span class="ar">التقدم</span><span class="en">Progress</span></span><b class="xsmall">65%</b></div>
+            <div class="progress" style="margin-top:4px"><i style="width:65%"></i></div>
+            <button class="btn btn-outline btn-sm grow" style="margin-top:12px" data-pane="boq"><span class="ar">رفع BOQ</span><span class="en">Upload BOQ</span></button>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div style="height:110px; background:linear-gradient(135deg,var(--brand-500),#fbbf24); display:flex; align-items:center; justify-content:center; color:#fff; font-size:30px">&#128230;</div>
+          <div class="card-pad">
+            <div class="row"><b><span class="ar">مستودع المنطقة الصناعية</span><span class="en">Industrial warehouse</span></b><span class="badge bg-warning"><span class="ar">إيقاف</span><span class="en">On hold</span></span></div>
+            <div class="small muted" style="margin:6px 0">Jeddah · <span class="ar">30%</span><span class="en">30%</span></div>
+            <div class="progress"><i style="width:30%"></i></div>
+            <button class="btn btn-outline btn-sm grow" style="margin-top:12px" data-pane="boq"><span class="ar">رفع BOQ</span><span class="en">Upload BOQ</span></button>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div style="height:110px; background:linear-gradient(135deg,var(--info-500),var(--info-600)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:30px">&#127976;</div>
+          <div class="card-pad">
+            <div class="row"><b><span class="ar">مجمع سكني</span><span class="en">Residential compound</span></b><span class="badge bg-success"><span class="ar">مكتمل</span><span class="en">Completed</span></span></div>
+            <div class="small muted" style="margin:6px 0">Dammam · 300 <span class="ar">وحدة</span><span class="en">units</span></div>
+            <div class="progress"><i style="width:100%"></i></div>
+            <button class="btn btn-outline btn-sm grow" style="margin-top:12px"><span class="ar">تقرير</span><span class="en">Report</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ BOQ ============ -->
+    <div class="pane" id="boq">
+      <div class="page-title"><span class="ar">رفع جدول الكميات (BOQ)</span><span class="en">Upload Bill of Quantities</span></div>
+      <div class="page-sub"><span class="ar">ارفع ملف Excel أو أدخل الأصناف يدوياً ليتم تحويلها إلى RFQ</span><span class="en">Upload Excel or enter line items to convert into an RFQ</span></div>
+      <div class="steps">
+        <div class="step done"><span class="dot">&#10003;</span><span class="lbl"><span class="ar">المشروع</span><span class="en">Project</span></span><span class="line"></span></div>
+        <div class="step current"><span class="dot">2</span><span class="lbl"><span class="ar">الرفع</span><span class="en">Upload</span></span><span class="line"></span></div>
+        <div class="step"><span class="dot">3</span><span class="lbl"><span class="ar">التحقق</span><span class="en">Validate</span></span><span class="line"></span></div>
+        <div class="step"><span class="dot">4</span><span class="lbl"><span class="ar">تحويل لـ RFQ</span><span class="en">Convert to RFQ</span></span></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><div class="card-title"><span class="ar">ملف الـ BOQ — برج الواحة</span><span class="en">BOQ file — Al-Waha Tower</span></div><span class="badge bg-success"><span class="ar">تم التحقق</span><span class="en">Validated</span></span></div>
+        <div class="card-body">
+          <div style="border:2px dashed var(--surface-300); border-radius:12px; padding:28px; text-align:center; margin-bottom:16px">
+            <div style="font-size:34px; margin-bottom:8px">&#128194;</div>
+            <b>boq_alwaha_22F.xlsx</b>
+            <div class="small muted">1.2 MB · <span class="ar">128 بنداً</span><span class="en">128 items</span></div>
+            <button class="btn btn-outline btn-sm" style="margin-top:12px"><span class="ar">استبدال الملف</span><span class="en">Replace file</span></button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>#</th><th><span class="ar">البند</span><span class="en">Item</span></th><th><span class="ar">الفئة</span><span class="en">Category</span></th><th class="th-num"><span class="ar">الكمية</span><span class="en">Qty</span></th><th><span class="ar">الوحدة</span><span class="en">Unit</span></th><th><span class="ar">المطابقة</span><span class="en">Match</span></th></tr></thead>
+              <tbody>
+                <tr><td class="mono">1</td><td><span class="ar">أسمنت بورتلاندي</span><span class="en">Portland cement</span></td><td><span class="ar">أسمنت</span><span class="en">Cement</span></td><td class="num">1,200</td><td class="mono">TON</td><td><span class="badge bg-success">98%</span></td></tr>
+                <tr><td class="mono">2</td><td><span class="ar">حديد تسليح 16مم</span><span class="en">Rebar 16mm</span></td><td><span class="ar">حديد</span><span class="en">Steel</span></td><td class="num">450</td><td class="mono">TON</td><td><span class="badge bg-success">95%</span></td></tr>
+                <tr><td class="mono">3</td><td><span class="ar">طابوق 20×20×40</span><span class="en">Concrete block</span></td><td><span class="ar">بلوك</span><span class="en">Blocks</span></td><td class="num">86,000</td><td class="mono">UNT</td><td><span class="badge bg-warning">72%</span></td></tr>
+                <tr><td class="mono">4</td><td><span class="ar">مادة غير معروفة</span><span class="en">Unknown item</span></td><td>—</td><td class="num">—</td><td>—</td><td><span class="badge bg-danger"><span class="ar">تحت المراجعة</span><span class="en">Review</span></span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row" style="justify-content:space-between; margin-top:16px">
+            <div class="small muted"><span class="ar">128 بنداً · 124 مطابق · 4 يحتاج مراجعة</span><span class="en">128 items · 124 matched · 4 to review</span></div>
+            <button class="btn btn-primary" data-pane="rfq"><span class="ar">تحويل إلى RFQ</span><span class="en">Convert to RFQ</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ RFQ ============ -->
+    <div class="pane" id="rfq">
+      <div class="page-title"><span class="ar">إنشاء طلب عرض سعر (RFQ)</span><span class="en">Create Request for Quotation</span></div>
+      <div class="page-sub"><span class="ar">حدد الأصناف والكميات وموعد التسليم واختر الموردين</span><span class="en">Set items, quantities, delivery date and select suppliers</span></div>
+      <div class="steps">
+        <div class="step done"><span class="dot">&#10003;</span><span class="lbl"><span class="ar">الأصناف</span><span class="en">Items</span></span><span class="line"></span></div>
+        <div class="step current"><span class="dot">2</span><span class="lbl"><span class="ar">التفاصيل</span><span class="en">Details</span></span><span class="line"></span></div>
+        <div class="step"><span class="dot">3</span><span class="lbl"><span class="ar">الموردون</span><span class="en">Suppliers</span></span></div>
+      </div>
+      <div class="grid" style="grid-template-columns: 2fr 1fr">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">الأصناف المطلوبة</span><span class="en">Requested items</span></div></div>
+          <div class="card-body">
+            <div class="table-wrap" style="margin-bottom:12px">
+              <table class="table">
+                <thead><tr><th><span class="ar">البند</span><span class="en">Item</span></th><th class="th-num"><span class="ar">الكمية</span><span class="en">Qty</span></th><th><span class="ar">الوحدة</span><span class="en">Unit</span></th><th class="th-num"><span class="ar">السعر المستهدف</span><span class="en">Target price</span></th><th></th></tr></thead>
+                <tbody>
+                  <tr><td><b><span class="ar">أسمنت بورتلاندي</span><span class="en">Portland cement</span></b></td><td class="num"><input class="input" style="width:90px;height:36px" value="1200"></td><td class="mono">TON</td><td class="num">600</td><td><button class="btn btn-ghost btn-sm">&#10005;</button></td></tr>
+                  <tr><td><b><span class="ar">حديد تسليح 16مم</span><span class="en">Rebar 16mm</span></b></td><td class="num"><input class="input" style="width:90px;height:36px" value="450"></td><td class="mono">TON</td><td class="num">2,700</td><td><button class="btn btn-ghost btn-sm">&#10005;</button></td></tr>
+                  <tr><td><b><span class="ar">طابوق 20×20×40</span><span class="en">Concrete block</span></b></td><td class="num"><input class="input" style="width:90px;height:36px" value="86000"></td><td class="mono">UNT</td><td class="num">0.85</td><td><button class="btn btn-ghost btn-sm">&#10005;</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <button class="btn btn-outline btn-sm"><span class="ar">+ إضافة بند</span><span class="en">+ Add item</span></button>
+          </div>
+        </div>
+        <div class="card" style="align-self:start">
+          <div class="card-header"><div class="card-title"><span class="ar">التفاصيل</span><span class="en">Details</span></div></div>
+          <div class="card-body">
+            <div class="field"><label><span class="ar">موعد التسليم</span><span class="en">Delivery date</span></label><input class="input" type="date"></div>
+            <div class="field"><label><span class="ar">الموقع</span><span class="en">Location</span></label><input class="input" data-ph-ar="موقع التسليم" data-ph-en="Delivery location" placeholder="موقع التسليم"></div>
+            <div class="field"><label><span class="ar">ملاحظات</span><span class="en">Notes</span></label><textarea class="textarea" style="min-height:70px" data-ph-ar="متطلبات إضافية…" data-ph-en="Additional requirements…" placeholder="متطلبات إضافية…"></textarea></div>
+            <div class="field"><label><span class="ar">عدد الموردين المستهدف</span><span class="en">Target suppliers</span></label><select class="select"><option>4</option><option>6</option><option>8</option></select></div>
+            <button class="btn btn-primary grow" style="width:100%"><span class="ar">التالي: اختيار الموردين</span><span class="en">Next: select suppliers</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ OFFERS ============ -->
+    <div class="pane" id="offers">
+      <div class="page-title"><span class="ar">مقارنة العروض — RFQ-0021</span><span class="en">Compare offers — RFQ-0021</span></div>
+      <div class="page-sub"><span class="ar">قارن العروض ورسِّ على الأفضل حسب السعر والمدة والتحقق</span><span class="en">Compare offers and award based on price, lead time and verification</span></div>
+      <div class="alert info" style="margin-bottom:16px"><span>&#128161;</span><span><span class="ar"><b>توصية النظام:</b> العرض (أ) هو الأفضل توازناً بين السعر ووقت التسليم ومستوى التحقق.</span><span class="en"><b>System recommendation:</b> Offer (A) is the best balance of price, lead time and verification.</span></span></div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="min-width:180px"><span class="ar">المعيار</span><span class="en">Criterion</span></th>
+              <th class="compare-col recommended"><b><span class="ar">المورد أ</span><span class="en">Supplier A</span></b><div><span class="vchip trusted">TRUSTED</span></div></th>
+              <th class="compare-col"><b><span class="ar">المورد ب</span><span class="en">Supplier B</span></b><div><span class="vchip verified">VERIFIED</span></div></th>
+              <th class="compare-col"><b><span class="ar">المورد ج</span><span class="en">Supplier C</span></b><div><span class="vchip basic">BASIC</span></div></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="ar">السعر الإجمالي</span><span class="en">Total price</span></td><td class="num"><b class="mono">1,184,000</b> SAR</td><td class="num mono">1,205,000 SAR</td><td class="num mono">1,152,000 SAR</td></tr>
+            <tr><td><span class="ar">وقت التسليم</span><span class="en">Lead time</span></td><td>14 <span class="ar">يوماً</span><span class="en">days</span></td><td>21 <span class="ar">يوماً</span><span class="en">days</span></td><td>30 <span class="ar">يوماً</span><span class="en">days</span></td></tr>
+            <tr><td><span class="ar">التقييم</span><span class="en">Rating</span></td><td>4.8 &#9733;</td><td>4.2 &#9733;</td><td>3.6 &#9733;</td></tr>
+            <tr><td><span class="ar">مستوى التحقق</span><span class="en">Verification</span></td><td><span class="vchip trusted">TRUSTED</span></td><td><span class="vchip verified">VERIFIED</span></td><td><span class="vchip basic">BASIC</span></td></tr>
+            <tr><td><span class="ar">شروط الدفع</span><span class="en">Payment terms</span></td><td>NET30</td><td>NET60</td><td><span class="ar">كاش</span><span class="en">Cash</span></td></tr>
+            <tr><td><span class="ar">الاختيار</span><span class="en">Selection</span></td>
+              <td><label class="check-row"><input type="radio" name="award" checked> <span class="ar">رسِّ على هذا العرض</span><span class="en">Award this offer</span></label></td>
+              <td><label class="check-row"><input type="radio" name="award"> <span class="ar">اختيار</span><span class="en">Select</span></label></td>
+              <td><label class="check-row"><input type="radio" name="award"> <span class="ar">اختيار</span><span class="en">Select</span></label></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row" style="justify-content:space-between; margin-top:20px">
+        <div class="small muted"><span class="ar">إجمالي 3 عروض لـ 3 أصناف</span><span class="en">3 offers for 3 items</span></div>
+        <button class="btn btn-success btn-lg"><span class="ar">ترسية وإنشاء أمر شراء</span><span class="en">Award &amp; create purchase order</span></button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

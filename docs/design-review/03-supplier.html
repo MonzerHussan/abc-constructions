@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supplier Portal — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">بوابة المورد</span><span class="en">Supplier Portal</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="topbar">
+  <div class="mobile-only"><button onclick="previewSidebar()" style="font-size:20px">&#9776;</button></div>
+  <a class="logo" href="#"><span class="logo-mark">A</span> ABC</a>
+  <div class="row grow" style="gap:8px">
+    <span class="badge bg-brand"><span class="ar">مورد</span><span class="en">Supplier</span></span>
+    <b class="small"><span class="ar">مصنع الخليج للأسمنت</span><span class="en">Gulf Cement Factory</span></b>
+    <span class="vchip trusted">TRUSTED</span>
+  </div>
+  <div class="search-wrap desktop-only" style="width:280px">
+    <span class="search-icon">&#128269;</span>
+    <input class="input input-search" data-ph-ar="بحث…" data-ph-en="Search…" placeholder="بحث…">
+  </div>
+  <button style="font-size:18px; position:relative">&#128276;<span class="badge bg-danger" style="position:absolute; top:-4px; inset-inline-end:-6px; font-size:10px">7</span></button>
+  <div class="avatar green">س</div>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="nav-item active" data-pane="dashboard">&#128200; <span><span class="ar">نظرة عامة</span><span class="en">Dashboard</span></span></div>
+    <div class="nav-item" data-pane="profile">&#128100; <span><span class="ar">الملف التجاري</span><span class="en">Company profile</span></span></div>
+    <div class="nav-item" data-pane="products">&#128230; <span><span class="ar">المنتجات</span><span class="en">Products</span></span><span class="count neutral">34</span></div>
+    <div class="nav-item" data-pane="inventory">&#128718; <span><span class="ar">المخزون</span><span class="en">Inventory</span></span><span class="count">2</span></div>
+    <div class="nav-item" data-pane="rfqs">&#128221; <span>RFQ</span><span class="count">5</span></div>
+    <div class="nav-item" data-pane="orders">&#128717; <span><span class="ar">الطلبات</span><span class="en">Orders</span></span></div>
+    <div class="nav-sec"><span class="ar">الأداء</span><span class="en">Performance</span></div>
+    <div class="nav-item" data-pane="analytics">&#128202; <span><span class="ar">التحليلات</span><span class="en">Analytics</span></span></div>
+  </aside>
+
+  <main class="shell-main">
+
+    <!-- ============ DASHBOARD ============ -->
+    <div class="pane active" id="dashboard">
+      <div class="page-title"><span class="ar">نظرة عامة</span><span class="en">Dashboard</span></div>
+      <div class="page-sub"><span class="ar">مرحباً سارة — إليك آخر أداء لشركتك</span><span class="en">Hi Sara — here is your company's latest performance</span></div>
+      <div class="kpi-grid">
+        <div class="stat-card card"><div class="stat-icon">&#128717;</div><div><div class="stat-value">186</div><div class="stat-label"><span class="ar">إجمالي الطلبات</span><span class="en">Total orders</span></div><div class="stat-trend trend-up">+12%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128200;</div><div><div class="stat-value">74%</div><div class="stat-label"><span class="ar">معدل الفوز</span><span class="en">Win rate</span></div><div class="stat-trend trend-up">+5%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#11088;</div><div><div class="stat-value">4.8</div><div class="stat-label"><span class="ar">متوسط التقييم</span><span class="en">Avg rating</span></div><div class="stat-trend trend-up">+0.2</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128337;</div><div><div class="stat-value">6<span class="h3">س</span></div><div class="stat-label"><span class="ar">زمن الاستجابة للـ RFQ</span><span class="en">RFQ response time</span></div><div class="stat-trend trend-up">-2h</div></div></div>
+      </div>
+
+      <div class="grid grid-2" style="grid-template-columns: 1fr 1fr">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">طلبات عرض أسعار واردة</span><span class="en">Incoming RFQs</span></div><button class="btn btn-link btn-sm" data-pane="rfqs"><span class="ar">عرض الكل</span><span class="en">View all</span></button></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+            <div class="card" style="border:1px solid var(--surface-200); padding:12px 14px">
+              <div class="row"><b>RFQ-0021</b><span class="badge bg-warning"><span class="ar">مستعجل</span><span class="en">Urgent</span></span></div>
+              <div class="small muted"><span class="ar">شركة البناء المتقدمة · 3 أصناف · تسليم خلال 14 يوماً</span><span class="en">Advanced Construction · 3 items · delivery in 14 days</span></div>
+              <div class="row" style="justify-content:flex-end; margin-top:8px"><button class="btn btn-primary btn-sm" data-pane="rfqs"><span class="ar">تقديم عرض</span><span class="en">Submit offer</span></button></div>
+            </div>
+            <div class="card" style="border:1px solid var(--surface-200); padding:12px 14px">
+              <div class="row"><b>RFQ-0020</b><span class="badge bg-neutral"><span class="ar">عادي</span><span class="en">Normal</span></span></div>
+              <div class="small muted"><span class="ar">شركة الطرق الحديثة · 6 أصناف · تسليم خلال 30 يوماً</span><span class="en">Modern Roads Co. · 6 items · 30 days</span></div>
+              <div class="row" style="justify-content:flex-end; margin-top:8px"><button class="btn btn-outline btn-sm" data-pane="rfqs"><span class="ar">عرض</span><span class="en">View</span></button></div>
+            </div>
+            <div class="card" style="border:1px solid var(--surface-200); padding:12px 14px">
+              <div class="row"><b>RFQ-0019</b></div>
+              <div class="small muted"><span class="ar">مؤسسة البناء الذكي · 2 أصناف</span><span class="en">Smart Build Est. · 2 items</span></div>
+              <div class="row" style="justify-content:flex-end; margin-top:8px"><button class="btn btn-outline btn-sm" data-pane="rfqs"><span class="ar">عرض</span><span class="en">View</span></button></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:16px">
+          <div class="card">
+            <div class="card-header"><div class="card-title"><span class="ar">تنبيهات المخزون</span><span class="en">Stock alerts</span></div></div>
+            <div class="card-body" style="display:flex; flex-direction:column; gap:8px">
+              <div class="alert warning"><span>&#9888;</span><div><b><span class="ar">أسمنت بورتلاندي 50كجم</span><span class="en">Portland Cement 50kg</span></b><div class="xsmall"><span class="ar">متبقٍ 120 طن — حد إعادة الطلب 200</span><span class="en">120 tons left — reorder at 200</span></div></div><button class="btn btn-outline btn-sm" style="margin-inline-start:auto" data-pane="inventory"><span class="ar">مخزون</span><span class="en">Stock</span></button></div>
+              <div class="alert warning"><span>&#9888;</span><div><b><span class="ar">كابل نحاس 3×4</span><span class="en">Copper cable 3x4</span></b><div class="xsmall"><span class="ar">متبقٍ 14 لفة</span><span class="en">14 rolls left</span></div></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title"><span class="ar">إجراءات سريعة</span><span class="en">Quick actions</span></div></div>
+            <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+              <button class="btn btn-primary" data-pane="products"><span class="ar">إضافة منتج</span><span class="en">Add product</span></button>
+              <button class="btn btn-outline" data-pane="inventory"><span class="ar">استيراد مخزون (Excel)</span><span class="en">Import inventory (Excel)</span></button>
+              <button class="btn btn-outline" data-pane="rfqs"><span class="ar">عرض RFQs الواردة</span><span class="en">View incoming RFQs</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PROFILE ============ -->
+    <div class="pane" id="profile">
+      <div class="page-title"><span class="ar">الملف التجاري</span><span class="en">Company profile</span></div>
+      <div class="page-sub"><span class="ar">بيانات مؤسستك، التحقق، الشهادات والفروع</span><span class="en">Your organization data, verification, certifications and branches</span></div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="row" style="gap:16px">
+              <div class="avatar amber" style="width:64px;height:64px;font-size:22px">م</div>
+              <div>
+                <b style="font-size:17px"><span class="ar">مصنع الخليج للأسمنت</span><span class="en">Gulf Cement Factory</span></b>
+                <div class="small muted">Riyadh · <span class="ar">منذ 2015</span><span class="en">since 2015</span></div>
+                <div class="row" style="gap:6px; margin-top:6px"><span class="vchip trusted">TRUSTED</span><span class="badge bg-success"><span class="ar">تحقق مكتمل</span><span class="en">Fully verified</span></span></div>
+              </div>
+            </div>
+            <div style="margin:16px 0">
+              <div class="row" style="margin-bottom:6px"><span class="small muted"><span class="ar">تقدم التحقق</span><span class="en">Verification progress</span></span><b class="xsmall">100%</b></div>
+              <div class="progress"><i style="width:100%"></i></div>
+            </div>
+            <div class="row wrap" style="gap:6px">
+              <span class="badge bg-success"><span class="dot"></span><span class="ar">رخصة تجارية</span><span class="en">Trade license</span></span>
+              <span class="badge bg-success"><span class="dot"></span><span class="ar">الضريبة</span><span class="en">VAT</span></span>
+              <span class="badge bg-success"><span class="dot"></span><span class="ar">ISO 9001</span><span class="en">ISO 9001</span></span>
+              <span class="badge bg-neutral"><span class="dot"></span><span class="ar">شهادة بنكية (جاهزة)</span><span class="en">Bank cert (ready)</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">القدرات (Capabilities)</span><span class="en">Capabilities</span></div></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+            <div class="card" style="border:1px solid var(--surface-200); padding:10px 12px"><b><span class="ar">إنتاج الأسمنت</span><span class="en">Cement production</span></b><div class="small muted">5,000 <span class="ar">طن/شهر</span><span class="en">tons/month</span></div><span class="badge bg-brand">PRIMARY</span></div>
+            <div class="card" style="border:1px solid var(--surface-200); padding:10px 12px"><b><span class="ar">الخرسانة الجاهزة</span><span class="en">Ready-mix concrete</span></b><div class="small muted">1,200 m³/<span class="ar">شهر</span><span class="en">month</span></div><span class="badge bg-info">SECONDARY</span></div>
+            <div class="card" style="border:1px solid var(--surface-200); padding:10px 12px"><b><span class="ar">النقل</span><span class="en">Transport</span></b><div class="small muted">—</div><span class="badge bg-neutral">EMERGING</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PRODUCTS ============ -->
+    <div class="pane" id="products">
+      <div class="page-title"><span class="ar">المنتجات</span><span class="en">Products</span></div>
+      <div class="page-sub"><span class="ar">عروضك السعرية للمنتجات المسجلة في الكتالوج</span><span class="en">Your priced offerings in the catalog</span></div>
+      <div class="row" style="justify-content:flex-end; margin-bottom:16px"><button class="btn btn-primary"><span class="ar">+ إضافة عرض منتج</span><span class="en">+ Add product offering</span></button></div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th><span class="ar">المنتج</span><span class="en">Product</span></th><th class="th-num"><span class="ar">السعر</span><span class="en">Price</span></th><th class="th-num"><span class="ar">الكمية الدنيا</span><span class="en">MOQ</span></th><th class="th-num"><span class="ar">المدة</span><span class="en">Lead time</span></th><th><span class="ar">الحالة</span><span class="en">Status</span></th><th></th></tr></thead>
+            <tbody>
+              <tr><td><b><span class="ar">أسمنت بورتلاندي 50كجم</span><span class="en">Portland Cement 50kg</span></b><div class="xsmall muted">SKU-100254</div></td><td class="num">12.50</td><td class="num">100</td><td class="num">2 <span class="ar">يوم</span><span class="en">days</span></td><td><span class="badge bg-success">ACTIVE</span></td><td><button class="btn btn-link btn-sm"><span class="ar">تعديل</span><span class="en">Edit</span></button></td></tr>
+              <tr><td><b><span class="ar">أسمنت مقاوم للكبريتات</span><span class="en">Sulfate-resistant cement</span></b><div class="xsmall muted">SKU-100302</div></td><td class="num">16.00</td><td class="num">50</td><td class="num">5 <span class="ar">أيام</span><span class="en">days</span></td><td><span class="badge bg-success">ACTIVE</span></td><td><button class="btn btn-link btn-sm"><span class="ar">تعديل</span><span class="en">Edit</span></button></td></tr>
+              <tr><td><b><span class="ar">جير حي</span><span class="en">Quicklime</span></b><div class="xsmall muted">SKU-100118</div></td><td class="num">9.75</td><td class="num">200</td><td class="num">—</td><td><span class="badge bg-warning">OUT_OF_STOCK</span></td><td><button class="btn btn-link btn-sm"><span class="ar">تعديل</span><span class="en">Edit</span></button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ INVENTORY ============ -->
+    <div class="pane" id="inventory">
+      <div class="page-title"><span class="ar">المخزون</span><span class="en">Inventory</span></div>
+      <div class="page-sub"><span class="ar">المستودعات ومستويات المخزون</span><span class="en">Warehouses and stock levels</span></div>
+      <div class="row" style="justify-content:space-between; margin-bottom:16px">
+        <div class="row">
+          <span class="badge bg-brand"><span class="ar">المستودع الرئيسي</span><span class="en">Main warehouse</span></span>
+          <span class="badge bg-neutral"><span class="ar">مستودع جدة</span><span class="en">Jeddah warehouse</span></span>
+        </div>
+        <button class="btn btn-outline"><span class="ar">استيراد Excel</span><span class="en">Import Excel</span></button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th><span class="ar">المنتج</span><span class="en">Product</span></th><th class="th-num"><span class="ar">الفيزيائي</span><span class="en">Physical</span></th><th class="th-num"><span class="ar">المحجوز</span><span class="en">Reserved</span></th><th class="th-num"><span class="ar">المتاح</span><span class="en">Available</span></th><th><span class="ar">الحالة</span><span class="en">Status</span></th></tr></thead>
+            <tbody>
+              <tr><td><b><span class="ar">أسمنت بورتلاندي 50كجم</span><span class="en">Portland Cement 50kg</span></b></td><td class="num">120</td><td class="num">15</td><td class="num">105</td><td><span class="badge bg-warning"><span class="dot"></span><span class="ar">منخفض</span><span class="en">Low</span></span></td></tr>
+              <tr><td><b><span class="ar">حديد تسليح 16مم</span><span class="en">Rebar 16mm</span></b></td><td class="num">640</td><td class="num">80</td><td class="num">560</td><td><span class="badge bg-success"><span class="dot"></span><span class="ar">متوفر</span><span class="en">In stock</span></span></td></tr>
+              <tr><td><b><span class="ar">كابل نحاس 3×4مم</span><span class="en">Copper cable 3x4mm</span></b></td><td class="num">14</td><td class="num">0</td><td class="num">14</td><td><span class="badge bg-danger"><span class="dot"></span><span class="ar">نفد تقريباً</span><span class="en">Almost out</span></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ RFQS ============ -->
+    <div class="pane" id="rfqs">
+      <div class="page-title"><span class="ar">طلبات عرض الأسعار</span><span class="en">RFQ requests</span></div>
+      <div class="page-sub"><span class="ar">RFQs الواردة إليك — استجب بسرعة لزيادة فرص الفوز</span><span class="en">Incoming RFQs — respond fast to increase win rate</span></div>
+      <div class="grid grid-2">
+        <div class="card card-hover">
+          <div class="card-header"><div class="row"><b>RFQ-0021</b><span class="badge bg-warning"><span class="ar">مستعجل</span><span class="en">Urgent</span></span></div><span class="xsmall muted">قبل 6 ساعات</span></div>
+          <div class="card-body">
+            <div class="small muted"><span class="ar">المشتري:</span><span class="en">Buyer:</span> <b><span class="ar">شركة البناء المتقدمة</span><span class="en">Advanced Construction</span></b></div>
+            <div class="small" style="margin:8px 0"><span class="ar">3 أصناف · تسليم خلال 14 يوماً · موقع الرياض</span><span class="en">3 items · 14 days · Riyadh</span></div>
+            <div class="row wrap" style="gap:6px">
+              <span class="badge bg-neutral"><span class="ar">أسمنت</span><span class="en">Cement</span></span>
+              <span class="badge bg-neutral"><span class="ar">حديد</span><span class="en">Steel</span></span>
+              <span class="badge bg-neutral"><span class="ar">بلوك</span><span class="en">Blocks</span></span>
+            </div>
+            <button class="btn btn-primary grow" style="width:100%; margin-top:12px"><span class="ar">تقديم عرض</span><span class="en">Submit offer</span></button>
+          </div>
+        </div>
+        <div class="card card-hover">
+          <div class="card-header"><div class="row"><b>RFQ-0020</b><span class="badge bg-neutral"><span class="ar">عادي</span><span class="en">Normal</span></span></div><span class="xsmall muted"><span class="ar">قبل يوم</span><span class="en">Yesterday</span></span></div>
+          <div class="card-body">
+            <div class="small muted"><span class="ar">المشتري:</span><span class="en">Buyer:</span> <b><span class="ar">شركة الطرق الحديثة</span><span class="en">Modern Roads Co.</span></b></div>
+            <div class="small" style="margin:8px 0">6 <span class="ar">أصناف · تسليم خلال 30 يوماً · جدة</span><span class="en">items · 30 days · Jeddah</span></div>
+            <div class="row wrap" style="gap:6px">
+              <span class="badge bg-neutral"><span class="ar">أسفلت</span><span class="en">Asphalt</span></span>
+              <span class="badge bg-neutral"><span class="ar">ركام</span><span class="en">Aggregate</span></span>
+            </div>
+            <button class="btn btn-outline grow" style="width:100%; margin-top:12px"><span class="ar">عرض التفاصيل</span><span class="en">View details</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ ANALYTICS ============ -->
+    <div class="pane" id="analytics">
+      <div class="page-title"><span class="ar">التحليلات والأداء</span><span class="en">Analytics &amp; performance</span></div>
+      <div class="page-sub"><span class="ar">مؤشرات محسوبة تلقائياً من بياناتك الحقيقية</span><span class="en">Metrics computed automatically from your real data</span></div>
+      <div class="kpi-grid">
+        <div class="stat-card card"><div class="stat-icon">&#128202;</div><div><div class="stat-value">96%</div><div class="stat-label"><span class="ar">تسليم في الوقت</span><span class="en">On-time delivery</span></div><div class="stat-trend trend-up">+2%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128273;</div><div><div class="stat-value">74%</div><div class="stat-label"><span class="ar">معدل الفوز</span><span class="en">Win rate</span></div><div class="stat-trend trend-up">+5%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#9201;</div><div><div class="stat-value">6h</div><div class="stat-label"><span class="ar">متوسط زمن الاستجابة</span><span class="en">Avg response time</span></div><div class="stat-trend trend-up">-2h</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128176;</div><div><div class="stat-value">3.1M</div><div class="stat-label"><span class="ar">قيمة الطلبات (ر.س)</span><span class="en">Order value (SAR)</span></div><div class="stat-trend trend-up">+18%</div></div></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">الطلبات الشهرية</span><span class="en">Monthly orders</span></div><span class="xsmall muted"><span class="ar">آخر 6 أشهر</span><span class="en">Last 6 months</span></span></div>
+          <div class="card-body">
+            <div style="display:flex; align-items:flex-end; gap:8px; height:160px">
+              <div style="flex:1; background:var(--surface-100); border-radius:6px 6px 0 0; height:40%; display:flex; align-items:center; justify-content:center" class="xsmall muted">14</div>
+              <div style="flex:1; background:var(--surface-200); border-radius:6px 6px 0 0; height:55%; display:flex; align-items:center; justify-content:center" class="xsmall muted">18</div>
+              <div style="flex:1; background:var(--surface-200); border-radius:6px 6px 0 0; height:48%; display:flex; align-items:center; justify-content:center" class="xsmall muted">16</div>
+              <div style="flex:1; background:var(--brand-200); border-radius:6px 6px 0 0; height:70%; display:flex; align-items:center; justify-content:center" class="xsmall muted">22</div>
+              <div style="flex:1; background:var(--brand-500); border-radius:6px 6px 0 0; height:85%; display:flex; align-items:center; justify-content:center" class="xsmall" style="color:#fff">26</div>
+              <div style="flex:1; background:var(--brand-500); border-radius:6px 6px 0 0; height:95%; display:flex; align-items:center; justify-content:center" class="xsmall" style="color:#fff">30</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">أداء التقييمات</span><span class="en">Rating performance</span></div></div>
+          <div class="card-body">
+            <div style="display:flex; flex-direction:column; gap:10px">
+              <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">الجودة</span><span class="en">Quality</span></span><b class="small">4.9</b></div><div class="progress" style="margin-top:4px"><i style="width:98%"></i></div></div>
+              <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">التسليم</span><span class="en">Delivery</span></span><b class="small">4.7</b></div><div class="progress" style="margin-top:4px"><i style="width:94%"></i></div></div>
+              <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">التواصل</span><span class="en">Communication</span></span><b class="small">4.8</b></div><div class="progress" style="margin-top:4px"><i style="width:96%"></i></div></div>
+              <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">السعر</span><span class="en">Price</span></span><b class="small">4.6</b></div><div class="progress" style="margin-top:4px"><i style="width:92%"></i></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

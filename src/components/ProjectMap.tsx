@@ -24,14 +24,14 @@ export default function ProjectMap({ projects, height = "400px" }: ProjectMapPro
 
   if (projects.length === 0) {
     return (
-      <div className="h-64 bg-gray-100 rounded-xl flex items-center justify-center text-gray-500 text-sm">
+      <div className="h-64 bg-surface-100 rounded-xl flex items-center justify-center text-surface-500 text-sm">
         {language === "ar" ? "لا توجد مشاريع على الخريطة" : language === "en" ? "No projects on the map" : "نقشے پر کوئی منصوبہ نہیں"}
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl overflow-hidden border border-gray-200" style={{ height }}>
+    <div className="rounded-xl overflow-hidden border border-surface-200" style={{ height }}>
       <ProjectMapInner projects={projects} />
     </div>
   );

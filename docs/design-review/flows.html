@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Flows — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">المسارات الأساسية</span><span class="en">User flows</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="section">
+
+  <div class="page-title"><span class="ar">المسارات الأساسية للمستخدم</span><span class="en">Core user flows</span></div>
+  <div class="page-sub"><span class="ar">ثلاثة تدفقات جوهرية توضح تسلسل الشاشات والإجراءات (راجع 02-screen-map للأكواد)</span><span class="en">Three core journeys showing the screen sequence and actions (see 02-screen-map for codes)</span></div>
+
+  <!-- ============ CONTRACTOR FLOW ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="row" style="margin-bottom:16px">
+      <span class="badge bg-brand">CONTRACTOR</span>
+      <b class="h3"><span class="ar">مقاول: من المشروع إلى الترسية</span><span class="en">Contractor: project to award</span></b>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><span class="num">1</span><b><span class="ar">مشروع جديد</span><span class="en">New project</span></b><span>7.3</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">2</span><b>BOQ</b><span>7.5</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">3</span><b><span class="ar">التحقق والمطابقة</span><span class="en">Validate &amp; match</span></b><span>7.6</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">4</span><b>RFQ</b><span>7.8</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">5</span><b><span class="ar">عروض الموردين</span><span class="en">Supplier offers</span></b><span>7.9</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">6</span><b><span class="ar">مقارنة واختيار</span><span class="en">Compare &amp; select</span></b><span>8.12</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">7</span><b><span class="ar">أمر شراء</span><span class="en">Purchase order</span></b><span>8.8</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">8</span><b><span class="ar">تسليم ودفع</span><span class="en">Delivery &amp; payment</span></b><span>8.9</span></div>
+    </div>
+    <div class="alert info" style="margin-top:16px"><span>&#128161;</span><span><span class="ar">الخطوات 2-3 قابلة للأتمتة: رفع ملف Excel ثم مطابقة الأصناف مع الكتالوج قبل توليد الـ RFQ.</span><span class="en">Steps 2-3 can be automated: upload Excel, then match items with the catalog before generating the RFQ.</span></span></div>
+  </div>
+
+  <!-- ============ SUPPLIER FLOW ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="row" style="margin-bottom:16px">
+      <span class="badge bg-brand">SUPPLIER</span>
+      <b class="h3"><span class="ar">مورد: من الملف إلى عرض السعر</span><span class="en">Supplier: profile to offer</span></b>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><span class="num">1</span><b><span class="ar">الملف التجاري</span><span class="en">Company profile</span></b><span>5.2</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">2</span><b><span class="ar">التحقق</span><span class="en">Verification</span></b><span>5.2</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">3</span><b><span class="ar">المنتجات</span><span class="en">Products</span></b><span>5.7</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">4</span><b><span class="ar">المخزون</span><span class="en">Inventory</span></b><span>5.10</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">5</span><b><span class="ar">استلام RFQ</span><span class="en">Receive RFQ</span></b><span>5.13</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">6</span><b><span class="ar">تقديم عرض</span><span class="en">Submit offer</span></b><span>5.14</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">7</span><b><span class="ar">فاتورة ودفع</span><span class="en">Invoice &amp; payment</span></b><span>5.16</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">8</span><b><span class="ar">تحليلات</span><span class="en">Analytics</span></b><span>5.17</span></div>
+    </div>
+    <div class="alert info" style="margin-top:16px"><span>&#128161;</span><span><span class="ar">مستوى التحقق يعزز الثقة في كل خطوة: كلما ارتفع (TRUSTED/FLAGSHIP) زادت فرص الفوز.</span><span class="en">Verification level boosts trust at every step — higher levels increase win rate.</span></span></div>
+  </div>
+
+  <!-- ============ WORKFORCE FLOW ============ -->
+  <div class="card card-pad" style="margin-bottom:24px">
+    <div class="row" style="margin-bottom:16px">
+      <span class="badge bg-brand">WORKFORCE</span>
+      <b class="h3"><span class="ar">قوى عاملة: من الملف إلى الوظيفة</span><span class="en">Workforce: profile to job</span></b>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><span class="num">1</span><b><span class="ar">الملف</span><span class="en">Profile</span></b><span>9.2</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">2</span><b><span class="ar">المهارات</span><span class="en">Skills</span></b><span>9.2</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">3</span><b><span class="ar">التدريب والشهادات</span><span class="en">Training &amp; certs</span></b><span>9.9–9.13</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">4</span><b><span class="ar">الوظائف</span><span class="en">Jobs</span></b><span>9.5</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">5</span><b><span class="ar">تقديم الطلب</span><span class="en">Apply</span></b><span>9.7</span></div>
+      <div class="flow-arrow flip">&#10140;</div>
+      <div class="flow-step"><span class="num">6</span><b><span class="ar">التعيين</span><span class="en">Hired</span></b><span>9.8</span></div>
+    </div>
+    <div class="alert info" style="margin-top:16px"><span>&#128161;</span><span><span class="ar">حلقة مستمرة: الوظيفة تفرز حاجة تدريبية، والشهادة تعزز الملف للوظيفة التالية.</span><span class="en">A continuous loop: jobs surface training needs, and certificates strengthen the profile for the next job.</span></span></div>
+  </div>
+
+  <div class="card card-pad">
+    <div class="h3" style="margin-bottom:12px"><span class="ar">منظومة متكاملة — كل الأدوار</span><span class="en">One ecosystem — all roles</span></div>
+    <div class="grid grid-4">
+      <div class="card" style="border:1px solid var(--surface-200); padding:14px; text-align:center"><b><span class="ar">مالك المشروع</span><span class="en">Owner</span></b><div class="xsmall muted">مناقصات · مشاريع</div></div>
+      <div class="card" style="border:1px solid var(--surface-200); padding:14px; text-align:center"><b><span class="ar">الاستشاري</span><span class="en">Consultant</span></b><div class="xsmall muted">موافقات · جودة</div></div>
+      <div class="card" style="border:1px solid var(--surface-200); padding:14px; text-align:center"><b><span class="ar">المصنع</span><span class="en">Manufacturer</span></b><div class="xsmall muted">منتجات · موزعون</div></div>
+      <div class="card" style="border:1px solid var(--surface-200); padding:14px; text-align:center"><b><span class="ar">مزود التدريب</span><span class="en">Training provider</span></b><div class="xsmall muted">دورات · شهادات</div></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

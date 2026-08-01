@@ -115,24 +115,24 @@ export default function ProjectsPage() {
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-surface-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs items={[{ label: t("projectsTitle") }]} />
 
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Building2 className="w-7 h-7 text-purple-600" />
+            <h1 className="text-2xl font-bold text-surface-900 flex items-center gap-2">
+              <Building2 className="w-7 h-7 text-flagship-600" />
               {t("projectsTitle")}
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-surface-600 mt-1">
               {t("projectsDescription")}
             </p>
           </div>
           <Link
             href="/projects/new"
-            className="flex items-center gap-2 px-5 py-2.5 bg-purple-500 text-white rounded-xl font-medium hover:bg-purple-600 transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 bg-flagship-500 text-white rounded-xl font-medium hover:bg-flagship-600 transition-colors"
           >
             <Plus className="w-5 h-5" />
             {t("addProject")}
@@ -145,8 +145,8 @@ export default function ProjectsPage() {
             onClick={() => setFilterStatus("all")}
             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
               filterStatus === "all"
-                ? "bg-purple-500 text-white"
-                : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                ? "bg-flagship-500 text-white"
+                : "bg-white text-surface-600 border border-surface-200 hover:bg-surface-50"
             }`}
           >
             {t("active")}
@@ -157,8 +157,8 @@ export default function ProjectsPage() {
               onClick={() => setFilterStatus(key)}
               className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
                 filterStatus === key
-                  ? "bg-purple-500 text-white"
-                  : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
+                  ? "bg-flagship-500 text-white"
+                  : "bg-white text-surface-600 border border-surface-200 hover:bg-surface-50"
               }`}
             >
               {val.label}
@@ -173,7 +173,7 @@ export default function ProjectsPage() {
 
         {/* View Toggle */}
         <div className="flex items-center justify-between mb-4 mt-4">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-surface-500">
             {viewMode === "grid"
               ? language === "ar"
                 ? `عرض ${mockProjects.length} مشروع`
@@ -182,11 +182,11 @@ export default function ProjectsPage() {
                 : `${mockProjects.length} منصوبے دکھا رہا ہے`
               : ""}
           </p>
-          <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center gap-1 bg-surface-100 rounded-lg p-1">
             <button
               onClick={() => setViewMode("grid")}
               className={`p-2 rounded-lg transition-colors ${
-                viewMode === "grid" ? "bg-white shadow-sm text-purple-600" : "text-gray-500 hover:text-gray-700"
+                viewMode === "grid" ? "bg-white shadow-sm text-flagship-600" : "text-surface-500 hover:text-surface-700"
               }`}
             >
               <List className="w-4 h-4" />
@@ -194,7 +194,7 @@ export default function ProjectsPage() {
             <button
               onClick={() => setViewMode("map")}
               className={`p-2 rounded-lg transition-colors ${
-                viewMode === "map" ? "bg-white shadow-sm text-purple-600" : "text-gray-500 hover:text-gray-700"
+                viewMode === "map" ? "bg-white shadow-sm text-flagship-600" : "text-surface-500 hover:text-surface-700"
               }`}
             >
               <MapIcon className="w-4 h-4" />
@@ -224,8 +224,8 @@ export default function ProjectsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
           {mockProjects.map((project) => (
             <Card key={project.id} hover className="overflow-hidden">
-              <div className="h-56 bg-gradient-to-br from-purple-50 to-purple-100 flex items-center justify-center relative">
-                <Building2 className="w-20 h-20 text-purple-200" />
+              <div className="h-56 bg-gradient-to-br from-flagship-50 to-flagship-100 flex items-center justify-center relative">
+                <Building2 className="w-20 h-20 text-flagship-200" />
                 <div className="absolute top-3 right-3">
                   <StatusBadge
                     label={PROJECT_STATUS[project.status as keyof typeof PROJECT_STATUS].label}
@@ -240,17 +240,17 @@ export default function ProjectsPage() {
               </div>
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full">
+                  <span className="text-xs text-flagship-600 bg-flagship-50 px-2 py-0.5 rounded-full">
                     {project.category}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                <h3 className="text-lg font-bold text-surface-900 mb-2">
                   {project.title}
                 </h3>
-                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                <p className="text-sm text-surface-600 line-clamp-2 mb-3">
                   {project.description}
                 </p>
-                <div className="grid grid-cols-2 gap-2 text-sm text-gray-500 mb-3">
+                <div className="grid grid-cols-2 gap-2 text-sm text-surface-500 mb-3">
                   <span className="flex items-center gap-1">
                     <MapPin className="w-4 h-4" />
                     {project.location}
@@ -276,17 +276,17 @@ export default function ProjectsPage() {
                 </div>
                 <div className="border-t pt-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-sm font-medium text-purple-700">
+                    <div className="w-8 h-8 bg-flagship-100 rounded-full flex items-center justify-center text-sm font-medium text-flagship-700">
                       {project.user.name[3]}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-surface-900">
                         {project.user.name}
                       </p>
-                      <p className="text-xs text-gray-500">{project.user.company}</p>
+                      <p className="text-xs text-surface-500">{project.user.company}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-500">
+                  <div className="flex items-center gap-3 text-sm text-surface-500">
                     <span className="flex items-center gap-1">
                       <Heart className="w-4 h-4" />
                       {project.likes}

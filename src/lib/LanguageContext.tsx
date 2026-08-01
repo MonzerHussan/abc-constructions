@@ -2,31 +2,40 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { translations, TranslationKey } from "@/lib/translations";
-
-type Language = "ar" | "en" | "ur";
-
-const langLabels: Record<Language, string> = {
-  ar: "عربي",
-  en: "EN",
-  ur: "اردو",
-};
+import {
+  DEFAULT_LOCALE,
+  getDir,
+  isSupportedLocale,
+  Locale,
+  LOCALE_COOKIE,
+  LOCALE_LABELS,
+  setLocaleCookie,
+} from "@/lib/i18n";
 
 interface LanguageContextType {
-  language: Language;
+  language: Locale;
   dir: "rtl" | "ltr";
   t: (key: TranslationKey) => string;
   toggleLanguage: () => void;
-  setLanguage: (lang: Language) => void;
+  setLanguage: (lang: Locale) => void;
   langLabel: string;
   nextLangLabel: string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>("ar");
+export function LanguageProvider({
+  children,
+  initialLocale,
+}: {
+  children: ReactNode;
+  initialLocale?: string;
+}) {
+  const [language, setLanguageState] = useState<Locale>(() =>
+    isSupportedLocale(initialLocale) ? initialLocale : DEFAULT_LOCALE
+  );
 
-  const dir = language === "en" ? "ltr" : "rtl";
+  const dir = getDir(language);
 
   const t = useCallback(
     (key: TranslationKey): string => {
@@ -38,25 +47,27 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const cycleLanguage = useCallback(() => {
     setLanguageState((prev) => {
-      const next: Language = prev === "ar" ? "en" : prev === "en" ? "ur" : "ar";
+      const next: Locale = prev === "ar" ? "en" : prev === "en" ? "ur" : "ar";
+      setLocaleCookie(next);
       if (typeof document !== "undefined") {
-        document.documentElement.dir = next === "en" ? "ltr" : "rtl";
+        document.documentElement.dir = getDir(next);
         document.documentElement.lang = next;
       }
       return next;
     });
   }, []);
 
-  const setLanguage = useCallback((lang: Language) => {
+  const setLanguage = useCallback((lang: Locale) => {
     setLanguageState(lang);
+    setLocaleCookie(lang);
     if (typeof document !== "undefined") {
-      document.documentElement.dir = lang === "en" ? "ltr" : "rtl";
+      document.documentElement.dir = getDir(lang);
       document.documentElement.lang = lang;
     }
   }, []);
 
-  const langLabel = langLabels[language];
-  const nextLangLabel = langLabels[language === "ar" ? "en" : language === "en" ? "ur" : "ar"];
+  const langLabel = LOCALE_LABELS[language];
+  const nextLangLabel = LOCALE_LABELS[language === "ar" ? "en" : language === "en" ? "ur" : "ar"];
 
   return (
     <LanguageContext.Provider value={{ language, dir, t, toggleLanguage: cycleLanguage, setLanguage, langLabel, nextLangLabel }}>
@@ -72,3 +83,6 @@ export function useLanguage() {
   }
   return context;
 }
+
+export type { Locale };
+export { LOCALE_COOKIE };

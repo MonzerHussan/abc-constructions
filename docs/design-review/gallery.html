@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABC Screen Gallery — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">معرض الشاشات</span><span class="en">Screen gallery</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="section">
+  <div class="page-title"><span class="ar">معرض شاشات ABC — Design Review Pack</span><span class="en">ABC Screen Gallery — Design Review Pack</span></div>
+  <div class="page-sub"><span class="ar">11 صفحة معاينة تفاعلية · افتح أي صفحة ثم بدّل اللغة (عربي/English) والاتجاه (RTL/LTR) وعرض الجوال من الشريط العلوي</span><span class="en">11 interactive preview pages · open any page then switch language, direction and mobile view from the top bar</span></div>
+
+  <div class="grid grid-3" style="gap:20px">
+    <a class="card card-hover" href="00-design-system.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--brand-500),var(--brand-700)); display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff">&#127912;</div>
+      <div class="card-pad">
+        <div class="row"><b class="h3"><span class="ar">نظام التصميم</span><span class="en">Design System</span></b><span class="badge bg-brand">v1.0</span></div>
+        <p class="small muted" style="margin-top:6px"><span class="ar">الهوية البصرية كاملة: الألوان، الخطوط، الأزرار، البطاقات، النماذج، الجداول، الحالات</span><span class="en">Full visual identity: colors, type, buttons, cards, forms, tables, status</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="01-home.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--navy-700),var(--navy-900)); display:flex; align-items:center; justify-content:center; font-size:40px; color:var(--brand-500)">&#127968;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">الصفحة الرئيسية</span><span class="en">Home / Landing</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">هيرو + بحث ذكي + فئات + قيمة المنصة + الأدوار السبعة</span><span class="en">Hero + smart search + categories + value + 7 roles</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="02-contractor.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--info-500),var(--navy-800)); display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff">&#128739;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">بوابة المقاول</span><span class="en">Contractor Portal</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">لوحة + مشاريع + رفع BOQ + إنشاء RFQ + مقارنة العروض والترسية</span><span class="en">Dashboard + projects + BOQ upload + RFQ + offer comparison</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="03-supplier.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--success-500),var(--success-700)); display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff">&#129466;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">بوابة المورد</span><span class="en">Supplier Portal</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">ملف تجاري + تحقق + منتجات + مخزون + RFQs + تحليلات</span><span class="en">Profile + verification + products + inventory + RFQs + analytics</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="04-marketplace.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--brand-500),#fbbf24); display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff">&#128230;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">السوق</span><span class="en">Marketplace</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">بحث + تفاصيل منتج + مقارنة موردين + تدفق RFQ</span><span class="en">Search + product details + supplier comparison + RFQ flow</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="05-workforce-training.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--flagship-500),var(--info-600)); display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff">&#127891;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">القوى العاملة والتدريب</span><span class="en">Workforce &amp; Training</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">ملف مهارات + سوق وظائف + سوق تدريب + شهادات</span><span class="en">Skills profile + jobs + training marketplace + certificates</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="06-admin.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--surface-700),var(--navy-900)); display:flex; align-items:center; justify-content:center; font-size:40px; color:var(--brand-500)">&#128202;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">بوابة الإدارة</span><span class="en">Admin Portal</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">نظرة عامة + KPIs + نمو + طابور التحقق + نشاط</span><span class="en">Overview + KPIs + growth + verification queue + activity</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="07-manufacturer.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--amber-500),var(--amber-700)); display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff">&#127963;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">بوابة المصنع</span><span class="en">Manufacturer Portal</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">ملف مصنع + علامات + منتجات رئيسية + مستندات فنية + موزعون + رؤى سوق</span><span class="en">Factory profile + brands + product masters + TDS/SDS + distributors + market insights</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="08-ai-experience.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--info-500),var(--info-700)); display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff">&#129302;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">تجربة الذكاء الاصطناعي</span><span class="en">AI Experience</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">مواضع واجهات AI: بحث + BOQ + مطابقة موردين + توصيات — placeholders فقط</span><span class="en">AI placement: search + BOQ + supplier matching + recommendations — placeholders only</span></p>
+      </div>
+    </a>
+
+    <a class="card card-hover" href="flows.html" style="display:block">
+      <div style="height:140px; background:linear-gradient(135deg,var(--navy-800),var(--brand-600)); display:flex; align-items:center; justify-content:center; font-size:40px; color:#fff">&#128200;</div>
+      <div class="card-pad">
+        <b class="h3"><span class="ar">المسارات (User Flows)</span><span class="en">User Flows</span></b>
+        <p class="small muted" style="margin-top:6px"><span class="ar">مقاول: مشروع←BOQ←RFQ←ترسية · مورد: ملف←عرض · قوى عاملة: مهارات←وظيفة</span><span class="en">Contractor, supplier and workforce journeys</span></p>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>

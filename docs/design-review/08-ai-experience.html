@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Experience Placement — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">مواضع تجربة الذكاء الاصطناعي</span><span class="en">AI Experience Placement</span> · <span class="ar">إضافة مراجعة</span><span class="en">review addition</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="topbar">
+  <div class="mobile-only"><button onclick="previewSidebar()" style="font-size:20px">&#9776;</button></div>
+  <a class="logo" href="#"><img class="logo-img" src="assets/logo/abc-logo.svg" alt="ABC"></a>
+  <div class="search-wrap grow"><span class="search-icon">&#128269;</span><input class="input input-search" data-ph-ar="ابحث في السوق…" data-ph-en="Search marketplace…" placeholder="ابحث في السوق…"></div>
+  <button class="desktop-only"><span class="ar">سلة</span><span class="en">Cart</span> (0)</button>
+  <div class="avatar amber">م</div>
+</div>
+
+<div class="container">
+  <div class="page-title"><span class="ar">مواضع تجربة الذكاء الاصطناعي</span><span class="en">AI Experience Placement</span></div>
+  <div class="page-sub"><span class="ar">أين تظهر قدرات ABC الذكية عبر تجربة السوق — كلها مبينة كـ placeholders للاتجاه والمراجعة، بلا أي تنفيذ للذكاء الاصطناعي في هذه المرحلة</span><span class="en">Where ABC's intelligence appears across the marketplace experience — all shown as placeholders for direction &amp; review, with zero AI implementation at this stage</span></div>
+
+  <div class="alert warning"><span>&#9888;</span><div><b><span class="ar">حدود النطاق (Sprint 0):</span><span class="en">Scope limit (Sprint 0):</span></b><span> <span class="ar">الذكاء الاصطناعي مقرر في خارطة الطريق للمرحلة الثالثة (Roadmap Phase 3). ما في هذه الصفحة لغة تصميم المواضع والواجهات فقط — لا وكلاء، لا نماذج، لا تكاملات LLM في Sprint 1.</span><span class="en">AI is planned for Roadmap Phase 3. Everything here is placement &amp; interface design language only — no agents, models, or LLM integrations in Sprint 1.</span></span></div></div>
+
+  <div class="grid grid-2">
+
+    <!-- AI SEARCH ASSISTANT -->
+    <div class="card ai-card">
+      <div class="card-header"><div class="card-title"><span class="ar">1. مساعد بحث ذكي — صفحة السوق</span><span class="en">1. AI search assistant — Marketplace</span></div><span class="badge bg-brand"><span class="ar">موضع عرض</span><span class="en">Placement</span></span></div>
+      <div class="card-pad">
+        <p class="small muted"><span class="ar">في صفحة السوق الرئيسية: شريط بحث بارز يعرض اقتراحات سياقية وتنقيحات للفئات والجودة والموردين.</span><span class="en">On the marketplace home: a prominent search bar with contextual suggestions and filters for categories, quality, and suppliers.</span></p>
+        <div class="ai-block">
+          <div class="ai-block-head">&#128161; <span><span class="ar">اقتراحات مساعد البحث</span><span class="en">AI search suggestions</span></span></div>
+          <div class="chip-row">
+            <span class="chip">&#127968; <span class="ar">أسمنت لمشروع برج مكاتب</span><span class="en">Cement for an office tower</span></span>
+            <span class="chip">&#10010; <span class="ar">قضبان تسليح مقاومة للتآكل</span><span class="en">Corrosion-resistant rebar</span></span>
+            <span class="chip">&#9989; <span class="ar">موردون بتحقق كامل في جدة</span><span class="en">Fully verified suppliers in Jeddah</span></span>
+          </div>
+          <div class="ai-suggestion"><b><span class="ar">فهم مساعد:</span><span class="en">Assistant understands:</span></b> <span class="ar">"أسمنت لمشروع برج مكاتب" = أسمنت بورتلاندي عادي (OPC) 42.5R، رمز 32.5/42.5، التزام بمواصفات ASTM C150، موردون بتحقق كامل.</span><span class="en">"Cement for an office tower" = OPC 42.5R, ASTM C150, fully verified suppliers.</span></div>
+          <button class="btn btn-primary btn-sm"><span class="ar">اعتماد الاقتراح والبحث</span><span class="en">Use suggestion</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOQ INTELLIGENCE -->
+    <div class="card ai-card">
+      <div class="card-header"><div class="card-title"><span class="ar">2. ذكاء الجدول الكمي (BOQ) — رفع BOQ</span><span class="en">2. BOQ intelligence — BOQ upload</span></div><span class="badge bg-brand"><span class="ar">موضع عرض</span><span class="en">Placement</span></span></div>
+      <div class="card-pad">
+        <p class="small muted"><span class="ar">عند رفع ملف BOQ من قبل المقاول: قراءة تلقائية للبنود، وتحليل قوائم الكميات، ومطابقتها للمنتجات، مع تحقق بشري كامل قبل الإرسال.</span><span class="en">When a contractor uploads a BOQ: automatic line-item reading, quantity analysis, and product matching, with full human verification before submission.</span></p>
+        <div class="ai-block">
+          <div class="ai-block-head">&#128202; <span><span class="ar">تحليل الجدول الكمي</span><span class="en">BOQ analysis</span></span></div>
+          <div class="table-wrap">
+            <table class="table" style="font-size:12px">
+              <thead><tr><th><span class="ar">البند</span><span class="en">Item</span></th><th class="th-num"><span class="ar">الكمية</span><span class="en">Qty</span></th><th class="th-num"><span class="ar">الوحدة</span><span class="en">Unit</span></th><th><span class="ar">مطابقة مقترحة</span><span class="en">Suggested match</span></th></tr></thead>
+              <tbody>
+                <tr><td>2.01</td><td class="num">1,200</td><td class="mono">BAG</td><td><span class="badge bg-success"><span class="ar">مطابق</span><span class="en">Matched</span></span> <span class="ar">أسمنت بورتلاندي</span><span class="en">Portland cement</span></td></tr>
+                <tr><td>2.02</td><td class="num">340</td><td class="mono">TON</td><td><span class="badge bg-warning"><span class="ar">يتطلب مراجعة</span><span class="en">Needs review</span></span> <span class="ar">رمل وحصى</span><span class="en">Sand &amp; gravel</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ai-suggestion"><b><span class="ar">حالة الذكاء:</span><span class="en">AI status:</span></b> <span class="ar">إقتراحات مطابقة منتجات، مع تحقق بشري كامل قبل الإرسال.</span><span class="en">Product-matching suggestions, with full human verification before submission.</span></div>
+          <button class="btn btn-outline btn-sm"><span class="ar">مراجعة المطابقة المقترحة</span><span class="en">Review suggested matches</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLIER MATCHING -->
+    <div class="card ai-card">
+      <div class="card-header"><div class="card-title"><span class="ar">3. مطابقة موردين ذكية — RFQ</span><span class="en">3. Smart supplier matching — RFQ</span></div><span class="badge bg-brand"><span class="ar">موضع عرض</span><span class="en">Placement</span></span></div>
+      <div class="card-pad">
+        <p class="small muted"><span class="ar">عند اختيار الموردين في RFQ: قائمة مقترحة بمرشحين لائقين بترتيب جاهزية التقديم وتوافق منتجاتهم، مع إمكانية تعديلها يدوياً بالكامل.</span><span class="en">When selecting suppliers in an RFQ: a suggested list of fit candidates ordered by readiness and product fit, fully editable manually.</span></p>
+        <div class="ai-block">
+          <div class="ai-block-head">&#129309; <span><span class="ar">مرشحون مقترحون</span><span class="en">Suggested candidates</span></span></div>
+          <div class="row" style="gap:10px; align-items:center"><div class="avatar amber" style="width:36px;height:36px">س</div><div style="flex:1"><b><span class="ar">مصنع الخليج</span><span class="en">Gulf Factory</span></b><div class="xsmall muted"><span class="ar">مطابقة 96% · جاهزية عالية</span><span class="en">96% fit · high readiness</span></div></div><span class="vchip verified">VERIFIED</span></div>
+          <div class="row" style="gap:10px; align-items:center"><div class="avatar amber" style="width:36px;height:36px">م</div><div style="flex:1"><b><span class="ar">مصنع الشرق الأوسط</span><span class="en">Middle East Factory</span></b><div class="xsmall muted"><span class="ar">مطابقة 84% · جاهزية متوسطة</span><span class="en">84% fit · medium readiness</span></div></div><span class="vchip trusted">TRUSTED</span></div>
+          <div class="ai-suggestion"><b><span class="ar">لماذا هؤلاء؟</span><span class="en">Why these?</span></b> <span class="ar">نطاق المنتج، تغطية المنطقة، سجل الالتزام بالطلبات، ومستوى التحقق.</span><span class="en">Product range, region coverage, order compliance, and verification level.</span></div>
+          <button class="btn btn-outline btn-sm"><span class="ar">تعديل القائمة يدوياً</span><span class="en">Edit list manually</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT RECOMMENDATIONS -->
+    <div class="card ai-card">
+      <div class="card-header"><div class="card-title"><span class="ar">4. توصيات منتجات — تفاصيل المنتج</span><span class="en">4. Product recommendations — Product detail</span></div><span class="badge bg-brand"><span class="ar">موضع عرض</span><span class="en">Placement</span></span></div>
+      <div class="card-pad">
+        <p class="small muted"><span class="ar">في صفحة تفاصيل المنتج: بدائل مشابهة، ومكملات مبنية على سجلات مشاريع مماثلة، واقتراحات ترقية حسب الأهلية.</span><span class="en">On product detail pages: similar alternatives, complements from similar project records, and upgrade suggestions based on eligibility.</span></p>
+        <div class="ai-block">
+          <div class="ai-block-head">&#128230; <span><span class="ar">توصيات من ABC</span><span class="en">ABC recommendations</span></span></div>
+          <div class="chip-row">
+            <span class="chip">&#9998; <span class="ar">بديل مشابه: أسمنت مقاوم للكبريتات</span><span class="en">Similar: sulfate-resistant cement</span></span>
+            <span class="chip">&#10010; <span class="ar">مكمل: رمل وحصى مخلوط</span><span class="en">Complement: mixed sand &amp; gravel</span></span>
+            <span class="chip">&#127937; <span class="ar">ترقية: أسمنت 52.5R عالي القوة</span><span class="en">Upgrade: high-strength 52.5R</span></span>
+          </div>
+          <div class="ai-suggestion"><b><span class="ar">المنطق:</span><span class="en">Logic:</span></b> <span class="ar">حسب تصنيف البند في BOQ ونوع المشروع ونمط الطلبات السابقة.</span><span class="en">Based on the BOQ line-item class, project type, and past order patterns.</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Portal — Design Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/preview.css">
+<script defer src="assets/preview.js"></script>
+</head>
+<body>
+
+<div class="review-bar">
+  <b>ABC Design Review</b>
+  <span class="tag"><span class="ar">بوابة الإدارة</span><span class="en">Admin Portal</span></span>
+  <span class="spacer"></span>
+  <button onclick="previewMobile()"><span class="ar">عرض الجوال</span><span class="en">Mobile view</span></button>
+  <button onclick="previewLang()"><span class="ar">English</span><span class="en">العربية</span></button>
+</div>
+
+<div class="topbar">
+  <div class="mobile-only"><button onclick="previewSidebar()" style="font-size:20px">&#9776;</button></div>
+  <a class="logo" href="#"><span class="logo-mark">A</span> ABC <span class="badge bg-brand" style="font-size:10px">ADMIN</span></a>
+  <div class="grow"></div>
+  <div class="search-wrap desktop-only" style="width:280px">
+    <span class="search-icon">&#128269;</span>
+    <input class="input input-search" data-ph-ar="بحث في المنصة…" data-ph-en="Search platform…" placeholder="بحث في المنصة…">
+  </div>
+  <button style="font-size:18px; position:relative">&#128276;<span class="badge bg-danger" style="position:absolute; top:-4px; inset-inline-end:-6px; font-size:10px">12</span></button>
+  <div class="avatar">ف</div>
+</div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="nav-item active" data-pane="overview">&#128200; <span class="ar">نظرة عامة</span><span class="en">Overview</span></div>
+    <div class="nav-item" data-pane="verify">&#128274; <span class="ar">طلبات التحقق</span><span class="en">Verifications</span><span class="count">5</span></div>
+    <div class="nav-sec"><span class="ar">الإدارة</span><span class="en">Management</span></div>
+    <div class="nav-item" data-pane="users"><span class="ar">المستخدمون</span><span class="en">Users</span></div>
+    <div class="nav-item" data-pane="orgs"><span class="ar">المؤسسات</span><span class="en">Organizations</span></div>
+    <div class="nav-item" data-pane="content"><span class="ar">المحتوى</span><span class="en">Content</span></div>
+    <div class="nav-sec"><span class="ar">العمليات</span><span class="en">Operations</span></div>
+    <div class="nav-item" data-pane="proc"><span class="ar">المشتريات</span><span class="en">Procurement</span></div>
+    <div class="nav-item" data-pane="finance"><span class="ar">المالية</span><span class="en">Finance</span></div>
+    <div class="nav-item" data-pane="support"><span class="ar">الدعم</span><span class="en">Support</span></div>
+    <div class="nav-sec"><span class="ar">النظام</span><span class="en">System</span></div>
+    <div class="nav-item" data-pane="audit"><span class="ar">سجل التدقيق</span><span class="en">Audit log</span></div>
+    <div class="nav-item" data-pane="settings"><span class="ar">الإعدادات</span><span class="en">Settings</span></div>
+  </aside>
+
+  <main class="shell-main">
+
+    <!-- ============ OVERVIEW ============ -->
+    <div class="pane active" id="overview">
+      <div class="page-title"><span class="ar">نظرة عامة على المنصة</span><span class="en">Platform overview</span></div>
+      <div class="page-sub"><span class="ar">مرحباً فريق الإدارة — ملخص الأداء لهذا الشهر</span><span class="en">Welcome team — monthly performance summary</span></div>
+      <div class="kpi-grid">
+        <div class="stat-card card"><div class="stat-icon">&#128101;</div><div><div class="stat-value">18,240</div><div class="stat-label"><span class="ar">مستخدم نشط</span><span class="en">Active users</span></div><div class="stat-trend trend-up">+8%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#127970;</div><div><div class="stat-value">2,860</div><div class="stat-label"><span class="ar">مؤسسة</span><span class="en">Organizations</span></div><div class="stat-trend trend-up">+12%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128176;</div><div><div class="stat-value">41M</div><div class="stat-label"><span class="ar">حجم التداول (ر.س)</span><span class="en">GMV (SAR)</span></div><div class="stat-trend trend-up">+18%</div></div></div>
+        <div class="stat-card card"><div class="stat-icon">&#128274;</div><div><div class="stat-value">5</div><div class="stat-label"><span class="ar">طلبات تحقق معلقة</span><span class="en">Pending verifications</span></div><div class="stat-trend trend-down">-2</div></div></div>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">نمو المؤسسات</span><span class="en">Organization growth</span></div><span class="xsmall muted"><span class="ar">آخر 6 أشهر</span><span class="en">Last 6 months</span></span></div>
+          <div class="card-body">
+            <div style="display:flex; align-items:flex-end; gap:8px; height:150px">
+              <div style="flex:1; background:var(--surface-200); height:30%; border-radius:6px 6px 0 0"></div>
+              <div style="flex:1; background:var(--surface-200); height:38%; border-radius:6px 6px 0 0"></div>
+              <div style="flex:1; background:var(--surface-200); height:46%; border-radius:6px 6px 0 0"></div>
+              <div style="flex:1; background:var(--brand-300); height:58%; border-radius:6px 6px 0 0"></div>
+              <div style="flex:1; background:var(--brand-500); height:70%; border-radius:6px 6px 0 0"></div>
+              <div style="flex:1; background:var(--brand-500); height:86%; border-radius:6px 6px 0 0"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">توزيع الأدوار</span><span class="en">Role distribution</span></div></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:10px">
+            <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">موردون</span><span class="en">Suppliers</span></span><b class="small">34%</b></div><div class="progress" style="margin-top:4px"><i style="width:34%"></i></div></div>
+            <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">مقاولون</span><span class="en">Contractors</span></span><b class="small">28%</b></div><div class="progress" style="margin-top:4px"><i style="width:28%"></i></div></div>
+            <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">استشاريون</span><span class="en">Consultants</span></span><b class="small">15%</b></div><div class="progress" style="margin-top:4px"><i style="width:15%"></i></div></div>
+            <div><div class="row" style="justify-content:space-between"><span class="small"><span class="ar">قوى عاملة</span><span class="en">Workforce</span></span><b class="small">23%</b></div><div class="progress" style="margin-top:4px"><i style="width:23%"></i></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top:16px">
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">طابور التحقق</span><span class="en">Verification queue</span></div><button class="btn btn-link btn-sm" data-pane="verify"><span class="ar">مراجعة الكل</span><span class="en">Review all</span></button></div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th><span class="ar">المؤسسة</span><span class="en">Org</span></th><th><span class="ar">النوع</span><span class="en">Type</span></th><th><span class="ar">الحالة</span><span class="en">Status</span></th><th></th></tr></thead>
+              <tbody>
+                <tr><td><b><span class="ar">مصنع الرياض</span><span class="en">Riyadh Factory</span></b></td><td>MANUFACTURER</td><td><span class="badge bg-warning"><span class="dot"></span><span class="ar">BASIC</span><span class="en">BASIC</span></span></td><td><button class="btn btn-outline btn-sm" data-pane="verify"><span class="ar">مراجعة</span><span class="en">Review</span></button></td></tr>
+                <tr><td><b><span class="ar">مؤسسة البناء</span><span class="en">Al-Bina Est.</span></b></td><td>CONTRACTOR</td><td><span class="badge bg-neutral"><span class="dot"></span>UNVERIFIED</span></td><td><button class="btn btn-outline btn-sm" data-pane="verify"><span class="ar">مراجعة</span><span class="en">Review</span></button></td></tr>
+                <tr><td><b><span class="ar">توريدات جدة</span><span class="en">Jeddah Supplies</span></b></td><td>DISTRIBUTOR</td><td><span class="badge bg-warning"><span class="dot"></span><span class="ar">VERIFIED</span><span class="en">VERIFIED</span></span></td><td><button class="btn btn-outline btn-sm" data-pane="verify"><span class="ar">مراجعة</span><span class="en">Review</span></button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title"><span class="ar">أحدث النشاطات</span><span class="en">Recent activity</span></div></div>
+          <div class="card-body" style="display:flex; flex-direction:column; gap:12px; font-size:13px">
+            <div class="row"><span class="avatar-sm avatar green">+</span><span class="grow"><b><span class="ar">توريدات جدة</span><span class="en">Jeddah Supplies</span></b> <span class="ar">أصبحت VERIFIED</span><span class="en">became VERIFIED</span></span><span class="xsmall muted">قبل 1س</span></div>
+            <div class="row"><span class="avatar-sm avatar amber">+</span><span class="grow"><b><span class="ar">RFQ-0021</span></b> <span class="ar">تمت الترسية بـ 1.18M ر.س</span><span class="en">awarded at 1.18M SAR</span></span><span class="xsmall muted">قبل 3س</span></div>
+            <div class="row"><span class="avatar-sm avatar blue">+</span><span class="grow"><b><span class="ar">مستخدم جديد</span><span class="en">New user</span></b> <span class="ar">انضم كاستشاري</span><span class="en">joined as consultant</span></span><span class="xsmall muted">قبل 5س</span></div>
+            <div class="row"><span class="avatar-sm avatar">+</span><span class="grow"><b><span class="ar">بلاغ محتوى</span><span class="en">Content report</span></b> <span class="ar">على منتج — قيد المراجعة</span><span class="en">on a product — reviewing</span></span><span class="xsmall muted">قبل 8س</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ VERIFY ============ -->
+    <div class="pane" id="verify">
+      <div class="page-title"><span class="ar">طلبات التحقق</span><span class="en">Verification requests</span></div>
+      <div class="page-sub"><span class="ar">مراجعة مستندات KYC/KYB للمؤسسات</span><span class="en">Review KYC/KYB documents</span></div>
+      <div class="grid grid-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="row"><b><span class="ar">مصنع الرياض للأسمنت</span><span class="en">Riyadh Cement Factory</span></b><span class="badge bg-warning">VERIFIED → TRUSTED</span></div>
+            <div class="small muted" style="margin:8px 0"><span class="ar">مقدم:</span><span class="en">Submitted:</span> 28 <span class="ar">يوليو</span><span class="en">Jul</span></div>
+            <div class="row wrap" style="gap:6px; margin-bottom:12px">
+              <span class="badge bg-success"><span class="ar">رخصة تجارية ✓</span><span class="en">Trade license ✓</span></span>
+              <span class="badge bg-success"><span class="ar">ضريبة ✓</span><span class="en">VAT ✓</span></span>
+              <span class="badge bg-warning"><span class="ar">شهادة بنكية ⏳</span><span class="en">Bank cert ⏳</span></span>
+              <span class="badge bg-neutral"><span class="ar">ISO — لم يُرفع</span><span class="en">ISO — missing</span></span>
+            </div>
+            <div class="row">
+              <button class="btn btn-success"><span class="ar">اعتماد</span><span class="en">Approve</span></button>
+              <button class="btn btn-danger"><span class="ar">رفض</span><span class="en">Reject</span></button>
+              <button class="btn btn-outline"><span class="ar">طلب مستندات إضافية</span><span class="en">Request documents</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row"><b><span class="ar">توريدات جدة</span><span class="en">Jeddah Supplies</span></b><span class="badge bg-neutral">BASIC → VERIFIED</span></div>
+            <div class="small muted" style="margin:8px 0"><span class="ar">مقدم:</span><span class="en">Submitted:</span> 29 <span class="ar">يوليو</span><span class="en">Jul</span></div>
+            <div class="row wrap" style="gap:6px; margin-bottom:12px">
+              <span class="badge bg-success"><span class="ar">رخصة تجارية ✓</span><span class="en">Trade license ✓</span></span>
+              <span class="badge bg-success"><span class="ar">ضريبة ✓</span><span class="en">VAT ✓</span></span>
+              <span class="badge bg-neutral"><span class="ar">شهادة بنكية — لم تُرفع</span><span class="en">Bank cert — missing</span></span>
+            </div>
+            <div class="row">
+              <button class="btn btn-success"><span class="ar">اعتماد</span><span class="en">Approve</span></button>
+              <button class="btn btn-danger"><span class="ar">رفض</span><span class="en">Reject</span></button>
+              <button class="btn btn-outline"><span class="ar">طلب مستندات</span><span class="en">Request docs</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

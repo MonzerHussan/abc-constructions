@@ -23,11 +23,11 @@ import {
 import { useState } from "react";
 
 const skillPaths = [
-  { labelAr: "إدارة المشاريع الإنشائية", labelEn: "Construction Project Management", labelUr: "تعمیراتی پروجیکٹ مینجمنٹ", courses: 12, color: "from-blue-500 to-blue-600" },
-  { labelAr: "السلامة والصحة المهنية", labelEn: "Occupational Health & Safety", labelUr: "پیشہ ورانہ صحت و حفاظت", courses: 8, color: "from-green-500 to-green-600" },
-  { labelAr: "التصميم المعماري", labelEn: "Architectural Design", labelUr: "عمارتی ڈیزائن", courses: 15, color: "from-purple-500 to-purple-600" },
-  { labelAr: "البناء الخرساني", labelEn: "Concrete Construction", labelUr: "کنکریٹ تعمیر", courses: 10, color: "from-amber-500 to-orange-500" },
-  { labelAr: "التشطيبات الداخلية", labelEn: "Interior Finishing", labelUr: "اندرونی تشطيبات", courses: 9, color: "from-rose-500 to-rose-600" },
+  { labelAr: "إدارة المشاريع الإنشائية", labelEn: "Construction Project Management", labelUr: "تعمیراتی پروجیکٹ مینجمنٹ", courses: 12, color: "from-info-500 to-info-600" },
+  { labelAr: "السلامة والصحة المهنية", labelEn: "Occupational Health & Safety", labelUr: "پیشہ ورانہ صحت و حفاظت", courses: 8, color: "from-success-500 to-success-600" },
+  { labelAr: "التصميم المعماري", labelEn: "Architectural Design", labelUr: "عمارتی ڈیزائن", courses: 15, color: "from-flagship-500 to-flagship-600" },
+  { labelAr: "البناء الخرساني", labelEn: "Concrete Construction", labelUr: "کنکریٹ تعمیر", courses: 10, color: "from-amber-500 to-amber-500" },
+  { labelAr: "التشطيبات الداخلية", labelEn: "Interior Finishing", labelUr: "اندرونی تشطيبات", courses: 9, color: "from-danger-500 to-danger-600" },
   { labelAr: "أنظمة الكهرباء", labelEn: "Electrical Systems", labelUr: "بجلی کے نظام", courses: 11, color: "from-teal-500 to-teal-600" },
 ];
 
@@ -149,9 +149,9 @@ const mockCourses = [
 ];
 
 const levelColors: Record<string, string> = {
-  beginner: "bg-green-100 text-green-700",
+  beginner: "bg-success-100 text-success-700",
   intermediate: "bg-amber-100 text-amber-700",
-  advanced: "bg-red-100 text-red-700",
+  advanced: "bg-danger-100 text-danger-700",
 };
 
 const levelLabelsAr: Record<string, string> = {
@@ -188,7 +188,7 @@ export default function TrainingPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-surface-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Breadcrumbs items={[{ label: t("navTraining") }]} />
@@ -196,20 +196,20 @@ export default function TrainingPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <GraduationCap className="w-7 h-7 text-rose-600" />
+            <h1 className="text-2xl font-bold text-surface-900 flex items-center gap-2">
+              <GraduationCap className="w-7 h-7 text-danger-600" />
               {t("trainingTitle")}
             </h1>
-            <p className="text-gray-600 mt-1">{t("trainingDescription")}</p>
+            <p className="text-surface-600 mt-1">{t("trainingDescription")}</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative flex-1 md:w-72">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-surface-400" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={t("search") + "..."}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none bg-white"
+                className="w-full pl-10 pr-4 py-2.5 border border-surface-200 rounded-xl text-sm focus:ring-2 focus:ring-danger-500 focus:border-danger-500 outline-none bg-white"
               />
             </div>
           </div>
@@ -218,31 +218,31 @@ export default function TrainingPage() {
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="p-4 text-center">
-            <BookOpen className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-gray-900">120+</p>
-            <p className="text-sm text-gray-500">{t("browseCourses")}</p>
+            <BookOpen className="w-8 h-8 text-info-500 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-surface-900">120+</p>
+            <p className="text-sm text-surface-500">{t("browseCourses")}</p>
           </Card>
           <Card className="p-4 text-center">
-            <Users className="w-8 h-8 text-green-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-gray-900">15,000+</p>
-            <p className="text-sm text-gray-500">{t("courseStudents")}</p>
+            <Users className="w-8 h-8 text-success-500 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-surface-900">15,000+</p>
+            <p className="text-sm text-surface-500">{t("courseStudents")}</p>
           </Card>
           <Card className="p-4 text-center">
             <Award className="w-8 h-8 text-amber-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-gray-900">45+</p>
-            <p className="text-sm text-gray-500">{t("instructor")}</p>
+            <p className="text-2xl font-bold text-surface-900">45+</p>
+            <p className="text-sm text-surface-500">{t("instructor")}</p>
           </Card>
           <Card className="p-4 text-center">
-            <BarChart3 className="w-8 h-8 text-purple-500 mx-auto mb-2" />
-            <p className="text-2xl font-bold text-gray-900">92%</p>
-            <p className="text-sm text-gray-500">{t("courseRating")}</p>
+            <BarChart3 className="w-8 h-8 text-flagship-500 mx-auto mb-2" />
+            <p className="text-2xl font-bold text-surface-900">92%</p>
+            <p className="text-sm text-surface-500">{t("courseRating")}</p>
           </Card>
         </div>
 
         {/* Skill Paths */}
         <div className="mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-rose-500" />
+          <h2 className="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-danger-500" />
             {t("skillPaths")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
@@ -259,15 +259,15 @@ export default function TrainingPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-2 mb-6 border-b border-gray-200 pb-0">
+        <div className="flex items-center gap-2 mb-6 border-b border-surface-200 pb-0">
           {(["all", "bestseller", "new"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px ${
                 activeTab === tab
-                  ? "border-rose-500 text-rose-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
+                  ? "border-danger-500 text-danger-600"
+                  : "border-transparent text-surface-500 hover:text-surface-700"
               }`}
             >
               {tab === "all" ? t("all") : tab === "bestseller" ? t("trendingCourses") : t("newest")}
@@ -280,7 +280,7 @@ export default function TrainingPage() {
           {filteredCourses.map((course) => (
             <Card key={course.id} hover className="overflow-hidden flex flex-col">
               {/* Thumbnail placeholder */}
-              <div className="h-44 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center relative">
+              <div className="h-44 bg-gradient-to-br from-surface-700 to-surface-900 flex items-center justify-center relative">
                 <Play className="w-12 h-12 text-white/80" />
                 {course.isBestseller && (
                   <span className="absolute top-3 left-3 flex items-center gap-1 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-1 rounded-full">
@@ -297,7 +297,7 @@ export default function TrainingPage() {
                   })}
                   className="absolute top-3 right-3 p-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/40 transition-colors"
                 >
-                  <Heart className={`w-4 h-4 ${wishlist.has(course.id) ? "text-red-400 fill-current" : "text-white"}`} />
+                  <Heart className={`w-4 h-4 ${wishlist.has(course.id) ? "text-danger-400 fill-current" : "text-white"}`} />
                 </button>
               </div>
 
@@ -306,19 +306,19 @@ export default function TrainingPage() {
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${levelColors[course.level]}`}>
                     {getLevelLabels()[course.level]}
                   </span>
-                  <span className="text-xs text-gray-400">{course.updatedAt}</span>
+                  <span className="text-xs text-surface-400">{course.updatedAt}</span>
                 </div>
 
-                <h3 className="font-bold text-gray-900 mb-1 line-clamp-2">{course.title}</h3>
-                <p className="text-sm text-gray-500 mb-3">{course.instructor}</p>
+                <h3 className="font-bold text-surface-900 mb-1 line-clamp-2">{course.title}</h3>
+                <p className="text-sm text-surface-500 mb-3">{course.instructor}</p>
 
                 <div className="flex items-center gap-1 mb-2">
                   <Star className="w-4 h-4 text-amber-400 fill-current" />
                   <span className="text-sm font-bold text-amber-600">{course.rating}</span>
-                  <span className="text-xs text-gray-400">({course.reviews.toLocaleString()})</span>
+                  <span className="text-xs text-surface-400">({course.reviews.toLocaleString()})</span>
                 </div>
 
-                <div className="flex items-center gap-3 text-xs text-gray-500 mb-4">
+                <div className="flex items-center gap-3 text-xs text-surface-500 mb-4">
                   <span className="flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" />
                     {course.duration}
@@ -335,16 +335,16 @@ export default function TrainingPage() {
 
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {course.tags.map((tag) => (
-                    <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">{tag}</span>
+                    <span key={tag} className="text-xs bg-surface-100 text-surface-600 px-2 py-0.5 rounded-full">{tag}</span>
                   ))}
                 </div>
 
-                <div className="mt-auto flex items-center justify-between pt-3 border-t border-gray-100">
+                <div className="mt-auto flex items-center justify-between pt-3 border-t border-surface-100">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-bold text-gray-900">{course.price} {t("currency")}</span>
-                    <span className="text-sm text-gray-400 line-through">{course.originalPrice}</span>
+                    <span className="text-xl font-bold text-surface-900">{course.price} {t("currency")}</span>
+                    <span className="text-sm text-surface-400 line-through">{course.originalPrice}</span>
                   </div>
-                  <button className="px-4 py-2 bg-rose-500 text-white rounded-lg text-sm font-medium hover:bg-rose-600 transition-colors">
+                  <button className="px-4 py-2 bg-danger-500 text-white rounded-lg text-sm font-medium hover:bg-danger-600 transition-colors">
                     {t("enrollNow")}
                   </button>
                 </div>
@@ -355,19 +355,19 @@ export default function TrainingPage() {
 
         {/* Instructors CTA */}
         <div className="mt-12">
-          <Card className="p-8 bg-gradient-to-br from-rose-50 to-amber-50 border-rose-100 text-center">
-            <Award className="w-12 h-12 text-rose-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
+          <Card className="p-8 bg-gradient-to-br from-danger-50 to-amber-50 border-danger-100 text-center">
+            <Award className="w-12 h-12 text-danger-500 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-surface-900 mb-2">
               {language === "ar" ? "أنت مدرب محترف؟" : language === "en" ? "Are you a professional instructor?" : "کیا آپ پیشہ ورانہ ٹرینر ہیں؟"}
             </h3>
-            <p className="text-gray-600 mb-4 max-w-lg mx-auto">
+            <p className="text-surface-600 mb-4 max-w-lg mx-auto">
               {language === "ar"
                 ? "انضم إلى فريق المدربين وشارك خبراتك مع آلاف الطلاب في قطاع الإنشاءات"
                 : language === "en"
                 ? "Join our instructor team and share your expertise with thousands of construction students"
                 : "ہماری ٹرینر ٹیم میں شامل ہوں اور تعمیراتی طلباء کے ساتھ اپنی مہارت شیئر کریں"}
             </p>
-            <button className="px-6 py-3 bg-rose-500 text-white rounded-xl font-medium hover:bg-rose-600 transition-colors">
+            <button className="px-6 py-3 bg-danger-500 text-white rounded-xl font-medium hover:bg-danger-600 transition-colors">
               {language === "ar" ? "قدّم طلبك" : language === "en" ? "Apply Now" : "ابھی درخواست دیں"}
             </button>
           </Card>
