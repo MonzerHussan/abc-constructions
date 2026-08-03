@@ -72,7 +72,7 @@ export default function Navbar() {
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2">
               <Image
-                src="/logo/abc-logo-mark.svg"
+                src="/logo.png"
                 alt={t("appName")}
                 width={40}
                 height={40}
@@ -81,7 +81,7 @@ export default function Navbar() {
               />
               <div className="hidden sm:block">
                 <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
-                <span className="text-xs block text-surface-500 -mt-1">
+                <span className="text-xs block text-accent-500 -mt-1">
                   {t("appFullName")}
                 </span>
               </div>
@@ -98,8 +98,8 @@ export default function Navbar() {
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                       isActive
-                        ? "bg-amber-50 text-amber-700"
-                        : "text-surface-600 hover:bg-surface-50 hover:text-surface-900"
+                        ? "bg-secondary-50 text-secondary-600"
+                        : "text-surface-600 hover:bg-surface-100 hover:text-surface-900"
                     )}
                   >
                     {Icon && <Icon className="w-4 h-4" />}
@@ -132,8 +132,8 @@ export default function Navbar() {
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-2 p-1 rounded-lg hover:bg-surface-100"
                   >
-                    <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-amber-600" />
+                    <div className="w-8 h-8 bg-secondary-100 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-secondary-600" />
                     </div>
                     <ChevronDown className="w-4 h-4 text-surface-500 hidden sm:block" />
                   </button>
@@ -197,7 +197,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="px-4 py-2 text-sm font-medium bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors"
+                  className="px-4 py-2 text-sm font-medium bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors"
                 >
                   {t("register")}
                 </Link>
@@ -232,8 +232,8 @@ export default function Navbar() {
                   className={cn(
                     "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                     isActive
-                      ? "bg-amber-50 text-amber-700"
-                      : "text-surface-600 hover:bg-surface-50"
+                      ? "bg-secondary-50 text-secondary-600"
+                      : "text-surface-600 hover:bg-surface-100"
                   )}
                 >
                   {Icon && <Icon className="w-5 h-5" />}

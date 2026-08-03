@@ -35,7 +35,7 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-surface-900 mb-4">
+        <h3 className="text-lg font-bold text-primary-500 mb-4">
           {t("obSelectAccountType")}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -47,21 +47,21 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
                 key={option.id}
                 className={`p-5 cursor-pointer transition-all ${
                   isSelected
-                    ? "border-amber-500 ring-2 ring-amber-500 bg-amber-50/50"
-                    : "hover:border-amber-300"
+                    ? "border-secondary-500 ring-2 ring-secondary-500 bg-secondary-50/50"
+                    : "hover:border-secondary-300"
                 }`}
                 onClick={() => handleTypeSelect(option.id)}
               >
                 <div className="flex items-start gap-4">
                   <div
                     className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                      isSelected ? "bg-amber-500 text-white" : "bg-surface-100 text-surface-600"
+                      isSelected ? "bg-secondary-500 text-white" : "bg-surface-100 text-surface-600"
                     }`}
                   >
                     <IconComponent className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-surface-900">
+                    <h4 className="font-bold text-primary-500">
                       {t(option.key as TranslationKey)}
                     </h4>
                     <p className="text-sm text-surface-500 mt-1">
@@ -87,7 +87,7 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
             type="text"
             value={profile.fullName}
             onChange={(e) => handleChange("fullName", e.target.value)}
-            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
             dir={dir}
           />
           {errors.fullName && (
@@ -103,7 +103,7 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
             type="text"
             value={profile.companyName}
             onChange={(e) => handleChange("companyName", e.target.value)}
-            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
             dir={dir}
           />
           {errors.companyName && (
@@ -119,7 +119,7 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
             type="email"
             value={profile.email}
             onChange={(e) => handleChange("email", e.target.value)}
-            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
             dir="ltr"
           />
           {errors.email && (
@@ -135,7 +135,7 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
             type="tel"
             value={profile.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
-            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
             dir="ltr"
           />
           {errors.phone && (
@@ -151,7 +151,7 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
             type="text"
             value={profile.commercialRegistration || ""}
             onChange={(e) => handleChange("commercialRegistration", e.target.value)}
-            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
             dir={dir}
           />
         </div>

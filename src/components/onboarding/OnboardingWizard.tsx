@@ -170,18 +170,18 @@ export function OnboardingWizard() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-surface-900 mb-2">
+          <h2 className="text-2xl font-bold text-primary-500 mb-2">
             {t("obSuccessTitle")}
           </h2>
           <p className="text-surface-600 mb-4">
             {t("obSuccessMessage")}
           </p>
-          <p className="text-lg font-bold text-amber-600 mb-6">
+          <p className="text-lg font-bold text-secondary-600 mb-6">
             {success.trackingId}
           </p>
           <button
             onClick={() => router.push("/contractor")}
-            className="px-8 py-3 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors"
+            className="px-8 py-3 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors"
           >
             {t("obSuccessCta")}
           </button>
@@ -229,7 +229,7 @@ export function OnboardingWizard() {
             <button
               onClick={handleBack}
               disabled={state.step === 1}
-              className="px-6 py-2.5 border border-surface-300 text-surface-700 rounded-xl font-medium hover:bg-surface-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2.5 border border-surface-300 text-surface-700 rounded-xl font-medium hover:bg-surface-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t("obBack")}
             </button>
@@ -237,7 +237,7 @@ export function OnboardingWizard() {
             {state.step < 3 ? (
               <button
                 onClick={handleNext}
-                className="px-8 py-2.5 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors"
+                className="px-8 py-2.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors"
               >
                 {t("obNext")}
               </button>
@@ -245,7 +245,7 @@ export function OnboardingWizard() {
               <button
                 onClick={handleSubmit}
                 disabled={state.isSubmitting}
-                className="px-8 py-2.5 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="px-8 py-2.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {state.isSubmitting ? t("obSubmitting") : t("obSubmit")}
               </button>
