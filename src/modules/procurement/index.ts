@@ -5,6 +5,7 @@ export { EvaluationService } from '@/modules/procurement/services/EvaluationServ
 export { PurchaseOrderService } from '@/modules/procurement/services/PurchaseOrderService';
 export { DeliveryService } from '@/modules/procurement/services/DeliveryService';
 export { WorkflowHistoryService } from '@/modules/procurement/services/WorkflowHistoryService';
+export { PrismaWorkflowHistoryRecorder } from '@/modules/procurement/services/PrismaWorkflowHistoryRecorder';
 export { ProcurementWorkflowOrchestrator, procurementWorkflowOrchestrator } from '@/modules/procurement/services/ProcurementWorkflowOrchestrator';
 export type { EntityStatusPort, OrchestratorContext, OrchestrationResult } from '@/modules/procurement/services/ProcurementWorkflowOrchestrator';
 

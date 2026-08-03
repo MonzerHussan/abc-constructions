@@ -40,8 +40,24 @@ export class FinancialTrustService {
       prisma.paymentReservation.count({ where }),
     ]);
 
+    type ReservationItem = {
+      id: string;
+      reservationNumber: string;
+      purchaseOrderId: string | null;
+      buyerId: string | null;
+      supplierId: string | null;
+      totalAmount: number;
+      heldAmount: number;
+      releasedAmount: number;
+      currency: string;
+      status: string;
+      notes: string | null;
+      createdAt: Date;
+      _count: { releases: number };
+    };
+
     return {
-      items: items.map((r) => ({
+      items: items.map((r: ReservationItem) => ({
         id: r.id, reservationNumber: r.reservationNumber, purchaseOrderId: r.purchaseOrderId,
         supplierId: r.supplierId, totalAmount: r.totalAmount, heldAmount: r.heldAmount,
         releasedAmount: r.releasedAmount, currency: r.currency, status: r.status,
