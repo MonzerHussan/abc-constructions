@@ -4092,6 +4092,16 @@ model Relationship {
   @@index([status])
 }
 
+// Atomic per-prefix counter used to generate sequential human-friendly IDs
+// (ENTITY-00001, PROF-00001, ...) without in-memory state. Upsert-with-increment
+// is safe under concurrent requests and multiple server instances.
+model EntityRegistryCounter {
+  id        String @id
+  prefix    String @unique
+  value     Int    @default(0)
+  updatedAt DateTime @updatedAt
+}
+
 // ─── AI Module (Sprint AI-1b — BOQ Intelligence) ───────────────────────────
 // All models are additive and isolated to the AI domain. Tenant data is
 // scoped by orgId (org isolation). AiExtractionVersion is a platform-level

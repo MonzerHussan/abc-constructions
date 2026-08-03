@@ -50,48 +50,50 @@ export function calculateLeadScore(scores: {
 }
 
 export class EntityRegistryService {
-  private nextEntityNumber = 1;
-  private nextProfileNumber = 1;
-  private nextInteractionNumber = 1;
-  private nextValidationNumber = 1;
-  private nextScoreNumber = 1;
-  private nextConsentNumber = 1;
-  private nextRelationshipNumber = 1;
-
   private pad(n: number): string {
     return String(n).padStart(5, '0');
   }
 
+  /**
+   * Atomically increments a per-prefix DB counter (EntityRegistryCounter) and
+   * returns the sequential human-friendly id (ENTITY-00001, ...). Safe under
+   * concurrency and multiple instances — no in-memory state.
+   */
+  private async nextSequence(prefix: string): Promise<number> {
+    const counter = await prisma.entityRegistryCounter.upsert({
+      where: { prefix },
+      create: { id: `${prefix}_counter`, prefix, value: 1 },
+      update: { value: { increment: 1 } },
+    });
+    return counter.value;
+  }
+
   async generateEntityId(): Promise<string> {
-    let id = `ENTITY-${this.pad(this.nextEntityNumber++)}`;
-    while (await prisma.entity.findUnique({ where: { entityId: id }, select: { id: true } })) {
-      id = `ENTITY-${this.pad(this.nextEntityNumber++)}`;
-    }
-    return id;
+    return `ENTITY-${this.pad(await this.nextSequence('ENTITY'))}`;
   }
 
   async generateProfileId(): Promise<string> {
-    return `PROF-${this.pad(this.nextProfileNumber++)}`;
+    return `PROF-${this.pad(await this.nextSequence('PROF'))}`;
   }
 
   async generateInteractionId(): Promise<string> {
-    return `INT-${this.pad(this.nextInteractionNumber++)}`;
+    return `INT-${this.pad(await this.nextSequence('INT'))}`;
   }
 
   async generateValidationId(): Promise<string> {
-    return `VAL-${this.pad(this.nextValidationNumber++)}`;
+    return `VAL-${this.pad(await this.nextSequence('VAL'))}`;
   }
 
   async generateScoreId(): Promise<string> {
-    return `SCORE-${this.pad(this.nextScoreNumber++)}`;
+    return `SCORE-${this.pad(await this.nextSequence('SCORE'))}`;
   }
 
   async generateConsentId(): Promise<string> {
-    return `CONSENT-${this.pad(this.nextConsentNumber++)}`;
+    return `CONSENT-${this.pad(await this.nextSequence('CONSENT'))}`;
   }
 
   async generateRelationshipId(): Promise<string> {
-    return `REL-${this.pad(this.nextRelationshipNumber++)}`;
+    return `REL-${this.pad(await this.nextSequence('REL'))}`;
   }
 
   // ---------- Entities ----------
@@ -390,6 +392,12 @@ export class EntityRegistryService {
       select: { id: true, userId: true },
     });
     if (!supplierProfile) throw new Error(EntityRegistryErrors.ENTITY_NOT_FOUND);
+
+    // SECURITY: the caller must own the supplier profile they are bridging.
+    const ownerUserId = input.profile?.userId;
+    if (ownerUserId && supplierProfile.userId !== ownerUserId) {
+      throw new Error(EntityRegistryErrors.PROFILE_FORBIDDEN);
+    }
 
     const entityId = await this.generateEntityId();
 

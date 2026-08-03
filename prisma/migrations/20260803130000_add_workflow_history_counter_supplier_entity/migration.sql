@@ -1,8 +1,11 @@
-﻿-- CreateEnum
+-- Additive migration: WorkflowHistory + EntityRegistryCounter + SupplierProfile.entityId
+-- Verifies: no DROP / DELETE / TRUNCATE / destructive ALTER.
+
+-- CreateEnum
 CREATE TYPE "WorkflowHistoryResult" AS ENUM ('SUCCESS', 'BLOCKED_BY_GUARD', 'INVALID_TRANSITION', 'ERROR');
 
--- AlterTable
-ALTER TABLE "SupplierProfile" ADD COLUMN     "entityId" TEXT;
+-- AlterTable (additive: new nullable column on existing table)
+ALTER TABLE "SupplierProfile" ADD COLUMN "entityId" TEXT;
 
 -- CreateTable
 CREATE TABLE "WorkflowHistory" (
@@ -23,6 +26,16 @@ CREATE TABLE "WorkflowHistory" (
     CONSTRAINT "WorkflowHistory_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "EntityRegistryCounter" (
+    "id" TEXT NOT NULL,
+    "prefix" TEXT NOT NULL,
+    "value" INTEGER NOT NULL DEFAULT 0,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "EntityRegistryCounter_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE INDEX "WorkflowHistory_entityType_entityId_idx" ON "WorkflowHistory"("entityType", "entityId");
 
@@ -38,4 +51,5 @@ CREATE INDEX "WorkflowHistory_result_idx" ON "WorkflowHistory"("result");
 -- CreateIndex
 CREATE INDEX "WorkflowHistory_createdAt_idx" ON "WorkflowHistory"("createdAt");
 
-
+-- CreateIndex
+CREATE UNIQUE INDEX "EntityRegistryCounter_prefix_key" ON "EntityRegistryCounter"("prefix");

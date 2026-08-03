@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth';
 import { entityRegistryService, createEntitySchema, entityListQuerySchema } from '@/modules/entity-registry';
 import { success, successPaginated, error } from '@/modules/shared/utils/response-envelope';
 import { validate } from '@/modules/shared/utils/validation';
+import { logger } from '@/modules/shared/utils/logger';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 
 export async function POST(request: NextRequest) {
@@ -17,7 +18,8 @@ export async function POST(request: NextRequest) {
 
     const entity = await entityRegistryService.createEntity(parsed.data);
     return Response.json(success(entity), { status: 201 });
-  } catch {
+  } catch (err) {
+    logger.error('create-entity failed', { error: err instanceof Error ? err.message : String(err) });
     return Response.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to create entity'), { status: 500 });
   }
 }
@@ -43,7 +45,8 @@ export async function GET(request: NextRequest) {
 
     const { items, total, page, limit } = await entityRegistryService.listEntities(parsed.data);
     return Response.json(successPaginated(items, { page, limit, total }));
-  } catch {
+  } catch (err) {
+    logger.error('list-entities failed', { error: err instanceof Error ? err.message : String(err) });
     return Response.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to list entities'), { status: 500 });
   }
 }

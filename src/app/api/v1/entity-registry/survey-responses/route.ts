@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { Prisma } from '@/generated/prisma/client';
 import { entityRegistryService } from '@/modules/entity-registry';
 import { success, error } from '@/modules/shared/utils/response-envelope';
+import { logger } from '@/modules/shared/utils/logger';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { z } from 'zod';
 
@@ -88,7 +89,8 @@ export async function POST(request: NextRequest) {
     }
 
     return Response.json(success({ id: response.id, status: response.status, surveyId: response.surveyId }), { status: 201 });
-  } catch {
+  } catch (err) {
+    logger.error('submit-survey-response failed', { error: err instanceof Error ? err.message : String(err) });
     return Response.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to submit survey response'), { status: 500 });
   }
 }
