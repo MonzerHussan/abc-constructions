@@ -239,7 +239,7 @@ export default function LoginPage() {
 
       <div className="hidden lg:flex lg:flex-1 gradient-hero items-center justify-center p-12">
         <div className="text-center text-white">
-          <Image src="/logo/abc-logo-mark.svg" alt={t("appName")} width={80} height={80} priority className="w-20 h-20 mx-auto mb-6" />
+          <Image src="/logo.png" alt={t("appName")} width={80} height={80} priority className="w-20 h-20 mx-auto mb-6" />
           <h2 className="text-3xl font-bold mb-4">{t("appName")}</h2>
           <p className="text-lg text-white/80 mb-2">{t("appFullName")}</p>
           <p className="text-white/60 max-w-sm">{t("appDescription")}</p>

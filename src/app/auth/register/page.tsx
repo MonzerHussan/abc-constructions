@@ -86,7 +86,7 @@ export default function RegisterPage() {
         <div className="w-full max-w-md">
           <div className="mb-8">
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <Image src="/logo/abc-logo-mark.svg" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
+              <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
               <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
             </Link>
             <h1 className="text-2xl font-bold text-surface-900">{t("registerTitle")}</h1>
@@ -226,7 +226,7 @@ export default function RegisterPage() {
 
       <div className="hidden lg:flex lg:flex-1 gradient-hero items-center justify-center p-12">
         <div className="text-center text-white">
-          <Image src="/logo/abc-logo-mark.svg" alt={t("appName")} width={80} height={80} priority className="w-20 h-20 mx-auto mb-6" />
+          <Image src="/logo.png" alt={t("appName")} width={80} height={80} priority className="w-20 h-20 mx-auto mb-6" />
           <h2 className="text-3xl font-bold mb-4">{t("appName")}</h2>
           <p className="text-lg text-white/80 mb-6">{t("appFullName")}</p>
         </div>
