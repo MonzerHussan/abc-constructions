@@ -2,42 +2,77 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --background: #f8f9fa;
-  --foreground: #171717;
+  --background: #f5f5f5;
+  --foreground: #1a1a1a;
 
-  /* ABC brand tokens — Design System v1.0 (§2) */
-  --brand-50: #fffbeb;
-  --brand-100: #fef3c7;
-  --brand-200: #fde68a;
-  --brand-500: #f59e0b;
-  --brand-600: #d97706;
-  --brand-700: #b45309;
+  /* ABC Brand Identity System v2.0 */
+  --primary-50: #e6ebf2;
+  --primary-100: #b3c2d6;
+  --primary-200: #8099ba;
+  --primary-300: #4d709e;
+  --primary-400: #264b82;
+  --primary-500: #0a1f44;
+  --primary-600: #081a39;
+  --primary-700: #06142e;
+  --primary-800: #040f23;
+  --primary-900: #020918;
 
-  --amber-100: #fef3c7;
-  --amber-200: #fde68a;
-  --amber-300: #fcd34d;
-  --amber-400: #fbbf24;
-  --amber-500: #f59e0b;
-  --amber-600: #d97706;
-  --amber-700: #b45309;
-  --amber-800: #92400e;
+  --secondary-50: #fff7ed;
+  --secondary-100: #ffedd5;
+  --secondary-200: #fed7aa;
+  --secondary-300: #fdba74;
+  --secondary-400: #fb923c;
+  --secondary-500: #f97316;
+  --secondary-600: #ea580c;
+  --secondary-700: #c2410c;
+  --secondary-800: #9a3412;
+  --secondary-900: #7c2d12;
 
-  --navy-600: #1e3a5f;
-  --navy-700: #1e3a5f;
-  --navy-800: #0f172a;
-  --navy-900: #0a1128;
+  --accent-50: #fbf8ee;
+  --accent-100: #f5eed0;
+  --accent-200: #ebe0a6;
+  --accent-300: #e0d07c;
+  --accent-400: #d8c45e;
+  --accent-500: #d4a017;
+  --accent-600: #b88a14;
+  --accent-700: #9a7211;
+  --accent-800: #7c5b0e;
+  --accent-900: #5e430a;
+
+  /* Legacy aliases for gradual migration */
+  --brand-50: var(--secondary-50);
+  --brand-100: var(--secondary-100);
+  --brand-200: var(--secondary-200);
+  --brand-500: var(--secondary-500);
+  --brand-600: var(--secondary-600);
+  --brand-700: var(--secondary-700);
+
+  --amber-50: var(--secondary-50);
+  --amber-100: var(--secondary-100);
+  --amber-200: var(--secondary-200);
+  --amber-300: var(--secondary-300);
+  --amber-400: var(--secondary-400);
+  --amber-500: var(--secondary-500);
+  --amber-600: var(--secondary-600);
+  --amber-700: var(--secondary-700);
+  --amber-800: var(--secondary-800);
+
+  --navy-600: var(--primary-400);
+  --navy-700: var(--primary-500);
+  --navy-800: var(--primary-600);
+  --navy-900: var(--primary-700);
 
   --surface-0: #ffffff;
-  --surface-50: #f8f9fa;
-  --surface-100: #f1f3f5;
-  --surface-200: #e9ecef;
-  --surface-300: #dee2e6;
-  --surface-400: #ced4da;
-  --surface-500: #adb5bd;
-  --surface-600: #6c757d;
-  --surface-700: #495057;
-  --surface-800: #343a40;
-  --surface-900: #212529;
+  --surface-50: #f5f5f5;
+  --surface-100: #eeeeee;
+  --surface-200: #e0e0e0;
+  --surface-300: #bdbdbd;
+  --surface-400: #9e9e9e;
+  --surface-500: #757575;
+  --surface-600: #616161;
+  --surface-700: #424242;
+  --surface-800: #333333;
+  --surface-900: #1a1a1a;
 
   --success-50: #ecfdf5;
   --success-100: #d1fae5;
@@ -49,15 +84,15 @@
   --success-700: #166534;
   --success-800: #14532d;
 
-  --warning-50: #fffbeb;
-  --warning-100: #fef3c7;
-  --warning-200: #fef08a;
-  --warning-300: #fde047;
-  --warning-400: #facc15;
-  --warning-500: #f59e0b;
-  --warning-600: #d97706;
-  --warning-700: #b45309;
-  --warning-800: #854d0e;
+  --warning-50: var(--secondary-50);
+  --warning-100: var(--secondary-100);
+  --warning-200: var(--secondary-200);
+  --warning-300: var(--secondary-300);
+  --warning-400: var(--secondary-400);
+  --warning-500: var(--secondary-500);
+  --warning-600: var(--secondary-600);
+  --warning-700: var(--secondary-700);
+  --warning-800: var(--secondary-800);
 
   --danger-50: #fef2f2;
   --danger-100: #fee2e2;
@@ -89,7 +124,7 @@
   --flagship-700: #5b21b6;
   --flagship-800: #4c1d95;
 
-  /* Radius & motion (§2.1) */
+  /* Radius & motion */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
@@ -99,13 +134,13 @@
   --duration-fast: 150ms;
   --duration-base: 250ms;
 
-  /* Font strategy (§3.1): flipped per language via html[lang] */
+  /* Typography: Plus Jakarta Sans / Cairo / Nastaliq per language */
   --font-active: var(--font-cairo);
 }
 
-/* Trilingual font strategy — Arabic (Naskh) / Latin / Urdu (Nastaliq) */
+/* Trilingual font strategy */
 html[lang="ar"] { --font-active: var(--font-cairo); }
-html[lang="en"] { --font-active: var(--font-inter); }
+html[lang="en"] { --font-active: var(--font-jakarta); }
 html[lang="ur"] { --font-active: var(--font-nastaliq); }
 
 @theme inline {
@@ -113,6 +148,39 @@ html[lang="ur"] { --font-active: var(--font-nastaliq); }
   --color-foreground: var(--foreground);
   --font-sans: var(--font-active);
   --font-mono: var(--font-geist-mono);
+
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800);
+  --color-accent-900: var(--accent-900);
 
   --color-brand-50: var(--brand-50);
   --color-brand-100: var(--brand-100);
@@ -202,30 +270,57 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-active);
+  font-size: 18px;
+  line-height: 1.6;
 }
 
-/* Arabic & Urdu: higher line-height, no letter-spacing (§8 / §3.2) */
+/* Typography scale */
+h1, .headline {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--primary-500);
+}
+
+h2 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--primary-500);
+}
+
+h3 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--primary-500);
+}
+
+/* Arabic & Urdu: higher line-height */
 html[lang="ar"] body,
 html[lang="ur"] body {
   line-height: 1.6;
 }
 
-/* Nastaliq requires extra breathing room (§8.2) */
 html[lang="ur"] body {
   line-height: 1.7;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
+  scrollbar-color: var(--surface-300) transparent;
 }
 
-.gradient-amber {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, var(--secondary-500) 0%, var(--secondary-600) 100%);
 }
 
 .gradient-hero {
-  background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 50%, #1e293b 100%);
+  background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 50%, var(--primary-900) 100%);
 }
 
 .card-hover {
@@ -234,12 +329,20 @@ html[lang="ur"] body {
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(10, 31, 68, 0.12);
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: linear-gradient(135deg, var(--secondary-500), var(--accent-500));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.text-accent {
+  color: var(--accent-500);
+}
+
+.border-accent {
+  border-color: var(--accent-500);
 }

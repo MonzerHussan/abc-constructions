@@ -30,7 +30,7 @@ export default function LoginPage() {
   if (status === "loading" || status === "authenticated") {
     return (
       <div className="min-h-screen bg-surface-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-secondary-500" />
       </div>
     )
   }
@@ -95,7 +95,7 @@ export default function LoginPage() {
           <div className="w-full max-w-md">
             <div className="mb-8">
               <Link href="/" className="flex items-center gap-2 mb-6">
-                <Image src="/logo/abc-logo-mark.svg" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
+                <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
                 <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
               </Link>
               <h1 className="text-2xl font-bold text-surface-900">المصادقة الثنائية</h1>
@@ -112,7 +112,7 @@ export default function LoginPage() {
                     onChange={(e) => setTotp(e.target.value.replace(/\D/g, "").slice(0, 6))}
                     placeholder="000000"
                     maxLength={6}
-                    className="w-full pr-10 pl-4 py-2.5 border border-surface-300 rounded-xl text-lg text-center font-mono tracking-widest focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                    className="w-full pr-10 pl-4 py-2.5 border border-surface-300 rounded-xl text-lg text-center font-mono tracking-widest focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
                     autoFocus
                   />
                 </div>
@@ -120,7 +120,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={totp.length !== 6 || loading}
-                className="w-full py-2.5 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors disabled:opacity-50"
+                className="w-full py-2.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors disabled:opacity-50"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : "تسجيل الدخول"}
               </button>
@@ -137,7 +137,7 @@ export default function LoginPage() {
         </div>
         <div className="hidden lg:flex lg:flex-1 gradient-hero items-center justify-center p-12">
           <div className="text-center text-white">
-            <Image src="/logo/abc-logo-mark.svg" alt={t("appName")} width={80} height={80} priority className="w-20 h-20 mx-auto mb-6" />
+                <Image src="/logo.png" alt={t("appName")} width={80} height={80} priority className="w-20 h-20 mx-auto mb-6" />
             <h2 className="text-3xl font-bold mb-4">{t("appName")}</h2>
             <p className="text-lg text-white/80 mb-2">{t("appFullName")}</p>
             <p className="text-white/60 max-w-sm">{t("appDescription")}</p>
@@ -153,7 +153,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <div className="mb-8">
               <Link href="/" className="flex items-center gap-2 mb-6">
-                <Image src="/logo/abc-logo-mark.svg" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
+                <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
                 <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
               </Link>
             <h1 className="text-2xl font-bold text-surface-900">{t("loginTitle")}</h1>
@@ -193,7 +193,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="example@email.com"
-                  className="w-full pr-10 pl-4 py-2.5 border border-surface-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                  className="w-full pr-10 pl-4 py-2.5 border border-surface-300 rounded-xl text-sm focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
                 />
               </div>
             </div>
@@ -207,7 +207,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pr-10 pl-10 py-2.5 border border-surface-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                  className="w-full pr-10 pl-10 py-2.5 border border-surface-300 rounded-xl text-sm focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
                 />
                 <button
                   type="button"
@@ -222,7 +222,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors disabled:opacity-50"
+              className="w-full py-2.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors disabled:opacity-50"
             >
               {loading ? t("loading") : t("login")}
             </button>
@@ -230,7 +230,7 @@ export default function LoginPage() {
 
           <p className="text-center mt-6 text-sm text-surface-600">
             {t("noAccount")}{" "}
-            <Link href="/auth/register" className="text-amber-600 font-medium hover:text-amber-700">
+            <Link href="/auth/register" className="text-secondary-600 font-bold hover:text-secondary-700">
               {t("createAccount")}
             </Link>
           </p>

@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Cairo, Inter, Noto_Nastaliq_Urdu } from "next/font/google";
+import { Geist_Mono, Cairo, Plus_Jakarta_Sans, Noto_Nastaliq_Urdu } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
 import Providers from "./Providers";
 import AuthProvider from "@/components/AuthProvider";
 import { DEFAULT_LOCALE, getDir, isSupportedLocale, LOCALE_COOKIE } from "@/lib/i18n";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -22,10 +17,11 @@ const cairo = Cairo({
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const notoNastaliqUrdu = Noto_Nastaliq_Urdu({
@@ -55,7 +51,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={dir}
-      className={`${geistSans.variable} ${geistMono.variable} ${cairo.variable} ${inter.variable} ${notoNastaliqUrdu.variable} h-full antialiased`}
+      className={`${geistMono.variable} ${cairo.variable} ${plusJakartaSans.variable} ${notoNastaliqUrdu.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

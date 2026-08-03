@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import {
   FileText,
   Package,
   Store,
+  Building,
   Building2,
   Briefcase,
   GraduationCap,
@@ -15,6 +17,9 @@ import {
   Zap,
   Star,
   Truck,
+  HardHat,
+  Handshake,
+  Wrench,
 } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 
@@ -27,7 +32,7 @@ export default function HomePage() {
       title: t("modProjectTenders"),
       description: t("modProjectTendersDesc"),
       href: "/tenders/projects",
-      color: "from-info-500 to-info-600",
+      color: "from-primary-500 to-primary-600",
       stat: "120+ مناقصة نشطة",
     },
     {
@@ -35,7 +40,7 @@ export default function HomePage() {
       title: t("modMaterialTenders"),
       description: t("modMaterialTendersDesc"),
       href: "/tenders/materials",
-      color: "from-success-500 to-success-600",
+      color: "from-primary-400 to-primary-500",
       stat: "85+ طلب شراء",
     },
     {
@@ -43,15 +48,15 @@ export default function HomePage() {
       title: t("modMarketplace"),
       description: t("modMarketplaceDesc"),
       href: "/marketplace",
-      color: "from-amber-500 to-amber-500",
+      color: "from-secondary-500 to-secondary-600",
       stat: "500+ منتج متاح",
     },
     {
-      icon: Building2,
+      icon: Building,
       title: t("modProjects"),
       description: t("modProjectsDesc"),
       href: "/projects",
-      color: "from-flagship-500 to-flagship-600",
+      color: "from-primary-500 to-primary-700",
       stat: "200+ مشروع معروض",
     },
     {
@@ -59,7 +64,7 @@ export default function HomePage() {
       title: t("modJobs"),
       description: t("modJobsDesc"),
       href: "/jobs",
-      color: "from-teal-500 to-teal-600",
+      color: "from-accent-500 to-accent-600",
       stat: "60+ فرصة عمل",
     },
     {
@@ -67,7 +72,7 @@ export default function HomePage() {
       title: t("modDelivery"),
       description: t("modDeliveryDesc"),
       href: "/delivery",
-      color: "from-emerald-500 to-success-600",
+      color: "from-secondary-400 to-secondary-500",
       stat: "45+ سائق متاح",
     },
     {
@@ -75,7 +80,7 @@ export default function HomePage() {
       title: t("modTraining"),
       description: t("modTrainingDesc"),
       href: "/training",
-      color: "from-danger-500 to-danger-600",
+      color: "from-primary-600 to-primary-700",
       stat: "45+ دورة تدريبية",
     },
   ];
@@ -88,14 +93,14 @@ export default function HomePage() {
   ];
 
   const roles = [
-    { name: t("roleOwner"), desc: "إدارة المشاريع والمناقصات" },
-    { name: t("roleConsultant"), desc: "المتابعة والإشراف الفني" },
-    { name: t("roleContractor"), desc: "تنفيذ الأعمال الإنشائية" },
-    { name: t("roleSubcontractor"), desc: "الأعمال المتخصصة" },
-    { name: t("roleWorkshop"), desc: "الأعمال اليدوية المتخصصة" },
-    { name: t("roleFreelancer"), desc: "الخدماتFreelance" },
-    { name: t("roleSupplier"), desc: "توريد مواد البناء" },
-    { name: t("roleTrader"), desc: "بيع وتجارة مواد البناء" },
+    { name: t("roleOwner"), desc: "إدارة المشاريع والمناقصات", icon: Building },
+    { name: t("roleConsultant"), desc: "المتابعة والإشراف الفني", icon: FileText },
+    { name: t("roleContractor"), desc: "تنفيذ الأعمال الإنشائية", icon: HardHat },
+    { name: t("roleSubcontractor"), desc: "الأعمال المتخصصة", icon: Wrench },
+    { name: t("roleWorkshop"), desc: "الأعمال اليدوية المتخصصة", icon: Wrench },
+    { name: t("roleFreelancer"), desc: "الخدماتFreelance", icon: Briefcase },
+    { name: t("roleSupplier"), desc: "توريد مواد البناء", icon: Handshake },
+    { name: t("roleTrader"), desc: "بيع وتجارة مواد البناء", icon: Store },
   ];
 
   return (
@@ -112,21 +117,21 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
           <div className="text-center">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <Zap className="w-4 h-4 text-amber-400" />
+              <Zap className="w-4 h-4 text-accent-400" />
               <span className="text-sm text-white/90">{t("appDescription")}</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="headline text-white mb-6">
               {t("heroTitle")}
               <br />
               {t("heroSubtitle")}
             </h1>
-            <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-white/80 mb-8 max-w-2xl mx-auto">
               {t("heroDescription")}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/auth/register"
-                className="px-8 py-3.5 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors text-lg"
+                className="px-8 py-3.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors text-lg"
               >
                 {t("startNow")}
               </Link>
@@ -148,11 +153,11 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <stat.icon className="w-6 h-6 text-amber-600" />
+                <div className="w-12 h-12 bg-secondary-50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <stat.icon className="w-6 h-6 text-secondary-600" />
                 </div>
-                <p className="text-2xl font-bold text-surface-900">{stat.value}</p>
-                <p className="text-sm text-surface-500">{stat.label}</p>
+                <p className="text-3xl font-bold text-primary-500">{stat.value}</p>
+                <p className="text-sm text-surface-600">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -163,10 +168,10 @@ export default function HomePage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-surface-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary-500 mb-4">
               {t("servicesTitle")}
             </h2>
-            <p className="text-surface-600 max-w-xl mx-auto">
+            <p className="text-surface-600 max-w-xl mx-auto text-lg">
               {t("servicesDescription")}
             </p>
           </div>
@@ -184,7 +189,7 @@ export default function HomePage() {
                   </h3>
                   <p className="text-sm text-surface-600 mb-4">{mod.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">
+                    <span className="text-xs font-bold text-secondary-600 bg-secondary-50 px-2.5 py-1 rounded-full">
                       {mod.stat}
                     </span>
                     <ArrowLeft className="w-5 h-5 text-surface-400" />
@@ -208,18 +213,21 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {roles.map((role) => (
-              <div
-                key={role.name}
-                className="bg-white rounded-xl border border-surface-200 p-4 text-center card-hover"
-              >
-                <div className="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Star className="w-6 h-6 text-amber-500" />
+            {roles.map((role) => {
+              const RoleIcon = role.icon;
+              return (
+                <div
+                  key={role.name}
+                  className="bg-white rounded-xl border border-surface-200 p-4 text-center card-hover"
+                >
+                  <div className="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <RoleIcon className="w-6 h-6 text-primary-500" />
+                  </div>
+                  <h4 className="font-bold text-surface-900 text-sm mb-1">{role.name}</h4>
+                  <p className="text-xs text-surface-500">{role.desc}</p>
                 </div>
-                <h4 className="font-bold text-surface-900 text-sm mb-1">{role.name}</h4>
-                <p className="text-xs text-surface-500">{role.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -237,7 +245,7 @@ export default function HomePage() {
               </p>
               <Link
                 href="/auth/register"
-                className="inline-flex px-8 py-3.5 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors text-lg"
+                className="inline-flex px-8 py-3.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors text-lg"
               >
                 {t("createFreeAccount")}
               </Link>
@@ -252,12 +260,10 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-white" />
-                </div>
+                <Image src="/logo.png" alt={t("appName")} width={48} height={48} className="w-12 h-12" />
                 <div>
                   <span className="text-xl font-bold text-white">{t("appName")}</span>
-                  <span className="text-xs block text-surface-500">
+                  <span className="text-xs block text-accent-500">
                     {t("appFullName")}
                   </span>
                 </div>

@@ -38,7 +38,7 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-surface-900 mb-2">
+        <h3 className="text-lg font-bold text-primary-500 mb-2">
           {t("obSurveyTitle")}
         </h3>
         <p className="text-surface-600 mb-6">{t("obSurveySubtitle")}</p>
@@ -59,8 +59,8 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
                 onClick={() => handleToggleArray("lookingFor", option.id)}
                 className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
                   isSelected
-                    ? "border-amber-500 bg-amber-50 text-amber-700"
-                    : "border-surface-300 text-surface-700 hover:border-amber-300"
+                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
+                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
                 }`}
               >
                 {t(option.key as TranslationKey)}
@@ -87,8 +87,8 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
                 onClick={() => handleSelectSingle("hasProjects", option.id)}
                 className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
                   isSelected
-                    ? "border-amber-500 bg-amber-50 text-amber-700"
-                    : "border-surface-300 text-surface-700 hover:border-amber-300"
+                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
+                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
                 }`}
               >
                 {t(option.key as TranslationKey)}
@@ -115,8 +115,8 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
                 onClick={() => handleSelectSingle("budgetRange", option.id)}
                 className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
                   isSelected
-                    ? "border-amber-500 bg-amber-50 text-amber-700"
-                    : "border-surface-300 text-surface-700 hover:border-amber-300"
+                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
+                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
                 }`}
               >
                 {t(option.key as TranslationKey)}
@@ -143,8 +143,8 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
                 onClick={() => handleSelectSingle("urgency", option.id)}
                 className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
                   isSelected
-                    ? "border-amber-500 bg-amber-50 text-amber-700"
-                    : "border-surface-300 text-surface-700 hover:border-amber-300"
+                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
+                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
                 }`}
               >
                 {t(option.key as TranslationKey)}
@@ -172,8 +172,8 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
                 onClick={() => handleToggleArray("projectLocations", option.id)}
                 className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
                   isSelected
-                    ? "border-amber-500 bg-amber-50 text-amber-700"
-                    : "border-surface-300 text-surface-700 hover:border-amber-300"
+                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
+                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
                 }`}
               >
                 {t(option.key as TranslationKey)}

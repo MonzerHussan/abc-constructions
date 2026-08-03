@@ -25,9 +25,9 @@ export function StepIndicator({ steps, current }: StepIndicatorProps) {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-colors ${
                     isActive
-                      ? "bg-amber-500 border-amber-500 text-white"
+                      ? "bg-secondary-500 border-secondary-500 text-white"
                       : isCompleted
-                        ? "bg-green-500 border-green-500 text-white"
+                        ? "bg-success-500 border-success-500 text-white"
                         : "bg-white border-surface-300 text-surface-500"
                   }`}
                 >
@@ -50,7 +50,7 @@ export function StepIndicator({ steps, current }: StepIndicatorProps) {
                 </div>
                 <span
                   className={`mt-2 text-xs font-medium text-center ${
-                    isActive ? "text-amber-600" : "text-surface-500"
+                    isActive ? "text-secondary-600" : "text-surface-500"
                   }`}
                 >
                   {t(stepKey as never)}
@@ -59,7 +59,7 @@ export function StepIndicator({ steps, current }: StepIndicatorProps) {
               {!isLast && (
                 <div
                   className={`h-1 flex-1 mx-2 transition-colors ${
-                    stepNumber < current ? "bg-amber-500" : "bg-surface-200"
+                    stepNumber < current ? "bg-secondary-500" : "bg-surface-200"
                   }`}
                 />
               )}

@@ -85,7 +85,7 @@ export function StepDocuments({ documents, onChange }: StepDocumentsProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-bold text-surface-900 mb-2">
+        <h3 className="text-lg font-bold text-primary-500 mb-2">
           {t("obDocumentsTitle")}
         </h3>
         <p className="text-surface-600 mb-6">{t("obDocumentsSubtitle")}</p>
@@ -104,7 +104,7 @@ export function StepDocuments({ documents, onChange }: StepDocumentsProps) {
                       onChange={(e) =>
                         handleTypeChange(doc.id, e.target.value as OnboardingDocument["type"])
                       }
-                      className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none bg-white"
+                      className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none bg-white"
                     >
                       {documentTypeOptions.map((option) => (
                         <option key={option.id} value={option.id}>
@@ -117,7 +117,7 @@ export function StepDocuments({ documents, onChange }: StepDocumentsProps) {
                   <div className="flex-[2]">
                     {doc.status === "pending" && !doc.file ? (
                       <div
-                        className="border-2 border-dashed border-surface-300 rounded-xl p-4 text-center hover:border-amber-500 hover:bg-amber-50/50 transition-colors cursor-pointer"
+                        className="border-2 border-dashed border-surface-300 rounded-xl p-4 text-center hover:border-secondary-500 hover:bg-secondary-50/50 transition-colors cursor-pointer"
                         onClick={() => {
                           const input = document.createElement("input");
                           input.type = "file";
@@ -160,7 +160,7 @@ export function StepDocuments({ documents, onChange }: StepDocumentsProps) {
                             </div>
                             <div className="h-2 bg-surface-100 rounded-full overflow-hidden">
                               <div
-                                className="h-full bg-amber-500 rounded-full transition-all duration-300"
+                                className="h-full bg-secondary-500 rounded-full transition-all duration-300"
                                 style={{ width: `${doc.progress}%` }}
                               />
                             </div>
@@ -189,7 +189,7 @@ export function StepDocuments({ documents, onChange }: StepDocumentsProps) {
 
         <button
           onClick={handleAddDocument}
-          className="mt-4 flex items-center gap-2 px-4 py-2.5 border border-amber-500 text-amber-600 rounded-xl font-medium hover:bg-amber-50 transition-colors"
+          className="mt-4 flex items-center gap-2 px-4 py-2.5 border border-secondary-500 text-secondary-600 rounded-xl font-bold hover:bg-secondary-50 transition-colors"
         >
           <Upload className="w-4 h-4" />
           {t("obAddDocument")}
