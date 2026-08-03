@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useState } from "react"
-import { signIn } from "next-auth/react"
+import { useState, useEffect } from "react"
+import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { Mail, Lock, Eye, EyeOff, Smartphone, ArrowLeft, Loader2 } from "lucide-react"
 import { useLanguage } from "@/lib/LanguageContext"
@@ -11,6 +11,7 @@ import { useLanguage } from "@/lib/LanguageContext"
 export default function LoginPage() {
   const { t } = useLanguage()
   const router = useRouter()
+  const { data: session, status } = useSession()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -18,6 +19,21 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [mfaRequired, setMfaRequired] = useState(false)
+
+  // Redirect authenticated users to onboarding to complete their profile
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/onboarding")
+    }
+  }, [status, router])
+
+  if (status === "loading" || status === "authenticated") {
+    return (
+      <div className="min-h-screen bg-surface-50 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+      </div>
+    )
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,7 +67,7 @@ export default function LoginPage() {
       setError("حدث خطأ في تسجيل الدخول")
       setLoading(false)
     } else {
-      router.push("/")
+      router.push("/onboarding")
     }
   }
 
@@ -68,7 +84,7 @@ export default function LoginPage() {
       setError("رمز المصادقة غير صحيح")
       setLoading(false)
     } else {
-      router.push("/")
+      router.push("/onboarding")
     }
   }
 
@@ -145,7 +161,7 @@ export default function LoginPage() {
           </div>
 
           <button
-            onClick={() => signIn("google", { callbackUrl: "/" })}
+            onClick={() => signIn("google", { callbackUrl: "/onboarding" })}
             className="w-full flex items-center justify-center gap-3 py-2.5 border border-surface-300 rounded-xl text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors mb-6"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
