@@ -361,7 +361,7 @@ export class EntityRegistryService {
       };
 
       const profile = await tx.profile.create({
-        data: { profileId: await this.generateProfileId(), entityId, ...profileData },
+        data: { profileId: await this.generateProfileId(), entityId: entity.id, ...profileData },
       });
 
       await eventBus.publish({
@@ -419,7 +419,7 @@ export class EntityRegistryService {
       };
 
       const profile = await tx.profile.create({
-        data: { profileId: await this.generateProfileId(), entityId, ...profileData },
+        data: { profileId: await this.generateProfileId(), entityId: entity.id, ...profileData },
       });
 
       // Bridge: link the SupplierProfile to the new Entity (no FK — isolation preserved)
