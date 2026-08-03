@@ -1867,6 +1867,7 @@ model ProductTag {
 model SupplierProfile {
   id                 String             @id @default(cuid())
   userId             String             @unique
+  entityId           String?            // 🔗 Bridge to Entity Registry (plain string, no FK — Architecture Isolation preserved)
   organizationId     String?            @unique
   supplierType       SupplierType[]
   supplierTypeOther  String?
@@ -3791,4 +3792,390 @@ model WorkflowHistory {
   @@index([actorId])
   @@index([result])
   @@index([createdAt])
+}
+
+// ============================
+// ABC Entity Registry (Market Data Layer)
+// Referenced: docs/pilot-validation/ABC-ENTITY-REGISTRY-SCHEMA.md (FINAL BASELINE)
+// ISOLATION: These tables are intentionally NOT related to User/Organization.
+// The only bridge to the Auth layer is Profile.userId (plain string, no FK),
+// so Programmer 2 (Data) and Programmer 4 (AI) consume ONLY Entity + Profile.
+// ============================
+
+enum EntityType {
+  CUST
+  SUPP
+  ECO
+  INT
+}
+
+enum EntitySubtype {
+  CONTRACTOR
+  DEVELOPER
+  CONSULTANT
+  PROJECT_OWNER
+  SUPPLIER
+  MANUFACTURER
+  DISTRIBUTOR
+  MATERIAL_VENDOR
+  STRATEGIC_PARTNER
+  INDUSTRY_ASSOCIATION
+  SERVICE_PROVIDER
+  INVESTOR
+  ADVISOR
+  MEDIA
+  POTENTIAL_TEAM_MEMBER
+  SERVICE_STAFF
+}
+
+enum LanguagePreference {
+  ARABIC
+  ENGLISH
+  URDU
+}
+
+enum EntityRelationshipStatus {
+  NEW
+  ENGAGED
+  TRIAL
+  ACTIVE
+  CHURNED
+}
+
+enum EntitySource {
+  LINKEDIN
+  WHATSAPP
+  EMAIL
+  REFERRAL
+  EVENT
+  INTERNAL
+}
+
+enum PilotStatus {
+  INVITED
+  STARTED
+  COMPLETED
+  INTERVIEWED
+  FT_TRIAL
+}
+
+enum CrmClassification {
+  LEAD
+  PROSPECT
+  CUSTOMER
+  SUPPLIER
+  PARTNER
+  INVESTOR
+  OTHER_STAKEHOLDER
+}
+
+enum InteractionType {
+  SURVEY
+  INTERVIEW
+  EMAIL
+  CALL
+  MEETING
+  FEEDBACK
+  PILOT_ACTIVITY
+  REFERRAL
+}
+
+enum InteractionChannel {
+  TYPEFORM
+  WHATSAPP
+  EMAIL
+  PHONE
+  IN_PERSON
+  PLATFORM
+}
+
+enum WtpRange {
+  UNDER_100
+  RANGE_100_400
+  RANGE_400_1000
+  RANGE_1000_PLUS
+}
+
+enum CommissionAcceptance {
+  NONE
+  P_1_3
+  P_3_5
+  P_5_PLUS
+}
+
+enum AdoptionInterest {
+  IMMEDIATELY
+  MONTHS_6_12
+  LATER
+}
+
+enum ConsentStatus {
+  GRANTED
+  DENIED
+  NOT_REQUESTED
+}
+
+enum AllowedUsage {
+  PRODUCT_RESEARCH
+  CONTACT_FOR_PILOT
+  EARLY_ADOPTER_LIST
+}
+
+enum RelationshipType {
+  SERVES
+  DEMANDS
+  OWNS
+  EXECUTES
+  INITIATES
+  BIDS
+  RESULTS
+  PARTNERS
+  REFERS
+  FUNDS
+}
+
+enum EntityLinkStatus {
+  ACTIVE
+  PENDING
+  ENDED
+}
+
+model Entity {
+  id                   String                  @id @default(cuid())
+  entityId             String                  @unique
+  entityType           EntityType
+  entitySubtype        EntitySubtype
+  companyName          String
+  contactPerson        String?
+  contactRole          String?
+  contactEmail         String?
+  contactPhone         String?
+  languagePreference   LanguagePreference      @default(ARABIC)
+  location             String?
+  industrySegment      String?
+  relationshipStatus   EntityRelationshipStatus @default(NEW)
+  source               EntitySource
+  sourceDetail         String?
+  pilotStatus          PilotStatus?
+  crmClassification    CrmClassification       @default(LEAD)
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+
+  profile      Profile?
+  interactions Interaction[]
+  validation   Validation?
+  leadScore    LeadScoring?
+  consent      Consent?
+  relationshipsFrom Relationship[] @relation("RelationshipFrom")
+  relationshipsTo   Relationship[] @relation("RelationshipTo")
+
+  @@index([entityType])
+  @@index([entitySubtype])
+  @@index([crmClassification])
+  @@index([relationshipStatus])
+  @@index([source])
+}
+
+model Profile {
+  id                 String   @id @default(cuid())
+  profileId          String   @unique
+  entityId           String   @unique
+  userId             String?
+  companySize        String?
+  annualVolume       String?
+  businessActivity   String?
+  relevantCategories String[]
+  hasCatalog         Boolean  @default(false)
+  digitalMaturity    String?
+  apiReadiness       String?
+  capabilities       String[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  entity Entity @relation(fields: [entityId], references: [id])
+
+  @@index([userId])
+}
+
+model Interaction {
+  id               String             @id @default(cuid())
+  interactionId    String             @unique
+  entityId         String
+  type             InteractionType
+  date             DateTime           @default(now())
+  channel          InteractionChannel
+  owner            String
+  outcome          String?
+  nextAction       String?
+  relatedEntityId  String?
+  createdAt        DateTime           @default(now())
+
+  entity Entity @relation(fields: [entityId], references: [id])
+
+  @@index([entityId])
+  @@index([date])
+  @@index([type])
+}
+
+model Validation {
+  id                   String             @id @default(cuid())
+  validationId         String             @unique
+  entityId             String             @unique
+  painPoints           String[]
+  needs                String[]
+  feedback             String?
+  feedbackLanguage     String?
+  willingnessToPay     WtpRange?
+  commissionAcceptance CommissionAcceptance?
+  adoptionInterest     AdoptionInterest?
+  firstTransactionReady Boolean            @default(false)
+  ftOrderValue         Float?
+  assumptionResults    Json?
+  validatedDate        DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  entity Entity @relation(fields: [entityId], references: [id])
+}
+
+model LeadScoring {
+  id               String   @id @default(cuid())
+  scoreId          String   @unique
+  entityId         String   @unique
+  strategicScore   Int      @default(0)
+  engagementScore  Int      @default(0)
+  commercialScore  Int      @default(0)
+  conversionScore  Int      @default(0)
+  totalLeadScore   Float    @default(0)
+  tier             String   @default("Cold")
+  scoredDate       DateTime @default(now())
+  createdAt        DateTime @default(now())
+
+  entity Entity @relation(fields: [entityId], references: [id])
+}
+
+model Consent {
+  id                  String            @id @default(cuid())
+  consentId           String            @unique
+  entityId            String            @unique
+  consentStatus       ConsentStatus     @default(NOT_REQUESTED)
+  consentDate         DateTime?
+  consentVersion      String?
+  language            LanguagePreference @default(ARABIC)
+  allowedUsage        AllowedUsage[]
+  deletionRequested   Boolean           @default(false)
+  deletionRequestedAt DateTime?
+  dataRetentionExpiry DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  entity Entity @relation(fields: [entityId], references: [id])
+}
+
+model Relationship {
+  id               String           @id @default(cuid())
+  relationshipId   String           @unique
+  fromEntityId     String
+  toEntityId       String
+  relationshipType RelationshipType
+  sinceDate        DateTime?
+  status           EntityLinkStatus @default(ACTIVE)
+  notes            String?
+  createdAt        DateTime         @default(now())
+
+  fromEntity Entity @relation("RelationshipFrom", fields: [fromEntityId], references: [id])
+  toEntity   Entity @relation("RelationshipTo", fields: [toEntityId], references: [id])
+
+  @@index([fromEntityId])
+  @@index([toEntityId])
+  @@index([relationshipType])
+  @@index([status])
+}
+
+// Atomic per-prefix counter used to generate sequential human-friendly IDs
+// (ENTITY-00001, PROF-00001, ...) without in-memory state. Upsert-with-increment
+// is safe under concurrent requests and multiple server instances.
+model EntityRegistryCounter {
+  id        String @id
+  prefix    String @unique
+  value     Int    @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+// ─── AI Module (Sprint AI-1b — BOQ Intelligence) ───────────────────────────
+// All models are additive and isolated to the AI domain. Tenant data is
+// scoped by orgId (org isolation). AiExtractionVersion is a platform-level
+// deployment registry (not tenant data).
+
+enum AiJobType {
+  EXTRACTION
+  EMBEDDING
+  ANALYSIS
+  MATCHING
+  RECOMMENDATION
+}
+
+enum AiJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  PARTIAL
+  FAILED
+}
+
+model AiJob {
+  id        String      @id @default(cuid())
+  orgId     String
+  type      AiJobType
+  status    AiJobStatus @default(PENDING)
+  fileUrl   String?
+  result    Json?
+  error     String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  usages AiUsage[]
+
+  @@index([orgId])
+  @@index([orgId, status])
+  @@index([type, createdAt])
+}
+
+model AiUsage {
+  id         String   @id @default(cuid())
+  orgId      String
+  jobId      String?
+  tokensUsed Int      @default(0)
+  cost       Float    @default(0)
+  model      String?
+  createdAt  DateTime @default(now())
+
+  job AiJob? @relation(fields: [jobId], references: [id])
+
+  @@index([orgId])
+  @@index([orgId, createdAt])
+  @@index([jobId])
+  @@index([model])
+}
+
+model AiQuota {
+  id          String   @id @default(cuid())
+  orgId       String
+  month       String
+  tokensUsed  Int      @default(0)
+  tokensLimit Int?
+  jobsUsed    Int      @default(0)
+  jobsLimit   Int?
+
+  @@unique([orgId, month])
+  @@index([orgId, month])
+}
+
+model AiExtractionVersion {
+  id         String    @id @default(cuid())
+  version    String    @unique
+  modelName  String
+  schema     Json
+  deployedAt DateTime  @default(now())
+  active     Boolean   @default(false)
 }
