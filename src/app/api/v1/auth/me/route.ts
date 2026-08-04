@@ -53,7 +53,29 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err) {
-    logger.error('Mobile me failed', { error: err instanceof Error ? err.message : String(err) });
-    return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 });
+    const code =
+      typeof err === "object" && err !== null && "code" in err
+        ? (err as { code?: string }).code
+        : undefined;
+
+    logger.error('Mobile me failed', {
+      error: err instanceof Error ? err.message : String(err),
+      code,
+    });
+
+    if (code === 'AUTH_SECRET_MISSING') {
+      return NextResponse.json(
+        { error: 'Server is not configured for authentication', code },
+        { status: 503 },
+      );
+    }
+    if (code === 'P2021' || code === 'P2022') {
+      return NextResponse.json(
+        { error: 'Database schema not migrated', code },
+        { status: 503 },
+      );
+    }
+
+    return NextResponse.json({ error: 'Failed to fetch user', code: code ?? 'UNKNOWN' }, { status: 500 });
   }
 }

@@ -12,7 +12,9 @@ const TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days, matches NextAuth maxAge
 function getSecretKey(): Uint8Array {
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
   if (!secret) {
-    throw new Error('AUTH_SECRET is not configured');
+    const e = new Error('AUTH_SECRET is not configured');
+    (e as Error & { code?: string }).code = 'AUTH_SECRET_MISSING';
+    throw e;
   }
   return new TextEncoder().encode(secret);
 }
@@ -102,7 +104,31 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    logger.error('Mobile login failed', { error: err instanceof Error ? err.message : String(err) });
-    return NextResponse.json({ error: 'Login failed' }, { status: 500 });
+    const code =
+      typeof err === "object" && err !== null && "code" in err
+        ? (err as { code?: string }).code
+        : undefined;
+
+    logger.error('Mobile login failed', {
+      error: err instanceof Error ? err.message : String(err),
+      code,
+    });
+
+    // Surface config / migration errors with clear codes so mobile clients
+    // (P9/P10) can distinguish server misconfig from invalid credentials.
+    if (code === 'AUTH_SECRET_MISSING') {
+      return NextResponse.json(
+        { error: 'Server is not configured for authentication', code },
+        { status: 503 },
+      );
+    }
+    if (code === 'P2021' || code === 'P2022') {
+      return NextResponse.json(
+        { error: 'Database schema not migrated', code },
+        { status: 503 },
+      );
+    }
+
+    return NextResponse.json({ error: 'Login failed', code: code ?? 'UNKNOWN' }, { status: 500 });
   }
 }
