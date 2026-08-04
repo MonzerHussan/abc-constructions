@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ABC Smart Navigation Rules",
+  "description": "Source-of-truth navigation rules for Web, iOS, and Android. Keep in sync with src/lib/navigation/types.ts.",
+  "version": "1.0.0",
+  "publicPaths": [
+    "/",
+    "/auth/login",
+    "/auth/register",
+    "/auth/forgot-password",
+    "/auth/reset-password",
+    "/api/v1/health",
+    "/api/auth"
+  ],
+  "onboardingPath": "/onboarding",
+  "loginPath": "/auth/login",
+  "rules": [
+    {
+      "name": "Unauthenticated protected page",
+      "when": {
+        "isAuthenticated": false,
+        "currentPathIsPublic": false
+      },
+      "action": "redirect",
+      "target": "/auth/login",
+      "preserveCallbackUrl": true
+    },
+    {
+      "name": "Authenticated but not onboarded",
+      "when": {
+        "isAuthenticated": true,
+        "isOnboarded": false,
+        "currentPathIsOnboarding": false,
+        "currentPathIsPublic": false
+      },
+      "action": "redirect",
+      "target": "/onboarding"
+    },
+    {
+      "name": "Authenticated and onboarded on auth/onboarding page",
+      "when": {
+        "isAuthenticated": true,
+        "isOnboarded": true,
+        "currentPathIsAuthOrOnboarding": true
+      },
+      "action": "redirect",
+      "target": "ROLE_DEFAULT"
+    }
+  ],
+  "roleDefaultRoutes": {
+    "ADMIN": "/admin",
+    "SUPER_ADMIN": "/admin",
+    "SUPPLIER": "/marketplace",
+    "TRADER": "/marketplace",
+    "CONTRACTOR": "/projects",
+    "SUBCONTRACTOR": "/projects",
+    "WORKSHOP": "/projects",
+    "CONSULTANT": "/projects",
+    "OWNER": "/projects",
+    "FREELANCER": "/jobs"
+  },
+  "mobileScreenMapping": {
+    "/admin": "AdminDashboard",
+    "/marketplace": "MarketplaceScreen",
+    "/projects": "ProjectsScreen",
+    "/jobs": "JobsScreen",
+    "/onboarding": "OnboardingScreen",
+    "/auth/login": "LoginScreen"
+  },
+  "api": {
+    "endpoint": "GET /api/v1/entity-registry/me",
+    "authentication": "Bearer token",
+    "response": {
+      "success": true,
+      "data": {
+        "isOnboarded": true,
+        "profile": null,
+        "entity": null
+      }
+    }
+  }
+}

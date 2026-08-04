@@ -220,6 +220,47 @@ src/lib/navigation/types.ts
 
 Use `ROLE_DEFAULT_ROUTE` and `shouldRedirectToOnboarding` / `shouldRedirectToDashboard` helpers.
 
+#### 4.5.1 Mobile Integration Overview
+
+Mobile apps do not use `useSmartNavigation()` directly. Instead, they should replicate the same state machine on the native side:
+
+1. **Authentication state** — maintained by the mobile auth layer (token / session).
+2. **Onboarding state** — fetched from the same API endpoint: `GET /api/v1/entity-registry/me`.
+3. **Role** — stored in the auth token/session after login.
+
+A detailed mobile implementation guide with iOS (SwiftUI) and Android (Kotlin) examples is available at:
+
+```
+docs/mobile-navigation-guide.md
+```
+
+#### 4.5.2 Key Rules for Mobile
+
+- Unauthenticated user opening a protected screen → show Login screen.
+- Authenticated user without onboarding → show Onboarding flow and block other screens.
+- Authenticated onboarded user opening Login/Register/Onboarding → redirect to role default screen.
+- Authenticated onboarded user on any other screen → allow.
+
+#### 4.5.3 API Contract
+
+```http
+GET /api/v1/entity-registry/me
+Authorization: Bearer <token>
+```
+
+Response:
+
+```json
+{
+  "success": true,
+  "data": {
+    "isOnboarded": true,
+    "profile": { /* ... */ },
+    "entity": { /* ... */ }
+  }
+}
+```
+
 ---
 
 ## 5. Responsive Breakpoints
