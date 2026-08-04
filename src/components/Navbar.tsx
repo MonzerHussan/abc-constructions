@@ -29,6 +29,7 @@ import {
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
 import { useLanguage } from "@/lib/LanguageContext";
+import { useCart } from "@/lib/cart";
 import type { TranslationKey } from "@/lib/translations";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
@@ -61,6 +62,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const { t } = useLanguage();
+  const { toggleCart, totalItems } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const isLoggedIn = status === "authenticated";
@@ -111,6 +113,18 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={toggleCart}
+              className="relative p-2 text-surface-500 hover:text-surface-700 hover:bg-surface-100 rounded-lg"
+              aria-label={t("cart")}
+            >
+              <ShoppingCart className="w-5 h-5" />
+              {totalItems > 0 && (
+                <span className="absolute top-1 end-1 w-4 h-4 bg-brand-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </span>
+              )}
+            </button>
             <button className="p-2 text-surface-500 hover:text-surface-700 hover:bg-surface-100 rounded-lg">
               <Search className="w-5 h-5" />
             </button>

@@ -2,7 +2,9 @@
 
 import { ReactNode } from "react";
 import { LanguageProvider } from "@/lib/LanguageContext";
+import { CartProvider } from "@/lib/cart";
 import DirSync from "@/components/DirSync";
+import CartDrawer from "@/components/marketplace/CartDrawer";
 
 export default function Providers({
   children,
@@ -13,8 +15,11 @@ export default function Providers({
 }) {
   return (
     <LanguageProvider initialLocale={initialLocale}>
-      <DirSync />
-      {children}
+      <CartProvider>
+        <DirSync />
+        {children}
+        <CartDrawer />
+      </CartProvider>
     </LanguageProvider>
   );
 }
