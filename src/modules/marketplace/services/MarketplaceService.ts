@@ -30,7 +30,7 @@ const OFFERING_INCLUDE = {
     select: {
       availableQty: true,
       reservedQty: true,
-      warehouse: { select: { id: true, name: true, city: true } },
+      warehouse: { select: { id: true, name: true, cityId: true, countryId: true } },
     },
   },
 } as const;
@@ -45,7 +45,7 @@ export class MarketplaceService {
       country, city, inStockOnly, maxLeadTimeDays, isAuthorizedOnly, supplierId,
     } = query;
 
-    const productWhere: Record<string, unknown> = { isActive: true, status: 'ACTIVE' };
+    const productWhere: Record<string, unknown> = { isActive: true, status: 'PUBLISHED' };
     if (search) {
       productWhere.OR = [
         { name: { contains: search, mode: 'insensitive' } },
