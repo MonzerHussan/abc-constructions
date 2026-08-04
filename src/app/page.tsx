@@ -132,6 +132,7 @@ export default function HomePage() {
               <Link
                 href="/auth/register"
                 className="px-8 py-3.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors text-lg"
+                style={{ backgroundColor: "#F97316" }}
               >
                 {t("startNow")}
               </Link>
@@ -246,6 +247,7 @@ export default function HomePage() {
               <Link
                 href="/auth/register"
                 className="inline-flex px-8 py-3.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors text-lg"
+                style={{ backgroundColor: "#F97316" }}
               >
                 {t("createFreeAccount")}
               </Link>
