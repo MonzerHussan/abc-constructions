@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { LanguageProvider } from "@/lib/LanguageContext";
+import { SmartRouter } from "@/lib/navigation";
 import DirSync from "@/components/DirSync";
 
 export default function Providers({
@@ -14,6 +15,7 @@ export default function Providers({
   return (
     <LanguageProvider initialLocale={initialLocale}>
       <DirSync />
+      <SmartRouter />
       {children}
     </LanguageProvider>
   );

@@ -206,6 +206,17 @@ export class EntityRegistryService {
     return profile;
   }
 
+  /**
+   * Find the profile linked to an authenticated user.
+   * Used by the Smart Navigation Router to decide onboarding redirect.
+   */
+  async findProfileByUserId(userId: string) {
+    return prisma.profile.findFirst({
+      where: { userId },
+      include: { entity: true },
+    });
+  }
+
   // ---------- Interactions ----------
 
   async createInteraction(input: CreateInteractionInput) {
