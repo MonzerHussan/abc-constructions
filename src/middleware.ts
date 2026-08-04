@@ -12,6 +12,7 @@ const publicPaths = [
   '/auth/reset-password',
   '/api/v1/health',
   '/api/auth',
+  '/api/v1/auth',
 ];
 
 // Pages requiring an authenticated session (portal pages)
