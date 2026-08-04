@@ -13,6 +13,11 @@ const publicPaths = [
   '/api/v1/health',
   '/api/auth',
   '/api/v1/auth',
+  // Public-read (browsing) endpoints — no auth required (mobile + web)
+  '/api/v1/marketplace/products',
+  '/api/v1/marketplace/categories',
+  '/api/v1/marketplace/suppliers',
+  '/api/v1/marketplace/compare',
 ];
 
 // Pages requiring an authenticated session (portal pages)
