@@ -69,7 +69,7 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push("/");
+      router.push("/onboarding");
     } catch {
       setError("حدث خطأ أثناء إنشاء الحساب");
       setLoading(false);
@@ -77,7 +77,7 @@ export default function RegisterPage() {
   };
 
   const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
+    signIn("google", { callbackUrl: "/onboarding" });
   };
 
   return (

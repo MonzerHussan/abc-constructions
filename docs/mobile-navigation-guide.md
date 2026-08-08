@@ -2,7 +2,8 @@
 
 > **Audience:** Programmer 9 (iOS) and Programmer 10 (Android)  
 > **Owner:** Programmer 3 (Frontend)  
-> **Status:** Draft — ready for review session
+> **Status:** Updated for Dynamic Onboarding Survey v1.1
+> **Last updated:** 2026-08-08
 
 This guide explains how to implement the **Smart Navigation Router** on iOS and Android so that mobile users get the same automatic routing behavior as the web app.
 
@@ -248,14 +249,50 @@ Use this checklist during the review session with Programmer 3:
 
 ---
 
-## 8. Questions & Contact
+## 9. Onboarding Survey Flow (Dynamic Subcategories)
+
+The onboarding survey (Step 3 of 3) now uses a dynamic category/subcategory structure:
+
+- **12 Main Categories** (e.g., "Construction Materials", "Electrical & Low Current", etc.)
+- **133 Subcategories** total, dynamically loaded based on selected main categories
+- User flow: Select main categories → Subcategory panels appear for each selected category → Select subcategories
+
+### Mobile Implementation Notes
+
+- Onboarding screen must support expandable category cards with checkbox grids
+- RTL/LTR mirroring applies to the category/subcategory grids
+- Translation keys: `obSurveyCategoriesTitle`, `obSurveyCategoriesSubtitle`, `obSurveySubcategoriesTitle`, `obSurveySubcategoriesSubtitle`
+- Validation: At least one main category AND at least one subcategory required
+- API payload includes `selectedCategories[]` and `subcategories[]` arrays
+
+### Payload Sent to Backend
+
+```json
+{
+  "entity": { ... },
+  "profile": {
+    "businessActivity": "supplier",
+    "companySize": "medium",
+    "relevantCategories": ["construction-materials", "electrical-low-current"],
+    "subcategories": ["portland-cement", "reinforcement-steel", "power-cables"],
+    "capabilities": ["riyadh", "jeddah"]
+  }
+}
+```
+
+> **Note:** `subcategories` are now stored in a dedicated `subcategories` column on the Profile table (migration `20260808_add_profile_subcategories`). `capabilities` is reserved for project locations.
+
+---
+
+## 10. Questions & Contact
 
 - Source of truth for rules: `src/lib/navigation/types.ts`
 - Web implementation: `src/lib/navigation/useSmartNavigation.ts`
 - API endpoint: `src/app/api/v1/entity-registry/me/route.ts`
+- Onboarding survey data: `src/lib/data/survey-categories.ts`
 - Contact: Programmer 3 (Frontend)
 
 ---
 
-> **Maintained by:** Programmer 3 (Frontend)  
-> **Last updated:** 2026-08-04
+> **Maintained by:** Programmer 3 (Frontend)
+> **Last updated:** 2026-08-08

@@ -56,6 +56,7 @@ export const upsertProfileSchema = z.object({
   annualVolume: z.string().optional().nullable(),
   businessActivity: z.string().optional().nullable(),
   relevantCategories: z.array(z.string()).optional(),
+  subcategories: z.array(z.string()).optional(),
   hasCatalog: z.boolean().optional(),
   digitalMaturity: z.string().optional().nullable(),
   apiReadiness: z.string().optional().nullable(),

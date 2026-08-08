@@ -25,7 +25,15 @@ export interface OnboardingDocument {
 }
 
 export interface OnboardingSurvey {
+  /**
+   * Legacy broad-interest array. Kept for backward compatibility with existing
+   * entity-registry profile fields (`relevantCategories`).
+   */
   lookingFor: string[];
+  /** Selected main construction categories (12 main categories). */
+  selectedCategories: string[];
+  /** Selected subcategories across all chosen main categories (133 total). */
+  subcategories: string[];
   hasProjects: "yes" | "no" | "soon" | "";
   budgetRange: "small" | "medium" | "large" | "enterprise" | "";
   projectLocations: string[];

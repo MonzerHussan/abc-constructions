@@ -46,6 +46,8 @@ const initialState: OnboardingState = {
   ],
   survey: {
     lookingFor: [],
+    selectedCategories: [],
+    subcategories: [],
     hasProjects: "",
     budgetRange: "",
     projectLocations: [],
@@ -106,7 +108,10 @@ export function OnboardingWizard() {
 
     if (step === 3) {
       const { survey } = state;
-      if (survey.lookingFor.length === 0) newErrors.lookingFor = "obRequired";
+      if (survey.selectedCategories.length === 0)
+        newErrors.selectedCategories = "obRequired";
+      if (survey.subcategories.length === 0)
+        newErrors.subcategories = "obRequired";
       if (!survey.hasProjects) newErrors.hasProjects = "obRequired";
       if (!survey.budgetRange) newErrors.budgetRange = "obRequired";
       if (!survey.urgency) newErrors.urgency = "obRequired";

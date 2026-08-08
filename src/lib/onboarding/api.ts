@@ -125,7 +125,13 @@ export async function submitOnboarding(
     };
   }
 
-  if (!survey.hasProjects || !survey.budgetRange || !survey.urgency) {
+  if (
+    survey.selectedCategories.length === 0 ||
+    survey.subcategories.length === 0 ||
+    !survey.hasProjects ||
+    !survey.budgetRange ||
+    !survey.urgency
+  ) {
     return {
       success: false,
       message: "Survey is incomplete",
@@ -159,7 +165,8 @@ export async function submitOnboarding(
     profile: {
       businessActivity: profile.accountType,
       companySize: survey.budgetRange,
-      relevantCategories: survey.lookingFor,
+      relevantCategories: survey.selectedCategories,
+      subcategories: survey.subcategories,
       capabilities: survey.projectLocations,
     },
   };
@@ -244,6 +251,7 @@ export async function syncSupplierToRegistry(payload: {
   businessActivity?: string;
   companySize?: string;
   relevantCategories?: string[];
+  subcategories?: string[];
   capabilities?: string[];
 }): Promise<{
   entity: { entityId: string };
@@ -281,6 +289,7 @@ export async function syncSupplierToRegistry(payload: {
       businessActivity: payload.businessActivity,
       companySize: payload.companySize,
       relevantCategories: payload.relevantCategories,
+      subcategories: payload.subcategories,
       capabilities: payload.capabilities,
     },
   });
@@ -293,6 +302,7 @@ export async function updateOnboardingProfile(
     annualVolume?: string;
     businessActivity?: string;
     relevantCategories?: string[];
+    subcategories?: string[];
     hasCatalog?: boolean;
     digitalMaturity?: string;
     apiReadiness?: string;
