@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { supplierNetworkService } from '@/modules/supplier-network';
 import { addCapabilitySchema } from '@/modules/supplier-network/validators/supplier-network-schemas';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { SupplierNetworkErrors } from '@/modules/shared/errors/supplier-network.errors';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = addCapabilitySchema.parse(body);
     const capability = await supplierNetworkService.addCapability(parsed);
@@ -27,4 +23,4 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error adding capability'), { status: 500 });
   }
-}
+});

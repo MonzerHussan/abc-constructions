@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { supplierNetworkService } from '@/modules/supplier-network';
 import { createProfileSchema, profileListQuerySchema } from '@/modules/supplier-network/validators/supplier-network-schemas';
 import { success, successPaginated, error } from '@/modules/shared/utils/response-envelope';
 import { SupplierNetworkErrors } from '@/modules/shared/errors/supplier-network.errors';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const query = profileListQuerySchema.parse(Object.fromEntries(searchParams));
@@ -15,17 +15,13 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(error('INTERNAL_ERROR', 'Error fetching supplier profiles'), { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = createProfileSchema.parse(body);
-    const profile = await supplierNetworkService.createProfile(parsed, session.user.id);
+    const profile = await supplierNetworkService.createProfile(parsed, sessionUserId);
     return NextResponse.json(success(profile, createRequestId()), { status: 201 });
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -35,4 +31,4 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error creating supplier profile'), { status: 500 });
   }
-}
+});
