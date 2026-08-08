@@ -1,17 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { qualityService } from '@/modules/quality';
 import { updateInspectionSchema } from '@/modules/quality/validators/inspection-schemas';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const GET = withAuth(async (_request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
+    const { id } = params;
     const inspection = await qualityService.findInspectionById(id);
     return NextResponse.json(success(inspection, createRequestId()));
   } catch (err: unknown) {
@@ -20,18 +17,11 @@ export async function GET(
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error fetching inspection'), { status: 500 });
   }
-}
+});
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const PUT = withAuth(async (request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
+    const { id } = params;
     const body = await request.json();
     const parsed = updateInspectionSchema.parse(body);
     const inspection = await qualityService.updateInspection(id, parsed);
@@ -47,18 +37,11 @@ export async function PUT(
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error updating inspection'), { status: 500 });
   }
-}
+});
 
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const DELETE = withAuth(async (_request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
+    const { id } = params;
     await qualityService.deleteInspection(id);
     return NextResponse.json(success({ message: 'Inspection deleted' }, createRequestId()));
   } catch (err: unknown) {
@@ -72,4 +55,4 @@ export async function DELETE(
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error deleting inspection'), { status: 500 });
   }
-}
+});
