@@ -4,9 +4,9 @@ import { success, successPaginated, error } from '@/modules/shared/utils/respons
 import { validate } from '@/modules/shared/utils/validation';
 import { logger } from '@/modules/shared/utils/logger';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
-import { withAuth } from '@/lib/auth-guard';
+import { withAuth, withPermission } from '@/lib/auth-guard';
 
-export const POST = withAuth(async (request: NextRequest) => {
+export const POST = withPermission('research.survey.edit', async (request: NextRequest) => {
   try {
     const body = await request.json();
     const parsed = validate(createOnboardingQuestionSchema, body);

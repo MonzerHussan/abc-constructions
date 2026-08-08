@@ -37,7 +37,6 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 
-type EditorTarget = "category" | "subcategory";
 type EditorState =
   | { mode: "closed" }
   | { mode: "create"; type: SurveyQuestion["type"]; parentId: string | null }
@@ -62,20 +61,25 @@ export function SurveyManager() {
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const configRef = useRef(config);
-  configRef.current = config;
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    const { config: cfg, isRemote: remote } = await fetchSurveyConfig();
-    setConfig(cfg);
-    setIsRemote(remote);
-    setDirty(false);
-    setLoading(false);
-  }, []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    configRef.current = config;
+  }, [config]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { config: cfg, isRemote: remote } = await fetchSurveyConfig();
+      if (cancelled) return;
+      setConfig(cfg);
+      setIsRemote(remote);
+      setDirty(false);
+      setLoading(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const persist = useCallback(
     async (next: SurveyConfig) => {

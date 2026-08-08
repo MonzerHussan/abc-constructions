@@ -4,7 +4,7 @@ import { success, error } from '@/modules/shared/utils/response-envelope';
 import { validate } from '@/modules/shared/utils/validation';
 import { logger } from '@/modules/shared/utils/logger';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
-import { withAuth } from '@/lib/auth-guard';
+import { withAuth, withPermission } from '@/lib/auth-guard';
 
 export const GET = withAuth(async (_request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
@@ -20,7 +20,7 @@ export const GET = withAuth(async (_request: NextRequest, { params }: { sessionU
   }
 });
 
-export const PATCH = withAuth(async (request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
+export const PATCH = withPermission('research.survey.edit', async (request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
     const { id } = params;
     const body = await request.json();
@@ -38,7 +38,7 @@ export const PATCH = withAuth(async (request: NextRequest, { params }: { session
   }
 });
 
-export const DELETE = withAuth(async (_request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
+export const DELETE = withPermission('research.survey.edit', async (_request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
     const { id } = params;
     const result = await entityRegistryService.deleteOnboardingQuestion(id);

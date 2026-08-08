@@ -187,6 +187,7 @@ describe('EntityRegistryService onboarding question bank (isolated)', () => {
       questionText: 'What is your company size?',
       answerType: 'SINGLE_CHOICE',
       options: [{ label: '1-10', value: '1-10' }],
+      isActive: true,
     });
 
     expect(result.id).toBe('q1');
@@ -215,7 +216,7 @@ describe('EntityRegistryService onboarding question bank (isolated)', () => {
     ]);
     (prisma.onboardingQuestion.count as ReturnType<typeof vi.fn>).mockResolvedValue(1);
 
-    const result = await service.listOnboardingQuestions({ page: 1, limit: 20, category: 'business' });
+    const result = await service.listOnboardingQuestions({ page: 1, limit: 20, category: 'business', isActive: undefined });
 
     expect(result.total).toBe(1);
     expect(prisma.onboardingQuestion.findMany).toHaveBeenCalledWith(
