@@ -87,6 +87,7 @@ const PERMISSIONS = [
   { key: "research.campaign.launch", name: "Launch Campaigns", nameAr: "إطلاق الحملات", module: "research" },
   { key: "research.campaign.close", name: "Close Campaigns", nameAr: "إغلاق الحملات", module: "research" },
   { key: "research.survey.create", name: "Create Surveys", nameAr: "إنشاء استبيانات", module: "research" },
+  { key: "research.survey.view", name: "View Surveys & Questions", nameAr: "عرض الاستبيانات والأسئلة", module: "research" },
   { key: "research.survey.edit", name: "Edit Surveys", nameAr: "تعديل الاستبيانات", module: "research" },
   { key: "research.survey.delete", name: "Delete Surveys", nameAr: "حذف الاستبيانات", module: "research" },
   { key: "research.participant.view", name: "View Participants", nameAr: "عرض المشاركين", module: "research" },
