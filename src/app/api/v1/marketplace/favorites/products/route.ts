@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { getEffectiveOrgId } from '@/lib/rbac';
 import { marketplaceService } from '@/modules/marketplace';
 import { addFavoriteProductSchema, favoriteListQuerySchema } from '@/modules/marketplace/validators/marketplace-schemas';
 import { success, successPaginated, error, createRequestId } from '@/modules/shared/utils/response-envelope';
 import { MarketplaceErrors } from '@/modules/shared/errors/marketplace.errors';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    const orgId = session?.user?.id ? await getEffectiveOrgId(session.user.id) : null;
+    const orgId = await getEffectiveOrgId(sessionUserId);
     if (!orgId) {
       return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Organization required'), { status: 401 });
     }
@@ -20,12 +19,11 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(error('INTERNAL_ERROR', 'Error fetching favorite products'), { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    const orgId = session?.user?.id ? await getEffectiveOrgId(session.user.id) : null;
+    const orgId = await getEffectiveOrgId(sessionUserId);
     if (!orgId) {
       return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
     }
@@ -44,4 +42,4 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error adding favorite'), { status: 500 });
   }
-}
+});

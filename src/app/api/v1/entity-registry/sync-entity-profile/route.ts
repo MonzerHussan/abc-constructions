@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server';
-import { auth } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
 import { entityRegistryService, syncEntityProfileSchema } from '@/modules/entity-registry';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { validate } from '@/modules/shared/utils/validation';
 import { logger } from '@/modules/shared/utils/logger';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
+import { withAuth } from '@/lib/auth-guard';
 
 /**
  * sync-entity-profile
@@ -13,15 +13,11 @@ import { ErrorCodes } from '@/modules/shared/utils/error-codes';
  * via Profile.userId (plain string — no FK, preserving Architecture Isolation).
  * Data teams (P2) and AI (P4) consume only Entity + Profile tables.
  */
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return Response.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = validate(syncEntityProfileSchema, body);
-    if (!parsed.success) return Response.json(parsed.response, { status: 422 });
+    if (!parsed.success) return NextResponse.json(parsed.response, { status: 422 });
 
     // SECURITY: userId ALWAYS comes from the session — never from the body.
     // Accepting a client-supplied userId would allow identity spoofing (IDOR).
@@ -31,13 +27,13 @@ export async function POST(request: NextRequest) {
     ) as Omit<NonNullable<typeof parsed.data.profile>, 'userId'>;
     const payload = {
       entity: parsed.data.entity,
-      profile: { ...profileWithoutUserId, userId: session.user.id },
+      profile: { ...profileWithoutUserId, userId: sessionUserId },
     };
 
     const result = await entityRegistryService.syncEntityProfile(payload);
-    return Response.json(success(result), { status: 201 });
+    return NextResponse.json(success(result), { status: 201 });
   } catch (err) {
     logger.error('sync-entity-profile failed', { error: err instanceof Error ? err.message : String(err) });
-    return Response.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to sync entity profile'), { status: 500 });
+    return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to sync entity profile'), { status: 500 });
   }
-}
+});
