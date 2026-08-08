@@ -18,6 +18,8 @@ const publicPaths = [
   '/api/v1/marketplace/categories',
   '/api/v1/marketplace/suppliers',
   '/api/v1/marketplace/compare',
+  // Public homepage content (admin writes via /api/admin/homepage/*)
+  '/api/homepage',
 ];
 
 // Pages requiring an authenticated session (portal pages)

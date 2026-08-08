@@ -3990,6 +3990,7 @@ model Profile {
   digitalMaturity    String?
   apiReadiness       String?
   capabilities       String[]
+  surveyData         Json?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -4103,6 +4104,62 @@ model EntityRegistryCounter {
   updatedAt DateTime @updatedAt
 }
 
+// ─── Onboarding Survey Question Bank (Isolated) ───────────────────────────
+// Stores the reusable onboarding/market-survey question bank. Isolated from the
+// Research Survey engine (Survey/SurveySection/SurveyQuestion) — no FK, no
+// coupling. Answers are persisted in full on Profile.surveyData (Json).
+
+enum OnboardingAnswerType {
+  TEXT
+  TEXTAREA
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  DROPDOWN
+  RATING
+  LINEAR_SCALE
+  YES_NO
+  EMAIL
+  PHONE
+  DATE
+}
+
+model OnboardingQuestion {
+  id           String               @id @default(cuid())
+  category     String
+  questionText String
+  answerType   OnboardingAnswerType
+  options      Json?
+  order        Int                  @default(0)
+  isActive     Boolean              @default(true)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  @@index([category])
+  @@index([category, isActive])
+}
+
+// ─── Survey Config (Admin SurveyManager) ────────────────────────────────────
+// "الأسئلة" في إدارة الاستبيان هي عناصر: الفئات (categories) والفئات الفرعية
+// (subcategories). كل عنصر قابل للترتيب والتفعيل/التعطيل والإضافة والتعديل عبر
+// واجهة SurveyManager. يتبع هذا النموذج عقد docs/api/survey-config-contract.md.
+// id مفتاح مستقر (slug/cuid) يُحافظ عليه عبر الإصدارات لربط بيانات الردود.
+
+model SurveyConfigItem {
+  id        String   @id
+  parentId  String?
+  type      String
+  labelEn   String
+  labelAr   String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([type])
+  @@index([isActive])
+}
+
 // ─── AI Module (Sprint AI-1b — BOQ Intelligence) ───────────────────────────
 // All models are additive and isolated to the AI domain. Tenant data is
 // scoped by orgId (org isolation). AiExtractionVersion is a platform-level
@@ -4179,4 +4236,84 @@ model AiExtractionVersion {
   schema     Json
   deployedAt DateTime  @default(now())
   active     Boolean   @default(false)
+}
+
+// ============================
+// Homepage CMS Models
+// ============================
+
+model HomepageContent {
+  id                  String   @id @default(cuid())
+  introTitle          String
+  introTitleEn        String?
+  introTitleUr        String?
+  introBody           String
+  introBodyEn         String?
+  introBodyUr         String?
+  visionTitle         String
+  visionTitleEn       String?
+  visionTitleUr       String?
+  visionBody          String
+  visionBodyEn        String?
+  visionBodyUr        String?
+  primaryCtaLabel     String   @default("ابدأ الآن مجاناً")
+  primaryCtaLabelEn   String?  @default("Start Free Now")
+  primaryCtaLabelUr   String?
+  primaryCtaHref      String   @default("/auth/register")
+  secondaryCtaLabel   String   @default("تصفح المناقصات")
+  secondaryCtaLabelEn String?  @default("Browse Bids")
+  secondaryCtaLabelUr String?
+  secondaryCtaHref    String   @default("/tenders/projects")
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model CarouselSlide {
+  id         String   @id @default(cuid())
+  title      String
+  titleEn    String?
+  titleUr    String?
+  subtitle   String?
+  subtitleEn String?
+  subtitleUr String?
+  imageUrl   String
+  linkUrl    String?
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model VideoSection {
+  id           String   @id @default(cuid())
+  title        String
+  titleEn      String?
+  titleUr      String?
+  description  String?
+  descriptionEn String?
+  descriptionUr String?
+  videoUrl     String
+  posterUrl    String?
+  sortOrder    Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Ad {
+  id         String   @id @default(cuid())
+  title      String
+  titleEn    String?
+  titleUr    String?
+  subtitle   String?
+  subtitleEn String?
+  subtitleUr String?
+  imageUrl   String
+  linkUrl    String?
+  animation  String   @default("fade")
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

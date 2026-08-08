@@ -71,6 +71,12 @@ export const translations = {
     navJobs: "التوظيف",
     navDelivery: "خدمة التوصيل",
     navTraining: "التدريب",
+    navBids: "المناقصات",
+    navBidsSubtitle: "مناقصات المشاريع والمواد",
+    navMarketplaceTitle: "السوق",
+    navMarketplaceSubtitle: "البضائع والمشاريع والتوصيل",
+    navCommunity: "المجتمع",
+    navCommunitySubtitle: "التدريب والتوظيف",
 
     // Auth
     loginTitle: "تسجيل الدخول",
@@ -1018,6 +1024,12 @@ export const translations = {
     navJobs: "Jobs",
     navDelivery: "Delivery",
     navTraining: "Training",
+    navBids: "Bids",
+    navBidsSubtitle: "Project & material tenders",
+    navMarketplaceTitle: "Market",
+    navMarketplaceSubtitle: "Goods, projects & delivery",
+    navCommunity: "Community",
+    navCommunitySubtitle: "Training & jobs",
 
     // Auth
     loginTitle: "Login",
@@ -1964,6 +1976,12 @@ export const translations = {
     navJobs: "ملازمتیں",
     navDelivery: "ڈلیوری سروس",
     navTraining: "تربیت",
+    navBids: "ٹینڈرز",
+    navBidsSubtitle: "پروجیکٹ اور مواد کے ٹینڈرز",
+    navMarketplaceTitle: "بازار",
+    navMarketplaceSubtitle: "سامان، پراجیکٹس اور ڈلیوری",
+    navCommunity: "کمیونٹی",
+    navCommunitySubtitle: "تربیت اور ملازمتیں",
 
     // Auth
     loginTitle: "لاگ ان",
