@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { quotationService } from '@/modules/procurement';
 import { updateQuotationSchema } from '@/modules/procurement/validators/quotation-schemas';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const GET = withAuth(async (_request: NextRequest, { params, sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
+    const { id } = params;
     const quotation = await quotationService.findById(id);
+    // VULN-02 fix: restrict read to the quotation owner
+    if (quotation.supplierId !== sessionUserId) {
+      return NextResponse.json(error(ErrorCodes.CORE_USER_FORBIDDEN, 'Not authorized to view this quotation'), { status: 403 });
+    }
     return NextResponse.json(success(quotation, createRequestId()));
   } catch (err: unknown) {
     if (err instanceof Error && err.message === ErrorCodes.PROCUREMENT_QUOTATION_NOT_FOUND) {
@@ -20,21 +21,14 @@ export async function GET(
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error fetching quotation'), { status: 500 });
   }
-}
+});
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const PUT = withAuth(async (request: NextRequest, { params, sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
+    const { id } = params;
     const body = await request.json();
     const parsed = updateQuotationSchema.parse(body);
-    const quotation = await quotationService.update(id, parsed, session.user.id);
+    const quotation = await quotationService.update(id, parsed, sessionUserId);
     return NextResponse.json(success(quotation, createRequestId()));
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -50,19 +44,12 @@ export async function PUT(
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error updating quotation'), { status: 500 });
   }
-}
+});
 
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const DELETE = withAuth(async (_request: NextRequest, { params, sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
-    await quotationService.delete(id, session.user.id);
+    const { id } = params;
+    await quotationService.delete(id, sessionUserId);
     return NextResponse.json(success({ message: 'Quotation deleted' }, createRequestId()));
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -78,4 +65,4 @@ export async function DELETE(
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error deleting quotation'), { status: 500 });
   }
-}
+});
