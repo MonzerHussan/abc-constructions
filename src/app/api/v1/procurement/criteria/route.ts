@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { evaluationService } from '@/modules/procurement';
 import { createCriteriaSchema, updateCriterionSchema } from '@/modules/procurement/validators/evaluation-schemas';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const rfqId = searchParams.get('rfqId') || undefined;
@@ -15,14 +15,10 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error fetching criteria'), { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = createCriteriaSchema.parse(body);
     const criteria = await evaluationService.createCriteria(parsed);
@@ -30,14 +26,10 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error creating criteria'), { status: 500 });
   }
-}
+});
 
-export async function PUT(request: NextRequest) {
+export const PUT = withAuth(async (request: NextRequest) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     if (!id) {
@@ -53,14 +45,10 @@ export async function PUT(request: NextRequest) {
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error updating criterion'), { status: 500 });
   }
-}
+});
 
-export async function DELETE(request: NextRequest) {
+export const DELETE = withAuth(async (request: NextRequest) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     if (!id) {
@@ -74,4 +62,4 @@ export async function DELETE(request: NextRequest) {
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error deleting criterion'), { status: 500 });
   }
-}
+});

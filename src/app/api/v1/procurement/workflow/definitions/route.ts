@@ -1,14 +1,11 @@
-import { auth } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
 import { workflowEngine } from '@/modules/shared/workflow/WorkflowEngine';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET() {
+export const GET = withAuth(async () => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return Response.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
     const definitions = workflowEngine.listDefinitions().map((d) => ({
       name: d.name,
       entityType: d.entityType,
@@ -18,8 +15,8 @@ export async function GET() {
       terminalStates: d.terminalStates,
       guards: d.guards,
     }));
-    return Response.json(success(definitions));
+    return NextResponse.json(success(definitions));
   } catch {
-    return Response.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to list workflow definitions'), { status: 500 });
+    return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to list workflow definitions'), { status: 500 });
   }
-}
+});

@@ -1,31 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { evaluationService } from '@/modules/procurement';
 import { createApprovalSchema, approveDecisionSchema } from '@/modules/procurement/validators/evaluation-schemas';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const POST = withAuth(async (request: NextRequest, { params, sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
+    const { id } = params;
     const body = await request.json();
 
     if (body.action) {
       const parsed = approveDecisionSchema.parse(body);
-      const approval = await evaluationService.decideApproval(id, session.user.id, parsed);
+      const approval = await evaluationService.decideApproval(id, sessionUserId, parsed);
       return NextResponse.json(success(approval, createRequestId()));
     }
 
     const parsed = createApprovalSchema.parse(body);
-    const approval = await evaluationService.requestApproval(id, session.user.id, parsed);
+    const approval = await evaluationService.requestApproval(id, sessionUserId, parsed);
     return NextResponse.json(success(approval, createRequestId()), { status: 201 });
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -47,4 +40,4 @@ export async function POST(
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error processing approval'), { status: 500 });
   }
-}
+});
