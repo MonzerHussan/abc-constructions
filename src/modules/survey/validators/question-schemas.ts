@@ -31,7 +31,7 @@ export const questionOptionSchema = z.object({
   value: z.string().optional(),
   sortOrder: z.coerce.number().int().optional(),
   hasCustom: z.boolean().optional(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const createSurveyQuestionSchema = z
@@ -55,11 +55,11 @@ export const createSurveyQuestionSchema = z
     lowValue: z.coerce.number().int().nullable().optional(),
     highValue: z.coerce.number().int().nullable().optional(),
     stepValue: z.coerce.number().int().nullable().optional(),
-    matrixRows: z.record(z.unknown()).nullable().optional(),
-    matrixColumns: z.record(z.unknown()).nullable().optional(),
-    validationRules: z.record(z.unknown()).nullable().optional(),
-    visibilityLogic: z.record(z.unknown()).nullable().optional(),
-    metadata: z.record(z.unknown()).nullable().optional(),
+    matrixRows: z.record(z.string(), z.unknown()).nullable().optional(),
+    matrixColumns: z.record(z.string(), z.unknown()).nullable().optional(),
+    validationRules: z.record(z.string(), z.unknown()).nullable().optional(),
+    visibilityLogic: z.record(z.string(), z.unknown()).nullable().optional(),
+    metadata: z.record(z.string(), z.unknown()).nullable().optional(),
     options: z.array(questionOptionSchema).optional(),
   })
   .refine(
@@ -96,11 +96,11 @@ export const updateSurveyQuestionSchema = z
     lowValue: z.coerce.number().int().nullable().optional(),
     highValue: z.coerce.number().int().nullable().optional(),
     stepValue: z.coerce.number().int().nullable().optional(),
-    matrixRows: z.record(z.unknown()).nullable().optional(),
-    matrixColumns: z.record(z.unknown()).nullable().optional(),
-    validationRules: z.record(z.unknown()).nullable().optional(),
-    visibilityLogic: z.record(z.unknown()).nullable().optional(),
-    metadata: z.record(z.unknown()).nullable().optional(),
+    matrixRows: z.record(z.string(), z.unknown()).nullable().optional(),
+    matrixColumns: z.record(z.string(), z.unknown()).nullable().optional(),
+    validationRules: z.record(z.string(), z.unknown()).nullable().optional(),
+    visibilityLogic: z.record(z.string(), z.unknown()).nullable().optional(),
+    metadata: z.record(z.string(), z.unknown()).nullable().optional(),
     options: z.array(questionOptionSchema).optional(),
   })
   .refine(

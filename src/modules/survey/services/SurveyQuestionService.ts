@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import type { Prisma } from '@/generated/prisma/client';
+import { Prisma } from '@/generated/prisma/client';
 import { SurveyErrors } from '@/modules/shared/errors/survey.errors';
 import type {
   CreateSurveyQuestionInput,
@@ -15,7 +15,7 @@ const QUESTION_INCLUDE = {
   section: { select: { id: true, title: true, surveyId: true, survey: { select: { id: true, title: true } } } },
 } as const;
 
-function mapOptions(options?: CreateSurveyQuestionInput['options']): Prisma.QuestionOptionCreateManyInput[] {
+function mapOptions(options?: CreateSurveyQuestionInput['options']): Prisma.QuestionOptionCreateWithoutQuestionInput[] {
   return (options ?? []).map((o, index) => ({
     label: o.label,
     labelEn: o.labelEn ?? null,
@@ -23,7 +23,7 @@ function mapOptions(options?: CreateSurveyQuestionInput['options']): Prisma.Ques
     value: o.value ?? o.label,
     sortOrder: o.sortOrder ?? index,
     hasCustom: o.hasCustom ?? false,
-    metadata: o.metadata,
+    metadata: o.metadata as Prisma.InputJsonValue | undefined,
   }));
 }
 
@@ -31,6 +31,12 @@ function validateChoiceOptions(questionType: string, options?: unknown[] | null)
   if (CHOICE_TYPES.has(questionType) && (!options || options.length < 2)) {
     throw new Error(SurveyErrors.SURVEY_QUESTION_VALIDATION);
   }
+}
+
+function toJsonField(value: unknown): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return Prisma.JsonNull;
+  return value as Prisma.InputJsonValue;
 }
 
 export class SurveyQuestionService {
@@ -104,11 +110,11 @@ export class SurveyQuestionService {
         lowValue: input.lowValue ?? null,
         highValue: input.highValue ?? null,
         stepValue: input.stepValue ?? null,
-        matrixRows: input.matrixRows ?? undefined,
-        matrixColumns: input.matrixColumns ?? undefined,
-        validationRules: input.validationRules ?? undefined,
-        visibilityLogic: input.visibilityLogic ?? undefined,
-        metadata: input.metadata ?? undefined,
+        matrixRows: toJsonField(input.matrixRows),
+        matrixColumns: toJsonField(input.matrixColumns),
+        validationRules: toJsonField(input.validationRules),
+        visibilityLogic: toJsonField(input.visibilityLogic),
+        metadata: toJsonField(input.metadata),
         options: input.options ? { create: mapOptions(input.options) } : undefined,
       },
       include: QUESTION_INCLUDE,
@@ -151,11 +157,11 @@ export class SurveyQuestionService {
       lowValue: input.lowValue,
       highValue: input.highValue,
       stepValue: input.stepValue,
-      matrixRows: input.matrixRows,
-      matrixColumns: input.matrixColumns,
-      validationRules: input.validationRules,
-      visibilityLogic: input.visibilityLogic,
-      metadata: input.metadata,
+      matrixRows: toJsonField(input.matrixRows),
+      matrixColumns: toJsonField(input.matrixColumns),
+      validationRules: toJsonField(input.validationRules),
+      visibilityLogic: toJsonField(input.visibilityLogic),
+      metadata: toJsonField(input.metadata),
     };
 
     const question = await prisma.$transaction(async (tx) => {
