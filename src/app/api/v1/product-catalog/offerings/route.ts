@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { productCatalogService } from '@/modules/product-catalog';
 import { createOfferingSchema, offeringListQuerySchema } from '@/modules/product-catalog/validators/product-catalog-schemas';
 import { success, successPaginated, error } from '@/modules/shared/utils/response-envelope';
 import { ProductCatalogErrors } from '@/modules/shared/errors/product-catalog.errors';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const query = offeringListQuerySchema.parse(Object.fromEntries(searchParams));
@@ -15,17 +15,13 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(error('INTERNAL_ERROR', 'Error fetching offerings'), { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = createOfferingSchema.parse(body);
-    const offering = await productCatalogService.createOffering(parsed, session.user.id);
+    const offering = await productCatalogService.createOffering(parsed, sessionUserId);
     return NextResponse.json(success(offering, createRequestId()), { status: 201 });
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -38,4 +34,4 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error creating offering'), { status: 500 });
   }
-}
+});
