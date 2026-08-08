@@ -10,7 +10,7 @@ const BLOCKED_STATUS = 403;
 const NOT_FOUND_STATUS = 404;
 const CONFLICT_STATUS = 409;
 
-export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId, sessionRole }: { sessionUserId: string; sessionRole?: string; params: Record<string, string> }) => {
   try {
     const body = await request.json();
     const parsed = validate(workflowTransitionSchema, body);
@@ -20,7 +20,7 @@ export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { s
     const result = await procurementWorkflowOrchestrator.execute(entityType, action, {
       entityId,
       actorId: sessionUserId,
-      actorRole: undefined,
+      actorRole: sessionRole,
       reason,
       metadata,
     });

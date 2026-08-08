@@ -29,6 +29,8 @@ const adminLinks = [
   { href: "/admin/audit-log", icon: Clock, label: "سجل التدقيق", labelEn: "Audit Log" },
   { href: "/admin/crm", icon: Users, label: "CRM", labelEn: "CRM" },
   { href: "/admin/research", icon: FlaskConical, label: "مختبر الأبحاث", labelEn: "Research Lab" },
+  { href: "/admin/surveys", icon: ClipboardList, label: "اختبار الإعداد", labelEn: "Surveys" },
+  { href: "/admin/surveys/analytics", icon: PieChart, label: "تحليلات اختبار الإعداد", labelEn: "Survey Analytics" },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
