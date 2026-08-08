@@ -125,7 +125,13 @@ export async function submitOnboarding(
     };
   }
 
-  if (!survey.hasProjects || !survey.budgetRange || !survey.urgency) {
+  if (
+    survey.selectedCategories.length === 0 ||
+    survey.subcategories.length === 0 ||
+    !survey.hasProjects ||
+    !survey.budgetRange ||
+    !survey.urgency
+  ) {
     return {
       success: false,
       message: "Survey is incomplete",
@@ -159,8 +165,10 @@ export async function submitOnboarding(
     profile: {
       businessActivity: profile.accountType,
       companySize: survey.budgetRange,
-      relevantCategories: survey.lookingFor,
-      capabilities: survey.projectLocations,
+      relevantCategories: survey.selectedCategories,
+      // TODO(P2/Data Architect): Add a dedicated `subcategories` column to the
+      // Profile model and migrate these out of `capabilities`.
+      capabilities: survey.subcategories,
     },
   };
 
