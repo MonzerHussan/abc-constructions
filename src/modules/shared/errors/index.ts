@@ -12,6 +12,7 @@ import { InvoicingErrors } from '@/modules/shared/errors/invoicing.errors';
 import { SupplierNetworkErrors } from '@/modules/shared/errors/supplier-network.errors';
 import { ProductCatalogErrors } from '@/modules/shared/errors/product-catalog.errors';
 import { EntityRegistryErrors } from '@/modules/shared/errors/entity-registry.errors';
+import { SurveyErrors } from '@/modules/shared/errors/survey.errors';
 
 export { CoreErrors };
 export { ProcurementErrors };
@@ -27,6 +28,7 @@ export { InvoicingErrors };
 export { SupplierNetworkErrors };
 export { ProductCatalogErrors };
 export { EntityRegistryErrors };
+export { SurveyErrors };
 
 export const ErrorCodes = {
   ...CoreErrors,
@@ -43,6 +45,7 @@ export const ErrorCodes = {
   ...SupplierNetworkErrors,
   ...ProductCatalogErrors,
   ...EntityRegistryErrors,
+  ...SurveyErrors,
 } as const;
 
 export type ErrorCode = (typeof ErrorCodes)[keyof typeof ErrorCodes];
