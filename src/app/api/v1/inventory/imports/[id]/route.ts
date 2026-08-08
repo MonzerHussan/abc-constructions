@@ -3,10 +3,11 @@ import { inventoryService } from '@/modules/inventory';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { InventoryErrors } from '@/modules/shared/errors/inventory.errors';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const GET = withAuth(async (_request: NextRequest, { params }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
+    const { id } = params;
     const imp = await inventoryService.findImportById(id);
     return NextResponse.json(success(imp, createRequestId()));
   } catch (err: unknown) {
@@ -15,4 +16,4 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error fetching import'), { status: 500 });
   }
-}
+});

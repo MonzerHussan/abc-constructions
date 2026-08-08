@@ -3,8 +3,9 @@ import { inventoryService } from '@/modules/inventory';
 import { stockLevelQuerySchema } from '@/modules/inventory/validators/inventory-schemas';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const query = stockLevelQuerySchema.parse(Object.fromEntries(searchParams));
@@ -13,4 +14,4 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(error('INTERNAL_ERROR', 'Error fetching stock levels'), { status: 500 });
   }
-}
+});
