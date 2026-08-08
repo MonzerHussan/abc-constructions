@@ -137,3 +137,36 @@
 - `docs/security/security-audit.md` — التدقيق الأمني السابق
 - `docs/technical-debt.md` TD-14 — مراجعة IDOR الشاملة (موجودة سابقاً)
 - `prisma/schema.prisma` models: `User`, `UserOrganization`, `Role`, `Permission`, `RolePermission`
+
+---
+
+## 8. حالة المعالجة (Update — 2026-08-08)
+
+**النطاق المنفَّذ:** المعالجة الأمنية P0/P1/P2 (VULN-01 + VULN-02) عبر الحارس المركزي `withAuth` في `src/lib/auth-guard.ts`.
+
+### 8.1 ما نُفِّذ
+
+- **الحارس المركزي** `src/lib/auth-guard.ts`: `withAuth(fn, opts)` يتضمن فحص جلسة (session.user.id)، وفحص ملكية via `sessionUserId`، مع `withPermission` (RBAC) جاهزة للتفعيل عند توفر صلاحيات مزروعة — **لا تم زرعها** بقرار من حارس البوابة حتى اعتماد الإدارة (لا `seed.ts`).
+- **التغطية:** 100% من الـ endpoints الكتابة/الحذف في النطاق تحوّلت إلى `withAuth` عبر دفعات مؤمّنة، بما فيها:
+  - **P0:** quotations, purchase-orders, invoices (commit `48eee76`).
+  - **P1 inventory:** stock-items (route/[id]/adjust/count/release/reserve), imports, stock-levels, transactions, transfers, warehouses (commit `cc4357f`).
+  - **P1 quality:** inspections + subroutes, ncrs, certificates (commit `80c1771`).
+  - **P1 supplier-network:** profiles, capabilities, documents, ratings, relationships (commit `9d80688`).
+  - **P1 procurement المتبقي:** rfqs subroutes, PO subroutes, quotations subroutes, purchase-requests, deliveries, criteria, evaluations, workflow (commit `4fe1bb9`).
+  - **P2:** entity-registry (entities, me, profiles, survey-responses, syncs), marketplace favorites + reviews (commit `eb42e94`).
+  - **دفعة أخيرة:** reservations (كان GET غير محمي)، marketplace/rfq، product-catalog (products/offerings/units)، tenders (projects/materials/awards/bids)، legacy `purchase-requests/route.ts`، وإزالة import ميت من `procurement/rfqs/route.ts` (commit `5ec6e2e`).
+- **قوائم المراجعات العامة** (`marketplace/reviews/*/list`) تُركت عامة عن قصد (محتوى عرض عام).
+
+### 8.2 التوصيات المتبقية (خارج النطاق الحالي)
+
+| البند | الحالة |
+|---|---|
+| VULN-03 (`any` في `rbac.ts`) | معلَّم TD — لم يُنفَّذ |
+| VULN-04 (توثيق ADMIN bypass) | لم يُنشأ بعد |
+| VULN-05 (تمرير `organizationId` صريح) | يعتمد على توفّر الصلاحيات المزروعة |
+| تفعيل `requirePermission` الفعلي (RBAC granular) | **معلَّق** على زرع الصلاحيات في DB (قرار الإدارة) |
+| تصحيح أخطاء `tsc` pre-existing في `src/modules/tenders/*` (مفاتيح `ErrorCodes`) | تخصّ Feature أخرى غير مكتملة وغير ملتزمة |
+
+### 8.3 خلاصة
+
+المرحلة P0 (المصادقة + الملكية) **مكتملة** على كل endpoints القراءة/الكتابة/الحذف الحساسة. يبقى تفعيل RBAC الدقيق متوقفاً على قرار زرع الصلاحيات. «التفويض الخشن + الملكية» يُعتبر آمنًا للـ Beta المحدود تحت الإشراف.
