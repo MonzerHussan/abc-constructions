@@ -3985,6 +3985,7 @@ model Profile {
   annualVolume       String?
   businessActivity   String?
   relevantCategories String[]
+  subcategories      String[]
   hasCatalog         Boolean  @default(false)
   digitalMaturity    String?
   apiReadiness       String?

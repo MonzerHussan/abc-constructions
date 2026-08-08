@@ -274,12 +274,13 @@ The onboarding survey (Step 3 of 3) now uses a dynamic category/subcategory stru
     "businessActivity": "supplier",
     "companySize": "medium",
     "relevantCategories": ["construction-materials", "electrical-low-current"],
-    "capabilities": ["portland-cement", "reinforcement-steel", "power-cables"]
+    "subcategories": ["portland-cement", "reinforcement-steel", "power-cables"],
+    "capabilities": ["riyadh", "jeddah"]
   }
 }
 ```
 
-> **Note:** Subcategories are currently stored in the `capabilities` field pending a DB migration to add a dedicated `subcategories` column (coordinate with Programmer 2).
+> **Note:** `subcategories` are now stored in a dedicated `subcategories` column on the Profile table (migration `20260808_add_profile_subcategories`). `capabilities` is reserved for project locations.
 
 ---
 
