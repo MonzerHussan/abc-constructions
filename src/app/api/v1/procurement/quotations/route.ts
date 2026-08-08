@@ -1,31 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { quotationService } from '@/modules/procurement';
 import { createQuotationSchema, quotationListQuerySchema } from '@/modules/procurement/validators/quotation-schemas';
 import { success, successPaginated, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
     const { searchParams } = new URL(request.url);
     const query = quotationListQuerySchema.parse(Object.fromEntries(searchParams));
+    // VULN-02 fix: scope to user's quotations by default
+    if (!query.supplierId) {
+      (query as Record<string, unknown>).supplierId = sessionUserId;
+    }
     const result = await quotationService.list(query);
     return NextResponse.json(successPaginated(result.items, { page: result.page, limit: result.limit, total: result.total }, createRequestId()));
-  } catch (err: unknown) {
+  } catch {
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error fetching quotations'), { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = createQuotationSchema.parse(body);
-    const quotation = await quotationService.create(parsed, session.user.id);
+    const quotation = await quotationService.create(parsed, sessionUserId);
     return NextResponse.json(success(quotation, createRequestId()), { status: 201 });
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -41,4 +41,4 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error creating quotation'), { status: 500 });
   }
-}
+});
