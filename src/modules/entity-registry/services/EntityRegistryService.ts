@@ -17,6 +17,11 @@ import type {
   SyncEntityProfileInput,
   SyncSupplierInput,
 } from '@/modules/entity-registry/validators/entity-registry-schemas';
+import type {
+  CreateOnboardingQuestionInput,
+  UpdateOnboardingQuestionInput,
+  OnboardingQuestionListQuery,
+} from '@/modules/entity-registry/validators/onboarding-question-schemas';
 
 /**
  * Entity Registry Service
@@ -190,10 +195,16 @@ export class EntityRegistryService {
     const existing = await prisma.profile.findUnique({ where: { entityId: input.entityId } });
     const profileId = existing?.profileId ?? (await this.generateProfileId());
 
+    const { surveyData, ...rest } = input;
+    const data = {
+      ...rest,
+      surveyData: (surveyData as Prisma.JsonValue | undefined) ?? Prisma.JsonNull,
+    };
+
     const profile = await prisma.profile.upsert({
       where: { entityId: input.entityId },
-      create: { profileId, ...input },
-      update: input,
+      create: { profileId, ...data },
+      update: data,
     });
 
     await eventBus.publish({
@@ -365,10 +376,12 @@ export class EntityRegistryService {
         annualVolume: input.profile?.annualVolume ?? null,
         businessActivity: input.profile?.businessActivity ?? null,
         relevantCategories: input.profile?.relevantCategories ?? [],
+        subcategories: input.profile?.subcategories ?? [],
         hasCatalog: input.profile?.hasCatalog ?? false,
         digitalMaturity: input.profile?.digitalMaturity ?? null,
         apiReadiness: input.profile?.apiReadiness ?? null,
         capabilities: input.profile?.capabilities ?? [],
+        surveyData: (input.profile?.surveyData as Prisma.JsonValue | undefined) ?? Prisma.JsonNull,
       };
 
       const profile = await tx.profile.create({
@@ -423,10 +436,12 @@ export class EntityRegistryService {
         annualVolume: input.profile?.annualVolume ?? null,
         businessActivity: input.profile?.businessActivity ?? null,
         relevantCategories: input.profile?.relevantCategories ?? [],
+        subcategories: input.profile?.subcategories ?? [],
         hasCatalog: input.profile?.hasCatalog ?? false,
         digitalMaturity: input.profile?.digitalMaturity ?? null,
         apiReadiness: input.profile?.apiReadiness ?? null,
         capabilities: input.profile?.capabilities ?? [],
+        surveyData: (input.profile?.surveyData as Prisma.JsonValue | undefined) ?? Prisma.JsonNull,
       };
 
       const profile = await tx.profile.create({
@@ -449,6 +464,99 @@ export class EntityRegistryService {
       logger.info('Entity+Profile synced to SupplierProfile', { entityId, supplierProfileId: input.supplierProfileId });
       return { entity, profile, supplierProfileId: input.supplierProfileId };
     });
+  }
+
+  // ---------- Onboarding Survey Question Bank (Isolated) ----------
+
+  /**
+   * Lists onboarding survey questions with optional category/answerType/isActive filters.
+   * ISOLATED: this is the onboarding question bank, separate from the Research Survey engine.
+   */
+  async listOnboardingQuestions(query: OnboardingQuestionListQuery) {
+    const { page, limit, category, answerType, isActive } = query;
+    const where: Record<string, unknown> = {};
+    if (category) where.category = category;
+    if (answerType) where.answerType = answerType;
+    if (isActive !== undefined) where.isActive = isActive;
+
+    const [items, total] = await Promise.all([
+      prisma.onboardingQuestion.findMany({
+        where,
+        orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+      prisma.onboardingQuestion.count({ where }),
+    ]);
+
+    return { items, total, page, limit };
+  }
+
+  async getOnboardingQuestion(id: string) {
+    const question = await prisma.onboardingQuestion.findUnique({ where: { id } });
+    if (!question) throw new Error(EntityRegistryErrors.ONBOARDING_QUESTION_NOT_FOUND);
+    return question;
+  }
+
+  async createOnboardingQuestion(input: CreateOnboardingQuestionInput) {
+    const question = await prisma.onboardingQuestion.create({
+      data: {
+        category: input.category,
+        questionText: input.questionText,
+        answerType: input.answerType,
+        options: (input.options as Prisma.JsonValue | undefined) ?? Prisma.JsonNull,
+        order: input.order ?? 0,
+        isActive: input.isActive ?? true,
+      },
+    });
+    logger.info('Onboarding question created', { id: question.id, category: question.category });
+    return question;
+  }
+
+  async updateOnboardingQuestion(id: string, input: UpdateOnboardingQuestionInput) {
+    const existing = await prisma.onboardingQuestion.findUnique({ where: { id } });
+    if (!existing) throw new Error(EntityRegistryErrors.ONBOARDING_QUESTION_NOT_FOUND);
+
+    const question = await prisma.onboardingQuestion.update({
+      where: { id },
+      data: {
+        category: input.category,
+        questionText: input.questionText,
+        answerType: input.answerType,
+        options: input.options !== undefined ? ((input.options as Prisma.JsonValue) ?? Prisma.JsonNull) : undefined,
+        order: input.order,
+        isActive: input.isActive,
+      },
+    });
+    logger.info('Onboarding question updated', { id });
+    return question;
+  }
+
+  async deleteOnboardingQuestion(id: string) {
+    const existing = await prisma.onboardingQuestion.findUnique({ where: { id } });
+    if (!existing) throw new Error(EntityRegistryErrors.ONBOARDING_QUESTION_NOT_FOUND);
+
+    await prisma.onboardingQuestion.delete({ where: { id } });
+    logger.info('Onboarding question deleted', { id });
+    return { id };
+  }
+
+  // ---------- Profile surveyData (bridge) ----------
+
+  /**
+   * Persists the full onboarding/market-survey answers on the user's Profile.
+   * BRIDGE: resolves the entity via Profile.userId (plain string, no FK).
+   */
+  async saveSurveyData(userId: string, surveyData: Record<string, unknown>) {
+    const profile = await prisma.profile.findFirst({ where: { userId } });
+    if (!profile) throw new Error(EntityRegistryErrors.PROFILE_NOT_FOUND);
+
+    const updated = await prisma.profile.update({
+      where: { id: profile.id },
+      data: { surveyData: (surveyData as Prisma.JsonValue) ?? Prisma.JsonNull },
+    });
+    logger.info('Profile surveyData saved', { profileId: profile.profileId, userId });
+    return updated;
   }
 }
 

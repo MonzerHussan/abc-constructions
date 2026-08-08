@@ -9,6 +9,7 @@ import {
   DollarSign, Newspaper, Headphones, Clock, Menu, X,
   Briefcase, ShoppingCart, Settings, BarChart3, GraduationCap,
   TreePine, Megaphone, Scale, FlaskConical, Receipt,
+  ClipboardList, PieChart,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -21,6 +22,9 @@ const adminLinks = [
   { href: "/admin/procurement", icon: ShoppingCart, label: "المشتريات", labelEn: "Procurement" },
   { href: "/admin/finance", icon: DollarSign, label: "المالية", labelEn: "Finance" },
   { href: "/admin/content", icon: Newspaper, label: "المحتوى", labelEn: "Content" },
+  { href: "/admin/homepage", icon: LayoutDashboard, label: "الصفحة الرئيسية", labelEn: "Homepage" },
+  { href: "/admin/surveys", icon: ClipboardList, label: "إدارة الاستبيان", labelEn: "Survey Manager" },
+  { href: "/admin/surveys/analytics", icon: PieChart, label: "تحليلات الاستبيان", labelEn: "Survey Analytics" },
   { href: "/admin/support", icon: Headphones, label: "خدمة العملاء", labelEn: "Support" },
   { href: "/admin/audit-log", icon: Clock, label: "سجل التدقيق", labelEn: "Audit Log" },
   { href: "/admin/crm", icon: Users, label: "CRM", labelEn: "CRM" },

@@ -15,6 +15,7 @@ vi.mock('@/lib/prisma', () => ({
       findFirst: vi.fn(),
       findMany: vi.fn(),
       create: vi.fn(),
+      update: vi.fn(),
       upsert: vi.fn(),
     },
     interaction: {
@@ -41,6 +42,14 @@ vi.mock('@/lib/prisma', () => ({
     },
     entityRegistryCounter: {
       upsert: vi.fn(),
+    },
+    onboardingQuestion: {
+      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      count: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
     },
   },
 }));
@@ -151,5 +160,102 @@ describe('EntityRegistryService security (userId always from session)', () => {
     expect(prisma.supplierProfile.update).toHaveBeenCalledWith(
       expect.objectContaining({ where: { id: 'sp1' }, data: { entityId: 'ENTITY-00001' } }),
     );
+  });
+});
+
+describe('EntityRegistryService onboarding question bank (isolated)', () => {
+  let service: EntityRegistryService;
+
+  beforeEach(() => {
+    service = new EntityRegistryService();
+    vi.clearAllMocks();
+  });
+
+  it('creates an onboarding question with options serialized to Json', async () => {
+    (prisma.onboardingQuestion.create as ReturnType<typeof vi.fn>).mockResolvedValue({
+      id: 'q1',
+      category: 'business',
+      questionText: 'What is your company size?',
+      answerType: 'SINGLE_CHOICE',
+      options: [{ label: '1-10', value: '1-10' }],
+      order: 0,
+      isActive: true,
+    });
+
+    const result = await service.createOnboardingQuestion({
+      category: 'business',
+      questionText: 'What is your company size?',
+      answerType: 'SINGLE_CHOICE',
+      options: [{ label: '1-10', value: '1-10' }],
+      isActive: true,
+    });
+
+    expect(result.id).toBe('q1');
+    expect(prisma.onboardingQuestion.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          category: 'business',
+          answerType: 'SINGLE_CHOICE',
+          options: [{ label: '1-10', value: '1-10' }],
+        }),
+      }),
+    );
+  });
+
+  it('throws ONBOARDING_QUESTION_NOT_FOUND for missing question on update', async () => {
+    (prisma.onboardingQuestion.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+
+    await expect(
+      service.updateOnboardingQuestion('missing', { questionText: 'X' }),
+    ).rejects.toThrow('ONBOARDING_QUESTION_NOT_FOUND');
+  });
+
+  it('lists onboarding questions with category filter', async () => {
+    (prisma.onboardingQuestion.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([
+      { id: 'q1', category: 'business' },
+    ]);
+    (prisma.onboardingQuestion.count as ReturnType<typeof vi.fn>).mockResolvedValue(1);
+
+    const result = await service.listOnboardingQuestions({ page: 1, limit: 20, category: 'business', isActive: undefined });
+
+    expect(result.total).toBe(1);
+    expect(prisma.onboardingQuestion.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { category: 'business' },
+        orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
+      }),
+    );
+  });
+
+  it('deletes an existing onboarding question', async () => {
+    (prisma.onboardingQuestion.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 'q1' });
+    (prisma.onboardingQuestion.delete as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 'q1' });
+
+    const result = await service.deleteOnboardingQuestion('q1');
+    expect(result).toEqual({ id: 'q1' });
+    expect(prisma.onboardingQuestion.delete).toHaveBeenCalledWith({ where: { id: 'q1' } });
+  });
+
+  it('saveSurveyData throws PROFILE_NOT_FOUND when user has no profile', async () => {
+    (prisma.profile.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue(null);
+
+    await expect(service.saveSurveyData('user-1', { companySize: '1-10' })).rejects.toThrow('PROFILE_NOT_FOUND');
+  });
+
+  it('saveSurveyData persists survey answers on the resolved profile', async () => {
+    (prisma.profile.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue({ id: 'p1', profileId: 'PROF-00001' });
+    (prisma.profile.update as ReturnType<typeof vi.fn>).mockResolvedValue({
+      id: 'p1',
+      profileId: 'PROF-00001',
+      surveyData: { companySize: '1-10' },
+    });
+
+    const result = await service.saveSurveyData('user-1', { companySize: '1-10' });
+
+    expect(result.surveyData).toEqual({ companySize: '1-10' });
+    expect(prisma.profile.update).toHaveBeenCalledWith({
+      where: { id: 'p1' },
+      data: { surveyData: { companySize: '1-10' } },
+    });
   });
 });
