@@ -14,8 +14,10 @@ const prismaMock = vi.hoisted(() => {
   return { onboardingQuestion };
 });
 
+const requirePermissionMock = vi.hoisted(() => vi.fn());
+
 vi.mock('@/lib/auth', () => ({ auth: authMock }));
-vi.mock('@/lib/rbac', () => ({ requirePermission: vi.fn() }));
+vi.mock('@/lib/rbac', () => ({ requirePermission: requirePermissionMock }));
 vi.mock('@/lib/prisma', () => ({ prisma: prismaMock }));
 
 vi.mock('@/modules/shared/utils/logger', () => ({
@@ -61,12 +63,27 @@ describe('Question Bank API — full CRUD flow (used by QuestionBankManager)', (
   beforeEach(() => {
     vi.clearAllMocks();
     authMock.mockResolvedValue({ user: USER });
+    requirePermissionMock.mockResolvedValue({ allowed: true, error: null, status: 200 });
   });
 
   it('401 without a session', async () => {
     authMock.mockResolvedValue(null);
     const res = await LIST_GET(jsonReq('http://localhost/api/v1/entity-registry/survey/questions'));
     expect(res.status).toBe(401);
+  });
+
+  it('403 write without research.survey.edit permission', async () => {
+    requirePermissionMock.mockResolvedValue({ allowed: false, error: 'Forbidden', status: 403 });
+    const res = await CREATE_POST(
+      jsonReq('http://localhost/api/v1/entity-registry/survey/questions', {
+        category: 'construction-materials',
+        questionText: 'Unauthorized write?',
+        answerType: 'MULTIPLE_CHOICE',
+        options: [{ label: 'A' }, { label: 'B' }],
+      }),
+    );
+    expect(res.status).toBe(403);
+    expect(prismaMock.onboardingQuestion.create).not.toHaveBeenCalled();
   });
 
   it('lists questions (paginated)', async () => {
