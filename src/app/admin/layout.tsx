@@ -9,7 +9,7 @@ import {
   DollarSign, Newspaper, Headphones, Clock, Menu, X,
   Briefcase, ShoppingCart, Settings, BarChart3, GraduationCap,
   TreePine, Megaphone, Scale, FlaskConical, Receipt,
-  ClipboardList, PieChart,
+  ClipboardList, PieChart, ListChecks,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -24,13 +24,12 @@ const adminLinks = [
   { href: "/admin/content", icon: Newspaper, label: "المحتوى", labelEn: "Content" },
   { href: "/admin/homepage", icon: LayoutDashboard, label: "الصفحة الرئيسية", labelEn: "Homepage" },
   { href: "/admin/surveys", icon: ClipboardList, label: "إدارة الاستبيان", labelEn: "Survey Manager" },
+  { href: "/admin/surveys/questions", icon: ListChecks, label: "بنك الأسئلة", labelEn: "Question Bank" },
   { href: "/admin/surveys/analytics", icon: PieChart, label: "تحليلات الاستبيان", labelEn: "Survey Analytics" },
   { href: "/admin/support", icon: Headphones, label: "خدمة العملاء", labelEn: "Support" },
   { href: "/admin/audit-log", icon: Clock, label: "سجل التدقيق", labelEn: "Audit Log" },
   { href: "/admin/crm", icon: Users, label: "CRM", labelEn: "CRM" },
   { href: "/admin/research", icon: FlaskConical, label: "مختبر الأبحاث", labelEn: "Research Lab" },
-  { href: "/admin/surveys", icon: ClipboardList, label: "اختبار الإعداد", labelEn: "Surveys" },
-  { href: "/admin/surveys/analytics", icon: PieChart, label: "تحليلات اختبار الإعداد", labelEn: "Survey Analytics" },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
