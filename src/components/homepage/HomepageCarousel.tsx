@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export interface SlideData {
   id: string
@@ -13,7 +14,7 @@ export interface SlideData {
   linkUrl: string | null
 }
 
-export default function HomepageCarousel({ slides, dir }: { slides: SlideData[]; dir: "rtl" | "ltr" }) {
+export default function HomepageCarousel({ slides, dir, fill }: { slides: SlideData[]; dir: "rtl" | "ltr"; fill?: boolean }) {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const count = slides.length
@@ -31,17 +32,19 @@ export default function HomepageCarousel({ slides, dir }: { slides: SlideData[];
 
   return (
     <div
-      className="relative overflow-hidden rounded-3xl"
+      className={cn("relative overflow-hidden rounded-3xl", fill && "h-full")}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div
-        className="flex transition-transform duration-700 ease-in-out"
+        className={cn("flex transition-transform duration-700 ease-in-out h-full")}
         style={{ transform: `translateX(${dir === "rtl" ? index * 100 : -index * 100}%)` }}
       >
         {slides.map((slide) => (
-          <div key={slide.id} className="min-w-full relative">
-            <div className="relative h-[360px] md:h-[440px] w-full overflow-hidden">
+          <div key={slide.id} className="min-w-full relative h-full">
+            <div
+              className={cn("relative h-[360px] md:h-[440px] w-full overflow-hidden", fill && "min-h-full")}
+            >
               <Image
                 src={slide.imageUrl}
                 alt={slide.title}
