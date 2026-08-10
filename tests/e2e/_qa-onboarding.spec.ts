@@ -23,7 +23,7 @@ async function registerSupplier(page: Page, mail: string) {
         const val = document.createElement.bind(document) as unknown;
         void val;
         el.addEventListener('click', () => {
-          if (el.type === 'file' && (window as any).__qaPendingFiles && (window as any).__qaPendingFiles.size > 0) {
+          if ((el as HTMLInputElement).type === 'file' && (window as any).__qaPendingFiles && (window as any).__qaPendingFiles.size > 0) {
             const dt = new DataTransfer();
             for (const f of (window as any).__qaPendingFiles.values()) dt.items.add(f);
             Object.defineProperty(el, 'files', { value: dt.files, configurable: true });
@@ -150,7 +150,7 @@ test.describe('QA: full onboarding flow (T1-T4, A1-A5, D1-D2)', () => {
     let successShown = 0;
     let errText = '';
     for (let i = 0; i < 8; i++) {
-      successShown = await page.getByText(/Application Received|تم استلام طلبك/i).count({ timeout: 2000 });
+      successShown = await page.getByText(/Application Received|تم استلام طلبك/i).count();
       if (successShown > 0) break;
       const errEl = await page.locator('.bg-red-50').first();
       if (await errEl.isVisible().catch(() => false)) { errText = (await errEl.textContent()) ?? ''; }
