@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
-import { ArrowRight, KeyRound, Loader2, Mail } from "lucide-react"
+import { KeyRound, Loader2, Mail } from "lucide-react"
 import { useLanguage } from "@/lib/LanguageContext"
 
 export default function ForgotPasswordPage() {
@@ -12,7 +12,6 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [sent, setSent] = useState(false)
-  const [devResetUrl, setDevResetUrl] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,10 +25,12 @@ export default function ForgotPasswordPage() {
         body: JSON.stringify({ email }),
       })
 
-const data = await res.json().catch(() => ({}))
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setError(data.message ?? "حدث خطأ أثناء إرسال الطلب. حاول لاحقاً.")
+        return
+      }
       setSent(true)
-      // في بيئة التطوير فقط يظهر رابط مباشر لتسهيل الاختبار
-      if (data.resetUrl) setDevResetUrl(data.resetUrl)
     } catch {
       setError("حدث خطأ أثناء إرسال الطلب")
     } finally {
@@ -50,20 +51,9 @@ const data = await res.json().catch(() => ({}))
             <p className="text-surface-600 mt-1">أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور</p>
           </div>
 
-          {sent || devResetUrl ? (
+          {sent ? (
             <div className="bg-success-50 border border-success-200 text-success-700 text-sm px-4 py-3 rounded-xl space-y-3">
               <p>تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني إن كان الحساب مسجلاً.</p>
-              {devResetUrl && (
-                <div>
-                  <p className="mb-1 font-medium">رابط للتجربة (بيئة التطوير):</p>
-                  <Link
-                    href={devResetUrl}
-                    className="block break-all text-secondary-600 font-bold hover:text-secondary-700"
-                  >
-                    {devResetUrl}
-                  </Link>
-                </div>
-              )}
               <Link href="/auth/login" className="block text-secondary-600 font-bold hover:text-secondary-700">
                 العودة إلى تسجيل الدخول
               </Link>

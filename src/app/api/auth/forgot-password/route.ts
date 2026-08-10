@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 const REQUEST_LIMIT = 5
 const REQUEST_WINDOW_MS = 60 * 60 * 1000
@@ -56,17 +57,27 @@ export async function POST(request: NextRequest) {
 
     const resetUrl = `${RESET_BASE_URL}/auth/reset-password?token=${token}&email=${encodeURIComponent(user.email)}`
 
-    // HTTPS NOTES:
-    //   - في بيئة إنتاج يجب إرسال resetUrl عبر البريد الإلكتروني.
-    //   - يُرجع resetUrl هنا فقط لبيئة التطوير/الاختبار حتى يتم تفعيل مزود بريد فعلي.
-    const isProd = process.env.NODE_ENV === "production"
+    const emailResult = await sendPasswordResetEmail({
+      to: user.email,
+      name: user.name,
+      resetUrl,
+    })
+
+    if (!emailResult.ok) {
+      // لا نكشف أن الحساب موجود — النجاح الغامض، لكن دون تهيئة مزود بريد لا يمكن إيصال الرسالة.
+      console.error("Password reset email delivery failed:", emailResult.error)
+      return NextResponse.json(
+        {
+          message: "تعذر إرسال رابط إعادة التعيين حاليًا (مزود البريد غير مُهيّأ). حاول لاحقاً.",
+          retryable: true,
+        },
+        { status: 502 },
+      )
+    }
+
     const payload: Record<string, unknown> = {
       message: "تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني",
     }
-    if (!isProd) {
-      payload.resetUrl = resetUrl
-    }
-
     return NextResponse.json(payload, { status: 200 })
   } catch (error: unknown) {
     console.error("Forgot-password error:", error)
