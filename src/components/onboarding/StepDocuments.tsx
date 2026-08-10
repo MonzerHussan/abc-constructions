@@ -13,9 +13,10 @@ import { FileText, Upload, X, Check, AlertCircle, Loader2 } from "lucide-react";
 interface StepDocumentsProps {
   documents: OnboardingDocument[];
   onChange: (documents: OnboardingDocument[]) => void;
+  errors: Record<string, string>;
 }
 
-export function StepDocuments({ documents, onChange }: StepDocumentsProps) {
+export function StepDocuments({ documents, onChange, errors }: StepDocumentsProps) {
   const { t, dir } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -194,6 +195,12 @@ export function StepDocuments({ documents, onChange }: StepDocumentsProps) {
           <Upload className="w-4 h-4" />
           {t("obAddDocument")}
         </button>
+
+        {errors.documents && (
+          <p className="text-red-500 text-sm mt-2">
+            {t(errors.documents as TranslationKey)}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -202,18 +202,22 @@ export async function uploadDocument(
     xhr.addEventListener("load", () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         try {
-          const envelope = JSON.parse(xhr.responseText) as {
+          const parsed = JSON.parse(xhr.responseText) as {
             success?: boolean;
             data?: { url: string; fileName: string };
+            url?: string;
+            fileName?: string;
             error?: { message: string };
           };
-          if (envelope.success === false || !envelope.data) {
-            throw new Error(envelope.error?.message ?? "Upload failed");
+          if (parsed.success === false || parsed.error) {
+            throw new Error(parsed.error?.message ?? "Upload failed");
           }
-          resolve({
-            url: envelope.data.url,
-            name: envelope.data.fileName,
-          });
+          const url = parsed.data?.url ?? parsed.url;
+          const name = parsed.data?.fileName ?? parsed.fileName;
+          if (!url || !name) {
+            throw new Error("Invalid upload response");
+          }
+          resolve({ url, name });
         } catch {
           reject(new Error("Invalid upload response"));
         }
