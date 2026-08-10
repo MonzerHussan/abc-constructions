@@ -20,6 +20,14 @@ vi.mock('@/lib/rate-limit', () => ({
   getClientIp: () => '127.0.0.1',
 }));
 
+const sendPasswordResetEmailMock = vi.hoisted(() =>
+  vi.fn().mockResolvedValue({ ok: true }),
+);
+vi.mock('@/lib/email', () => ({
+  sendEmail: vi.fn().mockResolvedValue({ ok: true }),
+  sendPasswordResetEmail: sendPasswordResetEmailMock,
+}));
+
 import { POST as FORGOT_POST } from '@/app/api/auth/forgot-password/route';
 import { POST as RESET_POST } from '@/app/api/auth/reset-password/route';
 
@@ -51,9 +59,10 @@ describe('Password reset flow (forgot-password + reset-password)', () => {
     const body = await res.json();
     expect(body.message).toContain('إذا كان البريد الإلكتروني مسجلاً');
     expect(body.resetUrl).toBeUndefined();
+    expect(sendPasswordResetEmailMock).not.toHaveBeenCalled();
   });
 
-  it('forgot-password: creates a hashed token and returns dev resetUrl', async () => {
+  it('forgot-password: creates a hashed token and emails the reset link', async () => {
     prismaMock.user.findUnique.mockResolvedValue({ id: 'u1', email: 'admin@example.com', password: 'hash' });
     prismaMock.passwordResetToken.create.mockResolvedValue({ id: 'rt1' });
 
@@ -62,15 +71,35 @@ describe('Password reset flow (forgot-password + reset-password)', () => {
     );
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body.resetUrl).toContain('/auth/reset-password?token=');
-    expect(body.resetUrl).toContain('email=admin%40example.com');
+    expect(body.message).toContain('تم إرسال رابط إعادة التعيين');
+    expect(body.resetUrl).toBeUndefined();
+
+    expect(sendPasswordResetEmailMock).toHaveBeenCalledTimes(1);
+    const emailArgs = sendPasswordResetEmailMock.mock.calls[0][0];
+    expect(emailArgs.to).toBe('admin@example.com');
+    expect(emailArgs.resetUrl).toContain('/auth/reset-password?token=');
+    expect(emailArgs.resetUrl).toContain('email=admin%40example.com');
 
     const createCall = prismaMock.passwordResetToken.create.mock.calls[0][0];
-    const rawToken = body.resetUrl.split('token=')[1].split('&')[0];
+    const rawToken = emailArgs.resetUrl.split('token=')[1].split('&')[0];
     // tokenHash is a sha-256 hash (64 hex chars), never the raw token
     expect(createCall.data.tokenHash).toMatch(/^[a-f0-9]{64}$/);
     expect(createCall.data.tokenHash).not.toBe(rawToken);
     expect(createCall.data.expiresAt).toBeInstanceOf(Date);
+  });
+
+  it('forgot-password: 502 + token invalidated when email provider is unavailable', async () => {
+    prismaMock.user.findUnique.mockResolvedValue({ id: 'u1', email: 'admin@example.com', password: 'hash' });
+    prismaMock.passwordResetToken.create.mockResolvedValue({ id: 'rt1' });
+    prismaMock.passwordResetToken.update.mockResolvedValue({ id: 'rt1' });
+    sendPasswordResetEmailMock.mockResolvedValueOnce({ ok: false, error: 'No provider' });
+
+    const res = await FORGOT_POST(
+      jsonReq('http://localhost/api/auth/forgot-password', { email: 'admin@example.com' }),
+    );
+    expect(res.status).toBe(502);
+    const body = await res.json();
+    expect(body.retryable).toBe(true);
   });
 
   it('forgot-password: 429 after hitting rate limit', async () => {
@@ -161,5 +190,53 @@ describe('Password reset flow (forgot-password + reset-password)', () => {
       jsonReq('http://localhost/api/auth/reset-password', { token: 't', newPassword: 'newpass123' }),
     );
     expect(res.status).toBe(429);
+  });
+
+  it('full flow: forgot-password emails a link → reset-password consumes it → sign-in uses new password', async () => {
+    // 1) المستخدم موجود
+    prismaMock.user.findUnique.mockResolvedValue({ id: 'u1', email: 'user@example.com', password: 'old-hash' });
+    prismaMock.passwordResetToken.create.mockImplementation(async ({ data }: any) => ({
+      id: 'rt1',
+      userId: data.userId,
+      tokenHash: data.tokenHash,
+    }));
+
+    // 2) طلب الاستعادة → سيُرسل رابط عبر مزود البريد (mock يحبس القيمة الفعلية)
+    const forgotRes = await FORGOT_POST(
+      jsonReq('http://localhost/api/auth/forgot-password', { email: 'user@example.com' }),
+    );
+    expect(forgotRes.status).toBe(200);
+
+    const emailArgs = sendPasswordResetEmailMock.mock.calls[0][0];
+    const resetUrl = new URL(emailArgs.resetUrl);
+    const rawToken = resetUrl.searchParams.get('token')!;
+    expect(rawToken).toBeTruthy();
+
+    // استرداد التوكن المشفر المخزن
+    const storedToken = prismaMock.passwordResetToken.create.mock.calls[0][0];
+    expect(storedToken.data.tokenHash).not.toBe(rawToken);
+
+    // 3) المستخدم يفتح الرابط ويعيد التعيين
+    prismaMock.passwordResetToken.findUnique.mockResolvedValue({
+      id: 'rt1',
+      userId: 'u1',
+      usedAt: null,
+      expiresAt: new Date(Date.now() + 60000),
+    });
+    prismaMock.$transaction.mockResolvedValue([{ id: 'u1' }, { id: 'rt1' }]);
+
+    const resetRes = await RESET_POST(
+      jsonReq('http://localhost/api/auth/reset-password', { token: rawToken, newPassword: 'brand-new-pass' }),
+    );
+    expect(resetRes.status).toBe(200);
+
+    const userUpdate = prismaMock.user.update.mock.calls[0][0];
+    expect(userUpdate.where.id).toBe('u1');
+    expect(String(userUpdate.data.password)).toMatch(/^\$2/); // bcrypt
+
+    // 4) التوكن أصبح مُستهلكاً
+    const tokenUpdate = prismaMock.passwordResetToken.update.mock.calls[0][0];
+    expect(tokenUpdate.where.id).toBe('rt1');
+    expect(tokenUpdate.data.usedAt).toBeInstanceOf(Date);
   });
 });
