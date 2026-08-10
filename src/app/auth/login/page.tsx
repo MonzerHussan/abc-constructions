@@ -226,6 +226,15 @@ export default function LoginPage() {
             >
               {loading ? t("loading") : t("login")}
             </button>
+
+            <p className="text-center text-sm">
+              <Link
+                href="/auth/forgot-password"
+                className="text-secondary-600 font-bold hover:text-secondary-700"
+              >
+                {t("forgotPassword")}
+              </Link>
+            </p>
           </form>
 
           <p className="text-center mt-6 text-sm text-surface-600">

@@ -498,6 +498,7 @@ model User {
   bugReports              BugReport[]
   npsScores               NpsScore[]
   csatScores              CsatScore[]
+  passwordResetTokens     PasswordResetToken[]
   cesScores               CesScore[]
   journeyEvents           CustomerJourneyEvent[]
   crmLinkedContacts       CrmContact[]
@@ -556,6 +557,19 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model ProjectTender {
