@@ -15,7 +15,7 @@ This checklist validates the full **Register → Login → Onboarding Survey** f
 - [ ] DB migration `20260808_add_profile_subcategories` has been applied (`npx prisma migrate deploy`).
 - [ ] `.env` points to the staging database and `AUTH_SECRET` is set.
 
-> **Blocking gap:** `package.json` references `prisma/seed.ts` (`npm run prisma:seed`) but the file does not exist. A test-account seeder must be created or accounts must be registered through the UI.
+> **Blocking gap — RESOLVED 2026-08-10:** `prisma/seed.ts` is now present and wired via `npm run prisma:seed`. QA accounts were created through the real UI (`/auth/register`) as the stronger path; see `docs/qa/dynamic-survey-qa-report.md` §"Blocking gap".
 
 ---
 
@@ -119,5 +119,5 @@ Mobile onboarding screen must render the same 12-category / 133-subcategory surv
 | Programmer 3 (Frontend) | Ready | Survey UI + payload complete |
 | Programmer 2 (Data) | Migration ready | `20260808_add_profile_subcategories` — apply + verify |
 | Programmer 5 (Auth) | Verify | Register/login session flow |
-| Programmer 7 (QA) | Pending | Execute T1–T4, S1–S9, A1–A5, D1–D2 |
+| Programmer 7 (QA) | **Executed 2026-08-10** | All T/S/A/D items PASS — see `docs/qa/dynamic-survey-qa-report.md` |
 | CTO | Pending | Final sign-off |
