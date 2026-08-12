@@ -4180,3 +4180,81 @@ model AiExtractionVersion {
   deployedAt DateTime  @default(now())
   active     Boolean   @default(false)
 }
+
+// ─────────────────────────────────────────────
+// Governed Homepage CMS (admin-controlled layout)
+// ─────────────────────────────────────────────
+model HomepageConfig {
+  id              String   @id @default(cuid())
+  key             String   @unique
+  logoUrl         String?
+  ctaLabel        Json?
+  ctaHref         String?
+  heroTitle       Json?
+  heroSubtitle    Json?
+  heroDescription Json?
+  footerText      Json?
+  showLanguage    Boolean  @default(true)
+  showLogin       Boolean  @default(true)
+  showRegister    Boolean  @default(true)
+  updatedAt       DateTime @updatedAt
+}
+
+model HomepageZone {
+  id          String   @id @default(cuid())
+  location    String
+  contentType String   @default("TEXT")
+  title       Json?
+  body        Json?
+  mediaUrl    String?
+  link        String?
+  enabled     Boolean  @default(true)
+  order       Int      @default(0)
+  updatedAt   DateTime @updatedAt
+}
+
+model HomepageSlide {
+  id       String  @id @default(cuid())
+  title    Json?
+  subtitle Json?
+  imageUrl String
+  link     String?
+  order    Int     @default(0)
+  enabled  Boolean @default(true)
+}
+
+model HeaderMenu {
+  id      String           @id @default(cuid())
+  key     String           @unique
+  label   Json?
+  order   Int              @default(0)
+  enabled Boolean          @default(true)
+  items   HeaderMenuItem[]
+}
+
+model HeaderMenuItem {
+  id      String    @id @default(cuid())
+  menuId  String
+  label   Json?
+  href    String
+  order   Int       @default(0)
+  enabled Boolean   @default(true)
+  menu    HeaderMenu @relation(fields: [menuId], references: [id], onDelete: Cascade)
+}
+
+model FooterLink {
+  id      String  @id @default(cuid())
+  label   Json?
+  href    String
+  order   Int     @default(0)
+  enabled Boolean @default(true)
+}
+
+model HomepageAd {
+  id       String  @id @default(cuid())
+  title    Json?
+  imageUrl String?
+  link     String?
+  enabled  Boolean @default(true)
+  order    Int     @default(0)
+}

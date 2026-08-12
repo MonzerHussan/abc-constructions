@@ -7,9 +7,9 @@ const root = path.resolve(__dirname, '..');
 
 // Fix remaining Record<string, unknown> in page-level component map/filter/forEach callbacks
 const pageDirs = [
-  'src/app/admin',
-  'src/app/organization',
-  'src/app/procurement',
+  'src/app/projects/ABC/admin',
+  'src/app/projects/ABC/organization',
+  'src/app/projects/ABC/procurement',
 ];
 
 let fixed = 0;

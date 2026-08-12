@@ -23,7 +23,8 @@ async function registerSupplier(page: Page, mail: string) {
         const val = document.createElement.bind(document) as unknown;
         void val;
         el.addEventListener('click', () => {
-          if (el.type === 'file' && (window as any).__qaPendingFiles && (window as any).__qaPendingFiles.size > 0) {
+          const inputEl = el as HTMLInputElement;
+          if (inputEl.type === 'file' && (window as any).__qaPendingFiles && (window as any).__qaPendingFiles.size > 0) {
             const dt = new DataTransfer();
             for (const f of (window as any).__qaPendingFiles.values()) dt.items.add(f);
             Object.defineProperty(el, 'files', { value: dt.files, configurable: true });
@@ -35,7 +36,7 @@ async function registerSupplier(page: Page, mail: string) {
     }) as any;
     void origClick;
   });
-  await page.goto('/auth/register');
+  await page.goto('/projects/ABC/auth/register');
   const roleButtons = await page.locator('div.grid.grid-cols-2 > button').all();
   let clicked = false;
   for (const b of roleButtons) {
@@ -150,7 +151,7 @@ test.describe('QA: full onboarding flow (T1-T4, A1-A5, D1-D2)', () => {
     let successShown = 0;
     let errText = '';
     for (let i = 0; i < 8; i++) {
-      successShown = await page.getByText(/Application Received|تم استلام طلبك/i).count({ timeout: 2000 });
+      successShown = await page.getByText(/Application Received|تم استلام طلبك/i).count();
       if (successShown > 0) break;
       const errEl = await page.locator('.bg-red-50').first();
       if (await errEl.isVisible().catch(() => false)) { errText = (await errEl.textContent()) ?? ''; }
@@ -190,11 +191,11 @@ test.describe('QA: full onboarding flow (T1-T4, A1-A5, D1-D2)', () => {
     await anonPage.goto(`${base}/onboarding`, { waitUntil: 'domcontentloaded' });
     await anonPage.waitForTimeout(4000);
     console.log('[QA] T4 anon URL:', anonPage.url());
-    expect(anonPage.url().includes('/auth/login')).toBeTruthy();
+    expect(anonPage.url().includes('/projects/ABC/auth/login')).toBeTruthy();
     await anonCtx.close();
 
     // T3 — Already-onboarded user visiting /onboarding is auto-redirected
-    await page.goto('/onboarding', { waitUntil: 'domcontentloaded' });
+    await page.goto('/projects/ABC/onboarding', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(8000);
     const redirectedUrl = page.url();
     console.log('[QA] T3 redirected URL:', redirectedUrl);

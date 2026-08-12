@@ -46,15 +46,15 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 const navLabelKeys: Partial<Record<string, TranslationKey>> = {
   "/": "navHome",
-  "/tenders/projects": "navProjectTenders",
-  "/tenders/materials": "navMaterialTenders",
-  "/marketplace": "navMarketplace",
-  "/projects": "navProjects",
-  "/jobs": "navJobs",
-  "/training": "navTraining",
-  "/delivery": "navDelivery",
-  "/procurement": "navProcurement",
-  "/research": "navResearch",
+  "/projects/ABC/tenders/projects": "navProjectTenders",
+  "/projects/ABC/tenders/materials": "navMaterialTenders",
+  "/projects/ABC/marketplace": "navMarketplace",
+  "/projects/ABC/projects": "navProjects",
+  "/projects/ABC/jobs": "navJobs",
+  "/projects/ABC/training": "navTraining",
+  "/projects/ABC/delivery": "navDelivery",
+  "/projects/ABC/procurement": "navProcurement",
+  "/projects/ABC/research": "navResearch",
 };
 
 export default function Navbar() {
@@ -158,21 +158,21 @@ export default function Navbar() {
                         {t("dashboard")}
                       </Link>
                       <Link
-                        href="/organization"
+                        href="/projects/ABC/organization"
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
                         <Building2 className="w-4 h-4" />
                         {t("myOrganization")}
                       </Link>
                       <Link
-                        href="/verification"
+                        href="/projects/ABC/verification"
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
                         <ShieldCheck className="w-4 h-4" />
                         {t("verification")}
                       </Link>
                       <Link
-                        href="/settings/mfa"
+                        href="/projects/ABC/settings/mfa"
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
                         <Smartphone className="w-4 h-4" />
@@ -190,13 +190,13 @@ export default function Navbar() {
             ) : (
               <div className="flex items-center gap-2">
                 <Link
-                  href="/auth/login"
+                  href="/projects/ABC/auth/login"
                   className="px-4 py-2 text-sm font-medium text-surface-700 hover:text-surface-900"
                 >
                   {t("login")}
                 </Link>
                 <Link
-                  href="/auth/register"
+                  href="/projects/ABC/auth/register"
                   className="px-4 py-2 text-sm font-medium bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors"
                 >
                   {t("register")}

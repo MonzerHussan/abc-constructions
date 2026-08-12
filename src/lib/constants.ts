@@ -74,15 +74,15 @@ export const MATERIAL_TYPES = [
 
 export const NAV_ITEMS = [
   { href: "/", label: "الرئيسية", icon: "Home" },
-  { href: "/tenders/projects", label: "مناقصات المشاريع", icon: "FileText" },
-  { href: "/tenders/materials", label: "مناقصات المواد", icon: "Package" },
-  { href: "/marketplace", label: "سوق البضائع", icon: "Store" },
-  { href: "/projects", label: "عرض المشاريع", icon: "Building2" },
-  { href: "/jobs", label: "التوظيف", icon: "Briefcase" },
-  { href: "/training", label: "التدريب", icon: "GraduationCap" },
-  { href: "/delivery", label: "خدمة التوصيل", icon: "Truck" },
-  { href: "/procurement", label: "المشتريات", icon: "ShoppingCart" },
-  { href: "/research", label: "مختبر الأبحاث", icon: "Flask" },
+  { href: "/projects/ABC/tenders/projects", label: "مناقصات المشاريع", icon: "FileText" },
+  { href: "/projects/ABC/tenders/materials", label: "مناقصات المواد", icon: "Package" },
+  { href: "/projects/ABC/marketplace", label: "سوق البضائع", icon: "Store" },
+  { href: "/projects/ABC/projects", label: "عرض المشاريع", icon: "Building2" },
+  { href: "/projects/ABC/jobs", label: "التوظيف", icon: "Briefcase" },
+  { href: "/projects/ABC/training", label: "التدريب", icon: "GraduationCap" },
+  { href: "/projects/ABC/delivery", label: "خدمة التوصيل", icon: "Truck" },
+  { href: "/projects/ABC/procurement", label: "المشتريات", icon: "ShoppingCart" },
+  { href: "/projects/ABC/research", label: "مختبر الأبحاث", icon: "Flask" },
 ];
 
 export const COURSE_LEVELS = {
@@ -121,8 +121,8 @@ export const COURSE_CATEGORIES = [
 ] as const;
 
 export const ORG_NAV_ITEMS = [
-  { href: "/organization", label: "مؤسستي", labelEn: "My Organization", icon: "Building2" },
-  { href: "/verification", label: "التوثيق", labelEn: "Verification", icon: "ShieldCheck" },
+  { href: "/projects/ABC/organization", label: "مؤسستي", labelEn: "My Organization", icon: "Building2" },
+  { href: "/projects/ABC/verification", label: "التوثيق", labelEn: "Verification", icon: "ShieldCheck" },
 ];
 
 // ============================
@@ -334,19 +334,19 @@ export const PAYMENT_METHODS = {
 } as const;
 
 export const PROCUREMENT_NAV_ITEMS = [
-  { href: "/procurement", label: "لوحة المشتريات", labelEn: "Procurement Dashboard", icon: "ShoppingCart" },
-  { href: "/procurement/purchase-requests", label: "طلبات الشراء", labelEn: "Purchase Requests", icon: "FileText" },
-  { href: "/procurement/rfqs", label: "طلبات عروض الأسعار", labelEn: "RFQs", icon: "Send" },
-  { href: "/procurement/quotations", label: "عروض الأسعار", labelEn: "Quotations", icon: "FileSpreadsheet" },
-  { href: "/procurement/purchase-orders", label: "أوامر الشراء", labelEn: "Purchase Orders", icon: "ShoppingCart" },
-  { href: "/procurement/invoices", label: "الفواتير", labelEn: "Invoices", icon: "Receipt" },
+  { href: "/projects/ABC/procurement", label: "لوحة المشتريات", labelEn: "Procurement Dashboard", icon: "ShoppingCart" },
+  { href: "/projects/ABC/procurement/purchase-requests", label: "طلبات الشراء", labelEn: "Purchase Requests", icon: "FileText" },
+  { href: "/projects/ABC/procurement/rfqs", label: "طلبات عروض الأسعار", labelEn: "RFQs", icon: "Send" },
+  { href: "/projects/ABC/procurement/quotations", label: "عروض الأسعار", labelEn: "Quotations", icon: "FileSpreadsheet" },
+  { href: "/projects/ABC/procurement/purchase-orders", label: "أوامر الشراء", labelEn: "Purchase Orders", icon: "ShoppingCart" },
+  { href: "/projects/ABC/procurement/invoices", label: "الفواتير", labelEn: "Invoices", icon: "Receipt" },
 ] as const;
 
 export const RESEARCH_NAV_ITEMS = [
-  { href: "/research", label: "لوحة الأبحاث", labelEn: "Research Dashboard", icon: "Flask" },
-  { href: "/research/campaigns", label: "الحملات", labelEn: "Campaigns", icon: "Megaphone" },
-  { href: "/research/participants", label: "المشاركون", labelEn: "Participants", icon: "Users" },
-  { href: "/research/founding-members", label: "الأعضاء المؤسسون", labelEn: "Founding Members", icon: "Award" },
-  { href: "/research/feature-requests", label: "طلبات الميزات", labelEn: "Feature Requests", icon: "Lightbulb" },
-  { href: "/research/insights", label: "تحليلات الذكاء الاصطناعي", labelEn: "AI Insights", icon: "Brain" },
+  { href: "/projects/ABC/research", label: "لوحة الأبحاث", labelEn: "Research Dashboard", icon: "Flask" },
+  { href: "/projects/ABC/research/campaigns", label: "الحملات", labelEn: "Campaigns", icon: "Megaphone" },
+  { href: "/projects/ABC/research/participants", label: "المشاركون", labelEn: "Participants", icon: "Users" },
+  { href: "/projects/ABC/research/founding-members", label: "الأعضاء المؤسسون", labelEn: "Founding Members", icon: "Award" },
+  { href: "/projects/ABC/research/feature-requests", label: "طلبات الميزات", labelEn: "Feature Requests", icon: "Lightbulb" },
+  { href: "/projects/ABC/research/insights", label: "تحليلات الذكاء الاصطناعي", labelEn: "AI Insights", icon: "Brain" },
 ];
