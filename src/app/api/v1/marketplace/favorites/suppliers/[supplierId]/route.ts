@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { getEffectiveOrgId } from '@/lib/rbac';
 import { marketplaceService } from '@/modules/marketplace';
 import { success, error, createRequestId } from '@/modules/shared/utils/response-envelope';
 import { MarketplaceErrors } from '@/modules/shared/errors/marketplace.errors';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ supplierId: string }> }) {
+export const DELETE = withAuth(async (_request: NextRequest, { params, sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    const orgId = session?.user?.id ? await getEffectiveOrgId(session.user.id) : null;
+    const orgId = await getEffectiveOrgId(sessionUserId);
     if (!orgId) {
       return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
     }
-    const { supplierId } = await params;
+    const { supplierId } = params;
     const result = await marketplaceService.removeFavoriteSupplier(orgId, supplierId);
     return NextResponse.json(success(result, createRequestId()));
   } catch (err: unknown) {
@@ -21,4 +20,4 @@ export async function DELETE(_request: NextRequest, { params }: { params: Promis
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error removing favorite supplier'), { status: 500 });
   }
-}
+});

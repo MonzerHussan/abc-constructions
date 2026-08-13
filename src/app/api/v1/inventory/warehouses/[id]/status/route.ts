@@ -1,25 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { inventoryService } from '@/modules/inventory';
 import { z } from 'zod';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { InventoryErrors } from '@/modules/shared/errors/inventory.errors';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
 const actionSchema = z.object({
   action: z.enum(['activate', 'deactivate', 'maintenance', 'close', 'reopen']),
 });
 
-export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const POST = withAuth(async (request: NextRequest, { params, sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
-    }
-    const { id } = await params;
+    const { id } = params;
     const body = await request.json();
     const parsed = actionSchema.parse(body);
-    const warehouse = await inventoryService.transitionWarehouseStatus(id, parsed.action, session.user.id);
+    const warehouse = await inventoryService.transitionWarehouseStatus(id, parsed.action, sessionUserId);
     return NextResponse.json(success(warehouse, createRequestId()));
   } catch (err: unknown) {
     if (err instanceof Error && err.message === InventoryErrors.WAREHOUSE_NOT_FOUND) {
@@ -30,4 +26,4 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error transitioning warehouse status'), { status: 500 });
   }
-}
+});

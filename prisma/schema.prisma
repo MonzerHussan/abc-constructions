@@ -498,6 +498,7 @@ model User {
   bugReports              BugReport[]
   npsScores               NpsScore[]
   csatScores              CsatScore[]
+  passwordResetTokens     PasswordResetToken[]
   cesScores               CesScore[]
   journeyEvents           CustomerJourneyEvent[]
   crmLinkedContacts       CrmContact[]
@@ -556,6 +557,19 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model ProjectTender {
@@ -3990,6 +4004,7 @@ model Profile {
   digitalMaturity    String?
   apiReadiness       String?
   capabilities       String[]
+  surveyData         Json?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -4103,6 +4118,62 @@ model EntityRegistryCounter {
   updatedAt DateTime @updatedAt
 }
 
+// ─── Onboarding Survey Question Bank (Isolated) ───────────────────────────
+// Stores the reusable onboarding/market-survey question bank. Isolated from the
+// Research Survey engine (Survey/SurveySection/SurveyQuestion) — no FK, no
+// coupling. Answers are persisted in full on Profile.surveyData (Json).
+
+enum OnboardingAnswerType {
+  TEXT
+  TEXTAREA
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  DROPDOWN
+  RATING
+  LINEAR_SCALE
+  YES_NO
+  EMAIL
+  PHONE
+  DATE
+}
+
+model OnboardingQuestion {
+  id           String               @id @default(cuid())
+  category     String
+  questionText String
+  answerType   OnboardingAnswerType
+  options      Json?
+  order        Int                  @default(0)
+  isActive     Boolean              @default(true)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  @@index([category])
+  @@index([category, isActive])
+}
+
+// ─── Survey Config (Admin SurveyManager) ────────────────────────────────────
+// "الأسئلة" في إدارة الاستبيان هي عناصر: الفئات (categories) والفئات الفرعية
+// (subcategories). كل عنصر قابل للترتيب والتفعيل/التعطيل والإضافة والتعديل عبر
+// واجهة SurveyManager. يتبع هذا النموذج عقد docs/api/survey-config-contract.md.
+// id مفتاح مستقر (slug/cuid) يُحافظ عليه عبر الإصدارات لربط بيانات الردود.
+
+model SurveyConfigItem {
+  id        String   @id
+  parentId  String?
+  type      String
+  labelEn   String
+  labelAr   String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([type])
+  @@index([isActive])
+}
+
 // ─── AI Module (Sprint AI-1b — BOQ Intelligence) ───────────────────────────
 // All models are additive and isolated to the AI domain. Tenant data is
 // scoped by orgId (org isolation). AiExtractionVersion is a platform-level
@@ -4181,80 +4252,82 @@ model AiExtractionVersion {
   active     Boolean   @default(false)
 }
 
-// ─────────────────────────────────────────────
-// Governed Homepage CMS (admin-controlled layout)
-// ─────────────────────────────────────────────
-model HomepageConfig {
-  id              String   @id @default(cuid())
-  key             String   @unique
-  logoUrl         String?
-  ctaLabel        Json?
-  ctaHref         String?
-  heroTitle       Json?
-  heroSubtitle    Json?
-  heroDescription Json?
-  footerText      Json?
-  showLanguage    Boolean  @default(true)
-  showLogin       Boolean  @default(true)
-  showRegister    Boolean  @default(true)
-  updatedAt       DateTime @updatedAt
+// ============================
+// Homepage CMS Models
+// ============================
+
+model HomepageContent {
+  id                  String   @id @default(cuid())
+  introTitle          String
+  introTitleEn        String?
+  introTitleUr        String?
+  introBody           String
+  introBodyEn         String?
+  introBodyUr         String?
+  visionTitle         String
+  visionTitleEn       String?
+  visionTitleUr       String?
+  visionBody          String
+  visionBodyEn        String?
+  visionBodyUr        String?
+  primaryCtaLabel     String   @default("ابدأ الآن مجاناً")
+  primaryCtaLabelEn   String?  @default("Start Free Now")
+  primaryCtaLabelUr   String?
+  primaryCtaHref      String   @default("/auth/register")
+  secondaryCtaLabel   String   @default("تصفح المناقصات")
+  secondaryCtaLabelEn String?  @default("Browse Bids")
+  secondaryCtaLabelUr String?
+  secondaryCtaHref    String   @default("/tenders/projects")
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
-model HomepageZone {
-  id          String   @id @default(cuid())
-  location    String
-  contentType String   @default("TEXT")
-  title       Json?
-  body        Json?
-  mediaUrl    String?
-  link        String?
-  enabled     Boolean  @default(true)
-  order       Int      @default(0)
-  updatedAt   DateTime @updatedAt
+model CarouselSlide {
+  id         String   @id @default(cuid())
+  title      String
+  titleEn    String?
+  titleUr    String?
+  subtitle   String?
+  subtitleEn String?
+  subtitleUr String?
+  imageUrl   String
+  linkUrl    String?
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
-model HomepageSlide {
-  id       String  @id @default(cuid())
-  title    Json?
-  subtitle Json?
-  imageUrl String
-  link     String?
-  order    Int     @default(0)
-  enabled  Boolean @default(true)
+model VideoSection {
+  id           String   @id @default(cuid())
+  title        String
+  titleEn      String?
+  titleUr      String?
+  description  String?
+  descriptionEn String?
+  descriptionUr String?
+  videoUrl     String
+  posterUrl    String?
+  sortOrder    Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
-model HeaderMenu {
-  id      String           @id @default(cuid())
-  key     String           @unique
-  label   Json?
-  order   Int              @default(0)
-  enabled Boolean          @default(true)
-  items   HeaderMenuItem[]
-}
-
-model HeaderMenuItem {
-  id      String    @id @default(cuid())
-  menuId  String
-  label   Json?
-  href    String
-  order   Int       @default(0)
-  enabled Boolean   @default(true)
-  menu    HeaderMenu @relation(fields: [menuId], references: [id], onDelete: Cascade)
-}
-
-model FooterLink {
-  id      String  @id @default(cuid())
-  label   Json?
-  href    String
-  order   Int     @default(0)
-  enabled Boolean @default(true)
-}
-
-model HomepageAd {
-  id       String  @id @default(cuid())
-  title    Json?
-  imageUrl String?
-  link     String?
-  enabled  Boolean @default(true)
-  order    Int     @default(0)
+model Ad {
+  id         String   @id @default(cuid())
+  title      String
+  titleEn    String?
+  titleUr    String?
+  subtitle   String?
+  subtitleEn String?
+  subtitleUr String?
+  imageUrl   String
+  linkUrl    String?
+  animation  String   @default("fade")
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

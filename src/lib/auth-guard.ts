@@ -19,10 +19,10 @@ import { auth } from '@/lib/auth';
 import { requirePermission } from '@/lib/rbac';
 import { error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
-import { createRequestId } from '@/modules/shared/utils/response-envelope';
 
 export interface AuthedContext {
   sessionUserId: string;
+  sessionRole?: string;
   params: Record<string, string>;
 }
 
@@ -34,7 +34,7 @@ type Handler = (
 export function withPermission(permissionKey: string | null, handler: Handler) {
   return async (
     req: NextRequest,
-    { params }: { params: Promise<Record<string, string>> } = Promise.resolve({}) as any,
+    { params }: { params: Promise<Record<string, string>> } = { params: Promise.resolve({}) },
   ): Promise<NextResponse> => {
     try {
       const session = await auth();
@@ -58,6 +58,7 @@ export function withPermission(permissionKey: string | null, handler: Handler) {
       const resolvedParams = await params;
       return handler(req, {
         sessionUserId: session.user.id,
+        sessionRole: (session.user as { role?: string }).role,
         params: resolvedParams,
       });
     } catch {

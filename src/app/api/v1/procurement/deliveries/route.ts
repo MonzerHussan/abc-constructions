@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { deliveryService } from '@/modules/procurement';
 import { createDeliverySchema, deliveryListQuerySchema } from '@/modules/procurement/validators/delivery-schemas';
 import { success, successPaginated, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const query = deliveryListQuerySchema.parse(Object.fromEntries(searchParams));
@@ -15,17 +15,13 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error fetching deliveries'), { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = createDeliverySchema.parse(body);
-    const delivery = await deliveryService.create(parsed, session.user.id);
+    const delivery = await deliveryService.create(parsed, sessionUserId);
     return NextResponse.json(success(delivery, createRequestId()), { status: 201 });
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -35,4 +31,4 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error creating delivery'), { status: 500 });
   }
-}
+});

@@ -1,181 +1,203 @@
-// Default homepage content — shown when the DB is empty (admin has not yet published content).
-
-export interface LocalizedText {
-  ar: string;
-  en: string;
-  ur: string;
-  [key: string]: string;
+export interface HomepageContentData {
+  id: string;
+  introTitle: string;
+  introTitleEn: string;
+  introTitleUr: string;
+  introBody: string;
+  introBodyEn: string;
+  introBodyUr: string;
+  visionTitle: string;
+  visionTitleEn: string;
+  visionTitleUr: string;
+  visionBody: string;
+  visionBodyEn: string;
+  visionBodyUr: string;
+  primaryCtaLabel: string;
+  primaryCtaLabelEn: string;
+  primaryCtaLabelUr: string;
+  primaryCtaHref: string;
+  secondaryCtaLabel: string;
+  secondaryCtaLabelEn: string;
+  secondaryCtaLabelUr: string;
+  secondaryCtaHref: string;
+  isActive: boolean;
+  updatedAt: string;
 }
 
-export interface HomepageDefaults {
-  logoUrl: string;
-  ctaLabel: LocalizedText;
-  ctaHref: string;
-  heroTitle: LocalizedText;
-  heroSubtitle: LocalizedText;
-  heroDescription: LocalizedText;
-  footerText: LocalizedText;
-  showLanguage: boolean;
-  showLogin: boolean;
-  showRegister: boolean;
-}
-
-export const HOMEPAGE_DEFAULTS: HomepageDefaults = {
-  logoUrl: "/logo/abc-logo-white.svg",
-  ctaLabel: { ar: "ابدأ الآن", en: "Start Now", ur: "ابھی شروع کریں" },
-  ctaHref: "/projects/ABC/auth/register",
-  heroTitle: { ar: "منصة ABC الشاملة", en: "ABC Comprehensive Platform", ur: "ABC مکمل پلیٹ فارم" },
-  heroSubtitle: { ar: "لبناء قطاع الإنشاءات", en: "for Construction", ur: "تعمیرات کے لیے" },
-  heroDescription: {
-    ar: "اربط مشاريعك بأفضل المقاولين والمستقلين، واحصل على أفضل أسعار مواد البناء، وتابع المناقصات الحية — كل ما تحتاجه في منصة واحدة.",
-    en: "Connect your projects with the best contractors and freelancers, get the best building material prices, and follow live bids — everything you need in one platform.",
-    ur: "اپنے پروجیکٹس کو بہترین ٹھیکیداروں اور فری لانسرز سے جوڑیں، تعمیراتی سامان کی بہترین قیمتیں حاصل کریں، اور لائیو ٹینڈرز کی پیروی کریں۔",
-  },
-  footerText: {
-    ar: "© 2026 ABC — All About Constructions. جميع الحقوق محفوظة.",
-    en: "© 2026 ABC — All About Constructions. All rights reserved.",
-    ur: "© 2026 ABC — All About Constructions. جملہ حقوق محفوظ ہیں۔",
-  },
-  showLanguage: true,
-  showLogin: true,
-  showRegister: true,
-};
-
-export interface ZoneDefaults {
-  location: string;
-  contentType: "TEXT" | "IMAGE" | "VIDEO";
-  title: LocalizedText;
-  body: LocalizedText;
-  mediaUrl: string;
-  link: string;
-}
-
-export const ZONE_LOCATIONS = ["LEFT_TOP", "LEFT_BOTTOM", "RIGHT_TOP", "RIGHT_BOTTOM"] as const;
-
-export const ZONE_DEFAULTS: Record<string, ZoneDefaults> = {
-  LEFT_TOP: {
-    location: "LEFT_TOP",
-    contentType: "TEXT",
-    title: { ar: "رؤيتنا", en: "Our Vision", ur: "ہمارا وژن" },
-    body: {
-      ar: "نسعى لبناء أكبر منصة عربية لقطاع الإنشاءات والمقاولات.",
-      en: "We aim to build the largest construction platform in the region.",
-      ur: "ہم خطے کی سب سے بڑی تعمیراتی پلیٹ فارم بنانے کا ہدف رکھتے ہیں۔",
-    },
-    mediaUrl: "",
-    link: "",
-  },
-  LEFT_BOTTOM: {
-    location: "LEFT_BOTTOM",
-    contentType: "TEXT",
-    title: { ar: "انضم إلينا", en: "Join Us", ur: "ہم سے جڑیں" },
-    body: {
-      ar: "أنشئ حسابك مجاناً وابدأ في استكشاف الفرص المتاحة.",
-      en: "Create your free account and start exploring opportunities.",
-      ur: "اپنا مفت اکاؤنٹ بنائیں اور مواقع تلاش کرنا شروع کریں۔",
-    },
-    mediaUrl: "",
-    link: "/projects/ABC/auth/register",
-  },
-  RIGHT_TOP: {
-    location: "RIGHT_TOP",
-    contentType: "VIDEO",
-    title: { ar: "تعريف بالمنصة", en: "Platform Overview", ur: "پلیٹ فارم جائزہ" },
-    body: { ar: "", en: "", ur: "" },
-    mediaUrl: "",
-    link: "",
-  },
-  RIGHT_BOTTOM: {
-    location: "RIGHT_BOTTOM",
-    contentType: "IMAGE",
-    title: { ar: "أحدث المشاريع", en: "Latest Projects", ur: "تازہ ترین پروجیکٹس" },
-    body: { ar: "", en: "", ur: "" },
-    mediaUrl: "/logo/abc-logo-white.svg",
-    link: "/projects/ABC/projects",
-  },
-};
-
-export interface SlideDefaults {
-  title: LocalizedText;
-  subtitle: LocalizedText;
+export interface CarouselSlideData {
+  id: string;
+  title: string;
+  titleEn: string;
+  titleUr: string;
+  subtitle: string;
+  subtitleEn: string;
+  subtitleUr: string;
   imageUrl: string;
-  link: string;
+  linkUrl: string | null;
+  sortOrder: number;
+  isActive: boolean;
 }
 
-export const SLIDE_DEFAULTS: SlideDefaults[] = [
-  {
-    title: { ar: "مناقصات المشاريع الحية", en: "Live Project Bids", ur: "لائیو پروجیکٹ ٹینڈرز" },
-    subtitle: {
-      ar: "تابع أحدث المناقصات الإنشائية وقدم عروضك",
-      en: "Follow the latest construction bids and submit your offers",
-      ur: "تازہ ترین تعمیراتی ٹینڈرز دیکھیں اور اپنی پیشکشیں جمع کریں",
-    },
-    imageUrl: "/logo/abc-logo-white.svg",
-    link: "/projects/ABC/tenders/projects",
-  },
-  {
-    title: { ar: "سوق مواد البناء", en: "Building Materials Market", ur: "تعمیراتی سامان مارکیٹ" },
-    subtitle: {
-      ar: "تصفح وقارن أسعار مواد البناء من موردين معتمدين",
-      en: "Browse and compare building material prices from verified suppliers",
-      ur: "تصدیق شدہ سپلائرز سے تعمیراتی سامان کی قیمتیں دیکھیں اور موازنہ کریں",
-    },
-    imageUrl: "/logo/abc-logo-mark.svg",
-    link: "/projects/ABC/marketplace",
-  },
-];
-
-export interface MenuDefaults {
-  key: string;
-  label: LocalizedText;
-  items: { label: LocalizedText; href: string }[];
+export interface VideoSectionData {
+  id: string;
+  title: string;
+  titleEn: string;
+  titleUr: string;
+  description: string;
+  descriptionEn: string;
+  descriptionUr: string;
+  videoUrl: string;
+  posterUrl: string | null;
+  sortOrder: number;
+  isActive: boolean;
 }
 
-export const MENU_DEFAULTS: MenuDefaults[] = [
-  {
-    key: "bids",
-    label: { ar: "المناقصات", en: "Bids", ur: "ٹینڈرز" },
-    items: [
-      { label: { ar: "المشاريع", en: "Projects", ur: "پروجیکٹس" }, href: "/projects/ABC/projects" },
-      { label: { ar: "المواد", en: "Materials", ur: "مواد" }, href: "/projects/ABC/tenders/materials" },
-      { label: { ar: "المنتجات", en: "Products", ur: "مصنوعات" }, href: "/projects/ABC/marketplace" },
-      { label: { ar: "الرحلات", en: "Trip", ur: "ٹرپ" }, href: "/projects/ABC/delivery" },
-    ],
-  },
-  {
-    key: "market",
-    label: { ar: "السوق", en: "Market", ur: "مارکیٹ" },
-    items: [
-      { label: { ar: "المشاريع", en: "Projects", ur: "پروجیکٹس" }, href: "/projects/ABC/projects" },
-      { label: { ar: "المواد", en: "Materials", ur: "مواد" }, href: "/projects/ABC/tenders/materials" },
-      { label: { ar: "المنتجات", en: "Products", ur: "مصنوعات" }, href: "/projects/ABC/marketplace" },
-      { label: { ar: "التوصيل", en: "Delivery", ur: "ڈلیوری" }, href: "/projects/ABC/delivery" },
-    ],
-  },
-  {
-    key: "community",
-    label: { ar: "المجتمع", en: "Community", ur: "کمیونٹی" },
-    items: [
-      { label: { ar: "الوظائف", en: "Jobs", ur: "ملازمتیں" }, href: "/projects/ABC/jobs" },
-      { label: { ar: "التدريب", en: "Training", ur: "تربیت" }, href: "/projects/ABC/training" },
-    ],
-  },
-];
+export interface AdData {
+  id: string;
+  title: string;
+  titleEn: string;
+  titleUr: string;
+  subtitle: string;
+  subtitleEn: string;
+  subtitleUr: string;
+  imageUrl: string;
+  linkUrl: string | null;
+  animation: string;
+  sortOrder: number;
+  isActive: boolean;
+}
 
-export const REGISTER_ITEMS_DEFAULTS = [
-  { label: { ar: "جهة حكومية", en: "Government", ur: "سرکاری ادارہ" }, href: "/projects/ABC/auth/register" },
-  { label: { ar: "مالك مشروع", en: "Owner", ur: "پروجیکٹ مالک" }, href: "/projects/ABC/auth/register" },
-  { label: { ar: "استشاري", en: "Consultant", ur: "مشیر" }, href: "/projects/ABC/auth/register" },
-  { label: { ar: "مورد", en: "Supplier", ur: "سپلائر" }, href: "/projects/ABC/auth/register" },
-  { label: { ar: "مقاول", en: "Contractor", ur: "پیمانہ دار" }, href: "/projects/ABC/auth/register" },
-  { label: { ar: "مقاول فرعي", en: "Sub Contractor", ur: "ذیلی پیمانہ دار" }, href: "/projects/ABC/auth/register" },
-  { label: { ar: "إدارة المشاريع والصيانة", en: "PM & Maintenance", ur: "پروجیکٹ مینجمنٹ اور مینٹیننس" }, href: "/projects/ABC/auth/register" },
-  { label: { ar: "فرد", en: "Individual", ur: "فرد" }, href: "/projects/ABC/auth/register" },
-];
+export interface HomepageData {
+  content: HomepageContentData;
+  slides: CarouselSlideData[];
+  videos: VideoSectionData[];
+  ads: AdData[];
+}
 
-export const FOOTER_LINKS_DEFAULTS = [
-  { label: { ar: "عن المنصة", en: "About", ur: "ہمارے بارے میں" }, href: "/about" },
-  { label: { ar: "تواصل معنا", en: "Contact", ur: "رابطہ کریں" }, href: "/contact" },
-  { label: { ar: "الشروط", en: "Terms", ur: "شرائط" }, href: "/terms" },
-  { label: { ar: "الخصوصية", en: "Privacy", ur: "پرائیویسی" }, href: "/privacy" },
-];
+const slideImage =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='500'%3E%3Crect width='100%25' height='100%25' fill='%23f97316'/%3E%3C/svg%3E";
+
+const adImage =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='160'%3E%3Crect width='100%25' height='100%25' fill='%230a1f44'/%3E%3C/svg%3E";
+
+const posterImage =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='360'%3E%3Crect width='100%25' height='100%25' fill='%231f2937'/%3E%3C/svg%3E";
+
+export const HOMEPAGE_DEFAULTS: HomepageData = {
+  content: {
+    id: "default",
+    introTitle: "منصة ABC الشاملة",
+    introTitleEn: "ABC All-in-One Platform",
+    introTitleUr: "ABC مکمل پلیٹ فارم",
+    introBody:
+      "اربط مشاريعك بأفضل المقاولين والمستقلين، واحصل على أفضل أسعار مواد البناء، وتابع المناقصات الحية - كل ما تحتاجه في منصة واحدة",
+    introBodyEn:
+      "Connect your projects with the best contractors and freelancers, get the best building material prices, and follow live tenders - everything you need in one platform",
+    introBodyUr:
+      "اپنے پروجیکٹس کو بہترین ٹھیکیداروں اور فری لانسرز سے جوڑیں، تعمیراتی مواد کی بہترین قیمتیں حاصل کریں، اور لائیو ٹینڈرز کی پیروی کریں",
+    visionTitle: "رؤيتنا",
+    visionTitleEn: "Our Vision",
+    visionTitleUr: "ہمارا وژن",
+    visionBody:
+      "أن نكون المنصة الرقمية الأولى التي تُحدث نقلة نوعية في قطاع الإنشاءات والمقاولات بالمنطقة",
+    visionBodyEn:
+      "To be the leading digital platform transforming the construction and contracting sector in the region",
+    visionBodyUr:
+      "خطے میں تعمیرات اور کنٹریکٹنگ کے شعبے کو تبدیل کرنے والا اولین ڈیجیٹل پلیٹ فارم بننا",
+    primaryCtaLabel: "ابدأ الآن مجاناً",
+    primaryCtaLabelEn: "Start Free Now",
+    primaryCtaLabelUr: "مفت شروع کریں",
+    primaryCtaHref: "/projects/ABC/auth/register",
+    secondaryCtaLabel: "تصفح المناقصات",
+    secondaryCtaLabelEn: "Browse Bids",
+    secondaryCtaLabelUr: "ٹینڈرز براؤز کریں",
+    secondaryCtaHref: "/projects/ABC/tenders/projects",
+    isActive: true,
+    updatedAt: new Date().toISOString(),
+  },
+  slides: [
+    {
+      id: "default-slide-1",
+      title: "مناقصات المشاريع",
+      titleEn: "Project Bids",
+      titleUr: "پروجیکٹ ٹینڈرز",
+      subtitle: "اكتشف مناقصات جديدة يومياً",
+      subtitleEn: "Discover new bids daily",
+      subtitleUr: "روزانہ نئے ٹینڈرز دریافت کریں",
+      imageUrl: slideImage,
+      linkUrl: "/projects/ABC/tenders/projects",
+      sortOrder: 0,
+      isActive: true,
+    },
+    {
+      id: "default-slide-2",
+      title: "سوق البضائع",
+      titleEn: "Marketplace",
+      titleUr: "بازار",
+      subtitle: "مواد بناء بأسعار منافسة",
+      subtitleEn: "Building materials at competitive prices",
+      subtitleUr: "مسابقتی قیمتوں پر تعمیراتی مواد",
+      imageUrl: slideImage,
+      linkUrl: "/projects/ABC/marketplace",
+      sortOrder: 1,
+      isActive: true,
+    },
+    {
+      id: "default-slide-3",
+      title: "عرض المشاريع",
+      titleEn: "Project Showcase",
+      titleUr: "پروجیکٹ شوکیس",
+      subtitle: "استعرض أعمالنا وإنجازاتنا",
+      subtitleEn: "Explore our work and achievements",
+      subtitleUr: "ہمارا کام اور کامیابیاں دیکھیں",
+      imageUrl: slideImage,
+      linkUrl: "/projects/ABC/projects",
+      sortOrder: 2,
+      isActive: true,
+    },
+  ],
+  videos: [
+    {
+      id: "default-video-1",
+      title: "تعرّف على المنصة",
+      titleEn: "Discover the Platform",
+      titleUr: "پلیٹ فارم دریافت کریں",
+      description: "جولة سريعة على أبرز المميزات",
+      descriptionEn: "A quick tour of the key features",
+      descriptionUr: "کلیدی خصوصیات کا ایک فوری دورہ",
+      videoUrl: "",
+      posterUrl: posterImage,
+      sortOrder: 0,
+      isActive: true,
+    },
+    {
+      id: "default-video-2",
+      title: "قصص نجاح",
+      titleEn: "Success Stories",
+      titleUr: "کامیابی کی کہانیاں",
+      description: "مقاولون نفّذوا مشاريعهم عبر المنصة",
+      descriptionEn: "Contractors who delivered via the platform",
+      descriptionUr: "ٹھیکیدار جنہوں نے پلیٹ فارم کے ذریعے کام کیا",
+      videoUrl: "",
+      posterUrl: posterImage,
+      sortOrder: 1,
+      isActive: true,
+    },
+  ],
+  ads: [
+    {
+      id: "default-ad-1",
+      title: "اشترك الآن",
+      titleEn: "Subscribe Now",
+      titleUr: "ابھی سبسکرائب کریں",
+      subtitle: "مزايا حصرية للأعضاء",
+      subtitleEn: "Exclusive member benefits",
+      subtitleUr: "ممبران کے لیے خصوصی فوائد",
+      imageUrl: adImage,
+      linkUrl: "/projects/ABC/auth/register",
+      animation: "fade",
+      sortOrder: 0,
+      isActive: true,
+    },
+  ],
+};

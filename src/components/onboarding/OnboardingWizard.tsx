@@ -106,6 +106,13 @@ export function OnboardingWizard() {
       }
     }
 
+    if (step === 2) {
+      const uploadedCount = state.documents.filter(
+        (doc) => doc.status === "uploaded"
+      ).length;
+      if (uploadedCount === 0) newErrors.documents = "obDocRequired";
+    }
+
     if (step === 3) {
       const { survey } = state;
       if (survey.selectedCategories.length === 0)
@@ -214,6 +221,7 @@ export function OnboardingWizard() {
             <StepDocuments
               documents={state.documents}
               onChange={updateDocuments}
+              errors={errors}
             />
           )}
           {state.step === 3 && (

@@ -1,19 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { marketplaceService } from '@/modules/marketplace';
 import { createRfqFromMarketplaceSchema } from '@/modules/marketplace/validators/marketplace-schemas';
 import { success, error, createRequestId } from '@/modules/shared/utils/response-envelope';
 import { MarketplaceErrors } from '@/modules/shared/errors/marketplace.errors';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = createRfqFromMarketplaceSchema.parse(body);
-    const rfq = await marketplaceService.createRfqFromMarketplace(parsed, session.user.id);
+    const rfq = await marketplaceService.createRfqFromMarketplace(parsed, sessionUserId);
     return NextResponse.json(success(rfq, createRequestId()), { status: 201 });
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -26,4 +22,4 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error creating RFQ'), { status: 500 });
   }
-}
+});

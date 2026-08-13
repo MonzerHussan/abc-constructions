@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { inventoryService } from '@/modules/inventory';
 import { createImportSchema, importListQuerySchema } from '@/modules/inventory/validators/inventory-schemas';
 import { success, successPaginated, error } from '@/modules/shared/utils/response-envelope';
 import { InventoryErrors } from '@/modules/shared/errors/inventory.errors';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const query = importListQuerySchema.parse(Object.fromEntries(searchParams));
@@ -15,17 +15,13 @@ export async function GET(request: NextRequest) {
   } catch {
     return NextResponse.json(error('INTERNAL_ERROR', 'Error fetching imports'), { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = createImportSchema.parse(body);
-    const imp = await inventoryService.createImport(parsed, session.user.id);
+    const imp = await inventoryService.createImport(parsed, sessionUserId);
     return NextResponse.json(success(imp, createRequestId()), { status: 201 });
   } catch (err: unknown) {
     if (err instanceof Error && err.message === InventoryErrors.WAREHOUSE_SUPPLIER_MISMATCH) {
@@ -33,4 +29,4 @@ export async function POST(request: NextRequest) {
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error creating import'), { status: 500 });
   }
-}
+});

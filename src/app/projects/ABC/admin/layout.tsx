@@ -9,6 +9,7 @@ import {
   DollarSign, Newspaper, Headphones, Clock, Menu, X,
   Briefcase, ShoppingCart, Settings, BarChart3, GraduationCap,
   TreePine, Megaphone, Scale, FlaskConical, Receipt, LogOut,
+  ClipboardList, ListChecks, PieChart,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -22,7 +23,11 @@ const adminLinks = [
   { href: "/projects/ABC/admin/tenders", icon: FileText, label: "المناقصات", labelEn: "Tenders" },
   { href: "/projects/ABC/admin/procurement", icon: ShoppingCart, label: "المشتريات", labelEn: "Procurement" },
   { href: "/projects/ABC/admin/finance", icon: DollarSign, label: "المالية", labelEn: "Finance" },
-  { href: "/projects/ABC/admin/content", icon: Newspaper, label: "المحتوى", labelEn: "Content" },
+{ href: "/projects/ABC/admin/content", icon: Newspaper, label: "المحتوى", labelEn: "Content" },
+  { href: "/projects/ABC/admin/homepage", icon: LayoutDashboard, label: "Homepage" },
+  { href: "/projects/ABC/admin/surveys", icon: ClipboardList, label: "Survey Manager" },
+  { href: "/projects/ABC/admin/surveys/questions", icon: ListChecks, label: "Question Bank" },
+  { href: "/projects/ABC/admin/surveys/analytics", icon: PieChart, label: "Survey Analytics" },
   { href: "/projects/ABC/admin/support", icon: Headphones, label: "خدمة العملاء", labelEn: "Support" },
   { href: "/projects/ABC/admin/audit-log", icon: Clock, label: "سجل التدقيق", labelEn: "Audit Log" },
   { href: "/projects/ABC/admin/crm", icon: Users, label: "CRM", labelEn: "CRM" },

@@ -3,10 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
 import {
-  Home,
   FileText,
   Package,
   Store,
@@ -15,25 +14,19 @@ import {
   GraduationCap,
   Menu,
   X,
-  Bell,
-  MessageSquare,
   User,
-  Search,
   LogOut,
   ChevronDown,
   Truck,
-  ShoppingCart,
   ShieldCheck,
   Smartphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_ITEMS } from "@/lib/constants";
 import { useLanguage } from "@/lib/LanguageContext";
 import type { TranslationKey } from "@/lib/translations";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Home,
   FileText,
   Package,
   Store,
@@ -41,21 +34,41 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Briefcase,
   GraduationCap,
   Truck,
-  ShoppingCart,
 };
 
-const navLabelKeys: Partial<Record<string, TranslationKey>> = {
-  "/": "navHome",
-  "/projects/ABC/tenders/projects": "navProjectTenders",
-  "/projects/ABC/tenders/materials": "navMaterialTenders",
-  "/projects/ABC/marketplace": "navMarketplace",
-  "/projects/ABC/projects": "navProjects",
-  "/projects/ABC/jobs": "navJobs",
-  "/projects/ABC/training": "navTraining",
-  "/projects/ABC/delivery": "navDelivery",
-  "/projects/ABC/procurement": "navProcurement",
-  "/projects/ABC/research": "navResearch",
-};
+interface NavMenu {
+  key: string;
+  labelKey: TranslationKey;
+  items: { href: string; labelKey: TranslationKey }[];
+}
+
+const MENUS: NavMenu[] = [
+  {
+    key: "bids",
+    labelKey: "navBids",
+    items: [
+      { href: "/projects/ABC/tenders/projects", labelKey: "navProjectTenders" },
+      { href: "/projects/ABC/tenders/materials", labelKey: "navMaterialTenders" },
+    ],
+  },
+  {
+    key: "market",
+    labelKey: "navMarketplaceTitle",
+    items: [
+      { href: "/projects/ABC/marketplace", labelKey: "navMarketplace" },
+      { href: "/projects/ABC/projects", labelKey: "navProjects" },
+      { href: "/projects/ABC/delivery", labelKey: "navDelivery" },
+    ],
+  },
+  {
+    key: "community",
+    labelKey: "navCommunity",
+    items: [
+      { href: "/projects/ABC/training", labelKey: "navTraining" },
+      { href: "/projects/ABC/jobs", labelKey: "navJobs" },
+    ],
+  },
+];
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -63,76 +76,105 @@ export default function Navbar() {
   const { t } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const isLoggedIn = status === "authenticated";
 
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenu(null);
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  const isActiveItem = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href);
+
   return (
-    <nav className="bg-white border-b border-surface-200 sticky top-0 z-50">
+    <nav className="bg-white border-b border-surface-200 sticky top-0 z-50" ref={menuRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center">
               <Image
                 src="/logo.png"
-                alt={t("appName")}
-                width={40}
-                height={40}
+                alt="ABC"
+                width={64}
+                height={64}
                 priority
-                className="w-10 h-10"
+                className="w-16 h-16"
               />
-              <div className="hidden sm:block">
-                <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
-                <span className="text-xs block text-accent-500 -mt-1">
-                  {t("appFullName")}
-                </span>
-              </div>
             </Link>
 
             <div className="hidden lg:flex items-center gap-1">
-              {NAV_ITEMS.slice(1).map((item) => {
-                const Icon = iconMap[item.icon];
-                const isActive = pathname === item.href;
+              {MENUS.map((menu) => {
+                const active = menu.items.some((it) => isActiveItem(it.href));
+                const open = openMenu === menu.key;
                 return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                      isActive
-                        ? "bg-secondary-50 text-secondary-600"
-                        : "text-surface-600 hover:bg-surface-100 hover:text-surface-900"
+                  <div key={menu.key} className="relative">
+                    <button
+                      onClick={() => setOpenMenu(open ? null : menu.key)}
+                      className={cn(
+                        "flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-colors",
+                        active || open
+                          ? "text-amber-600"
+                          : "text-surface-700 hover:text-amber-600 hover:bg-surface-50"
+                      )}
+                      aria-expanded={open}
+                    >
+                      {t(menu.labelKey)}
+                      <ChevronDown className={cn("w-4 h-4 transition-transform", open && "rotate-180")} />
+                    </button>
+                    {open && (
+                      <div className="absolute top-full start-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-surface-100 py-2 z-50">
+                        <div className="px-4 py-2 border-b border-surface-100 mb-1">
+                          <p className="text-xs font-semibold text-surface-400 uppercase tracking-wide">
+                            {t(menu.labelKey)}
+                          </p>
+                        </div>
+                        {menu.items.map((item) => {
+                          const Icon = iconMap[item.labelKey] ?? FileText;
+                          return (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              onClick={() => setOpenMenu(null)}
+                              className={cn(
+                                "flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors",
+                                isActiveItem(item.href)
+                                  ? "text-amber-600 bg-amber-50"
+                                  : "text-surface-700 hover:bg-surface-50"
+                              )}
+                            >
+                              <Icon className="w-4 h-4 text-surface-400" />
+                              {t(item.labelKey)}
+                            </Link>
+                          );
+                        })}
+                      </div>
                     )}
-                  >
-                    {Icon && <Icon className="w-4 h-4" />}
-                    {t(navLabelKeys[item.href] ?? (item.label as TranslationKey))}
-                  </Link>
+                  </div>
                 );
               })}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="p-2 text-surface-500 hover:text-surface-700 hover:bg-surface-100 rounded-lg">
-              <Search className="w-5 h-5" />
-            </button>
-
-            {/* Language Switcher — 3 options (ar/en/ur) */}
+            {/* Language Switcher */}
             <LanguageSwitcher />
 
             {isLoggedIn ? (
               <>
-                <button className="relative p-2 text-surface-500 hover:text-surface-700 hover:bg-surface-100 rounded-lg">
-                  <Bell className="w-5 h-5" />
-                  <span className="absolute top-1 end-1 w-2 h-2 bg-danger-500 rounded-full" />
-                </button>
-                <button className="p-2 text-surface-500 hover:text-surface-700 hover:bg-surface-100 rounded-lg">
-                  <MessageSquare className="w-5 h-5" />
-                </button>
                 <div className="relative">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-2 p-1 rounded-lg hover:bg-surface-100"
                   >
-                    <div className="w-8 h-8 bg-secondary-100 rounded-full flex items-center justify-center">
+                    <div className="w-9 h-9 bg-secondary-100 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-secondary-600" />
                     </div>
                     <ChevronDown className="w-4 h-4 text-surface-500 hidden sm:block" />
@@ -145,6 +187,7 @@ export default function Navbar() {
                       </div>
                       <Link
                         href="/profile"
+                        onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
                         <User className="w-4 h-4" />
@@ -152,6 +195,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         href="/dashboard"
+                        onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
                         <Building2 className="w-4 h-4" />
@@ -159,6 +203,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         href="/projects/ABC/organization"
+                        onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
                         <Building2 className="w-4 h-4" />
@@ -166,6 +211,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         href="/projects/ABC/verification"
+                        onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
                         <ShieldCheck className="w-4 h-4" />
@@ -173,6 +219,7 @@ export default function Navbar() {
                       </Link>
                       <Link
                         href="/projects/ABC/settings/mfa"
+                        onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
                         <Smartphone className="w-4 h-4" />
@@ -220,27 +267,35 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="lg:hidden border-t bg-white">
-          <div className="px-4 py-3 space-y-1">
-            {NAV_ITEMS.map((item) => {
-              const Icon = iconMap[item.icon];
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                    isActive
-                      ? "bg-secondary-50 text-secondary-600"
-                      : "text-surface-600 hover:bg-surface-100"
-                  )}
-                >
-                  {Icon && <Icon className="w-5 h-5" />}
-                  {t(navLabelKeys[item.href] ?? (item.label as TranslationKey))}
-                </Link>
-              );
-            })}
+          <div className="px-4 py-3 space-y-4">
+            {MENUS.map((menu) => (
+              <div key={menu.key}>
+                <p className="text-xs font-bold text-surface-400 uppercase tracking-wide mb-2 px-3">
+                  {t(menu.labelKey)}
+                </p>
+                <div className="space-y-1">
+                  {menu.items.map((item) => {
+                    const Icon = iconMap[item.labelKey] ?? FileText;
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                          isActiveItem(item.href)
+                            ? "bg-amber-50 text-amber-600"
+                            : "text-surface-600 hover:bg-surface-100"
+                        )}
+                      >
+                        <Icon className="w-5 h-5" />
+                        {t(item.labelKey)}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

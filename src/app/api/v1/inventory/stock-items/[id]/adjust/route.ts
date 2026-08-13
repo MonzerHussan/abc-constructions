@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { inventoryService } from '@/modules/inventory';
 import { adjustStockSchema } from '@/modules/inventory/validators/inventory-schemas';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { InventoryErrors } from '@/modules/shared/errors/inventory.errors';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export const POST = withAuth(async (request: NextRequest, { params, sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error('CORE_USER_UNAUTHORIZED', 'Authentication required'), { status: 401 });
-    }
-    const { id } = await params;
+    const { id } = params;
     const body = await request.json();
     const parsed = adjustStockSchema.parse(body);
-    const stockItem = await inventoryService.adjustStock(id, parsed, session.user.id);
+    const stockItem = await inventoryService.adjustStock(id, parsed, sessionUserId);
     return NextResponse.json(success(stockItem, createRequestId()));
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -28,4 +24,4 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
     return NextResponse.json(error('INTERNAL_ERROR', 'Error adjusting stock'), { status: 500 });
   }
-}
+});

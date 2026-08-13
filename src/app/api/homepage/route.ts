@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { getHomepageData } from "@/lib/homepage";
+import { DEFAULT_LOCALE, getDir, isSupportedLocale, LOCALE_COOKIE } from "@/lib/i18n";
 
 export async function GET() {
-  try {
-    const data = await getHomepageData();
-    return NextResponse.json(data);
-  } catch (e) {
-    console.error("GET /api/homepage failed", e);
-    return NextResponse.json({ error: "Failed to load homepage content" }, { status: 500 });
-  }
+  const cookieStore = await cookies();
+  const cookieValue = cookieStore.get(LOCALE_COOKIE)?.value;
+  const locale = isSupportedLocale(cookieValue) ? cookieValue : DEFAULT_LOCALE;
+
+  const data = await getHomepageData(locale);
+  return NextResponse.json({
+    data,
+    locale,
+    dir: getDir(locale),
+  });
 }

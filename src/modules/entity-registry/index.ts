@@ -28,3 +28,19 @@ export type {
   SyncEntityProfileInput,
   SyncSupplierInput,
 } from '@/modules/entity-registry/validators/entity-registry-schemas';
+
+export {
+  onboardingAnswerTypeSchema,
+  onboardingOptionSchema,
+  createOnboardingQuestionSchema,
+  updateOnboardingQuestionSchema,
+  onboardingQuestionListQuerySchema,
+  saveSurveyDataSchema,
+} from '@/modules/entity-registry/validators/onboarding-question-schemas';
+
+export type {
+  CreateOnboardingQuestionInput,
+  UpdateOnboardingQuestionInput,
+  OnboardingQuestionListQuery,
+  SaveSurveyDataInput,
+} from '@/modules/entity-registry/validators/onboarding-question-schemas';

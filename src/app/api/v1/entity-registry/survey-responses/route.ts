@@ -1,5 +1,4 @@
-import { NextRequest } from 'next/server';
-import { auth } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@/generated/prisma/client';
 import { entityRegistryService } from '@/modules/entity-registry';
@@ -7,6 +6,7 @@ import { success, error } from '@/modules/shared/utils/response-envelope';
 import { logger } from '@/modules/shared/utils/logger';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { z } from 'zod';
+import { withAuth } from '@/lib/auth-guard';
 
 const createSurveyResponseSchema = z.object({
   surveyId: z.string().min(1, 'surveyId is required'),
@@ -24,12 +24,8 @@ const createSurveyResponseSchema = z.object({
   timeStarted: z.string().datetime().optional(),
 });
 
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return Response.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
     const body = await request.json();
     const parsed = createSurveyResponseSchema.safeParse(body);
     if (!parsed.success) {
@@ -38,17 +34,17 @@ export async function POST(request: NextRequest) {
         const path = issue.path.join('.');
         details[path] = issue.message;
       }
-      return Response.json(error(ErrorCodes.VALIDATION_ERROR, 'Validation failed', details), { status: 422 });
+      return NextResponse.json(error(ErrorCodes.VALIDATION_ERROR, 'Validation failed', details), { status: 422 });
     }
 
     const survey = await prisma.survey.findUnique({ where: { id: parsed.data.surveyId } });
-    if (!survey) return Response.json(error(ErrorCodes.NOT_FOUND, 'Survey not found'), { status: 404 });
+    if (!survey) return NextResponse.json(error(ErrorCodes.NOT_FOUND, 'Survey not found'), { status: 404 });
 
     const response = await prisma.surveyResponse.create({
       data: {
         campaignId: survey.campaignId,
         surveyId: parsed.data.surveyId,
-        linkedUserId: session.user.id,
+        linkedUserId: sessionUserId,
         status: 'COMPLETED',
         isComplete: true,
         source: 'onboarding',
@@ -74,7 +70,7 @@ export async function POST(request: NextRequest) {
 
     // Bridge: try to link the user's entity (if one exists) — non-fatal on failure
     try {
-      const profile = await prisma.profile.findFirst({ where: { userId: session.user.id } });
+      const profile = await prisma.profile.findFirst({ where: { userId: sessionUserId } });
       if (profile) {
         await entityRegistryService.createInteraction({
           entityId: profile.entityId,
@@ -88,9 +84,9 @@ export async function POST(request: NextRequest) {
       // non-blocking: survey response is the primary write
     }
 
-    return Response.json(success({ id: response.id, status: response.status, surveyId: response.surveyId }), { status: 201 });
+    return NextResponse.json(success({ id: response.id, status: response.status, surveyId: response.surveyId }), { status: 201 });
   } catch (err) {
     logger.error('submit-survey-response failed', { error: err instanceof Error ? err.message : String(err) });
-    return Response.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to submit survey response'), { status: 500 });
+    return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Failed to submit survey response'), { status: 500 });
   }
-}
+});

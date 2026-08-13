@@ -57,7 +57,7 @@ export default function CampaignDetailPage() {
           {campaign.surveys && campaign.surveys.length > 0 ? (
             <div className="space-y-4">
               {campaign.surveys.map(s => (
-                <Link key={s.id} href={"/projects/ABC/research/" + campaign.slug + "/projects/ABC/survey/" + s.id} className="block bg-white border rounded-xl p-5 hover:shadow-md transition">
+                <Link key={s.id} href={"/projects/ABC/research/" + campaign.slug + "/survey/" + s.id} className="block bg-white border rounded-xl p-5 hover:shadow-md transition">
                   <div className="flex items-start justify-between">
                     <div><h3 className="font-bold text-lg mb-1">{s.titleAr || s.title}</h3>{s.description && <p className="text-surface-500 text-sm">{s.description}</p>}</div>
                     <span className="flex items-center gap-1 text-info-600 text-sm">???? <ArrowLeft size={16} /></span>

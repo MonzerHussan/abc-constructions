@@ -36,8 +36,11 @@ test.describe('Authentication UI', () => {
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });
 
-  test('register page rejects an invalid password on the client', async ({ page }) => {
+test('register page walks the role wizard and renders details form', async ({ page }) => {
     await page.goto('/projects/ABC/auth/register');
+    await page.locator('div.grid.grid-cols-2 > button').first().click();
+    await page.locator('button[class*="bg-amber-500"]').click();
     await expect(page.locator('input[type="email"]')).toBeVisible();
+    await expect(page.locator('input[type="password"]')).toBeVisible();
   });
 });

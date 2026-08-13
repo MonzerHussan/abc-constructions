@@ -61,6 +61,7 @@ export const upsertProfileSchema = z.object({
   digitalMaturity: z.string().optional().nullable(),
   apiReadiness: z.string().optional().nullable(),
   capabilities: z.array(z.string()).optional(),
+  surveyData: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const createInteractionSchema = z.object({

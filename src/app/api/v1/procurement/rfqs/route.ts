@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { rfqService } from '@/modules/procurement';
 import { createRFQSchema, rfqListQuerySchema } from '@/modules/procurement/validators/rfq-schemas';
 import { success, successPaginated, error } from '@/modules/shared/utils/response-envelope';

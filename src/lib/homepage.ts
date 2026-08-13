@@ -1,194 +1,157 @@
 import { prisma } from "@/lib/prisma";
-import {
-  HOMEPAGE_DEFAULTS,
-  ZONE_DEFAULTS,
-  SLIDE_DEFAULTS,
-  MENU_DEFAULTS,
-  REGISTER_ITEMS_DEFAULTS,
-  FOOTER_LINKS_DEFAULTS,
-  ZONE_LOCATIONS,
-} from "@/lib/homepage-defaults";
+import { HOMEPAGE_DEFAULTS, type HomepageData } from "@/lib/homepage-defaults";
 
-export type Localized = Record<string, string>;
+function pickLocale<T extends string | null>(
+  ar: T,
+  en: T,
+  ur: T,
+  language: "ar" | "en" | "ur",
+): T {
+  if (language === "en") return en ?? ar;
+  if (language === "ur") return ur ?? ar;
+  return ar;
+}
 
-export interface HomepageData {
-  config: {
-    logoUrl: string;
-    ctaLabel: Localized;
-    ctaHref: string;
-    heroTitle: Localized;
-    heroSubtitle: Localized;
-    heroDescription: Localized;
-    footerText: Localized;
-    showLanguage: boolean;
-    showLogin: boolean;
-    showRegister: boolean;
+export interface LocalizedHomepageData {
+  content: {
+    introTitle: string;
+    introBody: string;
+    visionTitle: string;
+    visionBody: string;
+    primaryCtaLabel: string;
+    primaryCtaHref: string;
+    secondaryCtaLabel: string;
+    secondaryCtaHref: string;
   };
-  zones: {
-    LEFT_TOP: Zone;
-    LEFT_BOTTOM: Zone;
-    RIGHT_TOP: Zone;
-    RIGHT_BOTTOM: Zone;
-  };
-  slides: Slide[];
-  menus: { key: string; label: Localized; items: { label: Localized; href: string }[] }[];
-  registerItems: { label: Localized; href: string }[];
-  footerLinks: { label: Localized; href: string }[];
-  ads: { title: Localized; imageUrl: string; link: string }[];
+  slides: Array<{
+    id: string;
+    title: string;
+    subtitle: string;
+    imageUrl: string;
+    linkUrl: string | null;
+  }>;
+  videos: Array<{
+    id: string;
+    title: string;
+    description: string;
+    videoUrl: string;
+    posterUrl: string | null;
+  }>;
+  ads: Array<{
+    id: string;
+    title: string;
+    subtitle: string;
+    imageUrl: string;
+    linkUrl: string | null;
+    animation: string;
+  }>;
 }
 
-export interface Zone {
-  contentType: "TEXT" | "IMAGE" | "VIDEO";
-  title: Localized;
-  body: Localized;
-  mediaUrl: string;
-  link: string;
-}
-
-export interface Slide {
-  title: Localized;
-  subtitle: Localized;
-  imageUrl: string;
-  link: string;
-}
-
-function norm(text: Localized | null | undefined): Localized {
-  return {
-    ar: text?.ar ?? "",
-    en: text?.en ?? "",
-    ur: text?.ur ?? "",
-  };
-}
-
-export async function getHomepageData(): Promise<HomepageData> {
-  const [config, zones, slides, menus, menuItems, footerLinks, ads] = await Promise.all([
-    prisma.homepageConfig.findFirst({ where: { key: "main" } }),
-    prisma.homepageZone.findMany({ orderBy: { order: "asc" } }),
-    prisma.homepageSlide.findMany({ where: { enabled: true }, orderBy: { order: "asc" } }),
-    prisma.headerMenu.findMany({ where: { enabled: true }, orderBy: { order: "asc" } }),
-    prisma.headerMenuItem.findMany({ where: { enabled: true }, orderBy: { order: "asc" } }),
-    prisma.footerLink.findMany({ where: { enabled: true }, orderBy: { order: "asc" } }),
-    prisma.homepageAd.findMany({ where: { enabled: true }, orderBy: { order: "asc" } }),
+export async function getHomepageData(
+  language: "ar" | "en" | "ur" = "ar",
+): Promise<LocalizedHomepageData> {
+  const [contentRow, slides, videos, ads] = await Promise.all([
+    prisma.homepageContent.findFirst({ orderBy: { createdAt: "desc" } }),
+    prisma.carouselSlide.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: "asc" },
+    }),
+    prisma.videoSection.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: "asc" },
+    }),
+    prisma.ad.findMany({
+      where: { isActive: true },
+      orderBy: { sortOrder: "asc" },
+    }),
   ]);
 
-  // Config: DB row or defaults
-  const hasConfig = config && (config.logoUrl || config.ctaLabel);
-  const cfg = {
-    logoUrl: (config?.logoUrl as string) || HOMEPAGE_DEFAULTS.logoUrl,
-    ctaLabel: (config?.ctaLabel as Localized | null) || HOMEPAGE_DEFAULTS.ctaLabel,
-    ctaHref: config?.ctaHref || HOMEPAGE_DEFAULTS.ctaHref,
-    heroTitle: norm(config?.heroTitle as Localized | null).ar ? (config!.heroTitle as Localized) : HOMEPAGE_DEFAULTS.heroTitle,
-    heroSubtitle: norm(config?.heroSubtitle as Localized | null).ar ? (config!.heroSubtitle as Localized) : HOMEPAGE_DEFAULTS.heroSubtitle,
-    heroDescription: norm(config?.heroDescription as Localized | null).ar ? (config!.heroDescription as Localized) : HOMEPAGE_DEFAULTS.heroDescription,
-    footerText: norm(config?.footerText as Localized | null).ar ? (config!.footerText as Localized) : HOMEPAGE_DEFAULTS.footerText,
-    showLanguage: config?.showLanguage ?? HOMEPAGE_DEFAULTS.showLanguage,
-    showLogin: config?.showLogin ?? HOMEPAGE_DEFAULTS.showLogin,
-    showRegister: config?.showRegister ?? HOMEPAGE_DEFAULTS.showRegister,
+  const d = HOMEPAGE_DEFAULTS;
+  const content = contentRow ?? d.content;
+
+  const localizedContent = {
+    introTitle: pickLocale(
+      content.introTitle,
+      content.introTitleEn ?? content.introTitle,
+      content.introTitleUr ?? content.introTitle,
+      language,
+    ),
+    introBody: pickLocale(
+      content.introBody,
+      content.introBodyEn ?? content.introBody,
+      content.introBodyUr ?? content.introBody,
+      language,
+    ),
+    visionTitle: pickLocale(
+      content.visionTitle,
+      content.visionTitleEn ?? content.visionTitle,
+      content.visionTitleUr ?? content.visionTitle,
+      language,
+    ),
+    visionBody: pickLocale(
+      content.visionBody,
+      content.visionBodyEn ?? content.visionBody,
+      content.visionBodyUr ?? content.visionBody,
+      language,
+    ),
+    primaryCtaLabel: pickLocale(
+      content.primaryCtaLabel,
+      content.primaryCtaLabelEn ?? content.primaryCtaLabel,
+      content.primaryCtaLabelUr ?? content.primaryCtaLabel,
+      language,
+    ),
+    primaryCtaHref: content.primaryCtaHref,
+    secondaryCtaLabel: pickLocale(
+      content.secondaryCtaLabel,
+      content.secondaryCtaLabelEn ?? content.secondaryCtaLabel,
+      content.secondaryCtaLabelUr ?? content.secondaryCtaLabel,
+      language,
+    ),
+    secondaryCtaHref: content.secondaryCtaHref,
   };
 
-  // Zones: use DB rows if any exist, else defaults
-  const zoneMap = new Map<string, Zone>();
-  for (const z of zones) {
-    zoneMap.set(z.location, {
-      contentType: z.contentType as Zone["contentType"],
-      title: norm(z.title as Localized | null),
-      body: norm(z.body as Localized | null),
-      mediaUrl: z.mediaUrl || "",
-      link: z.link || "",
-    });
-  }
-  const resolvedZones = {} as HomepageData["zones"];
-  for (const loc of ZONE_LOCATIONS) {
-    const hasDb = zoneMap.has(loc) && zoneMap.get(loc)!.title.ar;
-    resolvedZones[loc] = hasDb
-      ? zoneMap.get(loc)!
-      : {
-          contentType: ZONE_DEFAULTS[loc].contentType,
-          title: ZONE_DEFAULTS[loc].title,
-          body: ZONE_DEFAULTS[loc].body,
-          mediaUrl: ZONE_DEFAULTS[loc].mediaUrl,
-          link: ZONE_DEFAULTS[loc].link,
-        };
-  }
-
-  // Slides: DB rows or defaults
-  const resolvedSlides = slides.length
-    ? slides.map((s) => ({
-        title: norm(s.title as Localized | null),
-        subtitle: norm(s.subtitle as Localized | null),
-        imageUrl: s.imageUrl,
-        link: s.link || "",
-      }))
-    : SLIDE_DEFAULTS;
-
-  // Menus: DB or defaults
-  const itemMap = new Map<string, { label: Localized; href: string }[]>();
-  for (const it of menuItems) {
-    const arr = itemMap.get(it.menuId) ?? [];
-    arr.push({ label: norm(it.label as Localized | null), href: it.href });
-    itemMap.set(it.menuId, arr);
-  }
-  const dbMenus = menus.map((m) => ({
-    key: m.key,
-    label: norm(m.label as Localized | null),
-    items: itemMap.get(m.id) ?? [],
-  }));
-  const hasAnyMenu = dbMenus.length > 0 && dbMenus.every((m) => m.label.ar);
-  const resolvedMenus = hasAnyMenu ? dbMenus : MENU_DEFAULTS;
-
-  // Register items: from the register menu if the admin created one, else defaults
-  const registerMenu = resolvedMenus.find((m) => m.key === "register");
-  const resolvedRegisterItems = registerMenu?.items?.length
-    ? registerMenu.items
-    : REGISTER_ITEMS_DEFAULTS;
-
-  // Footer links: DB or defaults
-  const resolvedFooterLinks = footerLinks.length
-    ? footerLinks.map((l) => ({ label: norm(l.label as Localized | null), href: l.href }))
-    : FOOTER_LINKS_DEFAULTS;
-
-  // Ads: DB or quick defaults
-  const resolvedAds = ads.length
-    ? ads.map((a) => ({ title: norm(a.title as Localized | null), imageUrl: a.imageUrl || "", link: a.link || "" }))
-    : [
-        {
-          title: { ar: "مشاريع إنشائية", en: "Construction Projects", ur: "تعمیراتی منصوبے" },
-          imageUrl: "/ads/ad-1.png",
-          link: "/projects/ABC/projects",
-        },
-        {
-          title: { ar: "مواد البناء", en: "Building Materials", ur: "تعمیراتی سامان" },
-          imageUrl: "/ads/ad-2.png",
-          link: "/projects/ABC/marketplace",
-        },
-        {
-          title: { ar: "معدات وآليات", en: "Equipment", ur: "مشینری" },
-          imageUrl: "/ads/ad-3.png",
-          link: "/projects/ABC/tenders/materials",
-        },
-      ];
+  const localizedSlides = slides.length > 0 ? slides : d.slides;
+  const localizedVideos = videos.length > 0 ? videos : d.videos;
+  const localizedAds = ads.length > 0 ? ads : d.ads;
 
   return {
-    config: cfg,
-    zones: resolvedZones,
-    slides: resolvedSlides,
-    menus: resolvedMenus,
-    registerItems: resolvedRegisterItems,
-    footerLinks: resolvedFooterLinks,
-    ads: resolvedAds,
+    content: localizedContent,
+    slides: localizedSlides.map((s) => ({
+      id: s.id,
+      title: pickLocale(s.title, s.titleEn ?? s.title, s.titleUr ?? s.title, language),
+      subtitle: pickLocale(
+        s.subtitle ?? "",
+        s.subtitleEn ?? s.subtitle ?? "",
+        s.subtitleUr ?? s.subtitle ?? "",
+        language,
+      ),
+      imageUrl: s.imageUrl,
+      linkUrl: s.linkUrl,
+    })),
+    videos: localizedVideos.map((v) => ({
+      id: v.id,
+      title: pickLocale(v.title, v.titleEn ?? v.title, v.titleUr ?? v.title, language),
+      description: pickLocale(
+        v.description ?? "",
+        v.descriptionEn ?? v.description ?? "",
+        v.descriptionUr ?? v.description ?? "",
+        language,
+      ),
+      videoUrl: v.videoUrl,
+      posterUrl: v.posterUrl,
+    })),
+    ads: localizedAds.map((a) => ({
+      id: a.id,
+      title: pickLocale(a.title, a.titleEn ?? a.title, a.titleUr ?? a.title, language),
+      subtitle: pickLocale(
+        a.subtitle ?? "",
+        a.subtitleEn ?? a.subtitle ?? "",
+        a.subtitleUr ?? a.subtitle ?? "",
+        language,
+      ),
+      imageUrl: a.imageUrl,
+      linkUrl: a.linkUrl,
+      animation: a.animation,
+    })),
   };
-}
-
-// used to indicate whether CMS content exists (for the admin UI banner)
-export async function hasProjectedHomepageContent(): Promise<boolean> {
-  const [zones, slides, menus] = await Promise.all([
-    prisma.homepageZone.findMany({ select: { id: true } }),
-    prisma.homepageSlide.findMany({ select: { id: true } }),
-    prisma.headerMenu.findMany({ select: { id: true } }),
-  ]);
-  return zones.length > 0 || slides.length > 0 || menus.length > 0;
-}
-
-export function getZoneByLocation(zones: HomepageData["zones"], location: keyof HomepageData["zones"]): Zone {
-  return zones[location];
 }

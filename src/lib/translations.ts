@@ -71,6 +71,12 @@ export const translations = {
     navJobs: "التوظيف",
     navDelivery: "خدمة التوصيل",
     navTraining: "التدريب",
+    navBids: "المناقصات",
+    navBidsSubtitle: "مناقصات المشاريع والمواد",
+    navMarketplaceTitle: "السوق",
+    navMarketplaceSubtitle: "البضائع والمشاريع والتوصيل",
+    navCommunity: "المجتمع",
+    navCommunitySubtitle: "التدريب والتوظيف",
 
     // Header menus
     headProjects: "المشاريع",
@@ -755,6 +761,7 @@ export const translations = {
     obUploaded: "تم الرفع",
     obUploadError: "فشل الرفع",
     obRemove: "إزالة",
+    obDocRequired: "يجب رفع وثيقة واحدة على الأقل",
     obSurveyTitle: "استبيان سريع",
     obSurveySubtitle: "ساعدنا على تخصيص تجربتك",
     obSurveyCategoriesTitle: "فئات الأعمال التي تغطيها",
@@ -1034,6 +1041,12 @@ export const translations = {
     navJobs: "Jobs",
     navDelivery: "Delivery",
     navTraining: "Training",
+    navBids: "Bids",
+    navBidsSubtitle: "Project & material tenders",
+    navMarketplaceTitle: "Market",
+    navMarketplaceSubtitle: "Goods, projects & delivery",
+    navCommunity: "Community",
+    navCommunitySubtitle: "Training & jobs",
 
     // Header menus
     headProjects: "Projects",
@@ -1718,6 +1731,7 @@ export const translations = {
     obUploaded: "Uploaded",
     obUploadError: "Upload failed",
     obRemove: "Remove",
+    obDocRequired: "At least one document is required",
     obSurveyTitle: "Quick Survey",
     obSurveySubtitle: "Help us personalize your experience",
     obSurveyCategoriesTitle: "Business categories you cover",
@@ -1996,6 +2010,12 @@ export const translations = {
     navJobs: "ملازمتیں",
     navDelivery: "ڈلیوری سروس",
     navTraining: "تربیت",
+    navBids: "ٹینڈرز",
+    navBidsSubtitle: "پروجیکٹ اور مواد کے ٹینڈرز",
+    navMarketplaceTitle: "بازار",
+    navMarketplaceSubtitle: "سامان، پراجیکٹس اور ڈلیوری",
+    navCommunity: "کمیونٹی",
+    navCommunitySubtitle: "تربیت اور ملازمتیں",
 
     // Header menus
     headProjects: "پروجیکٹس",
@@ -2638,6 +2658,7 @@ export const translations = {
     obUploaded: "اپ لوڈ ہو گیا",
     obUploadError: "اپ لوڈ ناکام",
     obRemove: "ہٹائیں",
+    obDocRequired: "کم از کم ایک دستاویز درکار ہے",
     obSurveyTitle: "مختصر سروے",
     obSurveySubtitle: "اپنے تجربے کو ذاتی بنانے میں ہماری مدد کریں",
     obSurveyCategoriesTitle: "وہ کاروباری زمرے جو آپ کور کرتے ہیں",

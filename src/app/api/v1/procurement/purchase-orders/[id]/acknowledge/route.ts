@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
 import { purchaseOrderService } from '@/modules/procurement';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { createRequestId } from '@/modules/shared/utils/response-envelope';
+import { withAuth } from '@/lib/auth-guard';
 
-export async function POST(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export const POST = withAuth(async (_request: NextRequest, { params, sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const { id } = await params;
-    const session = await auth();
-    if (!session?.user?.id) {
-      return NextResponse.json(error(ErrorCodes.CORE_USER_UNAUTHORIZED, 'Authentication required'), { status: 401 });
-    }
-    const po = await purchaseOrderService.acknowledge(id, session.user.id);
+    const { id } = params;
+    const po = await purchaseOrderService.acknowledge(id, sessionUserId);
     return NextResponse.json(success(po, createRequestId()));
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -31,4 +24,4 @@ export async function POST(
     }
     return NextResponse.json(error(ErrorCodes.INTERNAL_ERROR, 'Error acknowledging purchase order'), { status: 500 });
   }
-}
+});
