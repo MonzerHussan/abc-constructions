@@ -2,7 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const base = process.env.E2E_BASE_URL ?? 'http://localhost:3001';
+const base = process.env.E2E_BASE_URL ?? 'http://localhost:3000';
 const stamp = Date.now();
 const email = `qa-e2e-${stamp}@qa.abc.test`;
 const password = 'QaPassw0rd123';
