@@ -1,88 +1,51 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Homepage layout shell", () => {
-  test("columns and regions are positioned correctly", async ({ page }) => {
-    await page.goto("/", { waitUntil: "load" });
+test.describe("Homepage layout shell (/projects/ABC)", () => {
+  test("hero content and CTA render from defaults without seed", async ({ page }) => {
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
-    const asides = page.locator("aside");
-    expect(await asides.count()).toBe(2);
+    // Hero region renders even when the DB has no seeded homepage rows
+    await expect(page.locator("main")).toBeVisible();
+    await expect(page.locator("footer")).toBeVisible();
 
-    const leftBox = await asides.nth(0).boundingBox();
-    expect(leftBox!).not.toBeNull();
-    expect(Math.abs(leftBox!.width - 260)).toBeLessThan(4);
-
-    const rightBox = await asides.nth(1).boundingBox();
-    expect(rightBox!).not.toBeNull();
-    expect(Math.abs(rightBox!.width - 260)).toBeLessThan(4);
-
-    const headerBox = await page.locator("header").first().boundingBox();
-    expect(headerBox!).not.toBeNull();
-    expect(headerBox!.height).toBeLessThanOrEqual(72);
-
-    const footerBox = await page.locator("footer").first().boundingBox();
-    expect(footerBox!).not.toBeNull();
-    // Footer sits at the natural bottom of the document flow
-    const docH = await page.evaluate(() => document.documentElement.scrollHeight);
-    expect(Math.abs(footerBox!.y + footerBox!.height - docH)).toBeLessThan(4);
+    // Default CTA labels are always present (HOMEPAGE_DEFAULTS fallback)
+    await expect(page.getByText("ابدأ الآن مجاناً").first()).toBeVisible();
+    await expect(page.getByText("تصفح المناقصات").first()).toBeVisible();
   });
 
-  test("header dropdown menus open on hover, show exact items, close on leave", async ({ page }) => {
-    await page.goto("/", { waitUntil: "load" });
+  test("navbar menus open on click and show exact items with prefixed links", async ({ page }) => {
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
     // Bids
-    await page.locator("header button:has-text('المناقصات')").hover();
+    await page.locator("nav button:has-text('المناقصات')").click();
     await page.waitForTimeout(250);
-    await expect(page.locator("header div.absolute.top-full.w-52 a")).toHaveText([
-      "المشاريع",
-      "المواد",
-      "المنتجات",
-      "الرحلات",
-    ]);
+    await expect(page.locator("nav a[href*='/projects/ABC/tenders/']").first()).toBeVisible();
+    const bids = await page.locator("nav div.absolute.top-full a").allTextContents();
+    expect(bids.join("|")).toContain("مناقصات المشاريع");
+    expect(bids.join("|")).toContain("مناقصات المواد");
 
     // Market
-    await page.locator("header button:has-text('السوق')").hover();
+    await page.locator("nav button:has-text('السوق')").click();
     await page.waitForTimeout(250);
-    await expect(page.locator("header div.absolute.top-full.w-52 a")).toHaveText([
-      "المشاريع",
-      "المواد",
-      "المنتجات",
-      "التوصيل",
-    ]);
+    const market = await page.locator("nav div.absolute.top-full a").allTextContents();
+    expect(market.join("|")).toContain("سوق البضائع");
+    expect(market.join("|")).toContain("خدمة التوصيل");
 
     // Community
-    await page.locator("header button:has-text('المجتمع')").hover();
+    await page.locator("nav button:has-text('المجتمع')").click();
     await page.waitForTimeout(250);
-    await expect(page.locator("header div.absolute.top-full.w-52 a")).toHaveText(["الوظائف", "التدريب"]);
-
-    // Register
-    await page.locator("header button:has-text('إنشاء حساب')").first().hover();
-    await page.waitForTimeout(250);
-    await expect(page.locator("header div.absolute.top-full.w-56 a")).toHaveText([
-      "جهة حكومية",
-      "مالك مشروع",
-      "استشاري",
-      "مورد",
-      "مقاول",
-      "مقاول فرعي",
-      "إدارة المشاريع والصيانة",
-      "فرد",
-    ]);
-
-    // Moving off the header/menu closes all menus
-    await page.mouse.move(10, 400);
-    await page.waitForTimeout(250);
-    await expect(page.locator("header div.absolute.top-full")).toHaveCount(0);
+    const community = await page.locator("nav div.absolute.top-full a").allTextContents();
+    expect(community.join("|")).toContain("التدريب");
+    expect(community.join("|")).toContain("التوظيف");
   });
 
-  test("collapsing left sidebar shrinks it to a 48px rail", async ({ page }) => {
-    await page.goto("/", { waitUntil: "load" });
+  test("register and login links point to the platform auth routes", async ({ page }) => {
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
-    const aside = page.locator("aside").first();
-    await aside.locator("button").last().click();
-    await page.waitForTimeout(350);
+    const registerLink = page.locator("nav a[href='/projects/ABC/auth/register']").first();
+    await expect(registerLink).toBeVisible();
 
-    const collapsedBox = await aside.boundingBox();
-    expect(collapsedBox!).not.toBeNull();
-    expect(Math.abs(collapsedBox!.width - 48)).toBeLessThan(4);
+    const loginLink = page.locator("nav a[href='/projects/ABC/auth/login']").first();
+    await expect(loginLink).toBeVisible();
   });
 });

@@ -188,7 +188,7 @@ test.describe('QA: full onboarding flow (T1-T4, A1-A5, D1-D2)', () => {
       extraHTTPHeaders: { 'x-forwarded-for': `10.200.${(stamp + 1) % 250}.199` },
     });
     const anonPage = await anonCtx.newPage();
-    await anonPage.goto(`${base}/onboarding`, { waitUntil: 'domcontentloaded' });
+    await anonPage.goto(`${base}/projects/ABC/onboarding`, { waitUntil: 'domcontentloaded' });
     await anonPage.waitForTimeout(4000);
     console.log('[QA] T4 anon URL:', anonPage.url());
     expect(anonPage.url().includes('/projects/ABC/auth/login')).toBeTruthy();

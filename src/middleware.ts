@@ -31,6 +31,7 @@ const protectedPages = [
   '/projects/ABC/admin',
   '/projects/ABC/settings',
   '/projects/ABC/delivery/driver',
+  '/projects/ABC/onboarding',
 ];
 
 function isPublicPath(pathname: string): boolean {

@@ -165,10 +165,11 @@ jobs:
         run: npm run build
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      - name: Generate Prisma client + push schema
+      - name: Generate Prisma client + push schema + seed
         run: |
           npx prisma generate
           npx prisma db push
+          npx tsx prisma/seed-homepage.ts
       - name: Start server
         run: npm run start:ci &
         env:
