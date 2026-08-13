@@ -6,7 +6,7 @@ import type { NextAuthConfig } from "next-auth";
 export const authConfig = {
   providers: [], // providers are added in the full auth (src/lib/auth.ts) for the Node runtime
   pages: {
-    signIn: "/auth/login",
+    signIn: "/projects/ABC/auth/login",
   },
   session: {
     strategy: "jwt",
@@ -15,7 +15,7 @@ export const authConfig = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = (user as any).role;
+        token.role = (user as { role?: string }).role;
         token.id = user.id;
       }
       return token;

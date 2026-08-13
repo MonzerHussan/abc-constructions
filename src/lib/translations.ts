@@ -78,6 +78,19 @@ export const translations = {
     navCommunity: "المجتمع",
     navCommunitySubtitle: "التدريب والتوظيف",
 
+    // Header menus
+    headProjects: "المشاريع",
+    headMaterials: "المواد",
+    headProducts: "المنتجات",
+    headTrip: "الرحلات",
+    headDelivery: "التوصيل",
+    headJobs: "الوظائف",
+    headTraining: "التدريب",
+    collapse: "طيّ",
+    menuBids: "المناقصات",
+    menuMarket: "السوق",
+    menuCommunity: "المجتمع",
+
     // Auth
     loginTitle: "تسجيل الدخول",
     loginSubtitle: "مرحباً بعودتك! أدخل بياناتك للوصول لحسابك",
@@ -103,6 +116,9 @@ export const translations = {
     roleConsultant: "استشاري",
     roleContractor: "مقاول",
     roleSubcontractor: "مقاول فرعي",
+    roleGovernment: "جهة حكومية",
+    rolePmMaintenance: "إدارة المشاريع والصيانة",
+    roleIndividual: "فرد",
     roleWorkshop: "ورشة",
     roleFreelancer: "مستقل",
     roleSupplier: "مورد",
@@ -1032,6 +1048,19 @@ export const translations = {
     navCommunity: "Community",
     navCommunitySubtitle: "Training & jobs",
 
+    // Header menus
+    headProjects: "Projects",
+    headMaterials: "Materials",
+    headProducts: "Products",
+    headTrip: "Trip",
+    headDelivery: "Delivery",
+    headJobs: "Jobs",
+    headTraining: "Training",
+    collapse: "Collapse",
+    menuBids: "Bids",
+    menuMarket: "Market",
+    menuCommunity: "Community",
+
     // Auth
     loginTitle: "Login",
     loginSubtitle: "Welcome back! Enter your credentials to access your account",
@@ -1057,6 +1086,9 @@ export const translations = {
     roleConsultant: "Consultant",
     roleContractor: "Contractor",
     roleSubcontractor: "Subcontractor",
+    roleGovernment: "Government",
+    rolePmMaintenance: "PM & Maintenance",
+    roleIndividual: "Individual",
     roleWorkshop: "Workshop",
     roleFreelancer: "Freelancer",
     roleSupplier: "Supplier",
@@ -1985,6 +2017,19 @@ export const translations = {
     navCommunity: "کمیونٹی",
     navCommunitySubtitle: "تربیت اور ملازمتیں",
 
+    // Header menus
+    headProjects: "پروجیکٹس",
+    headMaterials: "مواد",
+    headProducts: "مصنوعات",
+    headTrip: "ٹرپ",
+    headDelivery: "ڈلیوری",
+    headJobs: "ملازمتیں",
+    headTraining: "تربیت",
+    collapse: "بند کریں",
+    menuBids: "ٹینڈرز",
+    menuMarket: "مارکیٹ",
+    menuCommunity: "کمیونٹی",
+
     // Auth
     loginTitle: "لاگ ان",
     loginSubtitle: "خوش آمدید! اکاؤنٹ تک رسائی کے لیے اپنی معلومات درج کریں",
@@ -2010,6 +2055,9 @@ export const translations = {
     roleConsultant: "مشیر",
     roleContractor: "پیمانہ دار",
     roleSubcontractor: "ذیلی پیمانہ دار",
+    roleGovernment: "سرکاری ادارہ",
+    rolePmMaintenance: "پراجیکٹ مینجمنٹ اور مینٹیننس",
+    roleIndividual: "فرد",
     roleWorkshop: "ورکشاپ",
     roleFreelancer: "فری لانسر",
     roleSupplier: "سپلائر",

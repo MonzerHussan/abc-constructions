@@ -32,29 +32,29 @@ export interface SmartNavigationState {
 }
 
 export const ROLE_DEFAULT_ROUTE: Record<UserRole, string> = {
-  OWNER: "/projects",
-  CONSULTANT: "/projects",
-  CONTRACTOR: "/projects",
-  SUBCONTRACTOR: "/projects",
-  WORKSHOP: "/projects",
-  FREELANCER: "/jobs",
-  SUPPLIER: "/marketplace",
-  TRADER: "/marketplace",
-  ADMIN: "/admin",
-  SUPER_ADMIN: "/admin",
+  OWNER: "/projects/ABC/projects",
+  CONSULTANT: "/projects/ABC/projects",
+  CONTRACTOR: "/projects/ABC/projects",
+  SUBCONTRACTOR: "/projects/ABC/projects",
+  WORKSHOP: "/projects/ABC/projects",
+  FREELANCER: "/projects/ABC/jobs",
+  SUPPLIER: "/projects/ABC/marketplace",
+  TRADER: "/projects/ABC/marketplace",
+  ADMIN: "/projects/ABC/admin",
+  SUPER_ADMIN: "/projects/ABC/admin",
 };
 
 export const PUBLIC_PATHS = [
   "/",
-  "/auth/login",
-  "/auth/register",
-  "/auth/forgot-password",
-  "/auth/reset-password",
+  "/projects/ABC/auth/login",
+  "/projects/ABC/auth/register",
+  "/projects/ABC/auth/forgot-password",
+  "/projects/ABC/auth/reset-password",
   "/api/v1/health",
   "/api/auth",
 ];
 
-export const ONBOARDING_PATH = "/onboarding";
+export const ONBOARDING_PATH = "/projects/ABC/onboarding";
 
 export function getRoleDefaultRoute(role: UserRole | null): string {
   if (!role) return "/";
@@ -81,7 +81,7 @@ export function shouldRedirectToDashboard(
   return (
     isAuthenticated &&
     isOnboarded &&
-    (pathname === "/auth/login" || pathname === "/auth/register" || pathname === ONBOARDING_PATH)
+    (pathname === "/projects/ABC/auth/login" || pathname === "/projects/ABC/auth/register" || pathname === ONBOARDING_PATH)
   );
 }
 
@@ -89,5 +89,10 @@ export function shouldRedirectToLogin(
   pathname: string,
   isAuthenticated: boolean
 ): boolean {
-  return !isAuthenticated && !isPublicPath(pathname) && !pathname.startsWith("/api/");
+  return (
+    !isAuthenticated &&
+    !isPublicPath(pathname) &&
+    !pathname.startsWith("/api/") &&
+    pathname !== "/projects/ABC"
+  );
 }

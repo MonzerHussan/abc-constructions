@@ -23,7 +23,8 @@ async function registerSupplier(page: Page, mail: string) {
         const val = document.createElement.bind(document) as unknown;
         void val;
         el.addEventListener('click', () => {
-          if ((el as HTMLInputElement).type === 'file' && (window as any).__qaPendingFiles && (window as any).__qaPendingFiles.size > 0) {
+          const inputEl = el as HTMLInputElement;
+          if (inputEl.type === 'file' && (window as any).__qaPendingFiles && (window as any).__qaPendingFiles.size > 0) {
             const dt = new DataTransfer();
             for (const f of (window as any).__qaPendingFiles.values()) dt.items.add(f);
             Object.defineProperty(el, 'files', { value: dt.files, configurable: true });
@@ -35,7 +36,7 @@ async function registerSupplier(page: Page, mail: string) {
     }) as any;
     void origClick;
   });
-  await page.goto('/auth/register');
+  await page.goto('/projects/ABC/auth/register');
   const roleButtons = await page.locator('div.grid.grid-cols-2 > button').all();
   let clicked = false;
   for (const b of roleButtons) {
@@ -187,14 +188,14 @@ test.describe('QA: full onboarding flow (T1-T4, A1-A5, D1-D2)', () => {
       extraHTTPHeaders: { 'x-forwarded-for': `10.200.${(stamp + 1) % 250}.199` },
     });
     const anonPage = await anonCtx.newPage();
-    await anonPage.goto(`${base}/onboarding`, { waitUntil: 'domcontentloaded' });
+    await anonPage.goto(`${base}/projects/ABC/onboarding`, { waitUntil: 'domcontentloaded' });
     await anonPage.waitForTimeout(4000);
     console.log('[QA] T4 anon URL:', anonPage.url());
-    expect(anonPage.url().includes('/auth/login')).toBeTruthy();
+    expect(anonPage.url().includes('/projects/ABC/auth/login')).toBeTruthy();
     await anonCtx.close();
 
     // T3 — Already-onboarded user visiting /onboarding is auto-redirected
-    await page.goto('/onboarding', { waitUntil: 'domcontentloaded' });
+    await page.goto('/projects/ABC/onboarding', { waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(8000);
     const redirectedUrl = page.url();
     console.log('[QA] T3 redirected URL:', redirectedUrl);

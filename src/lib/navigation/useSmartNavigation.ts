@@ -60,7 +60,7 @@ export function useSmartNavigation(): UseSmartNavigationResult {
 
     // 1. Unauthenticated users trying to reach a protected page → login.
     if (shouldRedirectToLogin(pathname, isAuthenticated)) {
-      const loginUrl = new URL("/auth/login", window.location.origin);
+      const loginUrl = new URL("/projects/ABC/auth/login", window.location.origin);
       loginUrl.searchParams.set("callbackUrl", pathname);
       router.replace(loginUrl.toString());
       return;

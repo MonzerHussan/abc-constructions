@@ -30,14 +30,14 @@ test.describe('Security headers & static responses', () => {
 
 test.describe('Authentication UI', () => {
   test('login page renders email and password fields', async ({ page }) => {
-    await page.goto('/auth/login');
+    await page.goto('/projects/ABC/auth/login');
     await expect(page.getByRole('button', { name: /google/i })).toBeVisible();
     await expect(page.locator('input[type="email"]')).toBeVisible();
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });
 
-  test('register page walks the role wizard and renders details form', async ({ page }) => {
-    await page.goto('/auth/register');
+test('register page walks the role wizard and renders details form', async ({ page }) => {
+    await page.goto('/projects/ABC/auth/register');
     await page.locator('div.grid.grid-cols-2 > button').first().click();
     await page.locator('button[class*="bg-amber-500"]').click();
     await expect(page.locator('input[type="email"]')).toBeVisible();

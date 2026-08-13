@@ -47,25 +47,25 @@ const MENUS: NavMenu[] = [
     key: "bids",
     labelKey: "navBids",
     items: [
-      { href: "/tenders/projects", labelKey: "navProjectTenders" },
-      { href: "/tenders/materials", labelKey: "navMaterialTenders" },
+      { href: "/projects/ABC/tenders/projects", labelKey: "navProjectTenders" },
+      { href: "/projects/ABC/tenders/materials", labelKey: "navMaterialTenders" },
     ],
   },
   {
     key: "market",
     labelKey: "navMarketplaceTitle",
     items: [
-      { href: "/marketplace", labelKey: "navMarketplace" },
-      { href: "/projects", labelKey: "navProjects" },
-      { href: "/delivery", labelKey: "navDelivery" },
+      { href: "/projects/ABC/marketplace", labelKey: "navMarketplace" },
+      { href: "/projects/ABC/projects", labelKey: "navProjects" },
+      { href: "/projects/ABC/delivery", labelKey: "navDelivery" },
     ],
   },
   {
     key: "community",
     labelKey: "navCommunity",
     items: [
-      { href: "/training", labelKey: "navTraining" },
-      { href: "/jobs", labelKey: "navJobs" },
+      { href: "/projects/ABC/training", labelKey: "navTraining" },
+      { href: "/projects/ABC/jobs", labelKey: "navJobs" },
     ],
   },
 ];
@@ -202,7 +202,7 @@ export default function Navbar() {
                         {t("dashboard")}
                       </Link>
                       <Link
-                        href="/organization"
+                        href="/projects/ABC/organization"
                         onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
@@ -210,7 +210,7 @@ export default function Navbar() {
                         {t("myOrganization")}
                       </Link>
                       <Link
-                        href="/verification"
+                        href="/projects/ABC/verification"
                         onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
@@ -218,7 +218,7 @@ export default function Navbar() {
                         {t("verification")}
                       </Link>
                       <Link
-                        href="/settings/mfa"
+                        href="/projects/ABC/settings/mfa"
                         onClick={() => setUserMenuOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
                       >
@@ -237,13 +237,13 @@ export default function Navbar() {
             ) : (
               <div className="flex items-center gap-2">
                 <Link
-                  href="/auth/login"
+                  href="/projects/ABC/auth/login"
                   className="px-4 py-2 text-sm font-medium text-surface-700 hover:text-surface-900"
                 >
                   {t("login")}
                 </Link>
                 <Link
-                  href="/auth/register"
+                  href="/projects/ABC/auth/register"
                   className="px-4 py-2 text-sm font-medium bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors"
                 >
                   {t("register")}

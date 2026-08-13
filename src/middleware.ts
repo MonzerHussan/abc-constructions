@@ -6,14 +6,15 @@ import { authConfig } from '@/auth.config';
 const { auth } = NextAuth(authConfig);
 
 const publicPaths = [
-  '/auth/login',
-  '/auth/register',
-  '/auth/forgot-password',
-  '/auth/reset-password',
+  '/projects/ABC/auth/login',
+  '/projects/ABC/auth/register',
+  '/projects/ABC/auth/forgot-password',
+  '/projects/ABC/auth/reset-password',
   '/api/v1/health',
   '/api/auth',
   '/api/v1/auth',
   // Public-read (browsing) endpoints — no auth required (mobile + web)
+  '/api/homepage',
   '/api/v1/marketplace/products',
   '/api/v1/marketplace/categories',
   '/api/v1/marketplace/suppliers',
@@ -24,19 +25,20 @@ const publicPaths = [
 
 // Pages requiring an authenticated session (portal pages)
 const protectedPages = [
-  '/organization',
-  '/verification',
-  '/procurement',
-  '/admin',
-  '/settings',
-  '/delivery/driver',
+  '/projects/ABC/organization',
+  '/projects/ABC/verification',
+  '/projects/ABC/procurement',
+  '/projects/ABC/admin',
+  '/projects/ABC/settings',
+  '/projects/ABC/delivery/driver',
+  '/projects/ABC/onboarding',
 ];
 
-// Admin-only prefix
-const adminOnly = ['/admin'];
-
 function isPublicPath(pathname: string): boolean {
-  return publicPaths.some((p) => pathname.startsWith(p));
+  const normalized = pathname.startsWith('/projects/ABC/api/')
+    ? pathname.slice('/projects/ABC'.length)
+    : pathname;
+  return publicPaths.some((p) => normalized.startsWith(p));
 }
 
 function shouldSkipAuth(pathname: string): boolean {
@@ -52,13 +54,19 @@ function isProtectedPage(pathname: string): boolean {
   return protectedPages.some((p) => pathname.startsWith(p));
 }
 
+function isApiPath(pathname: string): boolean {
+  return (
+    pathname.startsWith('/api/') || pathname.startsWith('/projects/ABC/api/')
+  );
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (shouldSkipAuth(pathname)) return NextResponse.next();
   if (isPublicPath(pathname)) return NextResponse.next();
 
-  if (pathname.startsWith('/api/')) {
+  if (isApiPath(pathname)) {
     const session = await auth();
     if (!session?.user) {
       return NextResponse.json(
@@ -77,13 +85,12 @@ export async function middleware(request: NextRequest) {
   if (isProtectedPage(pathname)) {
     const session = await auth();
     if (!session?.user) {
-      const loginUrl = new URL('/auth/login', request.url);
+      const loginUrl = new URL('/projects/ABC/auth/login', request.url);
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
-    if (adminOnly.some((p) => pathname.startsWith(p)) && (session.user as { role?: string }).role !== 'ADMIN' && (session.user as { role?: string }).role !== 'SUPER_ADMIN') {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
+    // Non-admins still render the page; the admin layout shows an access-denied
+    // message instead of silently redirecting to the homepage.
   }
 
   return NextResponse.next();
