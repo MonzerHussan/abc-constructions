@@ -4,13 +4,14 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { signIn, useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Mail, Lock, Eye, EyeOff, Smartphone, ArrowLeft, Loader2 } from "lucide-react"
 import { useLanguage } from "@/lib/LanguageContext"
 
 export default function LoginPage() {
   const { t } = useLanguage()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { data: session, status } = useSession()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
@@ -20,11 +21,22 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [mfaRequired, setMfaRequired] = useState(false)
 
-  // Redirect authenticated users to onboarding to complete their profile
+  // Honor the callbackUrl set by the middleware when a protected page redirected
+  // here, but only for safe internal paths (no open-redirect / no external hosts).
+  const getSafeCallback = () => {
+    const cb = searchParams.get("callbackUrl")
+    if (!cb) return "/projects/ABC/onboarding"
+    if (!cb.startsWith("/") || cb.startsWith("//")) return "/projects/ABC/onboarding"
+    if (cb.startsWith("/projects/ABC/auth/")) return "/projects/ABC/onboarding"
+    return cb
+  }
+
+  // Redirect authenticated users to their intended destination (or onboarding)
   useEffect(() => {
     if (status === "authenticated") {
-      router.replace("/projects/ABC/onboarding")
+      router.replace(getSafeCallback())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, router])
 
   if (status === "loading" || status === "authenticated") {
@@ -67,7 +79,7 @@ export default function LoginPage() {
       setError("╪¡╪»╪½ ╪«╪╖╪ú ┘ü┘è ╪¬╪│╪¼┘è┘ä ╪º┘ä╪»╪«┘ê┘ä")
       setLoading(false)
     } else {
-      router.push("/projects/ABC/onboarding")
+      router.push(getSafeCallback())
     }
   }
 
@@ -84,7 +96,7 @@ export default function LoginPage() {
       setError("╪▒┘à╪▓ ╪º┘ä┘à╪╡╪º╪»┘é╪⌐ ╪║┘è╪▒ ╪╡╪¡┘è╪¡")
       setLoading(false)
     } else {
-      router.push("/projects/ABC/onboarding")
+      router.push(getSafeCallback())
     }
   }
 
