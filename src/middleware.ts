@@ -38,7 +38,18 @@ function isPublicPath(pathname: string): boolean {
   const normalized = pathname.startsWith('/projects/ABC/api/')
     ? pathname.slice('/projects/ABC'.length)
     : pathname;
-  return publicPaths.some((p) => normalized.startsWith(p));
+  if (publicPaths.some((p) => normalized.startsWith(p))) return true;
+
+  // Company-wide public pages (e.g. /projects listing of company products).
+  // Anything under /projects/ABC stays protected by the checks below.
+  if (
+    pathname === '/projects' ||
+    (pathname.startsWith('/projects/') && !pathname.startsWith('/projects/ABC') && !pathname.startsWith('/projects/ABC/'))
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 function shouldSkipAuth(pathname: string): boolean {
