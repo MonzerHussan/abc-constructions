@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import {
   PLATFORM_HOME,
   PLATFORM_LOGIN,
@@ -34,24 +34,6 @@ export default function LandingHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#0A2540]/95 backdrop-blur border-b border-white/10">
-      <div className="hidden border-b border-white/10 md:block">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1.5 text-xs text-white/70">
-          <span className="flex items-center gap-1.5">
-            <MessageCircle className="h-3.5 w-3.5 text-amber-400" />
-            <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
-              WhatsApp: +971 50 424 1653
-            </a>
-          </span>
-          <div className="flex items-center gap-3">
-            <Link href={PLATFORM_LOGIN} className="hover:text-white transition-colors">Login</Link>
-            <span className="text-white/30">|</span>
-            <Link href={PLATFORM_REGISTER} className="hover:text-white transition-colors">Create Account</Link>
-            <span className="text-white/30">|</span>
-            <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Enquire Now</a>
-          </div>
-        </div>
-      </div>
-
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
         <Link href={PLATFORM_HOME} className="flex items-center gap-2.5">
           <img src="/assets/ip-logo-header-DAMZfvjA.png" alt="Intelligent Projects" className="h-9 w-auto object-contain" />

@@ -1,7 +1,7 @@
 export const PLATFORM_HOME = "/projects/ABC";
 export const PLATFORM_LOGIN = "/projects/ABC/auth/login";
 export const PLATFORM_REGISTER = "/projects/ABC/auth/register";
-export const PLATFORM_PROJECTS = "/projects/ABC/projects";
+export const PLATFORM_PROJECTS = "/projects";
 export const PLATFORM_MARKETPLACE = "/projects/ABC/marketplace";
 export const PLATFORM_TENDERS = "/projects/ABC/tenders/projects";
 
@@ -114,6 +114,42 @@ export const PROJECT_CATEGORIES = [
 ];
 
 export const VALUES = ["Innovation", "Integrity", "Excellence", "Partnership", "Growth"];
+
+export const COMPANY_PROJECTS = [
+  {
+    slug: "ABC",
+    title: "ABC",
+    tagline: "Business & Tenders Platform",
+    description:
+      "ABC is the company's flagship all-in-one business platform: marketplaces, tenders & procurement, RFQs and quotations, research, training and much more — all in one place.",
+    image: "/assets/all-projects-D-dbCtak.jpg",
+    href: "/projects/ABC",
+    status: "live" as const,
+    details: [{ label: "Platform", value: "Web" }],
+  },
+  {
+    slug: "wow",
+    title: "WOW",
+    tagline: "E-commerce & Consumer Experience",
+    description:
+      "An upcoming e-commerce venture focused on a seamless, tech-enabled consumer experience. Link will be added once the project goes live.",
+    image: "/assets/ecommerce-BQudAQvV.jpg",
+    href: "#",
+    status: "coming-soon" as const,
+    details: [{ label: "Status", value: "Coming Soon" }],
+  },
+  {
+    slug: "sakeenah",
+    title: "Sakeenah",
+    tagline: "Living & Community",
+    description:
+      "An upcoming community and lifestyle project. Link will be added once the project goes live.",
+    image: "/assets/coming-soon-section-CTIxRVQ-.jpg",
+    href: "#",
+    status: "coming-soon" as const,
+    details: [{ label: "Status", value: "Coming Soon" }],
+  },
+];
 
 export const QUICK_LINKS = [
   { label: "Home", href: PLATFORM_HOME },

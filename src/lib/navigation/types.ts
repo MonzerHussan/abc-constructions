@@ -62,7 +62,16 @@ export function getRoleDefaultRoute(role: UserRole | null): string {
 }
 
 export function isPublicPath(pathname: string): boolean {
-  return PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  if (PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return true;
+
+  // Company-wide public pages: /projects and any /projects/<slug> listing of
+  // company products. The entire /projects/ABC subtree belongs to the
+  // (protected) ABC platform and must never match this public prefix.
+  if (pathname === "/projects" || pathname.startsWith("/projects/")) {
+    return !(pathname === "/projects/ABC" || pathname.startsWith("/projects/ABC/"));
+  }
+
+  return false;
 }
 
 export function shouldRedirectToOnboarding(
