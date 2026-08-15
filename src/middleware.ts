@@ -49,6 +49,11 @@ function isPublicPath(pathname: string): boolean {
     return true;
   }
 
+  // Public company landing pages (services overview + service details).
+  if (pathname === '/services' || pathname.startsWith('/services/')) {
+    return true;
+  }
+
   return false;
 }
 
