@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { ArrowRight, Boxes, Clock } from "lucide-react";
 import { COMPANY_PROJECTS, PLATFORM_HOME, PLATFORM_PROJECTS } from "@/lib/landing-content";
+
+const projectHref = (slug: string) => `${PLATFORM_PROJECTS}/${slug}`;
 import LandingHeader from "@/components/landing/LandingHeader";
 import LandingFooter from "@/components/landing/LandingFooter";
 
@@ -61,7 +63,7 @@ export default function ProjectsPage() {
                         </span>
                       ) : (
                         <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-600">
-                          Open Platform
+                          Learn More
                           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </span>
                       )}
@@ -69,17 +71,10 @@ export default function ProjectsPage() {
                   </>
                 );
 
-                return comingSoon ? (
-                  <div
-                    key={project.slug}
-                    className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
-                  >
-                    {content}
-                  </div>
-                ) : (
+                return (
                   <Link
                     key={project.slug}
-                    href={project.href}
+                    href={projectHref(project.slug)}
                     className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-lg"
                   >
                     {content}
