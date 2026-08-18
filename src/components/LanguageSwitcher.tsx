@@ -22,7 +22,7 @@ export default function LanguageSwitcher() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-medium text-surface-600 hover:text-surface-900 hover:bg-surface-100 rounded-none transition-colors border border-surface-200"
+        className="flex items-center gap-1.5 text-sm font-semibold px-2.5 py-1.5 text-surface-600 hover:text-surface-900 hover:bg-surface-100 rounded-none transition-colors border border-surface-200"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label="Language"

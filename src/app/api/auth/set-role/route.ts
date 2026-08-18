@@ -10,8 +10,8 @@ const setRoleSchema = z.object({
     message: "Invalid role for self-registration",
   }),
   companyName: z.string().min(2).max(200),
-  name: z.string().min(2).max(100).optional(),
-  phone: z.string().min(8).max(30).optional(),
+  name: z.string().min(2).max(100),
+  phone: z.string().min(8).max(30),
 });
 
 export const POST = withAuth(async (request: NextRequest, { sessionUserId }) => {

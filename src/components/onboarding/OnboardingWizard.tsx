@@ -10,6 +10,7 @@ import { StepAccountType } from "./StepAccountType";
 import { StepDocuments } from "./StepDocuments";
 import { StepSurvey } from "./StepSurvey";
 import { submitOnboarding, syncUserRoleFromProfile } from "@/lib/onboarding/api";
+import { getRoleDefaultRoute, type UserRole } from "@/lib/navigation/types";
 import type {
   OnboardingState,
   OnboardingProfile,
@@ -82,6 +83,8 @@ export function OnboardingWizard() {
     searchParams.get("source") === "google" ||
     searchParams.get("source") === "role-required";
   const roleConfirmed = (session?.user as { roleConfirmed?: boolean } | undefined)?.roleConfirmed;
+  const emailVerified = (session?.user as { emailVerified?: boolean } | undefined)?.emailVerified;
+  const mustConfirmRole = roleConfirmed === false;
 
   useEffect(() => {
     if (!session?.user) return;
@@ -91,9 +94,16 @@ export function OnboardingWizard() {
         ...prev.profile,
         fullName: prev.profile.fullName || session.user?.name || "",
         email: prev.profile.email || session.user?.email || "",
+        phone: prev.profile.phone || (session.user as { phone?: string }).phone || "",
       },
     }));
   }, [session]);
+
+  useEffect(() => {
+    if (mustConfirmRole && state.step > 1) {
+      setState((prev) => ({ ...prev, step: 1 }));
+    }
+  }, [mustConfirmRole, state.step]);
 
   const updateProfile = useCallback((profile: OnboardingProfile) => {
     setState((prev) => ({ ...prev, profile }));
@@ -152,6 +162,11 @@ export function OnboardingWizard() {
   const handleNext = async () => {
     if (!validateStep(state.step)) return;
 
+    if (mustConfirmRole && state.step > 1) {
+      setState((prev) => ({ ...prev, step: 1, error: t("obGoogleRoleRequired") }));
+      return;
+    }
+
     if (state.step === 1) {
       setStepBusy(true);
       setState((prev) => ({ ...prev, error: null }));
@@ -175,6 +190,7 @@ export function OnboardingWizard() {
   };
 
   const handleBack = () => {
+    if (mustConfirmRole && state.step <= 1) return;
     setState((prev) => ({ ...prev, step: prev.step - 1, error: null }));
     setErrors({});
   };
@@ -232,7 +248,10 @@ export function OnboardingWizard() {
             {success.trackingId}
           </p>
           <button
-            onClick={() => router.push("/contractor")}
+            onClick={() => {
+              const role = (session?.user as { role?: UserRole } | undefined)?.role ?? null;
+              router.push(getRoleDefaultRoute(role));
+            }}
             className="px-8 py-3 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors"
           >
             {t("obSuccessCta")}
@@ -244,10 +263,17 @@ export function OnboardingWizard() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {(googleSource || roleConfirmed === false) && state.step === 1 && (
-        <div className="mb-4 rounded-none border border-secondary-200 bg-secondary-50 px-4 py-3 text-sm text-secondary-900">
-          {t("obGoogleRoleRequired") ||
-            "يرجى اختيار نوع حسابك وإكمال بياناتك. لا يمكن الدخول للمنصة قبل إتمام هذه الخطوة."}
+      {(googleSource || mustConfirmRole) && state.step === 1 && (
+        <div className="mb-4 space-y-2">
+          <div className="rounded-none border border-secondary-200 bg-secondary-50 px-4 py-3 text-sm text-secondary-900">
+            {t("obGoogleRoleRequired")}
+          </div>
+          <div className="rounded-none border border-surface-200 bg-white px-4 py-3 text-xs text-surface-700 space-y-1">
+            <p>
+              {emailVerified ? t("obEmailVerifiedGoogle") : t("obEmailVerifyHint")}
+            </p>
+            <p>{t("obPhoneVerifyHint")}</p>
+          </div>
         </div>
       )}
 
@@ -262,6 +288,7 @@ export function OnboardingWizard() {
               profile={state.profile}
               onChange={updateProfile}
               errors={errors}
+              emailVerified={emailVerified}
             />
           )}
           {state.step === 2 && (
@@ -288,7 +315,7 @@ export function OnboardingWizard() {
           <div className="mt-8 flex items-center justify-between gap-4">
             <button
               onClick={handleBack}
-              disabled={state.step === 1}
+              disabled={state.step === 1 || (mustConfirmRole && state.step === 1)}
               className="px-6 py-2.5 border border-surface-300 text-surface-700 rounded-xl font-medium hover:bg-surface-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {t("obBack")}

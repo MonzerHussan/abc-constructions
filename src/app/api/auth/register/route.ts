@@ -26,7 +26,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    const { email, password, name, phone, role, companyName } = parsed.data;
+    const { email, password, name, phone, role, companyName, companyType, country, city } = parsed.data;
+
+    const locationParts = [city, country].filter(Boolean);
+    const location = locationParts.length > 0 ? locationParts.join(", ") : undefined;
+    const bioParts = companyType ? [`${companyType}`] : [];
 
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -50,6 +54,8 @@ export async function POST(request: NextRequest) {
         role,
         companyName,
         roleConfirmed: true,
+        location,
+        bio: bioParts.length > 0 ? bioParts.join(" | ") : undefined,
       },
     });
 

@@ -19,6 +19,9 @@ export const selfRegisterSchema = z.object({
   phone: z.string().optional(),
   role: z.enum(SELF_REGISTRATION_ROLES, { message: 'Invalid role for self-registration' }),
   companyName: z.string().max(200).optional(),
+  companyType: z.string().max(100).optional(),
+  country: z.string().max(100).optional(),
+  city: z.string().max(100).optional(),
 });
 
 export const createUserSchema = z.object({

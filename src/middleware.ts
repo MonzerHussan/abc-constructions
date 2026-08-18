@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import NextAuth from 'next-auth';
 import { authConfig } from '@/auth.config';
+import {
+  isAbcPlatformPath,
+  isRoleSelectionApiAllowed,
+  isRoleSelectionPageAllowed,
+  ROLE_NOT_CONFIRMED_CODE,
+} from '@/lib/auth/role-gate';
 
 const { auth } = NextAuth(authConfig);
 
@@ -70,24 +76,6 @@ function isProtectedPage(pathname: string): boolean {
   return protectedPages.some((p) => pathname.startsWith(p));
 }
 
-/** Paths reachable while OAuth user has not confirmed account type yet */
-const roleSelectionAllowedPaths = [
-  '/projects/ABC',
-  '/projects/ABC/onboarding',
-  '/projects/ABC/auth/login',
-  '/projects/ABC/auth/register',
-  '/projects/ABC/auth/forgot-password',
-  '/projects/ABC/auth/reset-password',
-];
-
-function isRoleSelectionAllowed(pathname: string): boolean {
-  return roleSelectionAllowedPaths.includes(pathname);
-}
-
-function isAbcPlatformPath(pathname: string): boolean {
-  return pathname === '/projects/ABC' || pathname.startsWith('/projects/ABC/');
-}
-
 function isApiPath(pathname: string): boolean {
   return (
     pathname.startsWith('/api/') || pathname.startsWith('/projects/ABC/api/')
@@ -112,6 +100,22 @@ export async function middleware(request: NextRequest) {
         { status: 401 }
       );
     }
+
+    const roleConfirmed = (session.user as { roleConfirmed?: boolean }).roleConfirmed;
+    if (roleConfirmed === false && !isRoleSelectionApiAllowed(pathname)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: ROLE_NOT_CONFIRMED_CODE,
+            message: 'Account type must be confirmed before accessing this resource',
+          },
+          meta: { timestamp: new Date().toISOString() },
+        },
+        { status: 403 }
+      );
+    }
+
     return NextResponse.next();
   }
 
@@ -128,7 +132,7 @@ export async function middleware(request: NextRequest) {
     }
 
     const roleConfirmed = (session.user as { roleConfirmed?: boolean }).roleConfirmed;
-    if (roleConfirmed === false && !isRoleSelectionAllowed(pathname)) {
+    if (roleConfirmed === false && !isRoleSelectionPageAllowed(pathname)) {
       const onboardingUrl = new URL('/projects/ABC/onboarding', request.url);
       onboardingUrl.searchParams.set('source', 'role-required');
       return NextResponse.redirect(onboardingUrl);

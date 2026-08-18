@@ -133,6 +133,9 @@ function RectPanel({
   );
 }
 
+const HEADER_CONTROL =
+  "text-sm font-semibold px-2.5 py-1.5 whitespace-nowrap transition-colors";
+
 function NavDropdown({ dir }: { dir: "rtl" | "ltr" }) {
   const { t } = useLanguage();
   const [open, setOpen] = useState<string | null>(null);
@@ -152,7 +155,7 @@ function NavDropdown({ dir }: { dir: "rtl" | "ltr" }) {
         <div key={g.key} className="relative">
           <button
             onClick={() => setOpen(open === g.key ? null : g.key)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-none text-sm font-semibold text-surface-700 hover:text-secondary-600 hover:bg-secondary-50 transition-colors whitespace-nowrap"
+            className={cn("flex items-center gap-1.5 rounded-none", HEADER_CONTROL, "text-surface-700 hover:text-secondary-600 hover:bg-secondary-50")}
             aria-expanded={open === g.key}
           >
             {t(g.labelKey)}
@@ -202,7 +205,7 @@ function CreateAccountMenu({ dir, onSelect }: { dir: "rtl" | "ltr"; onSelect: (l
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 rounded-none bg-secondary-500 text-white font-semibold text-xs px-2.5 py-1 shadow-lg shadow-secondary-500/25 hover:bg-secondary-600 transition-colors"
+        className={cn("flex items-center gap-1.5 rounded-none bg-secondary-500 text-white shadow-lg shadow-secondary-500/25 hover:bg-secondary-600", HEADER_CONTROL)}
         aria-expanded={open}
       >
         {t("createAccount")}
@@ -343,8 +346,35 @@ function AccountMenu({ dir, onLogin, onRegisterSelect }: { dir: "rtl" | "ltr"; o
 export default function HomePage() {
   const { t, dir, language } = useLanguage();
   const [data, setData] = useState<HomepageData>(HOMEPAGE_DEFAULTS);
-  const [pendingRegister, setPendingRegister] = useState<{ role: string; label: string } | null>(null);
-  const [pendingLogin, setPendingLogin] = useState(false);
+  const [pendingRegister, setPendingRegister] = useState<{
+    role: string
+    label: string
+    categoryKey: TranslationKey
+  } | null>(null)
+  const [pendingLogin, setPendingLogin] = useState(false)
+  const authPanelRef = useRef<HTMLDivElement>(null)
+
+  function closeAuthPanel() {
+    setPendingLogin(false)
+    setPendingRegister(null)
+  }
+
+  useEffect(() => {
+    if (!pendingLogin && !pendingRegister) return
+
+    function handlePageButtonClick(e: MouseEvent) {
+      const target = e.target as HTMLElement
+      if (authPanelRef.current?.contains(target)) return
+
+      const clickedControl = target.closest("button, a, [role='button'], input[type='submit']")
+      if (clickedControl) {
+        closeAuthPanel()
+      }
+    }
+
+    document.addEventListener("click", handlePageButtonClick, true)
+    return () => document.removeEventListener("click", handlePageButtonClick, true)
+  }, [pendingLogin, pendingRegister])
 
   useEffect(() => {
     fetch(`/api/homepage`)
@@ -363,6 +393,7 @@ export default function HomePage() {
     setPendingRegister({
       role: ACCOUNT_CATEGORY_ROLE[labelKey] ?? "FREELANCER",
       label: t(labelKey),
+      categoryKey: labelKey,
     });
   }
 
@@ -421,15 +452,15 @@ export default function HomePage() {
       <main className="max-w-[1600px] mx-auto lg:grid lg:grid-cols-[260px_1fr] lg:gap-1 lg:h-[100dvh]">
         {/* ===== LEFT COLUMN — full height from top of screen ===== */}
         <section className="flex flex-col justify-between gap-3 p-2 lg:p-2.5 gradient-hero text-white min-h-[420px] lg:min-h-full">
-          {/* Logo only (no ABC letters) */}
+          {/* Logo — ABC All About Construction */}
           <div className="flex items-center">
             <Image
-              src="/logo.png"
-              alt="ABC"
-              width={64}
-              height={64}
+              src="/logo-left.png"
+              alt="ABC - All About Construction"
+              width={220}
+              height={120}
               priority
-              className="w-14 h-14 rounded-none shadow-2xl ring-1 ring-white/20"
+              className="w-full max-w-[220px] h-auto object-contain"
             />
           </div>
 
@@ -492,7 +523,7 @@ export default function HomePage() {
         </section>
 
         {/* ===== MAIN AREA — full-width header (after left column), then middle + right columns ===== */}
-        <div className="flex flex-col gap-1 py-2 lg:py-0 lg:min-h-0">
+        <div className="relative flex flex-col gap-1 py-2 lg:py-0 lg:min-h-0">
           <header className="relative z-20 flex items-center justify-between gap-2 bg-white/90 backdrop-blur rounded-none border border-surface-200 px-3 py-1.5 shadow-sm lg:min-h-0">
             <NavDropdown dir={dir} />
             <div className="flex items-center gap-1.5 shrink-0">
@@ -505,7 +536,7 @@ export default function HomePage() {
                   setPendingRegister(null);
                   setPendingLogin(true);
                 }}
-                className="px-2 py-1 text-xs font-medium text-surface-700 hover:text-secondary-600 transition-colors whitespace-nowrap"
+                className={cn("rounded-none", HEADER_CONTROL, "text-surface-700 hover:text-secondary-600")}
               >
                 {t("login")}
               </button>
@@ -537,15 +568,19 @@ export default function HomePage() {
               )}
 
               {(pendingLogin || pendingRegister) && (
-                <div className="absolute inset-0 z-30 flex items-start justify-center overflow-y-auto bg-black/55 backdrop-blur-[2px] p-2 pt-3">
-                  <div className="w-full max-w-full">
+                <div
+                  className="absolute inset-0 z-30 flex items-start justify-center overflow-y-auto bg-black/55 backdrop-blur-[2px] p-2 pt-3"
+                  onClick={closeAuthPanel}
+                  role="presentation"
+                >
+                  <div ref={authPanelRef} className="w-full max-w-full" onClick={(e) => e.stopPropagation()}>
                     {pendingLogin ? (
                       <LoginInline
                         dir={dir}
-                        onClose={() => setPendingLogin(false)}
-                        onOpenRegister={(role, label) => {
+                        onClose={closeAuthPanel}
+                        onOpenRegister={(role, label, categoryKey) => {
                           setPendingLogin(false);
-                          setPendingRegister({ role, label });
+                          setPendingRegister({ role, label, categoryKey });
                         }}
                       />
                     ) : (
@@ -554,7 +589,8 @@ export default function HomePage() {
                           dir={dir}
                           role={pendingRegister.role}
                           roleLabel={pendingRegister.label}
-                          onClose={() => setPendingRegister(null)}
+                          categoryKey={pendingRegister.categoryKey}
+                          onClose={closeAuthPanel}
                           onOpenLogin={openLogin}
                         />
                       )

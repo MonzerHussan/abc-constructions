@@ -11,6 +11,7 @@ interface StepAccountTypeProps {
   profile: OnboardingProfile;
   onChange: (profile: OnboardingProfile) => void;
   errors: Record<string, string>;
+  emailVerified?: boolean;
 }
 
 const iconMap: Record<string, typeof Building2> = {
@@ -21,7 +22,7 @@ const iconMap: Record<string, typeof Building2> = {
   Landmark,
 };
 
-export function StepAccountType({ profile, onChange, errors }: StepAccountTypeProps) {
+export function StepAccountType({ profile, onChange, errors, emailVerified }: StepAccountTypeProps) {
   const { t, dir } = useLanguage();
 
   const handleTypeSelect = (type: string) => {
@@ -125,6 +126,7 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
           {errors.phone && (
             <p className="text-red-500 text-sm mt-1">{t(errors.phone as TranslationKey)}</p>
           )}
+          <p className="text-xs text-surface-500 mt-1">{t("obPhoneVerifyHint")}</p>
         </div>
 
         <div className="md:col-span-2">
@@ -137,7 +139,14 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
             onChange={(e) => handleChange("email", e.target.value)}
             className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
             dir="ltr"
+            readOnly={emailVerified}
           />
+          {emailVerified && (
+            <p className="text-xs text-success-600 mt-1">{t("obEmailVerifiedGoogle")}</p>
+          )}
+          {!emailVerified && (
+            <p className="text-xs text-surface-500 mt-1">{t("obEmailVerifyHint")}</p>
+          )}
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{t(errors.email as TranslationKey)}</p>
           )}

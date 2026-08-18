@@ -8,10 +8,12 @@ import { X, Mail, Lock, ShieldCheck, Smartphone } from "lucide-react"
 import { useLanguage } from "@/lib/LanguageContext"
 import { GOOGLE_ONBOARDING_CALLBACK } from "@/lib/auth/role-selection"
 
+import type { TranslationKey } from "@/lib/translations"
+
 type LoginInlineProps = {
   dir: "rtl" | "ltr"
   onClose: () => void
-  onOpenRegister?: (role: string, label: string) => void
+  onOpenRegister?: (role: string, label: string, categoryKey: TranslationKey) => void
 }
 
 export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlineProps) {
@@ -82,7 +84,7 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
   }
 
   const inputCls =
-    "w-full rounded-none border border-surface-300 px-2.5 py-2 text-xs focus:border-secondary-500 focus:ring-1 focus:ring-secondary-500 outline-none transition"
+    "w-full rounded-none border border-surface-300 px-2 py-1.5 text-[11px] focus:border-secondary-500 focus:ring-1 focus:ring-secondary-500 outline-none transition"
 
   return (
     <div
@@ -100,8 +102,8 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
             className="h-9 w-auto max-w-[120px] object-contain object-left"
           />
           <div className="min-w-0 border-s border-surface-200 ps-2">
-            <h3 className="text-xs font-bold text-surface-900 leading-tight">{t("loginTitle")}</h3>
-            <p className="text-[10px] text-surface-500 truncate">{t("loginSubtitle")}</p>
+            <h3 className="text-[10px] font-bold text-surface-900 leading-tight">{t("loginTitle")}</h3>
+            <p className="text-[9px] text-surface-500 truncate">{t("loginSubtitle")}</p>
           </div>
         </div>
         <button
@@ -118,7 +120,7 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
         <button
           type="button"
           onClick={() => signIn("google", { callbackUrl: GOOGLE_ONBOARDING_CALLBACK })}
-          className="w-full flex items-center justify-center gap-2 py-2 border border-surface-300 rounded-none text-[11px] font-medium text-surface-700 hover:bg-surface-50 transition-colors"
+          className="w-full flex items-center justify-center gap-2 py-1.5 border border-surface-300 rounded-none text-[10px] font-medium text-surface-700 hover:bg-surface-50 transition-colors"
         >
           <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
@@ -133,7 +135,7 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-surface-200" />
           </div>
-          <div className="relative flex justify-center text-[10px]">
+          <div className="relative flex justify-center text-[9px]">
             <span className="bg-white px-2 text-surface-500">{t("orContinueWith")}</span>
           </div>
         </div>
@@ -141,10 +143,10 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
         {mfaRequired ? (
           <form onSubmit={handleMfaSubmit} className="space-y-2">
             {error && (
-              <div className="bg-danger-50 text-danger-600 text-xs rounded-none px-3 py-2">{error}</div>
+              <div className="bg-danger-50 text-danger-600 text-[10px] rounded-none px-3 py-1.5">{error}</div>
             )}
             <div>
-              <label className="mb-0.5 flex items-center gap-1 text-[11px] font-medium text-surface-700">
+              <label className="mb-0.5 flex items-center gap-1 text-[10px] font-medium text-surface-700">
                 <ShieldCheck className="w-3 h-3 text-secondary-500" />
                 {t("mfaCode")}
               </label>
@@ -166,14 +168,14 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
               <button
                 type="button"
                 onClick={() => { setMfaRequired(false); setTotp("") }}
-                className="py-2 text-[11px] text-surface-600 border border-surface-300 hover:bg-surface-50"
+                className="py-1.5 text-[10px] text-surface-600 border border-surface-300 hover:bg-surface-50"
               >
                 {t("back")}
               </button>
               <button
                 type="submit"
                 disabled={totp.length !== 6 || loading}
-                className="py-2 text-[11px] font-bold text-white bg-secondary-500 hover:bg-secondary-600 disabled:opacity-50"
+                className="py-1.5 text-[10px] font-bold text-white bg-secondary-500 hover:bg-secondary-600 disabled:opacity-50"
               >
                 {loading ? t("loading") : t("mfaVerify")}
               </button>
@@ -182,12 +184,12 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
         ) : (
           <form onSubmit={handleSubmit} className="space-y-2">
             {error && (
-              <div className="bg-danger-50 text-danger-600 text-xs rounded-none px-3 py-2">{error}</div>
+              <div className="bg-danger-50 text-danger-600 text-[10px] rounded-none px-3 py-1.5">{error}</div>
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
-                <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("email")}</label>
+                <label className="mb-0.5 block text-[10px] font-medium text-surface-700">{t("email")}</label>
                 <div className="relative">
                   <Mail className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
                   <input
@@ -202,7 +204,7 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
               </div>
 
               <div>
-                <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("password")}</label>
+                <label className="mb-0.5 block text-[10px] font-medium text-surface-700">{t("password")}</label>
                 <div className="relative">
                   <Lock className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
                   <input
@@ -215,7 +217,7 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute end-2 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-secondary-600 hover:text-secondary-700"
+                    className="absolute end-2 top-1/2 -translate-y-1/2 text-[9px] font-semibold text-secondary-600 hover:text-secondary-700"
                   >
                     {showPassword ? t("hide") : t("show")}
                   </button>
@@ -226,7 +228,7 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
             <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
               <Link
                 href="/projects/ABC/auth/forgot-password"
-                className="text-[10px] font-semibold text-secondary-600 hover:text-secondary-700"
+                className="text-[9px] font-semibold text-secondary-600 hover:text-secondary-700"
               >
                 {t("forgotPassword")}
               </Link>
@@ -234,8 +236,8 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
                 {onOpenRegister && (
                   <button
                     type="button"
-                    onClick={() => onOpenRegister("OWNER", t("accountCategoryOwner"))}
-                    className="text-[10px] font-semibold text-surface-600 hover:text-secondary-600"
+                    onClick={() => onOpenRegister("OWNER", t("accountCategoryOwner"), "accountCategoryOwner")}
+                    className="text-[9px] font-semibold text-surface-600 hover:text-secondary-600"
                   >
                     {t("createAccount")}
                   </button>
@@ -243,7 +245,7 @@ export default function LoginInline({ dir, onClose, onOpenRegister }: LoginInlin
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-3 py-1.5 text-[11px] font-bold text-white bg-secondary-500 hover:bg-secondary-600 disabled:opacity-50"
+                  className="px-2.5 py-1 text-[9px] font-bold text-white bg-secondary-500 hover:bg-secondary-600 disabled:opacity-50"
                 >
                   {loading ? t("loading") : t("login")}
                 </button>

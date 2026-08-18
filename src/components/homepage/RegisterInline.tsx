@@ -4,14 +4,16 @@ import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
-import { X, Mail, Lock, User, Phone, ShieldCheck, Building2 } from "lucide-react"
+import { X, Mail, Lock, User, Phone, ShieldCheck, Building2, MapPin, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/LanguageContext"
 import { GOOGLE_ONBOARDING_CALLBACK } from "@/lib/auth/role-selection"
+import type { TranslationKey } from "@/lib/translations"
 
 type RegisterInlineProps = {
   dir: "rtl" | "ltr"
   role: string
   roleLabel: string
+  categoryKey: TranslationKey
   onClose: () => void
   onOpenLogin?: () => void
 }
@@ -20,6 +22,7 @@ export default function RegisterInline({
   dir,
   role,
   roleLabel,
+  categoryKey,
   onClose,
   onOpenLogin,
 }: RegisterInlineProps) {
@@ -31,27 +34,39 @@ export default function RegisterInline({
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
     companyName: "",
+    companyType: "",
     name: "",
+    country: "",
+    city: "",
     phone: "",
     email: "",
     password: "",
     confirmPassword: "",
   })
 
+  const isEntity = categoryKey === "accountCategoryEntity"
+  const isIndividual = categoryKey === "accountCategoryIndividual"
+  const orgNameLabel = isEntity ? t("entityName") : t("companyName")
+  const orgTypeLabel = isEntity ? t("entityType") : t("companyType")
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError("")
 
     if (form.password.length < 8) {
-      setError("كلمة المرور يجب أن تكون 8 أحرف على الأقل")
+      setError(t("passwordMinLength") || "كلمة المرور يجب أن تكون 8 أحرف على الأقل")
       return
     }
     if (form.password !== form.confirmPassword) {
-      setError("كلمتا المرور غير متطابقتين")
+      setError(t("passwordMismatch"))
       return
     }
-    if (!form.companyName.trim()) {
-      setError("اسم الشركة مطلوب")
+    if (!isIndividual && !form.companyName.trim()) {
+      setError(isEntity ? t("entityNameRequired") : t("companyNameRequired"))
+      return
+    }
+    if (!isIndividual && !form.companyType.trim()) {
+      setError(isEntity ? t("entityTypeRequired") : t("companyTypeRequired"))
       return
     }
 
@@ -66,12 +81,15 @@ export default function RegisterInline({
           email: form.email,
           password: form.password,
           companyName: form.companyName,
+          companyType: form.companyType,
+          country: form.country,
+          city: form.city,
           role,
         }),
       })
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error || "حدث خطأ أثناء إنشاء الحساب")
+        setError(data.error || t("registerFailed"))
         setLoading(false)
         return
       }
@@ -81,14 +99,14 @@ export default function RegisterInline({
         redirect: false,
       })
       if (signInResult?.error) {
-        setError("تم إنشاء الحساب. الرجاء تسجيل الدخول")
+        setError(t("registerSuccessLogin"))
         setLoading(false)
         return
       }
       onClose()
       router.push("/projects/ABC/onboarding")
     } catch {
-      setError("حدث خطأ أثناء إنشاء الحساب")
+      setError(t("registerFailed"))
       setLoading(false)
     }
   }
@@ -123,7 +141,7 @@ export default function RegisterInline({
           type="button"
           onClick={onClose}
           className="rounded-none p-1 text-surface-400 hover:bg-surface-100 hover:text-surface-700 transition-colors shrink-0"
-          aria-label="إغلاق"
+          aria-label={t("close")}
         >
           <X className="w-4 h-4" />
         </button>
@@ -158,14 +176,43 @@ export default function RegisterInline({
             <div className="bg-danger-50 text-danger-600 text-xs rounded-none px-3 py-2">{error}</div>
           )}
 
+          {!isIndividual && (
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{orgNameLabel} *</label>
+                <div className="relative">
+                  <Building2 className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
+                  <input
+                    type="text"
+                    value={form.companyName}
+                    onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+                    className={inputCls + " ps-8 pe-2"}
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{orgTypeLabel} *</label>
+                <input
+                  type="text"
+                  value={form.companyType}
+                  onChange={(e) => setForm({ ...form, companyType: e.target.value })}
+                  className={inputCls}
+                  placeholder={isEntity ? t("entityTypePlaceholder") : t("companyTypePlaceholder")}
+                  required
+                />
+              </div>
+            </div>
+          )}
+
           <div>
-            <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("companyName")} *</label>
+            <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("fullName")} *</label>
             <div className="relative">
-              <Building2 className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
+              <User className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
               <input
                 type="text"
-                value={form.companyName}
-                onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className={inputCls + " ps-8 pe-2"}
                 required
               />
@@ -174,14 +221,46 @@ export default function RegisterInline({
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("fullName")} *</label>
+              <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("country")} *</label>
               <div className="relative">
-                <User className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
+                <Globe className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
                 <input
                   type="text"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  value={form.country}
+                  onChange={(e) => setForm({ ...form, country: e.target.value })}
                   className={inputCls + " ps-8 pe-2"}
+                  placeholder={t("countryPlaceholder")}
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("cityOrEmirate")} *</label>
+              <div className="relative">
+                <MapPin className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
+                <input
+                  type="text"
+                  value={form.city}
+                  onChange={(e) => setForm({ ...form, city: e.target.value })}
+                  className={inputCls + " ps-8 pe-2"}
+                  placeholder={t("cityPlaceholder")}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("email")} *</label>
+              <div className="relative">
+                <Mail className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  dir="ltr"
+                  className={inputCls + " ps-8 pe-2 text-start"}
                   required
                 />
               </div>
@@ -199,21 +278,6 @@ export default function RegisterInline({
                   placeholder="05XXXXXXXX"
                 />
               </div>
-            </div>
-          </div>
-
-          <div>
-            <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("email")} *</label>
-            <div className="relative">
-              <Mail className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                dir="ltr"
-                className={inputCls + " ps-8 pe-2 text-start"}
-                required
-              />
             </div>
           </div>
 
@@ -239,9 +303,7 @@ export default function RegisterInline({
               </div>
             </div>
             <div>
-              <label className="mb-0.5 block text-[11px] font-medium text-surface-700">
-                {t("confirmPassword") || "تأكيد كلمة المرور"} *
-              </label>
+              <label className="mb-0.5 block text-[11px] font-medium text-surface-700">{t("confirmPassword")} *</label>
               <div className="relative">
                 <Lock className="absolute start-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-surface-400" />
                 <input

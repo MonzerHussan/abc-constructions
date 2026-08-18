@@ -26,6 +26,7 @@ export const authConfig = {
         session.user.id = token.id as string;
         (session.user as { id: string; role?: unknown; roleConfirmed?: boolean }).role = token.role;
         (session.user as { roleConfirmed?: boolean }).roleConfirmed = Boolean(token.roleConfirmed);
+        (session.user as { emailVerified?: boolean }).emailVerified = Boolean(token.emailVerified);
       }
       return session;
     },

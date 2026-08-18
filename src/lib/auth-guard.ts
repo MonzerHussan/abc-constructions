@@ -19,6 +19,7 @@ import { auth } from '@/lib/auth';
 import { requirePermission } from '@/lib/rbac';
 import { error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
+import { isRoleSelectionApiAllowed, ROLE_NOT_CONFIRMED_CODE } from '@/lib/auth/role-gate';
 
 export interface AuthedContext {
   sessionUserId: string;
@@ -53,6 +54,14 @@ export function withPermission(permissionKey: string | null, handler: Handler) {
             { status: guard.status ?? 403 },
           );
         }
+      }
+
+      const roleConfirmed = (session.user as { roleConfirmed?: boolean }).roleConfirmed;
+      if (roleConfirmed === false && !isRoleSelectionApiAllowed(req.nextUrl.pathname)) {
+        return NextResponse.json(
+          error(ROLE_NOT_CONFIRMED_CODE, 'Account type must be confirmed before accessing this resource'),
+          { status: 403 },
+        );
       }
 
       const resolvedParams = await params;

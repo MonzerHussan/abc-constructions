@@ -15,7 +15,7 @@ const LOGIN_WINDOW_MS = 15 * 60 * 1000
 async function loadUserAuthFlags(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { role: true, roleConfirmed: true },
+    select: { role: true, roleConfirmed: true, emailVerified: true, phone: true },
   })
   return user
 }
@@ -87,11 +87,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/projects/ABC/auth/login",
   },
   callbacks: {
-    async jwt({ token, user, trigger }) {
+    async signIn({ account }) {
+      // Google OAuth allowed; roleConfirmed=false keeps user in onboarding until set-role
+      if (account?.provider === "google") return true
+      return true
+    },
+    async jwt({ token, user, trigger, account }) {
       if (user) {
         token.role = (user as { role?: string }).role
         token.id = user.id
         token.roleConfirmed = (user as { roleConfirmed?: boolean }).roleConfirmed ?? false
+      }
+
+      // Fresh Google sign-in: ensure JWT reflects unconfirmed role until onboarding step 1
+      if (account?.provider === "google" && user?.id) {
+        const dbUser = await loadUserAuthFlags(user.id)
+        if (dbUser) {
+          token.role = dbUser.role
+          token.roleConfirmed = dbUser.roleConfirmed
+          token.emailVerified = dbUser.emailVerified ? true : false
+        }
       }
 
       if (trigger === "update" && token.id) {
@@ -99,6 +114,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (dbUser) {
           token.role = dbUser.role
           token.roleConfirmed = dbUser.roleConfirmed
+          token.emailVerified = dbUser.emailVerified ? true : false
         }
       }
 
@@ -107,6 +123,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (dbUser) {
           token.role = dbUser.role
           token.roleConfirmed = dbUser.roleConfirmed
+          token.emailVerified = dbUser.emailVerified ? true : false
         }
       }
 
@@ -115,12 +132,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
-        ;(session.user as { id: string; role?: unknown; roleConfirmed?: boolean }).role = token.role
+        ;(session.user as { id: string; role?: unknown; roleConfirmed?: boolean; emailVerified?: boolean }).role = token.role
         ;(session.user as { roleConfirmed?: boolean }).roleConfirmed = Boolean(token.roleConfirmed)
+        ;(session.user as { emailVerified?: boolean }).emailVerified = Boolean(token.emailVerified)
       }
       return session
     },
     async redirect({ url, baseUrl }) {
+      // After Google OAuth, always land on onboarding unless caller supplied an allowed path
+      if (url.includes("source=google") || url.includes("/onboarding")) {
+        if (url.startsWith("/")) return `${baseUrl}${url}`
+        return url
+      }
       if (url.startsWith("/")) return `${baseUrl}${url}`
       try {
         if (new URL(url).origin === baseUrl) return url

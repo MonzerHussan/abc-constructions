@@ -18,7 +18,13 @@ export const GET = withAuth(async (_request: NextRequest, { sessionUserId }: { s
       entityRegistryService.findProfileByUserId(sessionUserId),
       prisma.user.findUnique({
         where: { id: sessionUserId },
-        select: { roleConfirmed: true, password: true },
+        select: {
+          roleConfirmed: true,
+          password: true,
+          email: true,
+          phone: true,
+          emailVerified: true,
+        },
       }),
     ]);
 
@@ -27,6 +33,9 @@ export const GET = withAuth(async (_request: NextRequest, { sessionUserId }: { s
     return NextResponse.json(success({
       isOnboarded: !!profile,
       roleConfirmed,
+      emailVerified: Boolean(user?.emailVerified),
+      email: user?.email ?? null,
+      phone: user?.phone ?? null,
       profile: profile ?? null,
       entity: profile?.entity ?? null,
     }));
