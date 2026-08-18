@@ -17,27 +17,27 @@
   --primary-800: #040f23;
   --primary-900: #020918;
 
-  --secondary-50: #fff7ed;
-  --secondary-100: #ffedd5;
-  --secondary-200: #fed7aa;
-  --secondary-300: #fdba74;
-  --secondary-400: #fb923c;
-  --secondary-500: #f97316;
-  --secondary-600: #ea580c;
-  --secondary-700: #c2410c;
-  --secondary-800: #9a3412;
-  --secondary-900: #7c2d12;
+  --secondary-50: #fdfaf0;
+  --secondary-100: #faf2d6;
+  --secondary-200: #f2e0a3;
+  --secondary-300: #e8cd71;
+  --secondary-400: #ddbd4b;
+  --secondary-500: #d4a017;
+  --secondary-600: #b38c12;
+  --secondary-700: #8f6d0e;
+  --secondary-800: #6b500b;
+  --secondary-900: #473508;
 
-  --accent-50: #fbf8ee;
-  --accent-100: #f5eed0;
-  --accent-200: #ebe0a6;
-  --accent-300: #e0d07c;
-  --accent-400: #d8c45e;
-  --accent-500: #d4a017;
-  --accent-600: #b88a14;
-  --accent-700: #9a7211;
-  --accent-800: #7c5b0e;
-  --accent-900: #5e430a;
+  --accent-50: #fff7ed;
+  --accent-100: #ffedd5;
+  --accent-200: #fed7aa;
+  --accent-300: #fdba74;
+  --accent-400: #fb923c;
+  --accent-500: #f97316;
+  --accent-600: #ea580c;
+  --accent-700: #c2410c;
+  --accent-800: #9a3412;
+  --accent-900: #7c2d12;
 
   /* Legacy aliases for gradual migration */
   --brand-50: var(--secondary-50);

@@ -19,6 +19,7 @@ export type UserRole =
 
 export interface EntityRegistryMe {
   isOnboarded: boolean;
+  roleConfirmed: boolean;
   profile: Record<string, unknown> | null;
   entity: Record<string, unknown> | null;
 }
@@ -77,9 +78,13 @@ export function isPublicPath(pathname: string): boolean {
 export function shouldRedirectToOnboarding(
   pathname: string,
   isAuthenticated: boolean,
-  isOnboarded: boolean
+  isOnboarded: boolean,
+  roleConfirmed: boolean
 ): boolean {
-  return isAuthenticated && !isOnboarded && pathname !== ONBOARDING_PATH && !isPublicPath(pathname);
+  if (!isAuthenticated) return false;
+  if (pathname === ONBOARDING_PATH) return false;
+  if (isPublicPath(pathname)) return false;
+  return !roleConfirmed || !isOnboarded;
 }
 
 export function shouldRedirectToDashboard(

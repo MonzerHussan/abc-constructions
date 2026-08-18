@@ -14,8 +14,8 @@ async function requireAdmin() {
 export async function GET() {
   const guard = await requireAdmin()
   if ("error" in guard) return NextResponse.json({ error: guard.error }, { status: guard.status })
-  const slides = await prisma.carouselSlide.findMany({ orderBy: { sortOrder: "asc" } })
-  return NextResponse.json(slides)
+  const zones = await prisma.homepageZone.findMany({ orderBy: { sortOrder: "asc" } })
+  return NextResponse.json(zones)
 }
 
 export async function POST(req: Request) {
@@ -25,22 +25,26 @@ export async function POST(req: Request) {
   const body = await req.json()
   if (!body.title) return NextResponse.json({ error: "title required" }, { status: 400 })
 
-  const slide = await prisma.carouselSlide.create({
+  const zone = await prisma.homepageZone.create({
     data: {
-      type: body.type ?? "image",
+      type: body.type ?? "text",
       title: body.title,
       titleEn: body.titleEn ?? null,
       titleUr: body.titleUr ?? null,
       subtitle: body.subtitle ?? null,
       subtitleEn: body.subtitleEn ?? null,
       subtitleUr: body.subtitleUr ?? null,
+      body: body.body ?? null,
+      bodyEn: body.bodyEn ?? null,
+      bodyUr: body.bodyUr ?? null,
       imageUrl: body.imageUrl ?? "",
       videoUrl: body.videoUrl ?? null,
       posterUrl: body.posterUrl ?? null,
       linkUrl: body.linkUrl ?? null,
+      animation: body.animation ?? "fade",
       sortOrder: body.sortOrder ?? 0,
       isActive: body.isActive ?? true,
     },
   })
-  return NextResponse.json(slide, { status: 201 })
+  return NextResponse.json(zone, { status: 201 })
 }

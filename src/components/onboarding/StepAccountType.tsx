@@ -79,6 +79,22 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-surface-700 mb-1">
+            {t("obCompanyName")} *
+          </label>
+          <input
+            type="text"
+            value={profile.companyName}
+            onChange={(e) => handleChange("companyName", e.target.value)}
+            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
+            dir={dir}
+          />
+          {errors.companyName && (
+            <p className="text-red-500 text-sm mt-1">{t(errors.companyName as TranslationKey)}</p>
+          )}
+        </div>
+
         <div>
           <label className="block text-sm font-medium text-surface-700 mb-1">
             {t("obFullName")} *
@@ -97,21 +113,21 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
 
         <div>
           <label className="block text-sm font-medium text-surface-700 mb-1">
-            {t("obCompanyName")} *
+            {t("obPhone")} *
           </label>
           <input
-            type="text"
-            value={profile.companyName}
-            onChange={(e) => handleChange("companyName", e.target.value)}
+            type="tel"
+            value={profile.phone}
+            onChange={(e) => handleChange("phone", e.target.value)}
             className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
-            dir={dir}
+            dir="ltr"
           />
-          {errors.companyName && (
-            <p className="text-red-500 text-sm mt-1">{t(errors.companyName as TranslationKey)}</p>
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{t(errors.phone as TranslationKey)}</p>
           )}
         </div>
 
-        <div>
+        <div className="md:col-span-2">
           <label className="block text-sm font-medium text-surface-700 mb-1">
             {t("obEmail")} *
           </label>
@@ -124,22 +140,6 @@ export function StepAccountType({ profile, onChange, errors }: StepAccountTypePr
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{t(errors.email as TranslationKey)}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-surface-700 mb-1">
-            {t("obPhone")} *
-          </label>
-          <input
-            type="tel"
-            value={profile.phone}
-            onChange={(e) => handleChange("phone", e.target.value)}
-            className="w-full px-4 py-2.5 border border-surface-300 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 outline-none"
-            dir="ltr"
-          />
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{t(errors.phone as TranslationKey)}</p>
           )}
         </div>
 

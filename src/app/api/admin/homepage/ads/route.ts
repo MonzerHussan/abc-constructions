@@ -23,18 +23,23 @@ export async function POST(req: Request) {
   if ("error" in guard) return NextResponse.json({ error: guard.error }, { status: guard.status })
 
   const body = await req.json()
-  if (!body.title || !body.imageUrl)
-    return NextResponse.json({ error: "title and imageUrl required" }, { status: 400 })
+  if (!body.title) return NextResponse.json({ error: "title required" }, { status: 400 })
 
   const ad = await prisma.ad.create({
     data: {
+      type: body.type ?? "image",
       title: body.title,
       titleEn: body.titleEn ?? null,
       titleUr: body.titleUr ?? null,
       subtitle: body.subtitle ?? null,
       subtitleEn: body.subtitleEn ?? null,
       subtitleUr: body.subtitleUr ?? null,
-      imageUrl: body.imageUrl,
+      body: body.body ?? null,
+      bodyEn: body.bodyEn ?? null,
+      bodyUr: body.bodyUr ?? null,
+      imageUrl: body.imageUrl ?? "",
+      videoUrl: body.videoUrl ?? null,
+      posterUrl: body.posterUrl ?? null,
       linkUrl: body.linkUrl ?? null,
       animation: body.animation ?? "fade",
       sortOrder: body.sortOrder ?? 0,

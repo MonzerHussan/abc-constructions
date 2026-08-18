@@ -21,8 +21,9 @@ export async function PATCH(req: Request, { params }: Params) {
   const body = await req.json()
 
   const allowed = [
-    "title", "titleEn", "titleUr", "subtitle", "subtitleEn", "subtitleUr",
-    "imageUrl", "linkUrl", "animation", "sortOrder", "isActive",
+    "type", "title", "titleEn", "titleUr", "subtitle", "subtitleEn", "subtitleUr",
+    "body", "bodyEn", "bodyUr", "imageUrl", "videoUrl", "posterUrl",
+    "linkUrl", "animation", "sortOrder", "isActive",
   ]
   const data: Record<string, unknown> = {}
   for (const key of allowed) if (key in body) data[key] = body[key]

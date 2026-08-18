@@ -1,18 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { useLanguage } from "@/lib/LanguageContext";
 
-export default function OnboardingPage() {
+function OnboardingContent() {
   const { t } = useLanguage();
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  // Admins skip the onboarding survey and go straight to the dashboard
   useEffect(() => {
     if (status === "authenticated") {
       const role = (session?.user as { role?: string } | undefined)?.role;
@@ -47,5 +46,19 @@ export default function OnboardingPage() {
         <OnboardingWizard />
       </div>
     </div>
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-surface-50 flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-secondary-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <OnboardingContent />
+    </Suspense>
   );
 }

@@ -7,7 +7,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-type Tab = "content" | "slides" | "videos" | "ads"
+type Tab = "content" | "slides" | "videos" | "ads" | "zones"
 
 interface ContentForm {
   introTitle: string
@@ -30,11 +30,58 @@ interface ContentForm {
   secondaryCtaLabelEn: string
   secondaryCtaLabelUr: string
   secondaryCtaHref: string
+  leftBlockType: string
+  leftBlockTitle: string
+  leftBlockTitleEn: string
+  leftBlockTitleUr: string
+  leftBlockBody: string
+  leftBlockBodyEn: string
+  leftBlockBodyUr: string
+  leftBlockImageUrl: string
+  leftBlockVideoUrl: string
+  leftBlockPosterUrl: string
+  leftBlockLinkUrl: string
+  leftBlockEnabled: boolean
+  showHighlights: boolean
+  highlightsTitle: string
+  highlightsTitleEn: string
+  highlightsTitleUr: string
+  showStats: boolean
+  stat1Value: string
+  stat1Label: string
+  stat1LabelEn: string
+  stat1LabelUr: string
+  stat2Value: string
+  stat2Label: string
+  stat2LabelEn: string
+  stat2LabelUr: string
+  stat3Value: string
+  stat3Label: string
+  stat3LabelEn: string
+  stat3LabelUr: string
+  stat4Value: string
+  stat4Label: string
+  stat4LabelEn: string
+  stat4LabelUr: string
+  showVideosSection: boolean
+  videosSectionTitle: string
+  videosSectionTitleEn: string
+  videosSectionTitleUr: string
+  showFooter: boolean
+  footerAbout: string
+  footerAboutEn: string
+  footerAboutUr: string
+  footerEmail: string
+  footerPhone: string
+  footerAddress: string
+  footerAddressEn: string
+  footerAddressUr: string
   isActive: boolean
 }
 
 interface SlideItem {
   id: string
+  type: string
   title: string
   titleEn: string
   titleUr: string
@@ -42,6 +89,8 @@ interface SlideItem {
   subtitleEn: string
   subtitleUr: string
   imageUrl: string
+  videoUrl: string
+  posterUrl: string
   linkUrl: string
   sortOrder: number
   isActive: boolean
@@ -63,13 +112,40 @@ interface VideoItem {
 
 interface AdItem {
   id: string
+  type: string
   title: string
   titleEn: string
   titleUr: string
   subtitle: string
   subtitleEn: string
   subtitleUr: string
+  body: string
+  bodyEn: string
+  bodyUr: string
   imageUrl: string
+  videoUrl: string
+  posterUrl: string
+  linkUrl: string
+  animation: string
+  sortOrder: number
+  isActive: boolean
+}
+
+interface ZoneItem {
+  id: string
+  type: string
+  title: string
+  titleEn: string
+  titleUr: string
+  subtitle: string
+  subtitleEn: string
+  subtitleUr: string
+  body: string
+  bodyEn: string
+  bodyUr: string
+  imageUrl: string
+  videoUrl: string
+  posterUrl: string
   linkUrl: string
   animation: string
   sortOrder: number
@@ -83,6 +159,27 @@ const EMPTY_CONTENT: ContentForm = {
   visionBody: "", visionBodyEn: "", visionBodyUr: "",
   primaryCtaLabel: "", primaryCtaLabelEn: "", primaryCtaLabelUr: "", primaryCtaHref: "/projects/ABC/auth/register",
   secondaryCtaLabel: "", secondaryCtaLabelEn: "", secondaryCtaLabelUr: "", secondaryCtaHref: "/projects/ABC/tenders/projects",
+  leftBlockType: "text",
+  leftBlockTitle: "", leftBlockTitleEn: "", leftBlockTitleUr: "",
+  leftBlockBody: "", leftBlockBodyEn: "", leftBlockBodyUr: "",
+  leftBlockImageUrl: "",
+  leftBlockVideoUrl: "",
+  leftBlockPosterUrl: "",
+  leftBlockLinkUrl: "",
+  leftBlockEnabled: true,
+  showHighlights: true,
+  highlightsTitle: "", highlightsTitleEn: "", highlightsTitleUr: "",
+  showStats: true,
+  stat1Value: "", stat1Label: "", stat1LabelEn: "", stat1LabelUr: "",
+  stat2Value: "", stat2Label: "", stat2LabelEn: "", stat2LabelUr: "",
+  stat3Value: "", stat3Label: "", stat3LabelEn: "", stat3LabelUr: "",
+  stat4Value: "", stat4Label: "", stat4LabelEn: "", stat4LabelUr: "",
+  showVideosSection: true,
+  videosSectionTitle: "", videosSectionTitleEn: "", videosSectionTitleUr: "",
+  showFooter: true,
+  footerAbout: "", footerAboutEn: "", footerAboutUr: "",
+  footerEmail: "", footerPhone: "",
+  footerAddress: "", footerAddressEn: "", footerAddressUr: "",
   isActive: true,
 }
 
@@ -91,6 +188,7 @@ const TABS: { key: Tab; label: string; icon: any }[] = [
   { key: "slides", label: "الشرائح (Carousel)", icon: ImageIcon },
   { key: "videos", label: "الفيديوهات", icon: VideoIcon },
   { key: "ads", label: "الإعلانات", icon: Megaphone },
+  { key: "zones", label: "مناطق العمود الأيمن", icon: LayoutDashboard },
 ]
 
 export default function AdminHomepagePage() {
@@ -102,6 +200,7 @@ export default function AdminHomepagePage() {
   const [slides, setSlides] = useState<SlideItem[]>([])
   const [videos, setVideos] = useState<VideoItem[]>([])
   const [ads, setAds] = useState<AdItem[]>([])
+  const [zones, setZones] = useState<ZoneItem[]>([])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -117,12 +216,34 @@ export default function AdminHomepagePage() {
           visionBody: c.visionBody ?? "", visionBodyEn: c.visionBodyEn ?? "", visionBodyUr: c.visionBodyUr ?? "",
           primaryCtaLabel: c.primaryCtaLabel ?? "", primaryCtaLabelEn: c.primaryCtaLabelEn ?? "", primaryCtaLabelUr: c.primaryCtaLabelUr ?? "", primaryCtaHref: c.primaryCtaHref ?? "/projects/ABC/auth/register",
           secondaryCtaLabel: c.secondaryCtaLabel ?? "", secondaryCtaLabelEn: c.secondaryCtaLabelEn ?? "", secondaryCtaLabelUr: c.secondaryCtaLabelUr ?? "", secondaryCtaHref: c.secondaryCtaHref ?? "/projects/ABC/tenders/projects",
+          leftBlockType: c.leftBlockType ?? "text",
+          leftBlockTitle: c.leftBlockTitle ?? "", leftBlockTitleEn: c.leftBlockTitleEn ?? "", leftBlockTitleUr: c.leftBlockTitleUr ?? "",
+          leftBlockBody: c.leftBlockBody ?? "", leftBlockBodyEn: c.leftBlockBodyEn ?? "", leftBlockBodyUr: c.leftBlockBodyUr ?? "",
+          leftBlockImageUrl: c.leftBlockImageUrl ?? "",
+          leftBlockVideoUrl: c.leftBlockVideoUrl ?? "",
+          leftBlockPosterUrl: c.leftBlockPosterUrl ?? "",
+          leftBlockLinkUrl: c.leftBlockLinkUrl ?? "",
+          leftBlockEnabled: c.leftBlockEnabled ?? true,
+          showHighlights: c.showHighlights ?? true,
+          highlightsTitle: c.highlightsTitle ?? "", highlightsTitleEn: c.highlightsTitleEn ?? "", highlightsTitleUr: c.highlightsTitleUr ?? "",
+          showStats: c.showStats ?? true,
+          stat1Value: c.stat1Value ?? "", stat1Label: c.stat1Label ?? "", stat1LabelEn: c.stat1LabelEn ?? "", stat1LabelUr: c.stat1LabelUr ?? "",
+          stat2Value: c.stat2Value ?? "", stat2Label: c.stat2Label ?? "", stat2LabelEn: c.stat2LabelEn ?? "", stat2LabelUr: c.stat2LabelUr ?? "",
+          stat3Value: c.stat3Value ?? "", stat3Label: c.stat3Label ?? "", stat3LabelEn: c.stat3LabelEn ?? "", stat3LabelUr: c.stat3LabelUr ?? "",
+          stat4Value: c.stat4Value ?? "", stat4Label: c.stat4Label ?? "", stat4LabelEn: c.stat4LabelEn ?? "", stat4LabelUr: c.stat4LabelUr ?? "",
+          showVideosSection: c.showVideosSection ?? true,
+          videosSectionTitle: c.videosSectionTitle ?? "", videosSectionTitleEn: c.videosSectionTitleEn ?? "", videosSectionTitleUr: c.videosSectionTitleUr ?? "",
+          showFooter: c.showFooter ?? true,
+          footerAbout: c.footerAbout ?? "", footerAboutEn: c.footerAboutEn ?? "", footerAboutUr: c.footerAboutUr ?? "",
+          footerEmail: c.footerEmail ?? "", footerPhone: c.footerPhone ?? "",
+          footerAddress: c.footerAddress ?? "", footerAddressEn: c.footerAddressEn ?? "", footerAddressUr: c.footerAddressUr ?? "",
           isActive: c.isActive ?? true,
         })
       }
       setSlides(data.slides ?? [])
       setVideos(data.videos ?? [])
       setAds(data.ads ?? [])
+      setZones(data.zones ?? [])
     }
     setLoading(false)
   }, [])
@@ -140,7 +261,7 @@ export default function AdminHomepagePage() {
     if (res.ok) { setSaved(true); setTimeout(() => setSaved(false), 2500) }
   }
 
-  async function saveItem(resource: "slides" | "videos" | "ads", id: string | undefined, payload: any, method: string) {
+  async function saveItem(resource: "slides" | "videos" | "ads" | "zones", id: string | undefined, payload: any, method: string) {
     setSaving(true)
     const url = id
       ? `/projects/ABC/api/admin/homepage/${resource}/${id}`
@@ -154,12 +275,12 @@ export default function AdminHomepagePage() {
     if (res.ok) { setSaved(true); setTimeout(() => setSaved(false), 2500); await load() }
   }
 
-  async function deleteItem(resource: "slides" | "videos" | "ads", id: string) {
+  async function deleteItem(resource: "slides" | "videos" | "ads" | "zones", id: string) {
     await fetch(`/projects/ABC/api/admin/homepage/${resource}/${id}`, { method: "DELETE" })
     await load()
   }
 
-  async function moveItem(resource: "slides" | "videos" | "ads", list: any[], index: number, delta: number) {
+  async function moveItem(resource: "slides" | "videos" | "ads" | "zones", list: any[], index: number, delta: number) {
     const target = index + delta
     if (target < 0 || target >= list.length) return
     const next = [...list]
@@ -169,6 +290,7 @@ export default function AdminHomepagePage() {
     if (resource === "slides") setSlides(updated)
     if (resource === "videos") setVideos(updated)
     if (resource === "ads") setAds(updated)
+    if (resource === "zones") setZones(updated)
     await saveItem(resource, item.id, { sortOrder: target }, "PATCH")
     const other = item.id
     const swapped = next[target]?.id
@@ -341,6 +463,151 @@ export default function AdminHomepagePage() {
             </label>
           </section>
 
+          <section className="bg-white border rounded-xl p-5">
+            <h2 className="font-bold text-surface-900 mb-4">العمود الأيسر — منطقة يتحكم بها الأدمن (نص / صورة / فيديو)</h2>
+            <div className="grid gap-3 md:grid-cols-2">
+              <div>
+                <label className={labelCls}>نوع المحتوى</label>
+                <select
+                  className={inputCls}
+                  value={content.leftBlockType}
+                  onChange={(e) => setContent({ ...content, leftBlockType: e.target.value })}
+                >
+                  <option value="text">نص</option>
+                  <option value="image">صورة</option>
+                  <option value="video">فيديو</option>
+                  <option value="none">إخفاء المنطقة</option>
+                </select>
+              </div>
+              <label className="flex items-end gap-2 pb-2 text-sm font-medium text-surface-700">
+                <input type="checkbox" checked={content.leftBlockEnabled} onChange={(e) => setContent({ ...content, leftBlockEnabled: e.target.checked })} />
+                مفعّلة
+              </label>
+            </div>
+
+            {content.leftBlockType === "text" && (
+              <div className="mt-4 space-y-3">
+                {localeFields("leftBlockTitle", ["العنوان (عربي)", "العنوان (إنجليزي)", "العنوان (أردو)"])}
+                <div>
+                  <label className={labelCls}>النص (عربي / إنجليزي / أردو)</label>
+                  <textarea className={cn(inputCls, "min-h-24")} value={content.leftBlockBody} onChange={(e) => setContent({ ...content, leftBlockBody: e.target.value })} />
+                  <textarea className={cn(inputCls, "min-h-24 mt-2")} value={content.leftBlockBodyEn} onChange={(e) => setContent({ ...content, leftBlockBodyEn: e.target.value })} />
+                  <textarea className={cn(inputCls, "min-h-24 mt-2")} value={content.leftBlockBodyUr} onChange={(e) => setContent({ ...content, leftBlockBodyUr: e.target.value })} />
+                </div>
+              </div>
+            )}
+
+            {content.leftBlockType === "image" && (
+              <div className="mt-4 grid gap-3 md:grid-cols-2">
+                <div>
+                  <label className={labelCls}>رابط الصورة</label>
+                  <input className={inputCls} value={content.leftBlockImageUrl} onChange={(e) => setContent({ ...content, leftBlockImageUrl: e.target.value })} />
+                </div>
+                <div>
+                  <label className={labelCls}>رابط الانتقال (اختياري)</label>
+                  <input className={inputCls} value={content.leftBlockLinkUrl ?? ""} onChange={(e) => setContent({ ...content, leftBlockLinkUrl: e.target.value })} />
+                </div>
+              </div>
+            )}
+
+            {content.leftBlockType === "video" && (
+              <div className="mt-4 grid gap-3 md:grid-cols-2">
+                <div>
+                  <label className={labelCls}>رابط الفيديو (YouTube/MP4)</label>
+                  <input className={inputCls} value={content.leftBlockVideoUrl} onChange={(e) => setContent({ ...content, leftBlockVideoUrl: e.target.value })} />
+                </div>
+                <div>
+                  <label className={labelCls}>الصورة المصغرة (اختياري)</label>
+                  <input className={inputCls} value={content.leftBlockPosterUrl ?? ""} onChange={(e) => setContent({ ...content, leftBlockPosterUrl: e.target.value })} />
+                </div>
+              </div>
+            )}
+          </section>
+
+          {/* ===== Below the ads band: everything down to the footer (admin-controlled) ===== */}
+          <section className="bg-white border rounded-xl p-5">
+            <h2 className="font-bold text-surface-900 mb-4">المحتوى تحت شريط الإعلانات حتى الفوتر — كامل سيطرة الأدمن</h2>
+
+            <div className="mb-4">
+              <label className="flex items-center gap-2 text-sm font-medium text-surface-700">
+                <input type="checkbox" checked={content.showHighlights} onChange={(e) => setContent({ ...content, showHighlights: e.target.checked })} />
+                إظهار قسم «أبرز ما في المنصة» (الكاروسيل)
+              </label>
+              <div className="mt-3">
+                {localeFields("highlightsTitle", ["عنوان القسم (عربي)", "عنوان القسم (إنجليزي)", "عنوان القسم (أردو)"])}
+              </div>
+            </div>
+
+            <div className="my-5 border-t border-surface-100" />
+
+            <div className="mb-4">
+              <label className="flex items-center gap-2 text-sm font-medium text-surface-700">
+                <input type="checkbox" checked={content.showStats} onChange={(e) => setContent({ ...content, showStats: e.target.checked })} />
+                إظهار شريط الإحصائيات
+              </label>
+              <div className="mt-3 grid gap-3 md:grid-cols-4">
+                {([1, 2, 3, 4] as const).map((n) => (
+                  <div key={n} className="border border-surface-200 rounded-lg p-3">
+                    <p className="block text-xs font-semibold text-surface-500 mb-2">الإحصائية {n}</p>
+                    <div className="mb-2">
+                      <label className={labelCls}>القيمة</label>
+                      <input
+                        className={inputCls}
+                        value={(content as any)[`stat${n}Value`]}
+                        onChange={(e) => setContent({ ...content, [`stat${n}Value`]: e.target.value })}
+                      />
+                    </div>
+                    {(["", "En", "Ur"] as const).map((suffix) => (
+                      <div key={suffix} className="mb-2">
+                        <label className={labelCls}>{suffix === "" ? "التسمية (عربي)" : suffix === "En" ? "التسمية (إنجليزي)" : "التسمية (أردو)"}</label>
+                        <input
+                          className={inputCls}
+                          value={(content as any)[`stat${n}Label${suffix}`]}
+                          onChange={(e) => setContent({ ...content, [`stat${n}Label${suffix}`]: e.target.value })}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="my-5 border-t border-surface-100" />
+
+            <div className="mb-4">
+              <label className="flex items-center gap-2 text-sm font-medium text-surface-700">
+                <input type="checkbox" checked={content.showVideosSection} onChange={(e) => setContent({ ...content, showVideosSection: e.target.checked })} />
+                إظهار قسم الفيديوهات
+              </label>
+              <div className="mt-3">
+                {localeFields("videosSectionTitle", ["عنوان القسم (عربي)", "عنوان القسم (إنجليزي)", "عنوان القسم (أردو)"])}
+              </div>
+            </div>
+
+            <div className="my-5 border-t border-surface-100" />
+
+            <div className="mb-4">
+              <label className="flex items-center gap-2 text-sm font-medium text-surface-700">
+                <input type="checkbox" checked={content.showFooter} onChange={(e) => setContent({ ...content, showFooter: e.target.checked })} />
+                إظهار الفوتر
+              </label>
+              <div className="mt-3 space-y-3">
+                {localeFields("footerAbout", ["نبذة عن المنصة (عربي)", "نبذة (إنجليزي)", "نبذة (أردو)"])}
+                <div className="grid gap-3 md:grid-cols-2">
+                  <div>
+                    <label className={labelCls}>البريد الإلكتروني</label>
+                    <input className={inputCls} value={content.footerEmail ?? ""} onChange={(e) => setContent({ ...content, footerEmail: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>الهاتف</label>
+                    <input className={inputCls} value={content.footerPhone ?? ""} onChange={(e) => setContent({ ...content, footerPhone: e.target.value })} />
+                  </div>
+                </div>
+                {localeFields("footerAddress", ["العنوان (عربي)", "العنوان (إنجليزي)", "العنوان (أردو)"])}
+              </div>
+            </div>
+          </section>
+
           <button
             onClick={saveContent}
             disabled={saving}
@@ -381,6 +648,17 @@ export default function AdminHomepagePage() {
           onSave={(id, payload, method) => saveItem("ads", id, payload, method)}
           onDelete={(id) => deleteItem("ads", id)}
           onMove={(i, d) => moveItem("ads", ads, i, d)}
+          saving={saving}
+        />
+      )}
+
+      {tab === "zones" && (
+        <ZonesEditor
+          items={zones}
+          setItems={setZones}
+          onSave={(id, payload, method) => saveItem("zones", id, payload, method)}
+          onDelete={(id) => deleteItem("zones", id)}
+          onMove={(i, d) => moveItem("zones", zones, i, d)}
           saving={saving}
         />
       )}
@@ -477,7 +755,7 @@ function SlidesEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
     setDrafts((prev) => prev.map((it, i) => (i === index ? { ...it, ...patch } : it)))
   }
   const [showNew, setShowNew] = useState(false)
-  const [newDraft, setNewDraft] = useState<Partial<SlideItem>>({ title: "", imageUrl: "", subtitle: "", isActive: true })
+  const [newDraft, setNewDraft] = useState<Partial<SlideItem>>({ title: "", type: "image", imageUrl: "", subtitle: "", isActive: true })
 
   return (
     <div className="space-y-4">
@@ -492,10 +770,26 @@ function SlidesEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
           <div className="space-y-3">
             {localeRow(["العنوان (عربي)", "العنوان (إنجليزي)", "العنوان (أردو)"], { ar: item.title, en: item.titleEn, ur: item.titleUr }, (v) => update(i, { title: v.ar, titleEn: v.en, titleUr: v.ur }))}
             {localeRow(["الوصف (عربي)", "الوصف (إنجليزي)", "الوصف (أردو)"], { ar: item.subtitle, en: item.subtitleEn, ur: item.subtitleUr }, (v) => update(i, { subtitle: v.ar, subtitleEn: v.en, subtitleUr: v.ur }))}
+            <div>
+              <label className={labelCls}>نوع الشريحة</label>
+              <select className={inputCls} value={item.type ?? "image"} onChange={(e) => update(i, { type: e.target.value })}>
+                <option value="image">صورة (Image)</option>
+                <option value="text">نص (Text)</option>
+                <option value="video">فيديو (Video)</option>
+              </select>
+            </div>
             <div className="grid gap-3 md:grid-cols-2">
               <div>
                 <label className={labelCls}>رابط الصورة</label>
                 <input className={inputCls} value={item.imageUrl} onChange={(e) => update(i, { imageUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>رابط الفيديو</label>
+                <input className={inputCls} value={item.videoUrl ?? ""} onChange={(e) => update(i, { videoUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>صورة الغلاف (Poster)</label>
+                <input className={inputCls} value={item.posterUrl ?? ""} onChange={(e) => update(i, { posterUrl: e.target.value })} />
               </div>
               <div>
                 <label className={labelCls}>رابط الانتقال</label>
@@ -521,10 +815,32 @@ function SlidesEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
               <div><label className={labelCls}>العنوان (أردو)</label><input className={inputCls} value={newDraft.titleUr ?? ""} onChange={(e) => setNewDraft({ ...newDraft, titleUr: e.target.value })} /></div>
             </div>
             <div>
-              <label className={labelCls}>رابط الصورة</label>
-              <input className={inputCls} value={newDraft.imageUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, imageUrl: e.target.value })} />
+              <label className={labelCls}>نوع الشريحة</label>
+              <select className={inputCls} value={newDraft.type ?? "image"} onChange={(e) => setNewDraft({ ...newDraft, type: e.target.value })}>
+                <option value="image">صورة (Image)</option>
+                <option value="text">نص (Text)</option>
+                <option value="video">فيديو (Video)</option>
+              </select>
             </div>
-            <SaveRow onSave={() => { onSave(undefined, newDraft, "POST"); setShowNew(false); setNewDraft({ title: "", imageUrl: "", subtitle: "", isActive: true }) }} saving={saving} />
+            <div className="grid gap-3 md:grid-cols-2">
+              <div>
+                <label className={labelCls}>رابط الصورة</label>
+                <input className={inputCls} value={newDraft.imageUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, imageUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>رابط الفيديو</label>
+                <input className={inputCls} value={newDraft.videoUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, videoUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>صورة الغلاف (Poster)</label>
+                <input className={inputCls} value={newDraft.posterUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, posterUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>رابط الانتقال</label>
+                <input className={inputCls} value={newDraft.linkUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, linkUrl: e.target.value })} />
+              </div>
+            </div>
+            <SaveRow onSave={() => { onSave(undefined, newDraft, "POST"); setShowNew(false); setNewDraft({ title: "", type: "image", imageUrl: "", subtitle: "", isActive: true }) }} saving={saving} />
           </div>
         </div>
       )}
@@ -611,6 +927,144 @@ function VideosEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
   )
 }
 
+function ZonesEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
+  items: ZoneItem[]
+  setItems: (items: ZoneItem[]) => void
+  onSave: (id: string | undefined, payload: any, method: string) => void
+  onDelete: (id: string) => void
+  onMove: (i: number, d: number) => void
+  saving: boolean
+}) {
+  const [drafts, setDrafts] = useState<ZoneItem[]>([])
+  useEffect(() => { setDrafts(items) }, [items])
+  const update = (index: number, patch: Partial<ZoneItem>) => {
+    setDrafts((prev) => prev.map((it, i) => (i === index ? { ...it, ...patch } : it)))
+  }
+  const [showNew, setShowNew] = useState(false)
+  const [newDraft, setNewDraft] = useState<Partial<ZoneItem>>({ title: "", type: "text", imageUrl: "", animation: "fade", isActive: true })
+
+  return (
+    <div className="space-y-4">
+      <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+        العمود الأيمن في الصفحة الرئيسية — يُقسَّم إلى 1-3 مناطق؛ كل منطقة نوعها (نص / صورة / فيديو / مزيج) وتُعرض عمودياً. أضف حتى 3 مناطق أو احذفها لتقلص.
+      </div>
+      {drafts.map((item, i) => (
+        <EditorCard
+          key={item.id}
+          title={item.title || `منطقة ${i + 1}`}
+          onDelete={() => onDelete(item.id)}
+          onMoveUp={() => onMove(i, -1)}
+          onMoveDown={() => onMove(i, 1)}
+        >
+          <div className="space-y-3">
+            {localeRow(["العنوان (عربي)", "العنوان (إنجليزي)", "العنوان (أردو)"], { ar: item.title, en: item.titleEn, ur: item.titleUr }, (v) => update(i, { title: v.ar, titleEn: v.en, titleUr: v.ur }))}
+            {localeRow(["الوصف (عربي)", "الوصف (إنجليزي)", "الوصف (أردو)"], { ar: item.subtitle, en: item.subtitleEn, ur: item.subtitleUr }, (v) => update(i, { subtitle: v.ar, subtitleEn: v.en, subtitleUr: v.ur }))}
+            <div>
+              <label className={labelCls}>نوع المنطقة</label>
+              <select className={inputCls} value={item.type ?? "text"} onChange={(e) => update(i, { type: e.target.value })}>
+                <option value="text">نص (Text)</option>
+                <option value="image">صورة (Image)</option>
+                <option value="video">فيديو (Video)</option>
+                <option value="mixed">مزيج (Mixed)</option>
+              </select>
+            </div>
+            {(item.type ?? "text") === "text" || (item.type ?? "text") === "mixed"
+              ? localeRow(["نص المنطقة (عربي)", "نص المنطقة (إنجليزي)", "نص المنطقة (أردو)"], { ar: item.body, en: item.bodyEn, ur: item.bodyUr }, (v) => update(i, { body: v.ar, bodyEn: v.en, bodyUr: v.ur }))
+              : null}
+            <div className="grid gap-3 md:grid-cols-2">
+              <div>
+                <label className={labelCls}>رابط الصورة</label>
+                <input className={inputCls} value={item.imageUrl} onChange={(e) => update(i, { imageUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>رابط الفيديو</label>
+                <input className={inputCls} value={item.videoUrl ?? ""} onChange={(e) => update(i, { videoUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>صورة الغلاف (Poster)</label>
+                <input className={inputCls} value={item.posterUrl ?? ""} onChange={(e) => update(i, { posterUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>رابط الانتقال</label>
+                <input className={inputCls} value={item.linkUrl ?? ""} onChange={(e) => update(i, { linkUrl: e.target.value })} />
+              </div>
+            </div>
+            <div>
+              <label className={labelCls}>نوع الحركة</label>
+              <select className={inputCls} value={item.animation} onChange={(e) => update(i, { animation: e.target.value })}>
+                <option value="fade">تلاشي (Fade)</option>
+                <option value="slide">انزلاق (Slide)</option>
+                <option value="bounce">ارتداد (Bounce)</option>
+                <option value="pulse">نبض (Pulse)</option>
+              </select>
+            </div>
+            <label className="flex items-center gap-2 text-sm font-medium text-surface-700">
+              <input type="checkbox" checked={item.isActive} onChange={(e) => update(i, { isActive: e.target.checked })} />
+              مفعّلة
+            </label>
+            <SaveRow onSave={() => onSave(item.id, drafts[i], "PATCH")} saving={saving} />
+          </div>
+        </EditorCard>
+      ))}
+
+      {showNew && (
+        <div className="bg-white border rounded-xl p-5">
+          <h3 className="font-bold text-surface-900 mb-4">منطقة جديدة</h3>
+          <div className="space-y-3">
+            <div className="grid gap-3 md:grid-cols-3">
+              <div><label className={labelCls}>العنوان (عربي)</label><input className={inputCls} value={newDraft.title ?? ""} onChange={(e) => setNewDraft({ ...newDraft, title: e.target.value })} /></div>
+              <div><label className={labelCls}>العنوان (إنجليزي)</label><input className={inputCls} value={newDraft.titleEn ?? ""} onChange={(e) => setNewDraft({ ...newDraft, titleEn: e.target.value })} /></div>
+              <div><label className={labelCls}>العنوان (أردو)</label><input className={inputCls} value={newDraft.titleUr ?? ""} onChange={(e) => setNewDraft({ ...newDraft, titleUr: e.target.value })} /></div>
+            </div>
+            <div>
+              <label className={labelCls}>نوع المنطقة</label>
+              <select className={inputCls} value={newDraft.type ?? "text"} onChange={(e) => setNewDraft({ ...newDraft, type: e.target.value })}>
+                <option value="text">نص (Text)</option>
+                <option value="image">صورة (Image)</option>
+                <option value="video">فيديو (Video)</option>
+                <option value="mixed">مزيج (Mixed)</option>
+              </select>
+            </div>
+            {(newDraft.type ?? "text") === "text" || (newDraft.type ?? "text") === "mixed"
+              ? localeRow(["نص المنطقة (عربي)", "نص المنطقة (إنجليزي)", "نص المنطقة (أردو)"], { ar: newDraft.body ?? "", en: newDraft.bodyEn ?? "", ur: newDraft.bodyUr ?? "" }, (v) => setNewDraft({ ...newDraft, body: v.ar, bodyEn: v.en, bodyUr: v.ur }))
+              : null}
+            <div className="grid gap-3 md:grid-cols-2">
+              <div>
+                <label className={labelCls}>رابط الصورة</label>
+                <input className={inputCls} value={newDraft.imageUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, imageUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>رابط الفيديو</label>
+                <input className={inputCls} value={newDraft.videoUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, videoUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>صورة الغلاف (Poster)</label>
+                <input className={inputCls} value={newDraft.posterUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, posterUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>نوع الحركة</label>
+                <select className={inputCls} value={newDraft.animation ?? "fade"} onChange={(e) => setNewDraft({ ...newDraft, animation: e.target.value })}>
+                  <option value="fade">تلاشي (Fade)</option>
+                  <option value="slide">انزلاق (Slide)</option>
+                  <option value="bounce">ارتداد (Bounce)</option>
+                  <option value="pulse">نبض (Pulse)</option>
+                </select>
+              </div>
+            </div>
+            <SaveRow onSave={() => { onSave(undefined, newDraft, "POST"); setShowNew(false); setNewDraft({ title: "", type: "text", imageUrl: "", animation: "fade", isActive: true }) }} saving={saving} />
+          </div>
+        </div>
+      )}
+
+      {drafts.length >= 3 ? (
+        <p className="text-sm text-surface-500">الحد الأقصى 3 مناطق في العمود الأيمن.</p>
+      ) : (
+        <NewItemButton onClick={() => setShowNew((v) => !v)} saving={saving} />
+      )}
+    </div>
+  )
+}
+
 function AdsEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
   items: AdItem[]
   setItems: (items: AdItem[]) => void
@@ -625,7 +1079,7 @@ function AdsEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
     setDrafts((prev) => prev.map((it, i) => (i === index ? { ...it, ...patch } : it)))
   }
   const [showNew, setShowNew] = useState(false)
-  const [newDraft, setNewDraft] = useState<Partial<AdItem>>({ title: "", imageUrl: "", animation: "fade", isActive: true })
+  const [newDraft, setNewDraft] = useState<Partial<AdItem>>({ title: "", type: "image", imageUrl: "", animation: "fade", isActive: true })
 
   return (
     <div className="space-y-4">
@@ -640,10 +1094,30 @@ function AdsEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
           <div className="space-y-3">
             {localeRow(["العنوان (عربي)", "العنوان (إنجليزي)", "العنوان (أردو)"], { ar: item.title, en: item.titleEn, ur: item.titleUr }, (v) => update(i, { title: v.ar, titleEn: v.en, titleUr: v.ur }))}
             {localeRow(["الوصف (عربي)", "الوصف (إنجليزي)", "الوصف (أردو)"], { ar: item.subtitle, en: item.subtitleEn, ur: item.subtitleUr }, (v) => update(i, { subtitle: v.ar, subtitleEn: v.en, subtitleUr: v.ur }))}
+            <div>
+              <label className={labelCls}>نوع الإعلان</label>
+              <select className={inputCls} value={item.type ?? "image"} onChange={(e) => update(i, { type: e.target.value })}>
+                <option value="image">صورة (Image)</option>
+                <option value="text">نص (Text)</option>
+                <option value="video">فيديو (Video)</option>
+                <option value="mixed">مزيج (Mixed)</option>
+              </select>
+            </div>
+            {(item.type ?? "image") === "text" || (item.type ?? "image") === "mixed"
+              ? localeRow(["نص الإعلان (عربي)", "نص الإعلان (إنجليزي)", "نص الإعلان (أردو)"], { ar: item.body, en: item.bodyEn, ur: item.bodyUr }, (v) => update(i, { body: v.ar, bodyEn: v.en, bodyUr: v.ur }))
+              : null}
             <div className="grid gap-3 md:grid-cols-2">
               <div>
                 <label className={labelCls}>رابط الصورة</label>
                 <input className={inputCls} value={item.imageUrl} onChange={(e) => update(i, { imageUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>رابط الفيديو</label>
+                <input className={inputCls} value={item.videoUrl ?? ""} onChange={(e) => update(i, { videoUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>صورة الغلاف (Poster)</label>
+                <input className={inputCls} value={item.posterUrl ?? ""} onChange={(e) => update(i, { posterUrl: e.target.value })} />
               </div>
               <div>
                 <label className={labelCls}>رابط الانتقال</label>
@@ -677,10 +1151,30 @@ function AdsEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
               <div><label className={labelCls}>العنوان (إنجليزي)</label><input className={inputCls} value={newDraft.titleEn ?? ""} onChange={(e) => setNewDraft({ ...newDraft, titleEn: e.target.value })} /></div>
               <div><label className={labelCls}>العنوان (أردو)</label><input className={inputCls} value={newDraft.titleUr ?? ""} onChange={(e) => setNewDraft({ ...newDraft, titleUr: e.target.value })} /></div>
             </div>
+            <div>
+              <label className={labelCls}>نوع الإعلان</label>
+              <select className={inputCls} value={newDraft.type ?? "image"} onChange={(e) => setNewDraft({ ...newDraft, type: e.target.value })}>
+                <option value="image">صورة (Image)</option>
+                <option value="text">نص (Text)</option>
+                <option value="video">فيديو (Video)</option>
+                <option value="mixed">مزيج (Mixed)</option>
+              </select>
+            </div>
+            {(newDraft.type ?? "image") === "text" || (newDraft.type ?? "image") === "mixed"
+              ? localeRow(["نص الإعلان (عربي)", "نص الإعلان (إنجليزي)", "نص الإعلان (أردو)"], { ar: newDraft.body ?? "", en: newDraft.bodyEn ?? "", ur: newDraft.bodyUr ?? "" }, (v) => setNewDraft({ ...newDraft, body: v.ar, bodyEn: v.en, bodyUr: v.ur }))
+              : null}
             <div className="grid gap-3 md:grid-cols-2">
               <div>
                 <label className={labelCls}>رابط الصورة</label>
                 <input className={inputCls} value={newDraft.imageUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, imageUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>رابط الفيديو</label>
+                <input className={inputCls} value={newDraft.videoUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, videoUrl: e.target.value })} />
+              </div>
+              <div>
+                <label className={labelCls}>صورة الغلاف (Poster)</label>
+                <input className={inputCls} value={newDraft.posterUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, posterUrl: e.target.value })} />
               </div>
               <div>
                 <label className={labelCls}>نوع الحركة</label>
@@ -692,7 +1186,7 @@ function AdsEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
                 </select>
               </div>
             </div>
-            <SaveRow onSave={() => { onSave(undefined, newDraft, "POST"); setShowNew(false); setNewDraft({ title: "", imageUrl: "", animation: "fade", isActive: true }) }} saving={saving} />
+            <SaveRow onSave={() => { onSave(undefined, newDraft, "POST"); setShowNew(false); setNewDraft({ title: "", type: "image", imageUrl: "", animation: "fade", isActive: true }) }} saving={saving} />
           </div>
         </div>
       )}

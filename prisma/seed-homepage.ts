@@ -38,6 +38,7 @@ async function main() {
     for (const s of d.slides) {
       await prisma.carouselSlide.create({
         data: {
+          type: s.type ?? "image",
           title: s.title,
           titleEn: s.titleEn,
           titleUr: s.titleUr,
@@ -45,6 +46,8 @@ async function main() {
           subtitleEn: s.subtitleEn,
           subtitleUr: s.subtitleUr,
           imageUrl: s.imageUrl,
+          videoUrl: s.videoUrl,
+          posterUrl: s.posterUrl,
           linkUrl: s.linkUrl,
           sortOrder: s.sortOrder,
         },
@@ -78,13 +81,19 @@ async function main() {
     for (const a of d.ads) {
       await prisma.ad.create({
         data: {
+          type: a.type ?? "image",
           title: a.title,
           titleEn: a.titleEn,
           titleUr: a.titleUr,
           subtitle: a.subtitle,
           subtitleEn: a.subtitleEn,
           subtitleUr: a.subtitleUr,
+          body: a.body,
+          bodyEn: a.bodyEn,
+          bodyUr: a.bodyUr,
           imageUrl: a.imageUrl,
+          videoUrl: a.videoUrl,
+          posterUrl: a.posterUrl,
           linkUrl: a.linkUrl,
           animation: a.animation,
           sortOrder: a.sortOrder,

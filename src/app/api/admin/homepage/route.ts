@@ -32,6 +32,52 @@ const CONTENT_FIELDS = {
   secondaryCtaLabelEn: true,
   secondaryCtaLabelUr: true,
   secondaryCtaHref: true,
+  leftBlockType: true,
+  leftBlockTitle: true,
+  leftBlockTitleEn: true,
+  leftBlockTitleUr: true,
+  leftBlockBody: true,
+  leftBlockBodyEn: true,
+  leftBlockBodyUr: true,
+  leftBlockImageUrl: true,
+  leftBlockVideoUrl: true,
+  leftBlockPosterUrl: true,
+  leftBlockLinkUrl: true,
+  leftBlockEnabled: true,
+  showHighlights: true,
+  highlightsTitle: true,
+  highlightsTitleEn: true,
+  highlightsTitleUr: true,
+  showStats: true,
+  stat1Value: true,
+  stat1Label: true,
+  stat1LabelEn: true,
+  stat1LabelUr: true,
+  stat2Value: true,
+  stat2Label: true,
+  stat2LabelEn: true,
+  stat2LabelUr: true,
+  stat3Value: true,
+  stat3Label: true,
+  stat3LabelEn: true,
+  stat3LabelUr: true,
+  stat4Value: true,
+  stat4Label: true,
+  stat4LabelEn: true,
+  stat4LabelUr: true,
+  showVideosSection: true,
+  videosSectionTitle: true,
+  videosSectionTitleEn: true,
+  videosSectionTitleUr: true,
+  showFooter: true,
+  footerAbout: true,
+  footerAboutEn: true,
+  footerAboutUr: true,
+  footerEmail: true,
+  footerPhone: true,
+  footerAddress: true,
+  footerAddressEn: true,
+  footerAddressUr: true,
   isActive: true,
 }
 
@@ -39,14 +85,15 @@ export async function GET() {
   const guard = await requireAdmin()
   if ("error" in guard) return NextResponse.json({ error: guard.error }, { status: guard.status })
 
-  const [content, slides, videos, ads] = await Promise.all([
+  const [content, slides, videos, ads, zones] = await Promise.all([
     prisma.homepageContent.findFirst({ orderBy: { createdAt: "desc" } }),
     prisma.carouselSlide.findMany({ orderBy: { sortOrder: "asc" } }),
     prisma.videoSection.findMany({ orderBy: { sortOrder: "asc" } }),
     prisma.ad.findMany({ orderBy: { sortOrder: "asc" } }),
+    prisma.homepageZone.findMany({ orderBy: { sortOrder: "asc" } }),
   ])
 
-  return NextResponse.json({ content, slides, videos, ads })
+  return NextResponse.json({ content, slides, videos, ads, zones })
 }
 
 export async function PUT(req: Request) {

@@ -17,13 +17,15 @@ export const authConfig = {
       if (user) {
         token.role = (user as { role?: string }).role;
         token.id = user.id;
+        token.roleConfirmed = (user as { roleConfirmed?: boolean }).roleConfirmed ?? false;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        (session.user as { id: string; role?: unknown }).role = token.role;
+        (session.user as { id: string; role?: unknown; roleConfirmed?: boolean }).role = token.role;
+        (session.user as { roleConfirmed?: boolean }).roleConfirmed = Boolean(token.roleConfirmed);
       }
       return session;
     },

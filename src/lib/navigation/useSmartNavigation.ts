@@ -18,6 +18,7 @@ import { fetchEntityRegistryMe } from "./api";
 export interface UseSmartNavigationResult {
   isLoading: boolean;
   isOnboarded: boolean | null;
+  roleConfirmed: boolean | null;
   role: UserRole | null;
   error: string | null;
   refresh: () => Promise<void>;
@@ -28,25 +29,31 @@ export function useSmartNavigation(): UseSmartNavigationResult {
   const router = useRouter();
   const pathname = usePathname();
   const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
+  const [roleConfirmed, setRoleConfirmed] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const isAuthenticated = status === "authenticated";
-  const isLoading = status === "loading" || (isAuthenticated && isOnboarded === null);
+  const sessionRoleConfirmed = (session?.user as { roleConfirmed?: boolean } | undefined)?.roleConfirmed;
+  const isLoading =
+    status === "loading" ||
+    (isAuthenticated && (isOnboarded === null || roleConfirmed === null));
   const role = (session?.user as { role?: UserRole } | undefined)?.role ?? null;
 
   const check = async () => {
     if (!isAuthenticated) {
       setIsOnboarded(null);
+      setRoleConfirmed(null);
       return;
     }
     try {
       const data = await fetchEntityRegistryMe();
       setIsOnboarded(data.isOnboarded);
+      setRoleConfirmed(data.roleConfirmed ?? sessionRoleConfirmed ?? false);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
-      // Fail closed: assume not onboarded until we can verify.
       setIsOnboarded(false);
+      setRoleConfirmed(sessionRoleConfirmed ?? false);
     }
   };
 
@@ -66,23 +73,30 @@ export function useSmartNavigation(): UseSmartNavigationResult {
       return;
     }
 
-    // 2. Authenticated but not onboarded → /onboarding (except public pages).
-    if (isOnboarded === false && shouldRedirectToOnboarding(pathname, isAuthenticated, isOnboarded)) {
-      router.replace(ONBOARDING_PATH);
-      return;
+    // 2. Authenticated but role not confirmed or not onboarded → onboarding only.
+    const confirmed = roleConfirmed ?? false;
+    if (
+      isOnboarded === false ||
+      !confirmed
+    ) {
+      if (shouldRedirectToOnboarding(pathname, isAuthenticated, isOnboarded ?? false, confirmed)) {
+        router.replace(ONBOARDING_PATH);
+        return;
+      }
     }
 
-    // 3. Authenticated and onboarded reaching auth/onboarding pages → role dashboard.
-    if (isOnboarded === true && shouldRedirectToDashboard(pathname, isAuthenticated, isOnboarded)) {
+    // 3. Authenticated, role confirmed, and onboarded reaching auth/onboarding pages → role dashboard.
+    if (isOnboarded === true && confirmed && shouldRedirectToDashboard(pathname, isAuthenticated, isOnboarded)) {
       const destination = getRoleDefaultRoute(role);
       router.replace(destination);
       return;
     }
-  }, [isLoading, isAuthenticated, isOnboarded, pathname, role, router]);
+  }, [isLoading, isAuthenticated, isOnboarded, roleConfirmed, pathname, role, router]);
 
   return {
     isLoading,
     isOnboarded,
+    roleConfirmed,
     role,
     error,
     refresh: check,

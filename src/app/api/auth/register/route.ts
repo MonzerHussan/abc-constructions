@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
         phone,
         role,
         companyName,
+        roleConfirmed: true,
       },
     });
 

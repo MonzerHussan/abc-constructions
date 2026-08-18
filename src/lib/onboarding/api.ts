@@ -1,4 +1,6 @@
 import { OnboardingState, OnboardingApiResponse } from "./types";
+import { ONBOARDING_ACCOUNT_TO_USER_ROLE } from "@/lib/auth/role-selection";
+import type { OnboardingProfile } from "./types";
 
 /**
  * Real onboarding API service.
@@ -101,6 +103,30 @@ async function apiPost<T>(url: string, body: unknown): Promise<T> {
   }
 
   return envelope.data;
+}
+
+export async function syncUserRoleFromProfile(profile: OnboardingProfile): Promise<void> {
+  const role = ONBOARDING_ACCOUNT_TO_USER_ROLE[profile.accountType];
+  if (!role) {
+    throw new Error("Invalid account type");
+  }
+
+  const res = await fetch("/api/auth/set-role", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    body: JSON.stringify({
+      role,
+      companyName: profile.companyName,
+      name: profile.fullName,
+      phone: profile.phone,
+    }),
+  });
+
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(body?.error || "Failed to confirm account type");
+  }
 }
 
 export async function submitOnboarding(

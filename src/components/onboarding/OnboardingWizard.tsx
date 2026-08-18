@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useCallback, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Card, CardBody } from "@/components/ui/card";
 import { useLanguage } from "@/lib/LanguageContext";
 import { StepIndicator } from "./StepIndicator";
 import { StepAccountType } from "./StepAccountType";
 import { StepDocuments } from "./StepDocuments";
 import { StepSurvey } from "./StepSurvey";
-import { submitOnboarding } from "@/lib/onboarding/api";
+import { submitOnboarding, syncUserRoleFromProfile } from "@/lib/onboarding/api";
 import type {
   OnboardingState,
   OnboardingProfile,
@@ -70,9 +71,29 @@ function validatePhone(phone: string): boolean {
 export function OnboardingWizard() {
   const { t, dir } = useLanguage();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const { data: session, update: updateSession } = useSession();
   const [state, setState] = useState<OnboardingState>(initialState);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState<{ trackingId: string } | null>(null);
+  const [stepBusy, setStepBusy] = useState(false);
+
+  const googleSource =
+    searchParams.get("source") === "google" ||
+    searchParams.get("source") === "role-required";
+  const roleConfirmed = (session?.user as { roleConfirmed?: boolean } | undefined)?.roleConfirmed;
+
+  useEffect(() => {
+    if (!session?.user) return;
+    setState((prev) => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        fullName: prev.profile.fullName || session.user?.name || "",
+        email: prev.profile.email || session.user?.email || "",
+      },
+    }));
+  }, [session]);
 
   const updateProfile = useCallback((profile: OnboardingProfile) => {
     setState((prev) => ({ ...prev, profile }));
@@ -128,10 +149,29 @@ export function OnboardingWizard() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleNext = () => {
-    if (validateStep(state.step)) {
-      setState((prev) => ({ ...prev, step: prev.step + 1, error: null }));
+  const handleNext = async () => {
+    if (!validateStep(state.step)) return;
+
+    if (state.step === 1) {
+      setStepBusy(true);
+      setState((prev) => ({ ...prev, error: null }));
+      try {
+        await syncUserRoleFromProfile(state.profile);
+        await updateSession?.();
+        setState((prev) => ({ ...prev, step: prev.step + 1, error: null }));
+        setErrors({});
+      } catch (err) {
+        setState((prev) => ({
+          ...prev,
+          error: err instanceof Error ? err.message : "Failed to save account type",
+        }));
+      } finally {
+        setStepBusy(false);
+      }
+      return;
     }
+
+    setState((prev) => ({ ...prev, step: prev.step + 1, error: null }));
   };
 
   const handleBack = () => {
@@ -204,6 +244,13 @@ export function OnboardingWizard() {
 
   return (
     <div className="max-w-4xl mx-auto">
+      {(googleSource || roleConfirmed === false) && state.step === 1 && (
+        <div className="mb-4 rounded-none border border-secondary-200 bg-secondary-50 px-4 py-3 text-sm text-secondary-900">
+          {t("obGoogleRoleRequired") ||
+            "يرجى اختيار نوع حسابك وإكمال بياناتك. لا يمكن الدخول للمنصة قبل إتمام هذه الخطوة."}
+        </div>
+      )}
+
       <div className="mb-8">
         <StepIndicator steps={steps} current={state.step} />
       </div>
@@ -250,9 +297,10 @@ export function OnboardingWizard() {
             {state.step < 3 ? (
               <button
                 onClick={handleNext}
-                className="px-8 py-2.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors"
+                disabled={stepBusy}
+                className="px-8 py-2.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors disabled:opacity-70"
               >
-                {t("obNext")}
+                {stepBusy ? t("obSubmitting") : t("obNext")}
               </button>
             ) : (
               <button

@@ -4,6 +4,7 @@ import { success, error } from '@/modules/shared/utils/response-envelope';
 import { ErrorCodes } from '@/modules/shared/utils/error-codes';
 import { logger } from '@/modules/shared/utils/logger';
 import { withAuth } from '@/lib/auth-guard';
+import { prisma } from '@/lib/prisma';
 
 /**
  * GET /api/v1/entity-registry/me
@@ -13,10 +14,19 @@ import { withAuth } from '@/lib/auth-guard';
  */
 export const GET = withAuth(async (_request: NextRequest, { sessionUserId }: { sessionUserId: string; params: Record<string, string> }) => {
   try {
-    const profile = await entityRegistryService.findProfileByUserId(sessionUserId);
+    const [profile, user] = await Promise.all([
+      entityRegistryService.findProfileByUserId(sessionUserId),
+      prisma.user.findUnique({
+        where: { id: sessionUserId },
+        select: { roleConfirmed: true, password: true },
+      }),
+    ]);
+
+    const roleConfirmed = user?.roleConfirmed ?? Boolean(user?.password);
 
     return NextResponse.json(success({
       isOnboarded: !!profile,
+      roleConfirmed,
       profile: profile ?? null,
       entity: profile?.entity ?? null,
     }));

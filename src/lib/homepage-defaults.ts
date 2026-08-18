@@ -20,12 +20,59 @@ export interface HomepageContentData {
   secondaryCtaLabelEn: string;
   secondaryCtaLabelUr: string;
   secondaryCtaHref: string;
+  leftBlockType: string;
+  leftBlockTitle: string;
+  leftBlockTitleEn: string;
+  leftBlockTitleUr: string;
+  leftBlockBody: string;
+  leftBlockBodyEn: string;
+  leftBlockBodyUr: string;
+  leftBlockImageUrl: string;
+  leftBlockVideoUrl: string;
+  leftBlockPosterUrl: string | null;
+  leftBlockLinkUrl: string | null;
+  leftBlockEnabled: boolean;
+  showHighlights: boolean;
+  highlightsTitle: string;
+  highlightsTitleEn: string;
+  highlightsTitleUr: string;
+  showStats: boolean;
+  stat1Value: string;
+  stat1Label: string;
+  stat1LabelEn: string;
+  stat1LabelUr: string;
+  stat2Value: string;
+  stat2Label: string;
+  stat2LabelEn: string;
+  stat2LabelUr: string;
+  stat3Value: string;
+  stat3Label: string;
+  stat3LabelEn: string;
+  stat3LabelUr: string;
+  stat4Value: string;
+  stat4Label: string;
+  stat4LabelEn: string;
+  stat4LabelUr: string;
+  showVideosSection: boolean;
+  videosSectionTitle: string;
+  videosSectionTitleEn: string;
+  videosSectionTitleUr: string;
+  showFooter: boolean;
+  footerAbout: string | null;
+  footerAboutEn: string | null;
+  footerAboutUr: string | null;
+  footerEmail: string | null;
+  footerPhone: string | null;
+  footerAddress: string | null;
+  footerAddressEn: string | null;
+  footerAddressUr: string | null;
   isActive: boolean;
   updatedAt: string;
 }
 
 export interface CarouselSlideData {
   id: string;
+  type: string;
   title: string;
   titleEn: string;
   titleUr: string;
@@ -33,6 +80,8 @@ export interface CarouselSlideData {
   subtitleEn: string;
   subtitleUr: string;
   imageUrl: string;
+  videoUrl: string | null;
+  posterUrl: string | null;
   linkUrl: string | null;
   sortOrder: number;
   isActive: boolean;
@@ -54,13 +103,40 @@ export interface VideoSectionData {
 
 export interface AdData {
   id: string;
+  type: string;
   title: string;
   titleEn: string;
   titleUr: string;
   subtitle: string;
   subtitleEn: string;
   subtitleUr: string;
+  body: string;
+  bodyEn: string;
+  bodyUr: string;
   imageUrl: string;
+  videoUrl: string | null;
+  posterUrl: string | null;
+  linkUrl: string | null;
+  animation: string;
+  sortOrder: number;
+  isActive: boolean;
+}
+
+export interface HomepageZoneData {
+  id: string;
+  type: string;
+  title: string;
+  titleEn: string;
+  titleUr: string;
+  subtitle: string;
+  subtitleEn: string;
+  subtitleUr: string;
+  body: string;
+  bodyEn: string;
+  bodyUr: string;
+  imageUrl: string;
+  videoUrl: string | null;
+  posterUrl: string | null;
   linkUrl: string | null;
   animation: string;
   sortOrder: number;
@@ -72,6 +148,7 @@ export interface HomepageData {
   slides: CarouselSlideData[];
   videos: VideoSectionData[];
   ads: AdData[];
+  zones: HomepageZoneData[];
 }
 
 const slideImage =
@@ -112,12 +189,64 @@ export const HOMEPAGE_DEFAULTS: HomepageData = {
     secondaryCtaLabelEn: "Browse Bids",
     secondaryCtaLabelUr: "ٹینڈرز براؤز کریں",
     secondaryCtaHref: "/projects/ABC/tenders/projects",
+    leftBlockType: "text",
+    leftBlockTitle: "رؤيتنا",
+    leftBlockTitleEn: "Our Vision",
+    leftBlockTitleUr: "ہمارا وژن",
+    leftBlockBody:
+      "أن نكون المنصة الرقمية الأولى التي تُحدث نقلة نوعية في قطاع الإنشاءات والمقاولات بالمنطقة",
+    leftBlockBodyEn:
+      "To be the leading digital platform transforming the construction and contracting sector in the region",
+    leftBlockBodyUr:
+      "خطے میں تعمیرات اور کنٹریکٹنگ کے شعبے کو تبدیل کرنے والا اولین ڈیجیٹل پلیٹ فارم بننا",
+    leftBlockImageUrl: "",
+    leftBlockVideoUrl: "",
+    leftBlockPosterUrl: null,
+    leftBlockLinkUrl: null,
+    leftBlockEnabled: true,
+    showHighlights: true,
+    highlightsTitle: "أبرز ما في المنصة",
+    highlightsTitleEn: "Platform Highlights",
+    highlightsTitleUr: "",
+    showStats: true,
+    stat1Value: "2,500+",
+    stat1Label: "مشاريع منجزة",
+    stat1LabelEn: "Completed projects",
+    stat1LabelUr: "",
+    stat2Value: "1,800+",
+    stat2Label: "مقاولون موثوقون",
+    stat2LabelEn: "Verified contractors",
+    stat2LabelUr: "",
+    stat3Value: "10,000+",
+    stat3Label: "خامات",
+    stat3LabelEn: "Materials",
+    stat3LabelUr: "",
+    stat4Value: "3,200+",
+    stat4Label: "عطاءات ممنوحة",
+    stat4LabelEn: "Awarded bids",
+    stat4LabelUr: "",
+    showVideosSection: true,
+    videosSectionTitle: "اكتشف المنصة",
+    videosSectionTitleEn: "Discover the Platform",
+    videosSectionTitleUr: "",
+    showFooter: true,
+    footerAbout:
+      "منصة رقمية متكاملة تربط أصحاب المشاريع والمقاولين والموردين في قطاع الإنشاءات",
+    footerAboutEn:
+      "An all-in-one digital platform connecting project owners, contractors and suppliers in the construction sector",
+    footerAboutUr: "",
+    footerEmail: "info@abc-constructions.com",
+    footerPhone: "+966 50 000 0000",
+    footerAddress: "الرياض، المملكة العربية السعودية",
+    footerAddressEn: "Riyadh, Saudi Arabia",
+    footerAddressUr: "",
     isActive: true,
     updatedAt: new Date().toISOString(),
   },
   slides: [
     {
       id: "default-slide-1",
+      type: "image",
       title: "مناقصات المشاريع",
       titleEn: "Project Bids",
       titleUr: "پروجیکٹ ٹینڈرز",
@@ -125,12 +254,15 @@ export const HOMEPAGE_DEFAULTS: HomepageData = {
       subtitleEn: "Discover new bids daily",
       subtitleUr: "روزانہ نئے ٹینڈرز دریافت کریں",
       imageUrl: slideImage,
+      videoUrl: null,
+      posterUrl: null,
       linkUrl: "/projects/ABC/tenders/projects",
       sortOrder: 0,
       isActive: true,
     },
     {
       id: "default-slide-2",
+      type: "image",
       title: "سوق البضائع",
       titleEn: "Marketplace",
       titleUr: "بازار",
@@ -138,12 +270,15 @@ export const HOMEPAGE_DEFAULTS: HomepageData = {
       subtitleEn: "Building materials at competitive prices",
       subtitleUr: "مسابقتی قیمتوں پر تعمیراتی مواد",
       imageUrl: slideImage,
+      videoUrl: null,
+      posterUrl: null,
       linkUrl: "/projects/ABC/marketplace",
       sortOrder: 1,
       isActive: true,
     },
     {
       id: "default-slide-3",
+      type: "image",
       title: "عرض المشاريع",
       titleEn: "Project Showcase",
       titleUr: "پروجیکٹ شوکیس",
@@ -151,6 +286,8 @@ export const HOMEPAGE_DEFAULTS: HomepageData = {
       subtitleEn: "Explore our work and achievements",
       subtitleUr: "ہمارا کام اور کامیابیاں دیکھیں",
       imageUrl: slideImage,
+      videoUrl: null,
+      posterUrl: null,
       linkUrl: "/projects/ABC/projects",
       sortOrder: 2,
       isActive: true,
@@ -187,16 +324,64 @@ export const HOMEPAGE_DEFAULTS: HomepageData = {
   ads: [
     {
       id: "default-ad-1",
+      type: "image",
       title: "اشترك الآن",
       titleEn: "Subscribe Now",
       titleUr: "ابھی سبسکرائب کریں",
       subtitle: "مزايا حصرية للأعضاء",
       subtitleEn: "Exclusive member benefits",
       subtitleUr: "ممبران کے لیے خصوصی فوائد",
+      body: "",
+      bodyEn: "",
+      bodyUr: "",
       imageUrl: adImage,
+      videoUrl: null,
+      posterUrl: null,
       linkUrl: "/projects/ABC/auth/register",
       animation: "fade",
       sortOrder: 0,
+      isActive: true,
+    },
+  ],
+  zones: [
+    {
+      id: "default-zone-1",
+      type: "text",
+      title: "جودة مضمونة",
+      titleEn: "Guaranteed Quality",
+      titleUr: "ضمانی کوالٹی",
+      subtitle: "موردون موثوقون وخامات معتمدة",
+      subtitleEn: "Trusted suppliers and certified materials",
+      subtitleUr: "قابل اعتماد سپلائرز اور تصدیق شدہ مواد",
+      body: "كل عقد على المنصة مغطى بضمان الجودة والالتزام بالجدول الزمني",
+      bodyEn: "Every contract on the platform is backed by quality assurance and schedule commitment",
+      bodyUr: "پلیٹ فارم پر ہر معاہدہ کوالٹی اشورنس اور شیڈول کی پابندی کے ساتھ محفوظ ہے",
+      imageUrl: "",
+      videoUrl: null,
+      posterUrl: null,
+      linkUrl: null,
+      animation: "fade",
+      sortOrder: 0,
+      isActive: true,
+    },
+    {
+      id: "default-zone-2",
+      type: "text",
+      title: "خدمات مالية",
+      titleEn: "Financial Services",
+      titleUr: "مالی خدمات",
+      subtitle: "مدفوعات آمنة عبر محفظة المنصة",
+      subtitleEn: "Secure payments via the platform wallet",
+      subtitleUr: "پلیٹ فارم والیٹ کے ذریعے محفوظ ادائیگیاں",
+      body: "",
+      bodyEn: "",
+      bodyUr: "",
+      imageUrl: "",
+      videoUrl: null,
+      posterUrl: null,
+      linkUrl: null,
+      animation: "fade",
+      sortOrder: 1,
       isActive: true,
     },
   ],

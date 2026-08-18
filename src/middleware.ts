@@ -70,6 +70,24 @@ function isProtectedPage(pathname: string): boolean {
   return protectedPages.some((p) => pathname.startsWith(p));
 }
 
+/** Paths reachable while OAuth user has not confirmed account type yet */
+const roleSelectionAllowedPaths = [
+  '/projects/ABC',
+  '/projects/ABC/onboarding',
+  '/projects/ABC/auth/login',
+  '/projects/ABC/auth/register',
+  '/projects/ABC/auth/forgot-password',
+  '/projects/ABC/auth/reset-password',
+];
+
+function isRoleSelectionAllowed(pathname: string): boolean {
+  return roleSelectionAllowedPaths.includes(pathname);
+}
+
+function isAbcPlatformPath(pathname: string): boolean {
+  return pathname === '/projects/ABC' || pathname.startsWith('/projects/ABC/');
+}
+
 function isApiPath(pathname: string): boolean {
   return (
     pathname.startsWith('/api/') || pathname.startsWith('/projects/ABC/api/')
@@ -98,12 +116,22 @@ export async function middleware(request: NextRequest) {
   }
 
   // Page-level route protection (D6)
-  if (isProtectedPage(pathname)) {
+  if (isProtectedPage(pathname) || isAbcPlatformPath(pathname)) {
     const session = await auth();
     if (!session?.user) {
-      const loginUrl = new URL('/projects/ABC/auth/login', request.url);
-      loginUrl.searchParams.set('callbackUrl', pathname);
-      return NextResponse.redirect(loginUrl);
+      if (isProtectedPage(pathname)) {
+        const loginUrl = new URL('/projects/ABC/auth/login', request.url);
+        loginUrl.searchParams.set('callbackUrl', pathname);
+        return NextResponse.redirect(loginUrl);
+      }
+      return NextResponse.next();
+    }
+
+    const roleConfirmed = (session.user as { roleConfirmed?: boolean }).roleConfirmed;
+    if (roleConfirmed === false && !isRoleSelectionAllowed(pathname)) {
+      const onboardingUrl = new URL('/projects/ABC/onboarding', request.url);
+      onboardingUrl.searchParams.set('source', 'role-required');
+      return NextResponse.redirect(onboardingUrl);
     }
     // Non-admins still render the page; the admin layout shows an access-denied
     // message instead of silently redirecting to the homepage.

@@ -22,14 +22,15 @@ export async function PATCH(req: Request, { params }: Params) {
 
   const allowed = [
     "type", "title", "titleEn", "titleUr", "subtitle", "subtitleEn", "subtitleUr",
-    "imageUrl", "videoUrl", "posterUrl", "linkUrl", "sortOrder", "isActive",
+    "body", "bodyEn", "bodyUr", "imageUrl", "videoUrl", "posterUrl",
+    "linkUrl", "animation", "sortOrder", "isActive",
   ]
   const data: Record<string, unknown> = {}
   for (const key of allowed) if (key in body) data[key] = body[key]
 
   try {
-    const slide = await prisma.carouselSlide.update({ where: { id }, data })
-    return NextResponse.json(slide)
+    const zone = await prisma.homepageZone.update({ where: { id }, data })
+    return NextResponse.json(zone)
   } catch {
     return NextResponse.json({ error: "Not found" }, { status: 404 })
   }
@@ -41,7 +42,7 @@ export async function DELETE(_req: Request, { params }: Params) {
 
   const { id } = await params
   try {
-    await prisma.carouselSlide.delete({ where: { id } })
+    await prisma.homepageZone.delete({ where: { id } })
     return NextResponse.json({ ok: true })
   } catch {
     return NextResponse.json({ error: "Not found" }, { status: 404 })

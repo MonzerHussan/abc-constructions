@@ -7,6 +7,7 @@ import { signIn, useSession } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Mail, Lock, Eye, EyeOff, Smartphone, ArrowLeft, Loader2 } from "lucide-react"
 import { useLanguage } from "@/lib/LanguageContext"
+import { GOOGLE_ONBOARDING_CALLBACK } from "@/lib/auth/role-selection"
 
 export default function LoginPage() {
   const { t } = useLanguage()
@@ -41,7 +42,10 @@ export default function LoginPage() {
 
   if (status === "loading" || status === "authenticated") {
     return (
-      <div className="min-h-screen bg-surface-50 flex items-center justify-center">
+      <div className="relative h-screen bg-surface-50 flex items-center justify-center overflow-hidden">
+        <Link href="/projects/ABC" className="absolute top-4 left-4 z-20">
+          <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
+        </Link>
         <Loader2 className="w-8 h-8 animate-spin text-secondary-500" />
       </div>
     )
@@ -102,16 +106,15 @@ export default function LoginPage() {
 
   if (mfaRequired) {
     return (
-      <div className="min-h-screen bg-surface-50 flex">
-        <div className="flex-1 flex items-center justify-center p-8">
+      <div className="relative h-screen bg-surface-50 flex overflow-hidden">
+        <Link href="/projects/ABC" className="absolute top-4 left-4 z-20">
+          <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
+        </Link>
+        <div className="flex-1 flex items-center justify-center p-6">
           <div className="w-full max-w-md">
-            <div className="mb-8">
-              <Link href="/projects/ABC" className="flex items-center gap-2 mb-6">
-                <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
-                <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
-              </Link>
+            <div className="mb-4">
               <h1 className="text-2xl font-bold text-surface-900">╪º┘ä┘à╪╡╪º╪»┘é╪⌐ ╪º┘ä╪½┘å╪º╪ª┘è╪⌐</h1>
-              <p className="text-surface-600 mt-1">╪ú╪»╪«┘ä ╪º┘ä╪▒┘é┘à ╪º┘ä┘à┘â┘ê┘å ┘à┘å 6 ╪ú╪▒┘é╪º┘à ┘à┘å ╪¬╪╖╪¿┘è┘é ╪º┘ä┘à╪╡╪º╪»┘é╪⌐</p>
+              <p className="text-surface-600 mt-1">╪ú╪»╪«┘ä ╪º┘ä╪▒╪┘é┘à ╪º┘ä┘à┘â┘ê┘å ┘à┘å 6 ╪ú╪▒┘é╪º┘à ┘à┘å ╪¬╪╖╪¿┘è┘é ╪º┘ä┘à╪╡╪º╪»┘é╪⌐</p>
             </div>
 
             <form onSubmit={handleMfaSubmit} className="space-y-5">
@@ -160,21 +163,20 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-50 flex">
-      <div className="flex-1 flex items-center justify-center p-8">
+    <div className="relative h-screen bg-surface-50 flex overflow-hidden">
+      <Link href="/projects/ABC" className="absolute top-4 left-4 z-20">
+        <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
+      </Link>
+      <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <div className="mb-8">
-              <Link href="/projects/ABC" className="flex items-center gap-2 mb-6">
-                <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
-                <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
-              </Link>
+          <div className="mb-4">
             <h1 className="text-2xl font-bold text-surface-900">{t("loginTitle")}</h1>
             <p className="text-surface-600 mt-1">{t("loginSubtitle")}</p>
           </div>
 
           <button
-            onClick={() => signIn("google", { callbackUrl: "/projects/ABC/onboarding" })}
-            className="w-full flex items-center justify-center gap-3 py-2.5 border border-surface-300 rounded-xl text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors mb-6"
+            onClick={() => signIn("google", { callbackUrl: GOOGLE_ONBOARDING_CALLBACK })}
+            className="w-full flex items-center justify-center gap-3 py-2.5 border border-surface-300 rounded-xl text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors mb-4"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
@@ -185,7 +187,7 @@ export default function LoginPage() {
             {t("googleSignIn")}
           </button>
 
-          <div className="relative mb-6">
+          <div className="relative mb-4">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-surface-200" />
             </div>
@@ -194,7 +196,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {error && <div className="bg-danger-50 text-danger-600 text-sm px-4 py-2.5 rounded-xl">{error}</div>}
             <div>
               <label className="block text-sm font-medium text-surface-700 mb-1.5">{t("email")}</label>
@@ -249,7 +251,7 @@ export default function LoginPage() {
             </p>
           </form>
 
-          <p className="text-center mt-6 text-sm text-surface-600">
+          <p className="text-center mt-4 text-sm text-surface-600">
             {t("noAccount")}{" "}
             <Link href="/projects/ABC/auth/register" className="text-secondary-600 font-bold hover:text-secondary-700">
               {t("createAccount")}

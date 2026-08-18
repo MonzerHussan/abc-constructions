@@ -8,9 +8,12 @@ import { cn } from "@/lib/utils"
 
 export interface SlideData {
   id: string
+  type: string
   title: string
   subtitle: string
   imageUrl: string
+  videoUrl: string | null
+  posterUrl: string | null
   linkUrl: string | null
 }
 
@@ -32,7 +35,7 @@ export default function HomepageCarousel({ slides, dir, fill }: { slides: SlideD
 
   return (
     <div
-      className={cn("relative overflow-hidden rounded-3xl", fill && "h-full")}
+      className={cn("relative overflow-hidden", fill && "h-full")}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -40,39 +43,64 @@ export default function HomepageCarousel({ slides, dir, fill }: { slides: SlideD
         className={cn("flex transition-transform duration-700 ease-in-out h-full")}
         style={{ transform: `translateX(${dir === "rtl" ? index * 100 : -index * 100}%)` }}
       >
-        {slides.map((slide) => (
-          <div key={slide.id} className="min-w-full relative h-full">
-            <div
-              className={cn("relative h-[360px] md:h-[440px] w-full overflow-hidden", fill && "min-h-full")}
-            >
-              <Image
-                src={slide.imageUrl}
-                alt={slide.title}
-                fill
-                priority
-                className="object-cover carousel-zoom"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 p-6 md:p-10">
-                <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 drop-shadow">
-                  {slide.title}
-                </h3>
-                {slide.subtitle && (
-                  <p className="text-white/85 text-sm md:text-lg mb-4 max-w-2xl">{slide.subtitle}</p>
+        {slides.map((slide) => {
+          const stype = slide.type || "image"
+          const isVideo = stype === "video" && Boolean(slide.videoUrl)
+          const isText = stype === "text"
+          return (
+            <div key={slide.id} className="min-w-full relative h-full">
+              <div
+                className={cn("relative h-[360px] md:h-[440px] w-full overflow-hidden", fill && "min-h-full")}
+              >
+                {isVideo ? (
+                  <video
+                    src={slide.videoUrl!}
+                    poster={slide.posterUrl || slide.imageUrl || undefined}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                    preload="metadata"
+                  />
+                ) : isText ? (
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-700 via-primary-800 to-secondary-900" />
+                ) : (
+                  <Image
+                    src={slide.imageUrl}
+                    alt={slide.title}
+                    fill
+                    priority
+                    className="object-cover carousel-zoom"
+                  />
                 )}
-                {slide.linkUrl && (
-                  <Link
-                    href={slide.linkUrl}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 text-white rounded-lg font-bold hover:bg-amber-600 transition-colors text-sm"
-                  >
-                    {dir === "rtl" ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-                    ابدأ الآن
-                  </Link>
-                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div
+                  className={cn(
+                    "absolute inset-x-0 p-3 md:p-5",
+                    isText ? "inset-y-0 flex flex-col items-center justify-center text-center" : "bottom-0"
+                  )}
+                >
+                  <h3 className="text-2xl md:text-4xl font-bold text-white mb-1 drop-shadow">
+                    {slide.title}
+                  </h3>
+                  {slide.subtitle && (
+                    <p className="text-white/85 text-sm md:text-lg mb-2 max-w-2xl">{slide.subtitle}</p>
+                  )}
+                  {slide.linkUrl && (
+                    <Link
+                      href={slide.linkUrl}
+                      className="inline-flex items-center gap-2 px-2.5 py-1.5 bg-amber-500 text-white rounded-none font-bold hover:bg-amber-600 transition-colors text-sm"
+                    >
+                      {dir === "rtl" ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                      ابدأ الآن
+                    </Link>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {count > 1 && (
