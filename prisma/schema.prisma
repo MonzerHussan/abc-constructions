@@ -16,10 +16,25 @@ enum UserRole {
   FREELANCER
   SUPPLIER
   TRADER
+  INDIVIDUAL
+  COMPANY
+  ENTITY
   ADMIN
   SUPER_ADMIN
 }
 
+/// Fixed platform account types (9) — used for registration, onboarding, and subcategory scoping.
+enum PlatformAccountType {
+  OWNER
+  CONSULTANT
+  CONTRACTOR
+  SUBCONTRACTOR
+  SUPPLIER
+  TRADER
+  INDIVIDUAL
+  COMPANY
+  ENTITY
+}
 enum TenderStatus {
   OPEN
   CLOSED
@@ -4172,6 +4187,21 @@ model SurveyConfigItem {
   @@index([parentId])
   @@index([type])
   @@index([isActive])
+}
+
+// Admin-managed subcategories per platform account type (9 fixed types).
+model AccountTypeSubcategory {
+  id          String              @id @default(cuid())
+  accountType PlatformAccountType
+  labelEn     String
+  labelAr     String
+  sortOrder   Int                 @default(0)
+  isActive    Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([accountType])
+  @@index([accountType, isActive])
 }
 
 // ─── AI Module (Sprint AI-1b — BOQ Intelligence) ───────────────────────────

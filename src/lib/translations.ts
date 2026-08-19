@@ -127,6 +127,17 @@ export const translations = {
     roleDelivery: "توصيل",
     roleTrainer: "مدرب",
 
+    // Create-account (header) categories
+    accountCategoryEntity: "جهة",
+    accountCategoryCompany: "شركة",
+    accountCategoryOwner: "مالك",
+    accountCategoryConsultant: "استشاري",
+    accountCategoryContractor: "مقاول",
+    accountCategorySubcontractor: "مقاول فرعي",
+    accountCategorySupplier: "مورد",
+    accountCategoryTrader: "تاجر",
+    accountCategoryIndividual: "أفراد",
+
     // Homepage
     heroTitle: "منصة ABC الشاملة",
     heroSubtitle: "لقطاع الإنشاءات والمقاولات",
@@ -738,6 +749,12 @@ export const translations = {
     obTypeConsultantDesc: "استشارات هندسية وإشراف فني",
     obTypeClientInvestor: "عميل / مستثمر",
     obTypeClientInvestorDesc: "نشر المشاريع والبحث عن عروض",
+    obTypeOwnerDesc: "مالك مشروع / مطور عقاري",
+    obTypeContractorDesc: "مقاول رئيسي لتنفيذ المشاريع",
+    obTypeTraderDesc: "شركة تجارة مواد بناء",
+    obTypeIndividualDesc: "باحث عن عمل / متدرب / مهني مستقل",
+    obTypeCompanyDesc: "شركة صيانة أو خدمية مرتبطة بالقطاع",
+    obTypeEntityDesc: "جهة حكومية / مالية / رقابية / تنظيمية",
     obFullName: "الاسم الكامل",
     obEmail: "البريد الإلكتروني",
     obPhone: "رقم الجوال",
@@ -1096,6 +1113,17 @@ export const translations = {
     roleManufacturer: "Manufacturer",
     roleDelivery: "Delivery",
     roleTrainer: "Trainer",
+
+    // Create-account (header) categories
+    accountCategoryEntity: "Entity",
+    accountCategoryCompany: "Company",
+    accountCategoryOwner: "Owner",
+    accountCategoryConsultant: "Consultant",
+    accountCategoryContractor: "Contractor",
+    accountCategorySubcontractor: "Subcontractor",
+    accountCategorySupplier: "Supplier",
+    accountCategoryTrader: "Trader",
+    accountCategoryIndividual: "Individuals",
 
     // Homepage
     heroTitle: "ABC Comprehensive Platform",
@@ -1708,6 +1736,12 @@ export const translations = {
     obTypeConsultantDesc: "Engineering consultancy and technical supervision",
     obTypeClientInvestor: "Client / Investor",
     obTypeClientInvestorDesc: "Publish projects and search for offers",
+    obTypeOwnerDesc: "Project owner / real estate developer",
+    obTypeContractorDesc: "Main contractor for project execution",
+    obTypeTraderDesc: "Building materials trading company",
+    obTypeIndividualDesc: "Job seeker / trainee / independent professional",
+    obTypeCompanyDesc: "Maintenance or service company in the sector",
+    obTypeEntityDesc: "Government / financial / regulatory entity",
     obFullName: "Full Name",
     obEmail: "Email Address",
     obPhone: "Mobile Number",
@@ -2065,6 +2099,17 @@ export const translations = {
     roleManufacturer: "مینوفیکچرر",
     roleDelivery: "ڈلیوری",
     roleTrainer: "ٹرینر",
+
+    // Create-account (header) categories
+    accountCategoryEntity: "ادارہ",
+    accountCategoryCompany: "کمپنی",
+    accountCategoryOwner: "مالک",
+    accountCategoryConsultant: "مشیر",
+    accountCategoryContractor: "پیمانہ دار",
+    accountCategorySubcontractor: "ذیلی پیمانہ دار",
+    accountCategorySupplier: "سپلائر",
+    accountCategoryTrader: "تاجر",
+    accountCategoryIndividual: "افراد",
 
     // Homepage
     heroTitle: "ABC مکمل پلیٹ فارم",
@@ -2635,6 +2680,12 @@ export const translations = {
     obTypeConsultantDesc: "انجینئرنگ مشاورت اور تکنیقی نگرانی",
     obTypeClientInvestor: "کلائنٹ / سرمایہ کار",
     obTypeClientInvestorDesc: "منصوبے شائع کریں اور پیشکشیں تلاش کریں",
+    obTypeOwnerDesc: "منصوبے کا مالک / رئیل اسٹیٹ ڈویلپر",
+    obTypeContractorDesc: "مرکزی ٹھیکیدار برائے منصوبہ",
+    obTypeTraderDesc: "تعمیراتی سامان کی تجارتی کمپنی",
+    obTypeIndividualDesc: "ملازمت طلب / ٹرینی / آزاد پیشہ ور",
+    obTypeCompanyDesc: "دیکھ بھال یا سروس کمپنی",
+    obTypeEntityDesc: "سرکاری / مالی / ریگولیٹری ادارہ",
     obFullName: "پورا نام",
     obEmail: "ای میل اڈریس",
     obPhone: "موبائل نمبر",

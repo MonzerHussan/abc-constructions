@@ -26,6 +26,7 @@ const adminLinks = [
 { href: "/projects/ABC/admin/content", icon: Newspaper, label: "المحتوى", labelEn: "Content" },
   { href: "/projects/ABC/admin/homepage", icon: LayoutDashboard, label: "Homepage" },
   { href: "/projects/ABC/admin/surveys", icon: ClipboardList, label: "Survey Manager" },
+  { href: "/projects/ABC/admin/surveys/account-types", icon: ListChecks, label: "Account Subcategories" },
   { href: "/projects/ABC/admin/surveys/questions", icon: ListChecks, label: "Question Bank" },
   { href: "/projects/ABC/admin/surveys/analytics", icon: PieChart, label: "Survey Analytics" },
   { href: "/projects/ABC/admin/support", icon: Headphones, label: "خدمة العملاء", labelEn: "Support" },
