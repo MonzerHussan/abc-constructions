@@ -22,30 +22,40 @@ vi.mock("@/modules/shared/utils/logger", () => ({
 
 import { prisma } from "@/lib/prisma";
 import { CrmBridgeService } from "@/modules/crm/services/CrmBridgeService";
+import type { Entity, Profile } from "@/generated/prisma/client";
+import {
+  EntitySource,
+  EntityType,
+  EntitySubtype,
+  LanguagePreference,
+  EntityRelationshipStatus,
+  PilotStatus,
+  CrmClassification,
+} from "@/generated/prisma/client";
 
-const mockEntity = {
+const mockEntity: Entity = {
   id: "e-internal",
   entityId: "ENTITY-00099",
-  entityType: "SUPP",
-  entitySubtype: "SUPPLIER",
+  entityType: EntityType.SUPP,
+  entitySubtype: EntitySubtype.SUPPLIER,
   companyName: "ABC Contracting",
   contactPerson: "Ali Hassan",
   contactRole: null,
   contactEmail: "ali@example.com",
   contactPhone: "0555000000",
-  languagePreference: "ARABIC",
+  languagePreference: LanguagePreference.ARABIC,
   location: "Riyadh",
   industrySegment: null,
-  relationshipStatus: "NEW",
-  source: "INTERNAL",
+  relationshipStatus: EntityRelationshipStatus.NEW,
+  source: EntitySource.INTERNAL,
   sourceDetail: "onboarding",
-  pilotStatus: "STARTED",
-  crmClassification: "SUPPLIER",
+  pilotStatus: PilotStatus.STARTED,
+  crmClassification: CrmClassification.SUPPLIER,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
 
-const mockProfile = {
+const mockProfile: Profile = {
   id: "p1",
   profileId: "PROF-00099",
   entityId: "e-internal",

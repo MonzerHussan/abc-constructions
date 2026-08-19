@@ -83,7 +83,7 @@ export function OnboardingWizard() {
     searchParams.get("source") === "google" ||
     searchParams.get("source") === "role-required";
   const roleConfirmed = (session?.user as { roleConfirmed?: boolean } | undefined)?.roleConfirmed;
-  const emailVerified = (session?.user as { emailVerified?: boolean } | undefined)?.emailVerified;
+  const emailVerified = (session?.user as { isEmailVerified?: boolean } | undefined)?.isEmailVerified;
   const mustConfirmRole = roleConfirmed === false;
 
   useEffect(() => {

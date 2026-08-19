@@ -132,9 +132,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
-        ;(session.user as { id: string; role?: unknown; roleConfirmed?: boolean; emailVerified?: boolean }).role = token.role
-        ;(session.user as { roleConfirmed?: boolean }).roleConfirmed = Boolean(token.roleConfirmed)
-        ;(session.user as { emailVerified?: boolean }).emailVerified = Boolean(token.emailVerified)
+        ;(session.user as unknown as { id: string; role?: unknown; roleConfirmed?: boolean; isEmailVerified?: boolean }).role = token.role
+        ;(session.user as unknown as { roleConfirmed?: boolean }).roleConfirmed = Boolean(token.roleConfirmed)
+        ;(session.user as unknown as { isEmailVerified?: boolean }).isEmailVerified = Boolean(token.emailVerified)
       }
       return session
     },
