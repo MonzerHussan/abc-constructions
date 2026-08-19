@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/LanguageContext";
 import type { TranslationKey } from "@/lib/translations";
 import {
@@ -8,10 +9,12 @@ import {
   urgencyOptions,
   locationOptions,
 } from "@/lib/data/onboarding-options";
+import type { SurveyCategory } from "@/lib/data/survey-categories";
 import {
-  surveyCategories,
-  getSubcategoriesByCategoryId,
-} from "@/lib/data/survey-categories";
+  fetchOnboardingSurveyCategories,
+  getSubcategoriesForCategories,
+  staticSurveyCategories,
+} from "@/lib/onboarding/survey-config-client";
 import type { OnboardingSurvey } from "@/lib/onboarding/types";
 
 interface StepSurveyProps {
@@ -22,6 +25,20 @@ interface StepSurveyProps {
 
 export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
   const { t, language, dir } = useLanguage();
+  const [categories, setCategories] = useState<SurveyCategory[]>(staticSurveyCategories);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchOnboardingSurveyCategories().then((loaded) => {
+      if (!cancelled && loaded.length > 0) setCategories(loaded);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const getSubcategoriesByCategoryId = (categoryId: string) =>
+    getSubcategoriesForCategories(categories, categoryId);
 
   const handleSelectSingle = (
     field: "hasProjects" | "budgetRange" | "urgency",
@@ -102,7 +119,7 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
           {t("obSurveyCategoriesSubtitle")}
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {surveyCategories.map((category) => {
+          {categories.map((category) => {
             const isSelected = survey.selectedCategories.includes(category.id);
             return (
               <button
@@ -135,7 +152,7 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
           </p>
           <div className="space-y-6">
             {survey.selectedCategories.map((categoryId) => {
-              const category = surveyCategories.find((c) => c.id === categoryId);
+              const category = categories.find((c) => c.id === categoryId);
               if (!category) return null;
               const subcategories = getSubcategoriesByCategoryId(categoryId);
 

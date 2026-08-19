@@ -1,6 +1,9 @@
 import { OnboardingState, OnboardingApiResponse } from "./types";
 import { ONBOARDING_ACCOUNT_TO_USER_ROLE } from "@/lib/auth/role-selection";
 import type { OnboardingProfile } from "./types";
+import {
+  buildSurveyDataPayload,
+} from "@/lib/onboarding/lead-scores";
 
 /**
  * Real onboarding API service.
@@ -194,6 +197,7 @@ export async function submitOnboarding(
       relevantCategories: survey.selectedCategories,
       subcategories: survey.subcategories,
       capabilities: survey.projectLocations,
+      surveyData: buildSurveyDataPayload(survey),
     },
   };
 

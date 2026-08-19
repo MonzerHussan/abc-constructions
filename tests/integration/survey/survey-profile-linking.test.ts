@@ -109,6 +109,15 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
     expect(body.profile.relevantCategories).toEqual(['construction-materials', 'finishing']);
     expect(body.profile.subcategories).toEqual(['portland-cement', 'tiles']);
     expect(body.profile.capabilities).toEqual(['Riyadh']);
+    expect(body.profile.surveyData).toEqual(
+      expect.objectContaining({
+        selectedCategories: ['construction-materials', 'finishing'],
+        subcategories: ['portland-cement', 'tiles'],
+        hasProjects: 'yes',
+        budgetRange: 'large',
+        urgency: 'immediate',
+      }),
+    );
 
     // Security: userId is never sent from the client.
     expect(body.profile.userId).toBeUndefined();

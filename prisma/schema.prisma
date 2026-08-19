@@ -3456,6 +3456,8 @@ model Lead {
   convertedToContactId String?
   assignedToId         String?
   createdById          String
+  /** Public Entity Registry id (e.g. ENTITY-00012) — links onboarding to CRM */
+  registryEntityId     String?    @unique
   createdAt            DateTime   @default(now())
   updatedAt            DateTime   @updatedAt
 

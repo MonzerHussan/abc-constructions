@@ -18,6 +18,7 @@ interface Lead {
   source: string
   status: string
   score: number
+  registryEntityId?: string | null
   createdAt: string
   assignedTo?: { id: string; name: string | null; email: string | null } | null
 }
@@ -116,6 +117,7 @@ export default function LeadsPage() {
                   <th className="text-right px-4 py-3 text-sm font-medium text-surface-600">المصدر</th>
                   <th className="text-right px-4 py-3 text-sm font-medium text-surface-600">الحالة</th>
                   <th className="text-right px-4 py-3 text-sm font-medium text-surface-600">التقييم</th>
+                  <th className="text-right px-4 py-3 text-sm font-medium text-surface-600">Entity ID</th>
                   <th className="text-right px-4 py-3 text-sm font-medium text-surface-600">التاريخ</th>
                   <th className="px-4 py-3 text-sm font-medium text-surface-600">إجراءات</th>
                 </tr>
@@ -129,6 +131,7 @@ export default function LeadsPage() {
                     <td className="px-4 py-3 text-sm"><StatusBadge label={getLeadSourceMeta(lead.source).label} color={getLeadSourceMeta(lead.source).color} /></td>
                     <td className="px-4 py-3 text-sm"><StatusBadge label={getLeadStatusMeta(lead.status).label} color={getLeadStatusMeta(lead.status).color} /></td>
                     <td className="px-4 py-3 text-sm">{lead.score}</td>
+                    <td className="px-4 py-3 text-sm font-mono text-xs text-surface-600">{lead.registryEntityId || "--"}</td>
                     <td className="px-4 py-3 text-sm text-surface-500">{new Date(lead.createdAt).toLocaleDateString("ar-SA")}</td>
                     <td className="px-4 py-3">
                       <div className="flex gap-2 justify-center">

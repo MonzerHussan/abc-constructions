@@ -4,6 +4,12 @@ import { eventBus } from '@/modules/shared/events/event-bus';
 import { buildEventName } from '@/modules/shared/events/types';
 import { ConsentStatus, Prisma } from '@/generated/prisma/client';
 import { EntityRegistryErrors } from '@/modules/shared/errors/entity-registry.errors';
+import { crmBridgeService } from '@/modules/crm';
+import {
+  deriveLeadScoresFromSurvey,
+  type OnboardingLeadScores,
+} from '@/lib/onboarding/lead-scores';
+import type { OnboardingSurvey } from '@/lib/onboarding/types';
 import type {
   CreateEntityInput,
   UpdateEntityInput,
@@ -296,13 +302,22 @@ export class EntityRegistryService {
     if (!entity) throw new Error(EntityRegistryErrors.ENTITY_NOT_FOUND);
 
     const { totalLeadScore, tier } = calculateLeadScore(input);
-    const existing = await prisma.leadScoring.findUnique({ where: { entityId: input.entityId } });
+    const existing = await prisma.leadScoring.findUnique({ where: { entityId: entity.id } });
     const scoreId = existing?.scoreId ?? (await this.generateScoreId());
 
+    const scorePayload = {
+      strategicScore: input.strategicScore,
+      engagementScore: input.engagementScore,
+      commercialScore: input.commercialScore,
+      conversionScore: input.conversionScore,
+      totalLeadScore,
+      tier,
+    };
+
     const score = await prisma.leadScoring.upsert({
-      where: { entityId: input.entityId },
-      create: { scoreId, ...input, totalLeadScore, tier },
-      update: { ...input, totalLeadScore, tier, scoredDate: new Date() },
+      where: { entityId: entity.id },
+      create: { scoreId, entityId: entity.id, ...scorePayload },
+      update: { ...scorePayload, scoredDate: new Date() },
     });
     logger.info('Lead score calculated', { entityId: input.entityId, totalLeadScore, tier });
     return score;
@@ -365,7 +380,7 @@ export class EntityRegistryService {
   async syncEntityProfile(input: SyncEntityProfileInput) {
     const entityId = await this.generateEntityId();
 
-    return prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       const entity = await tx.entity.create({
         data: { entityId, ...input.entity },
       });
@@ -398,6 +413,78 @@ export class EntityRegistryService {
       logger.info('Entity+Profile synced', { entityId, userId: profileData.userId });
       return { entity, profile };
     });
+
+    const surveyScores = this.deriveScoresFromSurveyData(input.profile?.surveyData);
+    let leadScoreTotal = 0;
+    let leadTier: string | undefined;
+
+    if (surveyScores) {
+      try {
+        const scored = await this.calculateLeadScore({
+          entityId: result.entity.entityId,
+          ...surveyScores,
+        });
+        leadScoreTotal = scored.totalLeadScore;
+        leadTier = scored.tier;
+      } catch (err) {
+        logger.error('Lead score calculation failed during sync', {
+          entityId: result.entity.entityId,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    }
+
+    if (result.profile.userId) {
+      try {
+        await crmBridgeService.syncLeadFromEntityRegistry({
+          entity: result.entity,
+          profile: result.profile,
+          userId: result.profile.userId,
+          leadScore: leadScoreTotal,
+          tier: leadTier,
+        });
+      } catch (err) {
+        logger.error('CRM bridge failed during sync', {
+          entityId: result.entity.entityId,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    }
+
+    return result;
+  }
+
+  private deriveScoresFromSurveyData(
+    surveyData: Record<string, unknown> | undefined | null
+  ): OnboardingLeadScores | null {
+    if (!surveyData || typeof surveyData !== 'object') return null;
+
+    const survey: OnboardingSurvey = {
+      lookingFor: [],
+      selectedCategories: Array.isArray(surveyData.selectedCategories)
+        ? (surveyData.selectedCategories as string[])
+        : [],
+      subcategories: Array.isArray(surveyData.subcategories)
+        ? (surveyData.subcategories as string[])
+        : [],
+      hasProjects: (surveyData.hasProjects as OnboardingSurvey['hasProjects']) ?? '',
+      budgetRange: (surveyData.budgetRange as OnboardingSurvey['budgetRange']) ?? '',
+      projectLocations: Array.isArray(surveyData.projectLocations)
+        ? (surveyData.projectLocations as string[])
+        : [],
+      urgency: (surveyData.urgency as OnboardingSurvey['urgency']) ?? '',
+    };
+
+    if (
+      survey.selectedCategories.length === 0 ||
+      !survey.hasProjects ||
+      !survey.budgetRange ||
+      !survey.urgency
+    ) {
+      return null;
+    }
+
+    return deriveLeadScoresFromSurvey(survey);
   }
 
   // ---------- Sync Supplier Bridge (entity_id ↔ supplierProfile) ----------

@@ -96,6 +96,21 @@ export class SurveyConfigService {
     };
   }
 
+  /** Active categories/subcategories for onboarding (no auth required). */
+  async getPublicConfig(): Promise<SurveyConfig> {
+    const config = await this.getConfig();
+    const activeCategoryIds = new Set(
+      config.categories.filter((c) => c.isActive).map((c) => c.id),
+    );
+    return {
+      categories: config.categories.filter((c) => c.isActive),
+      subcategories: config.subcategories.filter(
+        (s) => s.isActive && s.parentId && activeCategoryIds.has(s.parentId),
+      ),
+      updatedAt: config.updatedAt,
+    };
+  }
+
   async saveConfig(config: SurveyConfig): Promise<void> {
     await this.ensureSeeded();
 
