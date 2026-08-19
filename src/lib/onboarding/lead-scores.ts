@@ -39,7 +39,8 @@ export function deriveLeadScoresFromSurvey(survey: OnboardingSurvey): Onboarding
 
 export function buildSurveyDataPayload(survey: OnboardingSurvey): Record<string, unknown> {
   return {
-    selectedCategories: survey.selectedCategories,
+    accountType: survey.accountType,
+    selectedCategories: survey.accountType ? [survey.accountType] : survey.selectedCategories,
     subcategories: survey.subcategories,
     hasProjects: survey.hasProjects,
     budgetRange: survey.budgetRange,

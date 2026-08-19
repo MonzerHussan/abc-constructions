@@ -4,6 +4,9 @@ import type { OnboardingProfile } from "./types";
 import {
   buildSurveyDataPayload,
 } from "@/lib/onboarding/lead-scores";
+import { PlatformAccountType } from "@/lib/account-types";
+import { requiresOrganizationName } from "@/lib/account-types";
+import { isPlatformAccountType } from "@/lib/account-types";
 
 /**
  * Real onboarding API service.
@@ -26,42 +29,26 @@ function accountTypeToRegistry(
   crmClassification: string;
 } {
   switch (accountType) {
-    case "supplier":
-      return {
-        entityType: "SUPP",
-        entitySubtype: "SUPPLIER",
-        crmClassification: "SUPPLIER",
-      };
-    case "mainContractor":
-      return {
-        entityType: "CUST",
-        entitySubtype: "CONTRACTOR",
-        crmClassification: "CUSTOMER",
-      };
-    case "subcontractor":
-      return {
-        entityType: "CUST",
-        entitySubtype: "CONTRACTOR",
-        crmClassification: "CUSTOMER",
-      };
-    case "consultant":
-      return {
-        entityType: "CUST",
-        entitySubtype: "CONSULTANT",
-        crmClassification: "CUSTOMER",
-      };
-    case "clientInvestor":
-      return {
-        entityType: "CUST",
-        entitySubtype: "INVESTOR",
-        crmClassification: "INVESTOR",
-      };
+    case PlatformAccountType.SUPPLIER:
+      return { entityType: "SUPP", entitySubtype: "SUPPLIER", crmClassification: "SUPPLIER" };
+    case PlatformAccountType.TRADER:
+      return { entityType: "SUPP", entitySubtype: "SUPPLIER", crmClassification: "SUPPLIER" };
+    case PlatformAccountType.CONTRACTOR:
+      return { entityType: "CUST", entitySubtype: "CONTRACTOR", crmClassification: "CUSTOMER" };
+    case PlatformAccountType.SUBCONTRACTOR:
+      return { entityType: "CUST", entitySubtype: "CONTRACTOR", crmClassification: "CUSTOMER" };
+    case PlatformAccountType.CONSULTANT:
+      return { entityType: "CUST", entitySubtype: "CONSULTANT", crmClassification: "CUSTOMER" };
+    case PlatformAccountType.OWNER:
+      return { entityType: "CUST", entitySubtype: "INVESTOR", crmClassification: "INVESTOR" };
+    case PlatformAccountType.INDIVIDUAL:
+      return { entityType: "CUST", entitySubtype: "SERVICE_PROVIDER", crmClassification: "LEAD" };
+    case PlatformAccountType.COMPANY:
+      return { entityType: "CUST", entitySubtype: "SERVICE_PROVIDER", crmClassification: "CUSTOMER" };
+    case PlatformAccountType.ENTITY:
+      return { entityType: "INT", entitySubtype: "SERVICE_PROVIDER", crmClassification: "LEAD" };
     default:
-      return {
-        entityType: "CUST",
-        entitySubtype: "SERVICE_PROVIDER",
-        crmClassification: "LEAD",
-      };
+      return { entityType: "CUST", entitySubtype: "SERVICE_PROVIDER", crmClassification: "LEAD" };
   }
 }
 
@@ -109,10 +96,10 @@ async function apiPost<T>(url: string, body: unknown): Promise<T> {
 }
 
 export async function syncUserRoleFromProfile(profile: OnboardingProfile): Promise<void> {
-  const role = ONBOARDING_ACCOUNT_TO_USER_ROLE[profile.accountType];
-  if (!role) {
+  if (!isPlatformAccountType(profile.accountType)) {
     throw new Error("Invalid account type");
   }
+  const role = ONBOARDING_ACCOUNT_TO_USER_ROLE[profile.accountType];
 
   const res = await fetch("/api/auth/set-role", {
     method: "POST",
@@ -137,7 +124,12 @@ export async function submitOnboarding(
 ): Promise<OnboardingApiResponse> {
   const { profile, documents, survey } = state;
 
-  if (!profile.accountType || !profile.fullName || !profile.email || !profile.phone) {
+  if (
+    !isPlatformAccountType(profile.accountType) ||
+    !profile.fullName ||
+    !profile.email ||
+    !profile.phone
+  ) {
     return {
       success: false,
       message: "Profile information is incomplete",
@@ -155,7 +147,6 @@ export async function submitOnboarding(
   }
 
   if (
-    survey.selectedCategories.length === 0 ||
     survey.subcategories.length === 0 ||
     !survey.hasProjects ||
     !survey.budgetRange ||
@@ -194,7 +185,7 @@ export async function submitOnboarding(
     profile: {
       businessActivity: profile.accountType,
       companySize: survey.budgetRange,
-      relevantCategories: survey.selectedCategories,
+      relevantCategories: [profile.accountType],
       subcategories: survey.subcategories,
       capabilities: survey.projectLocations,
       surveyData: buildSurveyDataPayload(survey),

@@ -23,6 +23,7 @@ export const ROLE_SELECTION_API_PREFIXES = [
   "/api/v1/entity-registry/survey",
   "/api/v1/entity-registry/survey-responses",
   "/api/v1/survey-config/public",
+  "/api/v1/account-types/subcategories/public",
 ] as const;
 
 export function isRoleSelectionPageAllowed(pathname: string): boolean {

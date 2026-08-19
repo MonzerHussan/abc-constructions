@@ -1,12 +1,9 @@
-export type OnboardingAccountType =
-  | "supplier"
-  | "mainContractor"
-  | "subcontractor"
-  | "consultant"
-  | "clientInvestor";
+import type { PlatformAccountType } from "@/lib/account-types";
+
+export type OnboardingAccountType = PlatformAccountType | "";
 
 export interface OnboardingProfile {
-  accountType: OnboardingAccountType | "";
+  accountType: OnboardingAccountType;
   fullName: string;
   email: string;
   phone: string;
@@ -25,14 +22,12 @@ export interface OnboardingDocument {
 }
 
 export interface OnboardingSurvey {
-  /**
-   * Legacy broad-interest array. Kept for backward compatibility with existing
-   * entity-registry profile fields (`relevantCategories`).
-   */
+  /** Account type at time of survey (mirrors profile.accountType). */
+  accountType: OnboardingAccountType;
+  /** Legacy — stores [accountType] for entity-registry relevantCategories. */
   lookingFor: string[];
-  /** Selected main construction categories (12 main categories). */
   selectedCategories: string[];
-  /** Selected subcategories across all chosen main categories (133 total). */
+  /** Admin-managed subcategories for the selected account type. */
   subcategories: string[];
   hasProjects: "yes" | "no" | "soon" | "";
   budgetRange: "small" | "medium" | "large" | "enterprise" | "";

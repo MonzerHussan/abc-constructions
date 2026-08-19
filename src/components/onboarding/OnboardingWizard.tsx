@@ -17,6 +17,8 @@ import type {
   OnboardingDocument,
   OnboardingSurvey,
 } from "@/lib/onboarding/types";
+import { PlatformAccountType } from "@/lib/account-types";
+import { requiresOrganizationName, isPlatformAccountType } from "@/lib/account-types";
 
 const initialState: OnboardingState = {
   step: 1,
@@ -47,6 +49,7 @@ const initialState: OnboardingState = {
     },
   ],
   survey: {
+    accountType: "",
     lookingFor: [],
     selectedCategories: [],
     subcategories: [],
@@ -106,7 +109,20 @@ export function OnboardingWizard() {
   }, [mustConfirmRole, state.step]);
 
   const updateProfile = useCallback((profile: OnboardingProfile) => {
-    setState((prev) => ({ ...prev, profile }));
+    setState((prev) => ({
+      ...prev,
+      profile,
+      survey:
+        profile.accountType !== prev.profile.accountType
+          ? {
+              ...prev.survey,
+              accountType: profile.accountType,
+              subcategories: [],
+              selectedCategories: profile.accountType ? [profile.accountType] : [],
+              lookingFor: profile.accountType ? [profile.accountType] : [],
+            }
+          : prev.survey,
+    }));
   }, []);
 
   const updateDocuments = useCallback((documents: OnboardingDocument[]) => {
@@ -122,9 +138,12 @@ export function OnboardingWizard() {
 
     if (step === 1) {
       const { profile } = state;
-      if (!profile.accountType) newErrors.accountType = "obRequired";
+      if (!isPlatformAccountType(profile.accountType)) newErrors.accountType = "obRequired";
       if (!profile.fullName.trim()) newErrors.fullName = "obRequired";
-      if (!profile.companyName.trim()) newErrors.companyName = "obRequired";
+      const needsCompany =
+        isPlatformAccountType(profile.accountType) &&
+        requiresOrganizationName(profile.accountType as PlatformAccountType);
+      if (needsCompany && !profile.companyName.trim()) newErrors.companyName = "obRequired";
       if (!profile.email.trim()) {
         newErrors.email = "obRequired";
       } else if (!validateEmail(profile.email)) {
@@ -146,10 +165,7 @@ export function OnboardingWizard() {
 
     if (step === 3) {
       const { survey } = state;
-      if (survey.selectedCategories.length === 0)
-        newErrors.selectedCategories = "obRequired";
-      if (survey.subcategories.length === 0)
-        newErrors.subcategories = "obRequired";
+      if (survey.subcategories.length === 0) newErrors.subcategories = "obRequired";
       if (!survey.hasProjects) newErrors.hasProjects = "obRequired";
       if (!survey.budgetRange) newErrors.budgetRange = "obRequired";
       if (!survey.urgency) newErrors.urgency = "obRequired";
@@ -289,6 +305,7 @@ export function OnboardingWizard() {
               onChange={updateProfile}
               errors={errors}
               emailVerified={emailVerified}
+              forceRoleSelection={mustConfirmRole || googleSource}
             />
           )}
           {state.step === 2 && (
@@ -301,6 +318,7 @@ export function OnboardingWizard() {
           {state.step === 3 && (
             <StepSurvey
               survey={state.survey}
+              accountType={state.profile.accountType}
               onChange={updateSurvey}
               errors={errors}
             />

@@ -72,7 +72,7 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
     const state: OnboardingState = {
       step: 3,
       profile: {
-        accountType: 'supplier',
+        accountType: 'SUPPLIER',
         fullName: 'Ali',
         email: 'ali@example.com',
         phone: '0555000000',
@@ -82,8 +82,9 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
         { id: 'd1', type: 'commercialRegistration', file: null, name: 'cr.pdf', status: 'uploaded', progress: 100 },
       ],
       survey: {
+        accountType: 'SUPPLIER',
         lookingFor: [],
-        selectedCategories: ['construction-materials', 'finishing'],
+        selectedCategories: ['SUPPLIER'],
         subcategories: ['portland-cement', 'tiles'],
         hasProjects: 'yes',
         budgetRange: 'large',
@@ -104,14 +105,15 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
     // Mapping from the onboarding survey to the Profile fields:
     expect(body.entity.entityType).toBe('SUPP');
     expect(body.entity.entitySubtype).toBe('SUPPLIER');
-    expect(body.profile.businessActivity).toBe('supplier');
+    expect(body.profile.businessActivity).toBe('SUPPLIER');
     expect(body.profile.companySize).toBe('large');
-    expect(body.profile.relevantCategories).toEqual(['construction-materials', 'finishing']);
+    expect(body.profile.relevantCategories).toEqual(['SUPPLIER']);
     expect(body.profile.subcategories).toEqual(['portland-cement', 'tiles']);
     expect(body.profile.capabilities).toEqual(['Riyadh']);
     expect(body.profile.surveyData).toEqual(
       expect.objectContaining({
-        selectedCategories: ['construction-materials', 'finishing'],
+        accountType: 'SUPPLIER',
+        selectedCategories: ['SUPPLIER'],
         subcategories: ['portland-cement', 'tiles'],
         hasProjects: 'yes',
         budgetRange: 'large',
@@ -131,7 +133,7 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
     const state: OnboardingState = {
       step: 3,
       profile: {
-        accountType: 'mainContractor',
+        accountType: 'CONTRACTOR',
         fullName: 'Ali',
         email: 'ali@example.com',
         phone: '0555000000',
@@ -141,6 +143,7 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
         { id: 'd1', type: 'license', file: null, name: 'l.pdf', status: 'uploaded', progress: 100 },
       ],
       survey: {
+        accountType: 'CONTRACTOR',
         lookingFor: [],
         selectedCategories: [],
         subcategories: [],
@@ -199,9 +202,9 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
           crmClassification: 'SUPPLIER',
         },
         profile: {
-          businessActivity: 'supplier',
+          businessActivity: 'SUPPLIER',
           companySize: 'large',
-          relevantCategories: ['construction-materials', 'finishing'],
+          relevantCategories: ['SUPPLIER'],
           subcategories: ['portland-cement', 'tiles'],
           capabilities: ['Riyadh'],
         },
@@ -227,9 +230,9 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
       expect.objectContaining({
         data: expect.objectContaining({
           userId: USER.id,
-          businessActivity: 'supplier',
+          businessActivity: 'SUPPLIER',
           companySize: 'large',
-          relevantCategories: ['construction-materials', 'finishing'],
+          relevantCategories: ['SUPPLIER'],
           subcategories: ['portland-cement', 'tiles'],
           capabilities: ['Riyadh'],
           entityId: 'e1',
@@ -244,7 +247,7 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
         entity: { entityType: 'CUST', entitySubtype: 'CONTRACTOR', companyName: 'X', source: 'INTERNAL' },
         profile: {
           userId: 'attacker-user-id',
-          businessActivity: 'mainContractor',
+          businessActivity: 'CONTRACTOR',
           companySize: 'small',
         },
       }),

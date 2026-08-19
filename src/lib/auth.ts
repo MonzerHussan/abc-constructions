@@ -86,6 +86,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/projects/ABC/auth/login",
   },
+  events: {
+    async createUser({ user }) {
+      if (user.id) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { roleConfirmed: false },
+        });
+      }
+    },
+  },
   callbacks: {
     async signIn({ account }) {
       // Google OAuth allowed; roleConfirmed=false keeps user in onboarding until set-role

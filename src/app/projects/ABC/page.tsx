@@ -63,17 +63,10 @@ const CREATE_ACCOUNT_ROLES: { href: string; labelKey: TranslationKey }[] = [
   { href: "/projects/ABC/auth/register", labelKey: "accountCategoryIndividual" },
 ];
 
-const ACCOUNT_CATEGORY_ROLE: Record<string, string> = {
-  accountCategoryEntity: "OWNER",
-  accountCategoryCompany: "CONTRACTOR",
-  accountCategoryOwner: "OWNER",
-  accountCategoryConsultant: "CONSULTANT",
-  accountCategoryContractor: "CONTRACTOR",
-  accountCategorySubcontractor: "SUBCONTRACTOR",
-  accountCategorySupplier: "SUPPLIER",
-  accountCategoryTrader: "TRADER",
-  accountCategoryIndividual: "FREELANCER",
-};
+import {
+  LABEL_KEY_TO_PLATFORM_ACCOUNT_TYPE,
+  platformAccountTypeToUserRole,
+} from "@/lib/account-types";
 
 const NAV_GROUPS: {
   key: string;
@@ -390,8 +383,9 @@ export default function HomePage() {
 
   function handleCreateCategory(labelKey: TranslationKey) {
     setPendingLogin(false);
+    const accountType = LABEL_KEY_TO_PLATFORM_ACCOUNT_TYPE[labelKey];
     setPendingRegister({
-      role: ACCOUNT_CATEGORY_ROLE[labelKey] ?? "FREELANCER",
+      role: accountType ? platformAccountTypeToUserRole(accountType) : "INDIVIDUAL",
       label: t(labelKey),
       categoryKey: labelKey,
     });

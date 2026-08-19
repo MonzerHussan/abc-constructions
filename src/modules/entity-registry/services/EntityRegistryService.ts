@@ -460,6 +460,10 @@ export class EntityRegistryService {
     if (!surveyData || typeof surveyData !== 'object') return null;
 
     const survey: OnboardingSurvey = {
+      accountType:
+        typeof surveyData.accountType === 'string'
+          ? (surveyData.accountType as OnboardingSurvey['accountType'])
+          : '',
       lookingFor: [],
       selectedCategories: Array.isArray(surveyData.selectedCategories)
         ? (surveyData.selectedCategories as string[])

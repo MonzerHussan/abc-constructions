@@ -1,23 +1,15 @@
 import { z } from 'zod';
 import { UserRole } from '@/generated/prisma/client';
-
-export const SELF_REGISTRATION_ROLES = [
-  UserRole.OWNER,
-  UserRole.CONSULTANT,
-  UserRole.CONTRACTOR,
-  UserRole.SUBCONTRACTOR,
-  UserRole.WORKSHOP,
-  UserRole.FREELANCER,
-  UserRole.SUPPLIER,
-  UserRole.TRADER,
-] as const;
+import { isSelfRegistrationRole } from '@/lib/auth/role-selection';
 
 export const selfRegisterSchema = z.object({
   email: z.string().email('Invalid email format'),
   password: z.string().min(8, 'Password must be at least 8 characters').max(128),
   name: z.string().min(2, 'Name must be at least 2 characters').max(100),
   phone: z.string().optional(),
-  role: z.enum(SELF_REGISTRATION_ROLES, { message: 'Invalid role for self-registration' }),
+  role: z.nativeEnum(UserRole).refine(isSelfRegistrationRole, {
+    message: 'Invalid role for self-registration',
+  }),
   companyName: z.string().max(200).optional(),
   companyType: z.string().max(100).optional(),
   country: z.string().max(100).optional(),

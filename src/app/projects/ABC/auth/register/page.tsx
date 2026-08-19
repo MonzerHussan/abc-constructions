@@ -6,27 +6,21 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, User, Phone, Eye, EyeOff } from "lucide-react";
-import { ROLES } from "@/lib/constants";
+import {
+  PLATFORM_ACCOUNT_TYPES,
+  PlatformAccountType,
+  platformAccountTypeToUserRole,
+  requiresOrganizationName,
+} from "@/lib/account-types";
 import { useLanguage } from "@/lib/LanguageContext";
 import { GOOGLE_ONBOARDING_CALLBACK } from "@/lib/auth/role-selection";
-
-const ROLE_TRANSLATION_KEYS: Record<string, string> = {
-  OWNER: "roleOwner",
-  CONSULTANT: "roleConsultant",
-  CONTRACTOR: "roleContractor",
-  SUBCONTRACTOR: "roleSubcontractor",
-  WORKSHOP: "roleWorkshop",
-  FREELANCER: "roleFreelancer",
-  SUPPLIER: "roleSupplier",
-  TRADER: "roleTrader",
-};
 
 export default function RegisterPage() {
   const { t } = useLanguage();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState(1);
-  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedAccountType, setSelectedAccountType] = useState<PlatformAccountType | "">("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -39,9 +33,18 @@ export default function RegisterPage() {
     companyName: "",
   });
 
+  const needsCompany =
+    selectedAccountType !== "" &&
+    requiresOrganizationName(selectedAccountType as PlatformAccountType);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    if (!selectedAccountType) {
+      setError(t("obRequired"));
+      return;
+    }
 
     if (form.password !== form.confirmPassword) {
       setError(t("passwordMismatch") || "كلمتا المرور غير متطابقتين");
@@ -54,7 +57,10 @@ export default function RegisterPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, role: selectedRole }),
+        body: JSON.stringify({
+          ...form,
+          role: platformAccountTypeToUserRole(selectedAccountType),
+        }),
       });
 
       const data = await res.json();
@@ -135,29 +141,41 @@ export default function RegisterPage() {
 
           {step === 1 ? (
             <div className="space-y-4">
-              <h3 className="font-medium text-surface-900">{t("registerTitle")}</h3>
-              <div className="grid grid-cols-2 gap-2">
-                {Object.entries(ROLES)
-                  .filter(([key]) => key !== "ADMIN")
-                  .map(([key, val]) => (
+              <h3 className="font-medium text-surface-900">{t("obSelectAccountType")}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {PLATFORM_ACCOUNT_TYPES.map((option) => {
+                  const IconComponent = option.icon;
+                  const isSelected = selectedAccountType === option.id;
+                  return (
                     <button
-                      key={key}
-                      onClick={() => setSelectedRole(key)}
-                      className={`p-3 rounded-xl border-2 text-right transition-all ${
-                        selectedRole === key
+                      key={option.id}
+                      type="button"
+                      onClick={() => setSelectedAccountType(option.id)}
+                      className={`p-3 rounded-xl border-2 text-start transition-all ${
+                        isSelected
                           ? "border-amber-500 bg-amber-50"
                           : "border-surface-200 bg-white hover:border-surface-300"
                       }`}
                     >
-                      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium mb-1 ${val.color}`}>
-                        {t(ROLE_TRANSLATION_KEYS[key] as any)}
-                      </span>
+                      <div className="flex items-start gap-2">
+                        <IconComponent className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                        <div className="min-w-0">
+                          <span className="block text-sm font-semibold text-surface-900">
+                            {t(option.labelKey)}
+                          </span>
+                          <span className="block text-xs text-surface-500 mt-0.5">
+                            {t(option.descKey)}
+                          </span>
+                        </div>
+                      </div>
                     </button>
-                  ))}
+                  );
+                })}
               </div>
               <button
-                onClick={() => selectedRole && setStep(2)}
-                disabled={!selectedRole}
+                type="button"
+                onClick={() => selectedAccountType && setStep(2)}
+                disabled={!selectedAccountType}
                 className="w-full py-2.5 bg-amber-500 text-white rounded-xl font-medium hover:bg-amber-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {t("next")}
@@ -165,10 +183,12 @@ export default function RegisterPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium text-surface-700 mb-1">{t("companyName")}</label>
-                <input type="text" value={form.companyName} onChange={(e) => setForm({...form, companyName: e.target.value})} placeholder={t("companyName")} className="w-full px-3 py-2.5 border border-surface-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" required />
-              </div>
+              {needsCompany && (
+                <div>
+                  <label className="block text-sm font-medium text-surface-700 mb-1">{t("companyName")}</label>
+                  <input type="text" value={form.companyName} onChange={(e) => setForm({...form, companyName: e.target.value})} placeholder={t("companyName")} className="w-full px-3 py-2.5 border border-surface-300 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none" required />
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
