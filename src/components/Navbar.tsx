@@ -11,14 +11,11 @@ import {
   Building2,
   Briefcase,
   GraduationCap,
+  Truck,
   Menu,
   X,
-  User,
   LogOut,
   ChevronDown,
-  Truck,
-  ShieldCheck,
-  Smartphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AbcLogo from "@/components/AbcLogo";
@@ -76,7 +73,6 @@ export default function Navbar() {
   const { data: session, status } = useSession();
   const { t } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const isLoggedIn = status === "authenticated";
@@ -85,7 +81,6 @@ export default function Navbar() {
     function onClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenMenu(null);
-        setUserMenuOpen(false);
       }
     }
     document.addEventListener("mousedown", onClick);
