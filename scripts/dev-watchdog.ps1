@@ -61,7 +61,7 @@ try {
         -WindowStyle Hidden `
         -PassThru
 
-      Write-Log "Started npm run dev:$Port (pid $($proc.Id))"
+      Write-Log ("Started npm run dev:" + $Port + " pid=" + $proc.Id)
       Start-Sleep -Seconds 12
     }
 
