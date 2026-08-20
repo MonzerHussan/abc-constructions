@@ -15,6 +15,7 @@ function createPrismaClient() {
       max: Number(process.env.DATABASE_POOL_MAX ?? 5),
       connectionTimeoutMillis: Number(process.env.DATABASE_CONNECT_TIMEOUT_MS ?? 30_000),
       idleTimeoutMillis: Number(process.env.DATABASE_IDLE_TIMEOUT_MS ?? 60_000),
+      keepAlive: true,
       allowExitOnIdle: process.env.NODE_ENV !== "production",
     });
 

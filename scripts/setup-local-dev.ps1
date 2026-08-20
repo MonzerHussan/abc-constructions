@@ -66,7 +66,8 @@ Write-Host ""
 Write-Host "Done. Next steps:" -ForegroundColor Cyan
 Write-Host "  1. Open folder in Cursor:  $Dest"
 Write-Host "  2. Stop any old dev server on port 3002"
-Write-Host "  3. Run:  cd `"$Dest`" ; npm run dev:3002"
+Write-Host "  3. Run (auto-restart):  cd `"$Dest`" ; npm run dev:stable"
+Write-Host "     Or once:            cd `"$Dest`" ; npm run dev:3002"
 Write-Host "  4. Admin:  http://localhost:3002/projects/ABC/admin"
 Write-Host ""
 Write-Host "Optional: keep OneDrive copy but exclude heavy folders:" -ForegroundColor DarkGray

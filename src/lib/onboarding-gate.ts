@@ -47,6 +47,7 @@ export async function fetchUserOnboardedStatus(request: NextRequest): Promise<bo
     const res = await fetch(new URL("/api/v1/entity-registry/me", request.url), {
       headers: { cookie: request.headers.get("cookie") ?? "" },
       cache: "no-store",
+      signal: AbortSignal.timeout(8_000),
     });
     if (!res.ok) return false;
     const json = (await res.json()) as { data?: { isOnboarded?: boolean } };
