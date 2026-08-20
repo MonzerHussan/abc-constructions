@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import {
   LayoutDashboard, Image as ImageIcon, Video as VideoIcon, Megaphone,
-  Plus, Trash2, Save, Loader2, ChevronUp, ChevronDown,
+  Plus, Trash2, Save, Loader2, ChevronUp, ChevronDown, Upload,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, getMediaUrlIssue, isUsableMediaUrl } from "@/lib/utils"
 
 type Tab = "content" | "slides" | "videos" | "ads"
 
@@ -81,7 +81,7 @@ const EMPTY_CONTENT: ContentForm = {
   introBody: "", introBodyEn: "", introBodyUr: "",
   visionTitle: "", visionTitleEn: "", visionTitleUr: "",
   visionBody: "", visionBodyEn: "", visionBodyUr: "",
-  primaryCtaLabel: "", primaryCtaLabelEn: "", primaryCtaLabelUr: "", primaryCtaHref: "/projects/ABC/auth/register",
+  primaryCtaLabel: "", primaryCtaLabelEn: "", primaryCtaLabelUr: "", primaryCtaHref: "/projects/ABC?register=1",
   secondaryCtaLabel: "", secondaryCtaLabelEn: "", secondaryCtaLabelUr: "", secondaryCtaHref: "/projects/ABC/tenders/projects",
   isActive: true,
 }
@@ -115,7 +115,7 @@ export default function AdminHomepagePage() {
           introBody: c.introBody ?? "", introBodyEn: c.introBodyEn ?? "", introBodyUr: c.introBodyUr ?? "",
           visionTitle: c.visionTitle ?? "", visionTitleEn: c.visionTitleEn ?? "", visionTitleUr: c.visionTitleUr ?? "",
           visionBody: c.visionBody ?? "", visionBodyEn: c.visionBodyEn ?? "", visionBodyUr: c.visionBodyUr ?? "",
-          primaryCtaLabel: c.primaryCtaLabel ?? "", primaryCtaLabelEn: c.primaryCtaLabelEn ?? "", primaryCtaLabelUr: c.primaryCtaLabelUr ?? "", primaryCtaHref: c.primaryCtaHref ?? "/projects/ABC/auth/register",
+          primaryCtaLabel: c.primaryCtaLabel ?? "", primaryCtaLabelEn: c.primaryCtaLabelEn ?? "", primaryCtaLabelUr: c.primaryCtaLabelUr ?? "", primaryCtaHref: c.primaryCtaHref ?? "/projects/ABC?register=1",
           secondaryCtaLabel: c.secondaryCtaLabel ?? "", secondaryCtaLabelEn: c.secondaryCtaLabelEn ?? "", secondaryCtaLabelUr: c.secondaryCtaLabelUr ?? "", secondaryCtaHref: c.secondaryCtaHref ?? "/projects/ABC/tenders/projects",
           isActive: c.isActive ?? true,
         })
@@ -410,6 +410,83 @@ function localeRow(labels: [string, string, string], value: { ar: string; en: st
   )
 }
 
+function MediaUrlInput({
+  label,
+  value,
+  onChange,
+  hint,
+}: {
+  label: string
+  value: string
+  onChange: (url: string) => void
+  hint?: string
+}) {
+  const fileRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+  const issue = getMediaUrlIssue(value)
+
+  async function handleUpload(file: File | null) {
+    if (!file) return
+    setUploading(true)
+    try {
+      const form = new FormData()
+      form.append("file", file)
+      form.append("purpose", "homepage")
+      const res = await fetch("/api/upload", { method: "POST", body: form })
+      if (!res.ok) throw new Error("upload failed")
+      const json = (await res.json()) as { url?: string }
+      if (json.url) onChange(json.url)
+    } catch {
+      window.alert("فشل رفع الصورة — تأكد من تسجيل الدخول كمسؤول")
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  return (
+    <div>
+      <label className={labelCls}>{label}</label>
+      <input
+        className={inputCls}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="/uploads/homepage/... أو https://..."
+        dir="ltr"
+      />
+      <div className="mt-1.5 flex flex-wrap items-center gap-2">
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          onChange={(e) => handleUpload(e.target.files?.[0] ?? null)}
+        />
+        <button
+          type="button"
+          disabled={uploading}
+          onClick={() => fileRef.current?.click()}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium border border-surface-300 rounded-lg hover:bg-surface-50 disabled:opacity-50"
+        >
+          {uploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5" />}
+          رفع صورة
+        </button>
+        {isUsableMediaUrl(value) && (
+          <span className="text-[10px] text-emerald-600">✓ رابط صالح</span>
+        )}
+      </div>
+      {issue === "localPathNotAllowed" && (
+        <p className="mt-1 text-[11px] text-amber-700 leading-snug">
+          لا يمكن استخدام مسار ملف من جهازك (مثل C:\Users\...). اضغط «رفع صورة» أو الصق رابط ويب يبدأ بـ /uploads/ أو https://
+        </p>
+      )}
+      {issue === "invalidMediaUrl" && (
+        <p className="mt-1 text-[11px] text-amber-700">رابط الصورة غير صالح للمتصفح.</p>
+      )}
+      {hint && <p className="mt-1 text-[10px] text-surface-500">{hint}</p>}
+    </div>
+  )
+}
+
 function EditorCard({ title, onDelete, onMoveUp, onMoveDown, children }: {
   title: string
   onDelete: () => void
@@ -493,13 +570,14 @@ function SlidesEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
             {localeRow(["العنوان (عربي)", "العنوان (إنجليزي)", "العنوان (أردو)"], { ar: item.title, en: item.titleEn, ur: item.titleUr }, (v) => update(i, { title: v.ar, titleEn: v.en, titleUr: v.ur }))}
             {localeRow(["الوصف (عربي)", "الوصف (إنجليزي)", "الوصف (أردو)"], { ar: item.subtitle, en: item.subtitleEn, ur: item.subtitleUr }, (v) => update(i, { subtitle: v.ar, subtitleEn: v.en, subtitleUr: v.ur }))}
             <div className="grid gap-3 md:grid-cols-2">
-              <div>
-                <label className={labelCls}>رابط الصورة</label>
-                <input className={inputCls} value={item.imageUrl} onChange={(e) => update(i, { imageUrl: e.target.value })} />
-              </div>
+              <MediaUrlInput
+                label="رابط الصورة"
+                value={item.imageUrl}
+                onChange={(url) => update(i, { imageUrl: url })}
+              />
               <div>
                 <label className={labelCls}>رابط الانتقال</label>
-                <input className={inputCls} value={item.linkUrl ?? ""} onChange={(e) => update(i, { linkUrl: e.target.value })} />
+                <input className={inputCls} value={item.linkUrl ?? ""} onChange={(e) => update(i, { linkUrl: e.target.value })} placeholder="/projects/ABC/..." dir="ltr" />
               </div>
             </div>
             <label className="flex items-center gap-2 text-sm font-medium text-surface-700">
@@ -520,10 +598,11 @@ function SlidesEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
               <div><label className={labelCls}>العنوان (إنجليزي)</label><input className={inputCls} value={newDraft.titleEn ?? ""} onChange={(e) => setNewDraft({ ...newDraft, titleEn: e.target.value })} /></div>
               <div><label className={labelCls}>العنوان (أردو)</label><input className={inputCls} value={newDraft.titleUr ?? ""} onChange={(e) => setNewDraft({ ...newDraft, titleUr: e.target.value })} /></div>
             </div>
-            <div>
-              <label className={labelCls}>رابط الصورة</label>
-              <input className={inputCls} value={newDraft.imageUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, imageUrl: e.target.value })} />
-            </div>
+            <MediaUrlInput
+              label="رابط الصورة"
+              value={newDraft.imageUrl ?? ""}
+              onChange={(url) => setNewDraft({ ...newDraft, imageUrl: url })}
+            />
             <SaveRow onSave={() => { onSave(undefined, newDraft, "POST"); setShowNew(false); setNewDraft({ title: "", imageUrl: "", subtitle: "", isActive: true }) }} saving={saving} />
           </div>
         </div>
@@ -568,10 +647,11 @@ function VideosEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
                 <label className={labelCls}>رابط الفيديو (YouTube/MP4)</label>
                 <input className={inputCls} value={item.videoUrl} onChange={(e) => update(i, { videoUrl: e.target.value })} />
               </div>
-              <div>
-                <label className={labelCls}>رابط الصورة المصغرة</label>
-                <input className={inputCls} value={item.posterUrl ?? ""} onChange={(e) => update(i, { posterUrl: e.target.value })} />
-              </div>
+              <MediaUrlInput
+                label="رابط الصورة المصغرة"
+                value={item.posterUrl ?? ""}
+                onChange={(url) => update(i, { posterUrl: url })}
+              />
             </div>
             <label className="flex items-center gap-2 text-sm font-medium text-surface-700">
               <input type="checkbox" checked={item.isActive} onChange={(e) => update(i, { isActive: e.target.checked })} />
@@ -596,10 +676,11 @@ function VideosEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
                 <label className={labelCls}>رابط الفيديو</label>
                 <input className={inputCls} value={newDraft.videoUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, videoUrl: e.target.value })} />
               </div>
-              <div>
-                <label className={labelCls}>الصورة المصغرة</label>
-                <input className={inputCls} value={newDraft.posterUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, posterUrl: e.target.value })} />
-              </div>
+              <MediaUrlInput
+                label="الصورة المصغرة"
+                value={newDraft.posterUrl ?? ""}
+                onChange={(url) => setNewDraft({ ...newDraft, posterUrl: url })}
+              />
             </div>
             <SaveRow onSave={() => { onSave(undefined, newDraft, "POST"); setShowNew(false); setNewDraft({ title: "", videoUrl: "", isActive: true }) }} saving={saving} />
           </div>
@@ -641,13 +722,14 @@ function AdsEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
             {localeRow(["العنوان (عربي)", "العنوان (إنجليزي)", "العنوان (أردو)"], { ar: item.title, en: item.titleEn, ur: item.titleUr }, (v) => update(i, { title: v.ar, titleEn: v.en, titleUr: v.ur }))}
             {localeRow(["الوصف (عربي)", "الوصف (إنجليزي)", "الوصف (أردو)"], { ar: item.subtitle, en: item.subtitleEn, ur: item.subtitleUr }, (v) => update(i, { subtitle: v.ar, subtitleEn: v.en, subtitleUr: v.ur }))}
             <div className="grid gap-3 md:grid-cols-2">
-              <div>
-                <label className={labelCls}>رابط الصورة</label>
-                <input className={inputCls} value={item.imageUrl} onChange={(e) => update(i, { imageUrl: e.target.value })} />
-              </div>
+              <MediaUrlInput
+                label="رابط الصورة"
+                value={item.imageUrl}
+                onChange={(url) => update(i, { imageUrl: url })}
+              />
               <div>
                 <label className={labelCls}>رابط الانتقال</label>
-                <input className={inputCls} value={item.linkUrl ?? ""} onChange={(e) => update(i, { linkUrl: e.target.value })} />
+                <input className={inputCls} value={item.linkUrl ?? ""} onChange={(e) => update(i, { linkUrl: e.target.value })} placeholder="/projects/ABC/..." dir="ltr" />
               </div>
             </div>
             <div>
@@ -678,10 +760,11 @@ function AdsEditor({ items, setItems, onSave, onDelete, onMove, saving }: {
               <div><label className={labelCls}>العنوان (أردو)</label><input className={inputCls} value={newDraft.titleUr ?? ""} onChange={(e) => setNewDraft({ ...newDraft, titleUr: e.target.value })} /></div>
             </div>
             <div className="grid gap-3 md:grid-cols-2">
-              <div>
-                <label className={labelCls}>رابط الصورة</label>
-                <input className={inputCls} value={newDraft.imageUrl ?? ""} onChange={(e) => setNewDraft({ ...newDraft, imageUrl: e.target.value })} />
-              </div>
+              <MediaUrlInput
+                label="رابط الصورة"
+                value={newDraft.imageUrl ?? ""}
+                onChange={(url) => setNewDraft({ ...newDraft, imageUrl: url })}
+              />
               <div>
                 <label className={labelCls}>نوع الحركة</label>
                 <select className={inputCls} value={newDraft.animation ?? "fade"} onChange={(e) => setNewDraft({ ...newDraft, animation: e.target.value })}>

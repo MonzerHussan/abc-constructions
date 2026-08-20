@@ -9,9 +9,10 @@ import {
   DollarSign, Newspaper, Headphones, Clock, Menu, X,
   Briefcase, ShoppingCart, Settings, BarChart3, GraduationCap,
   TreePine, Megaphone, Scale, FlaskConical, Receipt, LogOut,
-  ClipboardList, ListChecks, PieChart,
+  ClipboardList, ListChecks, PieChart, BookOpen,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { platformLoginUrl } from "@/lib/homepage-auth-routes"
 
 const IDLE_TIMEOUT_MS = (Number(process.env.NEXT_PUBLIC_ADMIN_IDLE_TIMEOUT_MINUTES) || 30) * 60 * 1000
 
@@ -25,7 +26,9 @@ const adminLinks = [
   { href: "/projects/ABC/admin/finance", icon: DollarSign, label: "المالية", labelEn: "Finance" },
 { href: "/projects/ABC/admin/content", icon: Newspaper, label: "المحتوى", labelEn: "Content" },
   { href: "/projects/ABC/admin/homepage", icon: LayoutDashboard, label: "Homepage" },
+  { href: "/projects/ABC/admin/onboarding-content", icon: BookOpen, label: "Onboarding Content" },
   { href: "/projects/ABC/admin/surveys", icon: ClipboardList, label: "Survey Manager" },
+  { href: "/projects/ABC/admin/surveys/section-content", icon: BookOpen, label: "Section Content" },
   { href: "/projects/ABC/admin/surveys/account-types", icon: ListChecks, label: "Account Subcategories" },
   { href: "/projects/ABC/admin/surveys/questions", icon: ListChecks, label: "Question Bank" },
   { href: "/projects/ABC/admin/surveys/analytics", icon: PieChart, label: "Survey Analytics" },
@@ -47,7 +50,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const resetIdleTimer = useCallback(() => {
     if (!isAdmin) return
     const timeout = window.setTimeout(() => {
-      signOut({ callbackUrl: "/projects/ABC/auth/login" })
+      signOut({ callbackUrl: platformLoginUrl() })
     }, IDLE_TIMEOUT_MS)
     return () => window.clearTimeout(timeout)
   }, [isAdmin])
@@ -99,7 +102,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <p className="text-sm text-surface-600">منصة ABC</p>
             </div>
             <button
-              onClick={() => signOut({ callbackUrl: "/projects/ABC/auth/login" })}
+              onClick={() => signOut({ callbackUrl: platformLoginUrl() })}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-danger-600 hover:bg-danger-50 transition-colors"
               aria-label="تسجيل الخروج"
               title="تسجيل الخروج"
@@ -137,7 +140,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
           <button
-            onClick={() => signOut({ callbackUrl: "/projects/ABC/auth/login" })}
+            onClick={() => signOut({ callbackUrl: platformLoginUrl() })}
             className="p-2 text-danger-600 hover:bg-danger-50 rounded-lg"
             aria-label="تسجيل الخروج"
           >

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
@@ -22,6 +21,7 @@ import {
   Smartphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import AbcLogo from "@/components/AbcLogo";
 import { useLanguage } from "@/lib/LanguageContext";
 import type { TranslationKey } from "@/lib/translations";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -100,8 +100,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center">
-              <Image
-                src="/logo.png"
+              <AbcLogo
+                background="light"
                 alt="ABC"
                 width={64}
                 height={64}
@@ -237,13 +237,13 @@ export default function Navbar() {
             ) : (
               <div className="flex items-center gap-2">
                 <Link
-                  href="/projects/ABC/auth/login"
+                  href="/projects/ABC?login=1"
                   className="px-4 py-2 text-sm font-medium text-surface-700 hover:text-surface-900"
                 >
                   {t("login")}
                 </Link>
                 <Link
-                  href="/projects/ABC/auth/register"
+                  href="/projects/ABC?register=1"
                   className="px-4 py-2 text-sm font-medium bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors"
                 >
                   {t("register")}

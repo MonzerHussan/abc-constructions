@@ -1,7 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/lib/LanguageContext";
 import type { TranslationKey } from "@/lib/translations";
+import {
+  AUTH_PANEL_CHOICE_CLS,
+  AUTH_PANEL_HEADER_SUBTITLE,
+  AUTH_PANEL_HEADER_TITLE,
+  AUTH_PANEL_LABEL_CLS,
+} from "@/components/homepage/auth-panel-styles";
 import {
   budgetRangeOptions,
   hasProjectsOptions,
@@ -9,191 +17,171 @@ import {
   locationOptions,
 } from "@/lib/data/onboarding-options";
 import {
-  surveyCategories,
-  getSubcategoriesByCategoryId,
-} from "@/lib/data/survey-categories";
+  fetchAccountSubcategories,
+  type AccountSubcategoryOption,
+} from "@/lib/onboarding/account-subcategories-client";
+import { fetchSurveyDomainCategories } from "@/lib/onboarding/survey-config-client";
 import type { OnboardingSurvey } from "@/lib/onboarding/types";
 
 interface StepSurveyProps {
+  platformAccountType: string;
   survey: OnboardingSurvey;
   onChange: (survey: OnboardingSurvey) => void;
   errors: Record<string, string>;
 }
 
-export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
-  const { t, language, dir } = useLanguage();
+const choiceBtnBase =
+  "px-2.5 py-2 rounded-none border text-[11px] font-medium transition-colors text-start";
+
+type LabelledItem = { id: string; labelEn: string; labelAr: string };
+
+export function StepSurvey({
+  platformAccountType,
+  survey,
+  onChange,
+  errors,
+}: StepSurveyProps) {
+  const { t, language } = useLanguage();
+  const [mainCategories, setMainCategories] = useState<AccountSubcategoryOption[]>([]);
+  const [domainCategories, setDomainCategories] = useState<LabelledItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      const [main, domain] = await Promise.all([
+        fetchAccountSubcategories(platformAccountType),
+        fetchSurveyDomainCategories(),
+      ]);
+      if (cancelled) return;
+      setMainCategories(main);
+      setDomainCategories(domain);
+      setLoading(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [platformAccountType]);
 
   const handleSelectSingle = (
     field: "hasProjects" | "budgetRange" | "urgency",
-    value: string
+    value: string,
   ) => {
     onChange({ ...survey, [field]: value as OnboardingSurvey[typeof field] });
   };
 
-  const handleToggleCategory = (categoryId: string) => {
+  const handleToggleMainCategory = (categoryId: string) => {
     const isSelected = survey.selectedCategories.includes(categoryId);
     const updatedCategories = isSelected
       ? survey.selectedCategories.filter((id) => id !== categoryId)
       : [...survey.selectedCategories, categoryId];
 
-    // Remove any subcategories that belong to a deselected category.
-    const updatedSubcategories = isSelected
-      ? survey.subcategories.filter(
-          (subId) =>
-            !getSubcategoriesByCategoryId(categoryId).some((s) => s.id === subId)
-        )
-      : survey.subcategories;
-
     onChange({
       ...survey,
       selectedCategories: updatedCategories,
-      subcategories: updatedSubcategories,
-      // Keep legacy lookingFor in sync with selected main categories for any
-      // downstream consumers that still read it.
       lookingFor: updatedCategories,
     });
   };
 
-  const handleToggleSubcategory = (categoryId: string, subcategoryId: string) => {
-    const isSelected = survey.subcategories.includes(subcategoryId);
+  const handleToggleDomainCategory = (domainId: string) => {
+    const isSelected = survey.subcategories.includes(domainId);
     const updatedSubcategories = isSelected
-      ? survey.subcategories.filter((id) => id !== subcategoryId)
-      : [...survey.subcategories, subcategoryId];
-
-    // Ensure the parent category is selected when a subcategory is chosen.
-    const updatedCategories = survey.selectedCategories.includes(categoryId)
-      ? survey.selectedCategories
-      : [...survey.selectedCategories, categoryId];
+      ? survey.subcategories.filter((id) => id !== domainId)
+      : [...survey.subcategories, domainId];
 
     onChange({
       ...survey,
-      selectedCategories: updatedCategories,
       subcategories: updatedSubcategories,
-      lookingFor: updatedCategories,
     });
   };
 
-  const labelFor = (
-    category?: { labelAr: string; labelEn: string },
-    subcategory?: { labelAr: string; labelEn: string }
-  ) => {
-    const item = subcategory ?? category;
-    if (!item) return "";
+  const labelFor = (item: LabelledItem) => {
     if (language === "ar") return item.labelAr;
-    if (language === "ur") return item.labelAr; // Urdu uses Arabic labels for construction terms
+    if (language === "ur") return item.labelAr;
     return item.labelEn;
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <Loader2 className="w-5 h-5 animate-spin text-secondary-500" />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-3">
       <div>
-        <h3 className="text-lg font-bold text-primary-500 mb-2">
-          {t("obSurveyTitle")}
-        </h3>
-        <p className="text-surface-600">{t("obSurveySubtitle")}</p>
+        <p className={AUTH_PANEL_HEADER_TITLE}>{t("obSurveyTitle")}</p>
+        <p className={AUTH_PANEL_HEADER_SUBTITLE}>{t("obSurveySubtitle")}</p>
       </div>
 
-      {/* Main categories */}
+      {/* Main: account-type subcategories (e.g. subcontractor specialty) */}
       <div>
-        <label className="block text-sm font-medium text-surface-700 mb-3">
-          {t("obSurveyCategoriesTitle")} *
-        </label>
-        <p className="text-xs text-surface-500 mb-3">
-          {t("obSurveyCategoriesSubtitle")}
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {surveyCategories.map((category) => {
-            const isSelected = survey.selectedCategories.includes(category.id);
-            return (
-              <button
-                key={category.id}
-                onClick={() => handleToggleCategory(category.id)}
-                className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
-                  isSelected
-                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
-                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
-                }`}
-              >
-                {labelFor(category)}
-              </button>
-            );
-          })}
-        </div>
+        <label className={AUTH_PANEL_LABEL_CLS}>{t("obSurveyCategoriesTitle")} *</label>
+        <p className="text-[10px] text-surface-500 mb-2">{t("obSurveyCategoriesSubtitle")}</p>
+        {mainCategories.length === 0 ? (
+          <p className="text-[10px] text-surface-500">{t("obSurveyNoMainCategories")}</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {mainCategories.map((category) => {
+              const isSelected = survey.selectedCategories.includes(category.id);
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => handleToggleMainCategory(category.id)}
+                  className={`${choiceBtnBase} ${AUTH_PANEL_CHOICE_CLS(isSelected)}`}
+                >
+                  {labelFor(category)}
+                </button>
+              );
+            })}
+          </div>
+        )}
         {errors.selectedCategories && (
-          <p className="text-red-500 text-sm mt-2">{t("obRequired")}</p>
+          <p className="text-[10px] text-danger-600 mt-1">{t("obRequired")}</p>
         )}
       </div>
 
-      {/* Dynamic subcategories */}
+      {/* Sub: domain areas (materials, electrical, plumbing…) */}
       {survey.selectedCategories.length > 0 && (
-        <div className="border-t border-surface-200 pt-6">
-          <label className="block text-sm font-medium text-surface-700 mb-3">
-            {t("obSurveySubcategoriesTitle")} *
-          </label>
-          <p className="text-xs text-surface-500 mb-4">
-            {t("obSurveySubcategoriesSubtitle")}
-          </p>
-          <div className="space-y-6">
-            {survey.selectedCategories.map((categoryId) => {
-              const category = surveyCategories.find((c) => c.id === categoryId);
-              if (!category) return null;
-              const subcategories = getSubcategoriesByCategoryId(categoryId);
-
+        <div className="border-t border-surface-200 pt-3">
+          <label className={AUTH_PANEL_LABEL_CLS}>{t("obSurveySubcategoriesTitle")} *</label>
+          <p className="text-[10px] text-surface-500 mb-2">{t("obSurveySubcategoriesSubtitle")}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {domainCategories.map((domain) => {
+              const isSelected = survey.subcategories.includes(domain.id);
               return (
-                <div
-                  key={categoryId}
-                  className="p-4 rounded-xl border border-surface-200 bg-surface-50"
+                <button
+                  key={domain.id}
+                  type="button"
+                  onClick={() => handleToggleDomainCategory(domain.id)}
+                  className={`${choiceBtnBase} ${AUTH_PANEL_CHOICE_CLS(isSelected)}`}
                 >
-                  <h4 className="text-sm font-bold text-primary-500 mb-3">
-                    {labelFor(category)}
-                  </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                    {subcategories.map((sub) => {
-                      const isSelected = survey.subcategories.includes(sub.id);
-                      return (
-                        <button
-                          key={sub.id}
-                          onClick={() =>
-                            handleToggleSubcategory(categoryId, sub.id)
-                          }
-                          className={`px-3 py-2 rounded-lg border text-xs font-medium transition-colors text-start ${
-                            isSelected
-                              ? "border-secondary-500 bg-secondary-50 text-secondary-700"
-                              : "border-surface-300 text-surface-700 hover:border-secondary-300 bg-white"
-                          }`}
-                        >
-                          {labelFor(undefined, sub)}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+                  {labelFor(domain)}
+                </button>
               );
             })}
           </div>
           {errors.subcategories && (
-            <p className="text-red-500 text-sm mt-3">{t("obRequired")}</p>
+            <p className="text-[10px] text-danger-600 mt-1">{t("obRequired")}</p>
           )}
         </div>
       )}
 
-      {/* Has projects */}
-      <div className="border-t border-surface-200 pt-6">
-        <label className="block text-sm font-medium text-surface-700 mb-3">
-          {t("obHasProjects")} *
-        </label>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="border-t border-surface-200 pt-3">
+        <label className={AUTH_PANEL_LABEL_CLS}>{t("obHasProjects")} *</label>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-1.5">
           {hasProjectsOptions.map((option) => {
             const isSelected = survey.hasProjects === option.id;
             return (
               <button
                 key={option.id}
+                type="button"
                 onClick={() => handleSelectSingle("hasProjects", option.id)}
-                className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
-                  isSelected
-                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
-                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
-                }`}
+                className={`${choiceBtnBase} ${AUTH_PANEL_CHOICE_CLS(isSelected)}`}
               >
                 {t(option.key as TranslationKey)}
               </button>
@@ -201,27 +189,21 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
           })}
         </div>
         {errors.hasProjects && (
-          <p className="text-red-500 text-sm mt-2">{t("obRequired")}</p>
+          <p className="text-[10px] text-danger-600 mt-1">{t("obRequired")}</p>
         )}
       </div>
 
-      {/* Budget range */}
       <div>
-        <label className="block text-sm font-medium text-surface-700 mb-3">
-          {t("obBudgetRange")} *
-        </label>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label className={AUTH_PANEL_LABEL_CLS}>{t("obBudgetRange")} *</label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1.5">
           {budgetRangeOptions.map((option) => {
             const isSelected = survey.budgetRange === option.id;
             return (
               <button
                 key={option.id}
+                type="button"
                 onClick={() => handleSelectSingle("budgetRange", option.id)}
-                className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
-                  isSelected
-                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
-                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
-                }`}
+                className={`${choiceBtnBase} ${AUTH_PANEL_CHOICE_CLS(isSelected)}`}
               >
                 {t(option.key as TranslationKey)}
               </button>
@@ -229,27 +211,21 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
           })}
         </div>
         {errors.budgetRange && (
-          <p className="text-red-500 text-sm mt-2">{t("obRequired")}</p>
+          <p className="text-[10px] text-danger-600 mt-1">{t("obRequired")}</p>
         )}
       </div>
 
-      {/* Urgency */}
       <div>
-        <label className="block text-sm font-medium text-surface-700 mb-3">
-          {t("obUrgency")} *
-        </label>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <label className={AUTH_PANEL_LABEL_CLS}>{t("obUrgency")} *</label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-1.5">
           {urgencyOptions.map((option) => {
             const isSelected = survey.urgency === option.id;
             return (
               <button
                 key={option.id}
+                type="button"
                 onClick={() => handleSelectSingle("urgency", option.id)}
-                className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
-                  isSelected
-                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
-                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
-                }`}
+                className={`${choiceBtnBase} ${AUTH_PANEL_CHOICE_CLS(isSelected)}`}
               >
                 {t(option.key as TranslationKey)}
               </button>
@@ -257,35 +233,29 @@ export function StepSurvey({ survey, onChange, errors }: StepSurveyProps) {
           })}
         </div>
         {errors.urgency && (
-          <p className="text-red-500 text-sm mt-2">{t("obRequired")}</p>
+          <p className="text-[10px] text-danger-600 mt-1">{t("obRequired")}</p>
         )}
       </div>
 
-      {/* Project locations */}
       <div>
-        <label className="block text-sm font-medium text-surface-700 mb-3">
+        <label className={AUTH_PANEL_LABEL_CLS}>
           {t("obProjectLocations")} ({t("obOptional")})
         </label>
-        <p className="text-xs text-surface-500 mb-2">
-          {t("obSelectAllThatApply")}
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <p className="text-[10px] text-surface-500 mb-2">{t("obSelectAllThatApply")}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {locationOptions.map((option) => {
             const isSelected = survey.projectLocations.includes(option.id);
             return (
               <button
                 key={option.id}
+                type="button"
                 onClick={() => {
                   const updated = isSelected
                     ? survey.projectLocations.filter((id) => id !== option.id)
                     : [...survey.projectLocations, option.id];
                   onChange({ ...survey, projectLocations: updated });
                 }}
-                className={`px-4 py-3 rounded-xl border text-sm font-medium transition-colors text-start ${
-                  isSelected
-                    ? "border-secondary-500 bg-secondary-50 text-secondary-700"
-                    : "border-surface-300 text-surface-700 hover:border-secondary-300"
-                }`}
+                className={`${choiceBtnBase} ${AUTH_PANEL_CHOICE_CLS(isSelected)}`}
               >
                 {t(option.key as TranslationKey)}
               </button>

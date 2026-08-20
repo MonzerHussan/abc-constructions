@@ -6,7 +6,7 @@ import type { NextAuthConfig } from "next-auth";
 export const authConfig = {
   providers: [], // providers are added in the full auth (src/lib/auth.ts) for the Node runtime
   pages: {
-    signIn: "/projects/ABC/auth/login",
+    signIn: "/projects/ABC?login=1",
   },
   session: {
     strategy: "jwt",

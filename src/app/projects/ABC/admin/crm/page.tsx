@@ -23,7 +23,7 @@ export default function AdminCrmPage() {
 
   useEffect(() => {
     if (!session) return
-    if ((session.user as { id: string; role: string }).role !== "ADMIN") { router.push("/projects/ABC/auth/login"); return }
+    if ((session.user as { id: string; role: string }).role !== "ADMIN") { router.push("/projects/ABC?login=1"); return }
     Promise.all([
       fetch("/api/crm/leads?limit=1").then(r => r.json()),
       fetch("/api/crm/contacts?limit=1").then(r => r.json()),

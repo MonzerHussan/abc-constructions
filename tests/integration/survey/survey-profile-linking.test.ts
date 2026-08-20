@@ -57,26 +57,39 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
   });
 
   it('submitOnboarding maps survey answers to the Profile payload fields', async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        success: true,
-        data: {
-          entity: { entityId: 'ENTITY-00001' },
-          profile: { profileId: 'PROF-00001' },
-        },
-      }),
-    });
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true, data: { id: 'u1' } }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          success: true,
+          data: {
+            entity: { entityId: 'ENTITY-00001' },
+            profile: { profileId: 'PROF-00001' },
+          },
+        }),
+      });
     vi.stubGlobal('fetch', fetchMock);
 
     const state: OnboardingState = {
       step: 3,
       profile: {
         accountType: 'supplier',
+        platformAccountType: 'SUPPLIER',
         fullName: 'Ali',
         email: 'ali@example.com',
         phone: '0555000000',
         companyName: 'ABC Contracting',
+        companyType: '',
+        companyDescription: '',
+        country: 'AE',
+        countryCode: 'AE',
+        city: '',
+        address: '',
+        requestIdentityVerification: false,
       },
       documents: [
         { id: 'd1', type: 'commercialRegistration', file: null, name: 'cr.pdf', status: 'uploaded', progress: 100 },
@@ -97,9 +110,9 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
     const result = await submitOnboarding(state);
 
     expect(result.success).toBe(true);
-    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
+    const [url] = fetchMock.mock.calls[1] as [string, RequestInit];
     expect(url).toBe('/api/v1/entity-registry/sync-entity-profile');
-    const body = JSON.parse(init.body as string);
+    const body = JSON.parse((fetchMock.mock.calls[1] as [string, RequestInit])[1].body as string);
 
     // Mapping from the onboarding survey to the Profile fields:
     expect(body.entity.entityType).toBe('SUPP');
@@ -123,10 +136,18 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
       step: 3,
       profile: {
         accountType: 'mainContractor',
+        platformAccountType: 'CONTRACTOR',
         fullName: 'Ali',
         email: 'ali@example.com',
         phone: '0555000000',
         companyName: 'ABC',
+        companyType: '',
+        companyDescription: '',
+        country: 'AE',
+        countryCode: 'AE',
+        city: '',
+        address: '',
+        requestIdentityVerification: false,
       },
       documents: [
         { id: 'd1', type: 'license', file: null, name: 'l.pdf', status: 'uploaded', progress: 100 },

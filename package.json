@@ -4,6 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:3002": "next dev -p 3002",
+    "setup:local": "powershell -ExecutionPolicy Bypass -File scripts/setup-local-dev.ps1",
+    "setup:onedrive-cache": "powershell -ExecutionPolicy Bypass -File scripts/exclude-onedrive-cache.ps1",
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",

@@ -6,12 +6,13 @@ import "leaflet/dist/leaflet.css";
 interface LeafletMapProps {
   lat?: number;
   lng?: number;
+  zoom?: number;
   onLocationSelect: (lat: number, lng: number, address: string) => void;
 }
 
 const RIYADH = { lat: 24.7136, lng: 46.6753 };
 
-export default function LeafletMap({ lat, lng, onLocationSelect }: LeafletMapProps) {
+export default function LeafletMap({ lat, lng, zoom, onLocationSelect }: LeafletMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const instanceRef = useRef<any>(null);
   const cbRef = useRef(onLocationSelect);
@@ -30,8 +31,9 @@ export default function LeafletMap({ lat, lng, onLocationSelect }: LeafletMapPro
 
       const startLat = lat ?? RIYADH.lat;
       const startLng = lng ?? RIYADH.lng;
+      const startZoom = zoom ?? 14;
 
-      const map = L.map(mapRef.current!, { zoomControl: false }).setView([startLat, startLng], 14);
+      const map = L.map(mapRef.current!, { zoomControl: false }).setView([startLat, startLng], startZoom);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; OpenStreetMap',
@@ -82,7 +84,7 @@ export default function LeafletMap({ lat, lng, onLocationSelect }: LeafletMapPro
         instanceRef.current = null;
       }
     };
-  }, [lat, lng]);
+  }, [lat, lng, zoom]);
 
   return <div ref={mapRef} className="h-64 w-full" />;
 }

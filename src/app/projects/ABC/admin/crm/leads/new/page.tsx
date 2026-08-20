@@ -23,7 +23,7 @@ export default function LeadFormPage() {
   useEffect(() => {
     if (!session) return
     const user = session.user as { id: string; role: string };
-    if (user?.role !== "ADMIN") { router.push("/projects/ABC/auth/login"); return }
+    if (user?.role !== "ADMIN") { router.push("/projects/ABC?login=1"); return }
     if (isEdit && params?.id) {
       fetch(`/api/crm/leads/${params.id}`)
         .then(r => r.json())

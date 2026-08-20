@@ -14,6 +14,8 @@ import {
   ONBOARDING_PATH,
 } from "./types";
 import { fetchEntityRegistryMe } from "./api";
+import { platformLoginUrl } from "@/lib/homepage-auth-routes";
+import { isPlatformAdminRole, getAdminLandingPath } from "@/lib/auth/platform-admin";
 
 export interface UseSmartNavigationResult {
   isLoading: boolean;
@@ -60,9 +62,15 @@ export function useSmartNavigation(): UseSmartNavigationResult {
 
     // 1. Unauthenticated users trying to reach a protected page → login.
     if (shouldRedirectToLogin(pathname, isAuthenticated)) {
-      const loginUrl = new URL("/projects/ABC/auth/login", window.location.origin);
-      loginUrl.searchParams.set("callbackUrl", pathname);
-      router.replace(loginUrl.toString());
+      router.replace(platformLoginUrl(pathname));
+      return;
+    }
+
+    // Admins skip onboarding entirely.
+    if (isPlatformAdminRole(role)) {
+      if (pathname === ONBOARDING_PATH) {
+        router.replace(getAdminLandingPath(role));
+      }
       return;
     }
 
@@ -73,7 +81,7 @@ export function useSmartNavigation(): UseSmartNavigationResult {
     }
 
     // 3. Authenticated and onboarded reaching auth/onboarding pages → role dashboard.
-    if (isOnboarded === true && shouldRedirectToDashboard(pathname, isAuthenticated, isOnboarded)) {
+    if (isOnboarded === true && shouldRedirectToDashboard(pathname, isAuthenticated, isOnboarded, typeof window !== "undefined" ? window.location.search : "")) {
       const destination = getRoleDefaultRoute(role);
       router.replace(destination);
       return;

@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useLanguage } from "@/lib/LanguageContext";
 import { MapPin } from "lucide-react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), { ssr: false });
 
@@ -18,20 +18,42 @@ interface MapPickerProps {
   onChange: (value: string, lat?: number, lng?: number) => void;
   placeholder: string;
   icon?: React.ReactNode;
+  countryCode?: string;
+  defaultLat?: number;
+  defaultLng?: number;
+  defaultZoom?: number;
 }
 
-export default function MapPicker({ value, onChange, placeholder, icon }: MapPickerProps) {
+export default function MapPicker({
+  value,
+  onChange,
+  placeholder,
+  icon,
+  countryCode,
+  defaultLat,
+  defaultLng,
+  defaultZoom,
+}: MapPickerProps) {
   const { language } = useLanguage();
   const [searchInput, setSearchInput] = useState(value);
   const [suggestions, setSuggestions] = useState<LocationResult[]>([]);
   const [showMap, setShowMap] = useState(false);
-  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
+    defaultLat != null && defaultLng != null ? { lat: defaultLat, lng: defaultLng } : null,
+  );
+
+  useEffect(() => {
+    if (defaultLat != null && defaultLng != null) {
+      setCoords({ lat: defaultLat, lng: defaultLng });
+    }
+  }, [defaultLat, defaultLng, countryCode]);
 
   const searchLocation = useCallback(async (q: string) => {
     if (q.length < 3) { setSuggestions([]); return; }
     try {
+      const cc = countryCode ? `&countrycodes=${countryCode.toLowerCase()}` : "";
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&accept-language=${language}`
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&accept-language=${language}${cc}`
       );
       const data = await res.json();
       setSuggestions(
@@ -44,7 +66,7 @@ export default function MapPicker({ value, onChange, placeholder, icon }: MapPic
     } catch {
       setSuggestions([]);
     }
-  }, [language]);
+  }, [language, countryCode]);
 
   const reverseGeocode = useCallback(async (lat: number, lng: number) => {
     try {
@@ -125,8 +147,9 @@ export default function MapPicker({ value, onChange, placeholder, icon }: MapPic
       {showMap && (
         <div className="rounded-xl overflow-hidden border border-surface-200 relative">
           <LeafletMap
-            lat={coords?.lat}
-            lng={coords?.lng}
+            lat={coords?.lat ?? defaultLat}
+            lng={coords?.lng ?? defaultLng}
+            zoom={defaultZoom}
             onLocationSelect={confirmLocation}
           />
         </div>

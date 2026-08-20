@@ -427,14 +427,20 @@ model User {
   phone          String?
   avatar         String?
   role           UserRole  @default(OWNER)
+  roleConfirmed  Boolean   @default(true)
   bio            String?
   companyName    String?
+  companyType    String?
   companyLogo    String?
+  country        String?
+  city           String?
+  address        String?
   website        String?
   location       String?
   isVerified     Boolean   @default(false)
   isActive       Boolean   @default(true)
   emailVerified  DateTime?
+  phoneVerified  DateTime?
   mfaEnabled     Boolean   @default(false)
   mfaSecret      String?
   mfaBackupCodes String?
@@ -514,6 +520,8 @@ model User {
   npsScores               NpsScore[]
   csatScores              CsatScore[]
   passwordResetTokens     PasswordResetToken[]
+  contactVerificationCodes ContactVerificationCode[]
+  onboardingSurveyProgress OnboardingSurveyProgress?
   cesScores               CesScore[]
   journeyEvents           CustomerJourneyEvent[]
   crmLinkedContacts       CrmContact[]
@@ -585,6 +593,23 @@ model PasswordResetToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model ContactVerificationCode {
+  id        String    @id @default(cuid())
+  userId    String
+  channel   String
+  target    String
+  codeHash  String
+  expiresAt DateTime
+  usedAt    DateTime?
+  attempts  Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, channel])
+  @@index([expiresAt])
 }
 
 model ProjectTender {
@@ -3468,6 +3493,7 @@ model Lead {
   tags                 String[]
   notes                String?
   convertedToContactId String?
+  registryEntityId     String?    @unique
   assignedToId         String?
   createdById          String
   createdAt            DateTime   @default(now())
@@ -4204,6 +4230,107 @@ model AccountTypeSubcategory {
   @@index([accountType, isActive])
 }
 
+// ─── Dynamic Onboarding Survey (Admin-controlled templates) ─────────────────
+
+model OnboardingSurveyTemplate {
+  id          String              @id @default(cuid())
+  accountType PlatformAccountType @unique
+  nameEn      String
+  nameAr      String
+  version     Int                 @default(1)
+  isActive    Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  sections OnboardingSurveySection[]
+}
+
+model OnboardingSurveySection {
+  id            String   @id @default(cuid())
+  templateId    String
+  code          String
+  titleEn       String
+  titleAr       String
+  titleUr       String?
+  descriptionEn String?
+  descriptionAr String?
+  descriptionUr String?
+  sortOrder     Int      @default(0)
+  isActive      Boolean  @default(true)
+  showIf        Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  template  OnboardingSurveyTemplate   @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  questions OnboardingSurveyQuestion[]
+  content   OnboardingSectionContent?
+
+  @@unique([templateId, code])
+  @@index([templateId])
+}
+
+model OnboardingSurveyQuestion {
+  id             String               @id @default(cuid())
+  sectionId      String
+  code           String
+  questionTextEn String
+  questionTextAr String
+  questionTextUr String?
+  answerType     OnboardingAnswerType
+  options        Json?
+  sortOrder      Int                  @default(0)
+  isRequired     Boolean              @default(true)
+  isActive       Boolean              @default(true)
+  showIf         Json?
+  metadata       Json?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  section OnboardingSurveySection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@unique([sectionId, code])
+  @@index([sectionId])
+}
+
+/// Admin-managed supplementary content (text/image) per survey section screen.
+model OnboardingSectionContent {
+  id        String   @id @default(cuid())
+  sectionId String   @unique
+  titleEn   String?
+  titleAr   String?
+  titleUr   String?
+  bodyEn    String?
+  bodyAr    String?
+  bodyUr    String?
+  imageUrl  String?
+  videoUrl  String?
+  posterUrl String?
+  linkUrl   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  section OnboardingSurveySection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+}
+
+/// Per-user survey progress (section navigation, answers, skipped sections).
+model OnboardingSurveyProgress {
+  id                 String              @id @default(cuid())
+  userId             String              @unique
+  accountType        PlatformAccountType
+  currentSectionCode String?
+  answers            Json                @default("{}")
+  skippedSections    String[]            @default([])
+  completedSections  String[]            @default([])
+  isComplete         Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([accountType])
+}
+
 // ─── AI Module (Sprint AI-1b — BOQ Intelligence) ───────────────────────────
 // All models are additive and isolated to the AI domain. Tenant data is
 // scoped by orgId (org isolation). AiExtractionVersion is a platform-level
@@ -4360,4 +4487,50 @@ model Ad {
   isActive   Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model HomepageZone {
+  id         String   @id @default(cuid())
+  type       String   @default("text")
+  title      String
+  titleEn    String?
+  titleUr    String?
+  subtitle   String?
+  subtitleEn String?
+  subtitleUr String?
+  body       String?
+  bodyEn     String?
+  bodyUr     String?
+  imageUrl   String   @default("")
+  videoUrl   String?
+  posterUrl  String?
+  linkUrl    String?
+  animation  String   @default("fade")
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+/// Admin-managed promotional panel beside onboarding, scoped by account type.
+model OnboardingSideContent {
+  id          String              @id @default(cuid())
+  accountType PlatformAccountType @unique
+  type        String              @default("mixed")
+  title       String
+  titleEn     String?
+  titleUr     String?
+  subtitle    String?
+  subtitleEn  String?
+  subtitleUr  String?
+  body        String?
+  bodyEn      String?
+  bodyUr      String?
+  imageUrl    String              @default("")
+  videoUrl    String?
+  posterUrl   String?
+  linkUrl     String?
+  isActive    Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
 }

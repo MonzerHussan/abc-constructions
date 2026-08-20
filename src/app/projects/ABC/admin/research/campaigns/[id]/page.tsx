@@ -33,7 +33,7 @@ export default function CampaignDetailPage() {
 
   useEffect(() => {
     if (!session) return
-    if ((session.user as { id: string; role: string }).role !== "ADMIN") { router.push("/projects/ABC/auth/login"); return }
+    if ((session.user as { id: string; role: string }).role !== "ADMIN") { router.push("/projects/ABC?login=1"); return }
     fetchCampaign()
   }, [session, router])
 

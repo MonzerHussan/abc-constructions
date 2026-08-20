@@ -1,3 +1,5 @@
+import type { PlatformAccountType } from "@/lib/account-types";
+
 export type OnboardingAccountType =
   | "supplier"
   | "mainContractor"
@@ -7,11 +9,25 @@ export type OnboardingAccountType =
 
 export interface OnboardingProfile {
   accountType: OnboardingAccountType | "";
+  platformAccountType: PlatformAccountType | "";
   fullName: string;
   email: string;
   phone: string;
   companyName: string;
+  companyType: string;
+  companyDescription: string;
+  jobTitle: string;
+  country: string;
+  countryCode: string;
+  city: string;
+  address: string;
   commercialRegistration?: string;
+  avatarUrl?: string;
+  companyLogoUrl?: string;
+  location?: string;
+  locationLat?: number;
+  locationLng?: number;
+  requestIdentityVerification: boolean;
 }
 
 export interface OnboardingDocument {

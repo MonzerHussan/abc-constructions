@@ -1,7 +1,8 @@
 export const PLATFORM_HOME = "/projects/ABC";
-export const PLATFORM_LOGIN = "/projects/ABC/auth/login";
-export const PLATFORM_REGISTER = "/projects/ABC/auth/register";
+export const PLATFORM_LOGIN = "/projects/ABC?login=1";
+export const PLATFORM_REGISTER = "/projects/ABC?register=1";
 export const PLATFORM_PROJECTS = "/projects";
+export const PLATFORM_SERVICES = "/services";
 export const PLATFORM_MARKETPLACE = "/projects/ABC/marketplace";
 export const PLATFORM_TENDERS = "/projects/ABC/tenders/projects";
 
@@ -62,45 +63,61 @@ export const HERO_SLIDES = [
 
 export const SERVICES = [
   {
+    slug: "ai-solutions-automation",
     image: "/assets/ai-solutions-C8IaWUsF.jpg",
     title: "AI Solutions & Automation",
     description:
       "Leverage cutting-edge AI to automate processes, enhance decision-making, and scale operations efficiently.",
+    features: [
+      "Process automation & workflow optimization",
+      "AI-powered analytics and decision support",
+      "Integration with existing business systems",
+    ],
     href: PLATFORM_HOME,
   },
   {
+    slug: "ecommerce-solutions",
     image: "/assets/ecommerce-BQudAQvV.jpg",
     title: "E-commerce Solutions",
     description:
       "End-to-end e-commerce solutions from setup to optimization, including marketplace integration and digital storefronts.",
+    features: ["Store setup & customization", "Marketplace integration", "Conversion optimization"],
     href: PLATFORM_MARKETPLACE,
   },
   {
+    slug: "management-consultancy",
     image: "/assets/management-consultancy-CFpoLCAk.jpg",
     title: "Management Consultancy",
     description:
       "Strategic business planning, process optimization, and operational excellence to drive growth and efficiency.",
+    features: ["Strategic planning", "Process optimization", "Operational excellence"],
     href: PLATFORM_HOME,
   },
   {
+    slug: "marketing-consultancy",
     image: "/assets/marketing-consultancy-C0OOP8Hi.jpg",
     title: "Marketing Consultancy",
     description:
       "Data-driven marketing strategies, digital campaigns, and brand positioning for maximum market impact.",
+    features: ["Digital marketing strategy", "Brand positioning", "Campaign management"],
     href: PLATFORM_HOME,
   },
   {
+    slug: "investment-advisory",
     image: "/assets/investment-advisory-D-V3q8fG.jpg",
     title: "Investment Advisory",
     description:
       "Expert guidance on investment opportunities, portfolio management, and strategic financial planning.",
+    features: ["Investment opportunities", "Portfolio guidance", "Financial planning"],
     href: PLATFORM_HOME,
   },
   {
+    slug: "commercial-brokerage",
     image: "/assets/commercial-brokerage-new-BJe3eiFu.jpg",
     title: "Commercial Brokerage",
     description:
       "Professional facilitation of business transactions, mergers, acquisitions, and strategic partnerships.",
+    features: ["M&A facilitation", "Strategic partnerships", "Transaction advisory"],
     href: PLATFORM_HOME,
   },
 ];

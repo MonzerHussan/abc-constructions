@@ -1,62 +1,16 @@
 import { prisma } from '@/lib/prisma';
 import type { PlatformAccountType } from '@/lib/account-types';
 import { PLATFORM_ACCOUNT_TYPE_IDS } from '@/lib/account-types';
-import { PlatformAccountType as PlatformAccountTypeEnum } from '@/generated/prisma/enums';
 import type {
   CreateAccountSubcategoryInput,
   UpdateAccountSubcategoryInput,
 } from '@/modules/account-types/validators/account-type-schemas';
+import {
+  ACCOUNT_TYPE_SUBCATEGORY_DEFAULTS,
+  isBuiltInOtherSubcategory,
+} from '@/lib/account-type-subcategory-defaults';
 
-const DEFAULT_SUBCATEGORIES: Record<
-  PlatformAccountType,
-  Array<{ labelEn: string; labelAr: string }>
-> = {
-  [PlatformAccountTypeEnum.OWNER]: [
-    { labelEn: 'Residential Developer', labelAr: 'مطور سكني' },
-    { labelEn: 'Commercial Developer', labelAr: 'مطور تجاري' },
-  ],
-  [PlatformAccountTypeEnum.CONSULTANT]: [
-    { labelEn: 'Engineering Office', labelAr: 'مكتب هندسي' },
-    { labelEn: 'Design Office', labelAr: 'مكتب تصميم' },
-  ],
-  [PlatformAccountTypeEnum.CONTRACTOR]: [
-    { labelEn: 'General Contracting', labelAr: 'مقاول عام' },
-    { labelEn: 'Infrastructure', labelAr: 'بنية تحتية' },
-  ],
-  [PlatformAccountTypeEnum.SUBCONTRACTOR]: [
-    { labelEn: 'Building', labelAr: 'بناء' },
-    { labelEn: 'Workshops', labelAr: 'ورش' },
-    { labelEn: 'Interior & Decor', labelAr: 'ديكور' },
-    { labelEn: 'Landscape', labelAr: 'لاندسكيب' },
-    { labelEn: 'Electrical', labelAr: 'كهرباء' },
-    { labelEn: 'Freelancer', labelAr: 'فريلانسر' },
-    { labelEn: 'Other', labelAr: 'أخرى' },
-  ],
-  [PlatformAccountTypeEnum.SUPPLIER]: [
-    { labelEn: 'Building Materials', labelAr: 'مواد بناء' },
-    { labelEn: 'Equipment', labelAr: 'معدات' },
-  ],
-  [PlatformAccountTypeEnum.TRADER]: [
-    { labelEn: 'Wholesale', labelAr: 'جملة' },
-    { labelEn: 'Retail', labelAr: 'تجزئة' },
-  ],
-  [PlatformAccountTypeEnum.INDIVIDUAL]: [
-    { labelEn: 'Job Seeker', labelAr: 'باحث عن عمل' },
-    { labelEn: 'Trainee', labelAr: 'متدرب' },
-    { labelEn: 'Independent Professional', labelAr: 'مهني مستقل' },
-  ],
-  [PlatformAccountTypeEnum.COMPANY]: [
-    { labelEn: 'Maintenance', labelAr: 'صيانة' },
-    { labelEn: 'Services', labelAr: 'خدمات' },
-    { labelEn: 'Sector Related', labelAr: 'مرتبطة بالقطاع' },
-  ],
-  [PlatformAccountTypeEnum.ENTITY]: [
-    { labelEn: 'Government', labelAr: 'حكومية' },
-    { labelEn: 'Financial', labelAr: 'مالية' },
-    { labelEn: 'Regulatory', labelAr: 'رقابية' },
-    { labelEn: 'Regulatory Body', labelAr: 'تنظيمية' },
-  ],
-};
+const DEFAULT_SUBCATEGORIES = ACCOUNT_TYPE_SUBCATEGORY_DEFAULTS;
 
 export class AccountTypeSubcategoryService {
   private async ensureSeededForType(accountType: PlatformAccountType): Promise<void> {
@@ -85,7 +39,7 @@ export class AccountTypeSubcategoryService {
 
   async listPublic(accountType: PlatformAccountType) {
     await this.ensureSeededForType(accountType);
-    return prisma.accountTypeSubcategory.findMany({
+    const rows = await prisma.accountTypeSubcategory.findMany({
       where: { accountType, isActive: true },
       orderBy: { sortOrder: 'asc' },
       select: {
@@ -96,6 +50,7 @@ export class AccountTypeSubcategoryService {
         sortOrder: true,
       },
     });
+    return rows.filter((row) => !isBuiltInOtherSubcategory(row.labelEn, row.labelAr));
   }
 
   async listAdmin(accountType?: PlatformAccountType) {

@@ -89,3 +89,25 @@ export async function sendPasswordResetEmail(opts: { to: string; name?: string; 
 
   return sendEmail({ to: opts.to, subject, html, text });
 }
+
+export async function sendVerificationCodeEmail(opts: {
+  to: string;
+  name?: string;
+  code: string;
+}) {
+  const appName = "ABC Constructions";
+  const name = opts.name ? ` ${opts.name}` : "";
+  const subject = "رمز التحقق من بريدك الإلكتروني";
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px;">
+      <h2 style="margin-top: 0; color: #0f172a;">${subject}</h2>
+      <p style="color: #475569;">مرحباً${name}،</p>
+      <p style="color: #475569;">استخدم الرمز التالي للتحقق من بريدك الإلكتروني في ${appName}:</p>
+      <p style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #7c3aed; text-align: center; margin: 24px 0;">${opts.code}</p>
+      <p style="color: #94a3b8; font-size: 13px;">الرمز صالح لمدة 10 دقائق. إذا لم تطلب ذلك، تجاهل هذه الرسالة.</p>
+    </div>
+  `;
+  const text = `رمز التحقق${name}: ${opts.code}\n\nصالح لمدة 10 دقائق.`;
+
+  return sendEmail({ to: opts.to, subject, html, text });
+}

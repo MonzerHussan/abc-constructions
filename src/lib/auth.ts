@@ -1,24 +1,28 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@auth/prisma-adapter"
+import { loadEnvConfig } from "@next/env"
 import { prisma } from "@/lib/prisma"
+import { AbcPrismaAdapter } from "@/lib/auth-prisma-adapter"
 import bcrypt from "bcryptjs"
 import { verifySync } from "otplib"
 import { authConfig } from "@/auth.config"
 import { rateLimit } from "@/lib/rate-limit"
+import { isGoogleOAuthConfigured } from "@/lib/google-oauth"
+
+loadEnvConfig(process.cwd())
 
 const LOGIN_LIMIT = 15
 const LOGIN_WINDOW_MS = 15 * 60 * 1000
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
-  adapter: PrismaAdapter(prisma) as any,
+  adapter: AbcPrismaAdapter(prisma),
   providers: [
-    ...(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET
+    ...(isGoogleOAuthConfigured()
       ? [Google({
-          clientId: process.env.AUTH_GOOGLE_ID,
-          clientSecret: process.env.AUTH_GOOGLE_SECRET,
+          clientId: process.env.AUTH_GOOGLE_ID!,
+          clientSecret: process.env.AUTH_GOOGLE_SECRET!,
         })]
       : []),
     Credentials({

@@ -33,7 +33,7 @@ export default function ContactsPage() {
   useEffect(() => {
     if (!session) return
     const user = session.user as { id: string; role: string };
-    if (user?.role !== "ADMIN") { router.push("/projects/ABC/auth/login"); return }
+    if (user?.role !== "ADMIN") { router.push("/projects/ABC?login=1"); return }
     fetchContacts()
   }, [session, router, page])
 

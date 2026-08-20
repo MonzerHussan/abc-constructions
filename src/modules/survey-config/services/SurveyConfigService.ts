@@ -41,7 +41,7 @@ function slugify(value: string): string {
 }
 
 export class SurveyConfigService {
-  /** يزرع الإعداد الافتراضي (12 فئة / 133 فئة فرعية) عند أول استخدام. */
+  /** يزرع مجالات العمل (12 فئة) كـ categories وموادها التفصيلية كـ subcategories في لوحة الأدmin. */
   private async ensureSeeded(): Promise<void> {
     const count = await prisma.surveyConfigItem.count();
     if (count > 0) return;
@@ -93,6 +93,16 @@ export class SurveyConfigService {
       categories,
       subcategories,
       updatedAt: latest ? latest.toISOString() : null,
+    };
+  }
+
+  /** Active categories/subcategories for public onboarding UI. */
+  async getPublicConfig(): Promise<SurveyConfig> {
+    const config = await this.getConfig();
+    return {
+      categories: config.categories.filter((c) => c.isActive),
+      subcategories: config.subcategories.filter((s) => s.isActive),
+      updatedAt: config.updatedAt,
     };
   }
 

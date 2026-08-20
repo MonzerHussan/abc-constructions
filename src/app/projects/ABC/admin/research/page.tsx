@@ -27,7 +27,7 @@ export default function AdminResearchPage() {
   useEffect(() => {
     if (!session) return
     if ((session.user as { id: string; role: string }).role !== "ADMIN") {
-      router.push("/projects/ABC/auth/login")
+      router.push("/projects/ABC?login=1")
       return
     }
     fetch("/api/research/analytics")

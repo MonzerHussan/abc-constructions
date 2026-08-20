@@ -21,7 +21,7 @@ export default function LeadEditPage() {
 
   useEffect(() => {
     if (!session) return
-    if ((session.user as { id: string; role: string }).role !== "ADMIN") { router.push("/projects/ABC/auth/login"); return }
+    if ((session.user as { id: string; role: string }).role !== "ADMIN") { router.push("/projects/ABC?login=1"); return }
     if (params?.id) {
       fetch(`/api/crm/leads/${params.id}`)
         .then(r => { if (!r.ok) throw new Error("Not found"); return r.json() })

@@ -46,8 +46,6 @@ export const ROLE_DEFAULT_ROUTE: Record<UserRole, string> = {
 
 export const PUBLIC_PATHS = [
   "/",
-  "/projects/ABC/auth/login",
-  "/projects/ABC/auth/register",
   "/projects/ABC/auth/forgot-password",
   "/projects/ABC/auth/reset-password",
   "/api/v1/health",
@@ -85,12 +83,17 @@ export function shouldRedirectToOnboarding(
 export function shouldRedirectToDashboard(
   pathname: string,
   isAuthenticated: boolean,
-  isOnboarded: boolean
+  isOnboarded: boolean,
+  search = ""
 ): boolean {
+  const onHomepageAuth =
+    pathname === "/projects/ABC" &&
+    (search.includes("login=1") || search.includes("register=1"));
+
   return (
     isAuthenticated &&
     isOnboarded &&
-    (pathname === "/projects/ABC/auth/login" || pathname === "/projects/ABC/auth/register" || pathname === ONBOARDING_PATH)
+    (onHomepageAuth || pathname === ONBOARDING_PATH)
   );
 }
 

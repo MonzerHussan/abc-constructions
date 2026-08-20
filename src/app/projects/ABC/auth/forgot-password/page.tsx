@@ -1,10 +1,10 @@
 ﻿"use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { useState } from "react"
 import { KeyRound, Loader2, Mail } from "lucide-react"
 import { useLanguage } from "@/lib/LanguageContext"
+import AbcLogo from "@/components/AbcLogo"
 
 export default function ForgotPasswordPage() {
   const { t } = useLanguage()
@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
         <div className="w-full max-w-md">
           <div className="mb-8">
             <Link href="/projects/ABC" className="flex items-center gap-2 mb-6">
-              <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
+              <AbcLogo background="light" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
               <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
             </Link>
             <h1 className="text-2xl font-bold text-surface-900">Ù†Ø³ÙŠØª ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±ØŸ</h1>
@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
           {sent ? (
             <div className="bg-success-50 border border-success-200 text-success-700 text-sm px-4 py-3 rounded-xl space-y-3">
               <p>ØªÙ… Ø¥Ø±Ø³Ø§Ù„ Ø±Ø§Ø¨Ø· Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„ØªØ¹ÙŠÙŠÙ† Ø¥Ù„Ù‰ Ø¨Ø±ÙŠØ¯Ùƒ Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠ Ø¥Ù† ÙƒØ§Ù† Ø§Ù„Ø­Ø³Ø§Ø¨ Ù…Ø³Ø¬Ù„Ø§Ù‹.</p>
-              <Link href="/projects/ABC/auth/login" className="block text-secondary-600 font-bold hover:text-secondary-700">
+              <Link href="/projects/ABC?login=1" className="block text-secondary-600 font-bold hover:text-secondary-700">
                 Ø§Ù„Ø¹ÙˆØ¯Ø© Ø¥Ù„Ù‰ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„
               </Link>
             </div>
@@ -93,7 +93,7 @@ export default function ForgotPasswordPage() {
 
           <p className="text-center mt-6 text-sm text-surface-600">
             ØªØ°ÙƒØ±Øª ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±ØŸ{" "}
-            <Link href="/projects/ABC/auth/login" className="text-secondary-600 font-bold hover:text-secondary-700">
+            <Link href="/projects/ABC?login=1" className="text-secondary-600 font-bold hover:text-secondary-700">
               ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„
             </Link>
           </p>

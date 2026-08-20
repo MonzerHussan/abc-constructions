@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    const { email, password, name, phone, role, companyName } = parsed.data;
+    const { email, password, name, phone, role, companyName, companyType, jobTitle, country, city } = parsed.data;
 
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -49,6 +49,11 @@ export async function POST(request: NextRequest) {
         phone,
         role,
         companyName,
+        companyType,
+        bio: jobTitle?.trim() || undefined,
+        country,
+        city,
+        roleConfirmed: true,
       },
     });
 
