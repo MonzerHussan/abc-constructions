@@ -104,7 +104,7 @@ export default function PlatformHeader() {
                 >
                   {g.items.map((item) => (
                     <Link
-                      key={`${g.key}-${item.href}-${item.labelKey}`}
+                      key={`${g.key}-${item.labelKey}`}
                       href={item.href}
                       onClick={() => setOpen(null)}
                       className={cn(

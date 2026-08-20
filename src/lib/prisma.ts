@@ -13,8 +13,8 @@ function createPrismaClient() {
     new Pool({
       connectionString: process.env.DATABASE_URL!,
       max: Number(process.env.DATABASE_POOL_MAX ?? 5),
-      connectionTimeoutMillis: Number(process.env.DATABASE_CONNECT_TIMEOUT_MS ?? 15_000),
-      idleTimeoutMillis: Number(process.env.DATABASE_IDLE_TIMEOUT_MS ?? 30_000),
+      connectionTimeoutMillis: Number(process.env.DATABASE_CONNECT_TIMEOUT_MS ?? 30_000),
+      idleTimeoutMillis: Number(process.env.DATABASE_IDLE_TIMEOUT_MS ?? 60_000),
       allowExitOnIdle: process.env.NODE_ENV !== "production",
     });
 

@@ -66,21 +66,30 @@ export interface LocalizedHomepageData {
 export async function getHomepageData(
   language: "ar" | "en" | "ur" = "ar",
 ): Promise<LocalizedHomepageData> {
-  const [contentRow, slides, videos, ads] = await Promise.all([
-    prisma.homepageContent.findFirst({ orderBy: { createdAt: "desc" } }),
-    prisma.carouselSlide.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.videoSection.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.ad.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    }),
-  ]);
+  let contentRow: Awaited<ReturnType<typeof prisma.homepageContent.findFirst>> = null;
+  let slides: Awaited<ReturnType<typeof prisma.carouselSlide.findMany>> = [];
+  let videos: Awaited<ReturnType<typeof prisma.videoSection.findMany>> = [];
+  let ads: Awaited<ReturnType<typeof prisma.ad.findMany>> = [];
+
+  try {
+    [contentRow, slides, videos, ads] = await Promise.all([
+      prisma.homepageContent.findFirst({ orderBy: { createdAt: "desc" } }),
+      prisma.carouselSlide.findMany({
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.videoSection.findMany({
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.ad.findMany({
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+      }),
+    ]);
+  } catch (error) {
+    console.error("[homepage] database unavailable, using static defaults", error);
+  }
 
   const d = HOMEPAGE_DEFAULTS;
   const content = contentRow ?? d.content;
