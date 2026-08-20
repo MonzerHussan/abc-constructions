@@ -86,14 +86,15 @@ export function shouldRedirectToDashboard(
   isOnboarded: boolean,
   search = ""
 ): boolean {
-  const onHomepageAuth =
+  const onHomepage =
     pathname === "/projects/ABC" &&
-    (search.includes("login=1") || search.includes("register=1"));
+    !search.includes("login=1") &&
+    !search.includes("register=1");
 
   return (
     isAuthenticated &&
     isOnboarded &&
-    (onHomepageAuth || pathname === ONBOARDING_PATH)
+    (onHomepage || pathname === ONBOARDING_PATH)
   );
 }
 
