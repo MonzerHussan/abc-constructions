@@ -9,7 +9,6 @@ import {
   ONBOARDING_PATH,
 } from '@/lib/onboarding-gate';
 import { isPlatformAdminRole } from '@/lib/auth/platform-admin';
-import { getRoleDefaultRoute, type UserRole } from '@/lib/navigation/types';
 
 const { auth } = NextAuth(authConfig);
 
@@ -142,23 +141,6 @@ export async function middleware(request: NextRequest) {
     const onboarded = await fetchUserOnboardedStatus(request);
     if (!onboarded) {
       return NextResponse.redirect(new URL(ONBOARDING_PATH, request.url));
-    }
-  }
-
-  // Onboarded users must not stay on the public marketing homepage.
-  if (
-    session?.user &&
-    pathname === '/projects/ABC' &&
-    !request.nextUrl.searchParams.has('login') &&
-    !request.nextUrl.searchParams.has('register')
-  ) {
-    const onboarded = await fetchUserOnboardedStatus(request);
-    if (onboarded) {
-      const role = (session.user as { role?: UserRole }).role ?? null;
-      const destination = getRoleDefaultRoute(role);
-      if (destination !== '/projects/ABC') {
-        return NextResponse.redirect(new URL(destination, request.url));
-      }
     }
   }
 
