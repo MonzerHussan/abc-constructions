@@ -1,0 +1,6773 @@
+{
+  "version": "2026-08-21",
+  "source": "ABC-Survey-Review-v3.xlsx",
+  "defaultScale": {
+    "min": 1,
+    "max": 5,
+    "minLabelAr": "غير مهتم إطلاقاً",
+    "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+    "minLabelEn": "Not interested at all",
+    "maxLabelEn": "Very interested, would use immediately"
+  },
+  "sections": [
+    {
+      "code": "SUB_TYPE",
+      "titleAr": "نوع المنشأة",
+      "titleEn": "Entity Type",
+      "order": 5
+    },
+    {
+      "code": "WORKSHOP",
+      "titleAr": "بيانات الورشة",
+      "titleEn": "Workshop Profile",
+      "order": 6
+    },
+    {
+      "code": "IND_TYPE",
+      "titleAr": "نوع النشاط",
+      "titleEn": "Your Activity",
+      "order": 5
+    },
+    {
+      "code": "FREELANCER",
+      "titleAr": "المهني المستقل",
+      "titleEn": "Independent Professional",
+      "order": 6
+    },
+    {
+      "code": "SKILLED",
+      "titleAr": "العامل الماهر",
+      "titleEn": "Skilled Worker",
+      "order": 6
+    },
+    {
+      "code": "DRIVER",
+      "titleAr": "مالك مركبة النقل",
+      "titleEn": "Vehicle Owner",
+      "order": 6
+    },
+    {
+      "code": "JOBSEEKER",
+      "titleAr": "الباحث عن عمل أو تدريب",
+      "titleEn": "Job & Training Seeker",
+      "order": 6
+    },
+    {
+      "code": "FLEET",
+      "titleAr": "أسطول النقل",
+      "titleEn": "Transport Fleet",
+      "order": 40
+    },
+    {
+      "code": "MARKET_SELL",
+      "titleAr": "ما تبيعونه وكيف تبيعونه",
+      "titleEn": "What You Sell & How",
+      "order": 20
+    },
+    {
+      "code": "MARKET_BUY",
+      "titleAr": "كيف تشترون المواد",
+      "titleEn": "How You Buy Materials",
+      "order": 20
+    },
+    {
+      "code": "MARKET_WATCH",
+      "titleAr": "تقدير التكلفة ومتابعة الأسعار",
+      "titleEn": "Cost Estimating & Price Watch",
+      "order": 20
+    },
+    {
+      "code": "INVENTORY_SYNC",
+      "titleAr": "المخزون وربطه بالمنصة",
+      "titleEn": "Inventory & Platform Sync",
+      "order": 25
+    },
+    {
+      "code": "AI_SELLER",
+      "titleAr": "الذكاء الاصطناعي في البيع",
+      "titleEn": "AI for Selling",
+      "order": 60
+    },
+    {
+      "code": "AI_QUANTITIES",
+      "titleAr": "الكميات والحصر",
+      "titleEn": "Quantities & Takeoff",
+      "order": 30
+    },
+    {
+      "code": "AI_TRACKING",
+      "titleAr": "متابعة التنفيذ",
+      "titleEn": "Execution Tracking",
+      "order": 35
+    },
+    {
+      "code": "AI_TIME",
+      "titleAr": "الوقت والقيمة",
+      "titleEn": "Time & Value",
+      "order": 65
+    }
+  ],
+  "newQuestions": [
+    {
+      "code": "SUBR-01",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "SUB_TYPE",
+      "sectionTitleAr": "نوع المنشأة",
+      "sectionTitleEn": "Entity Type",
+      "sectionOrder": 5,
+      "questionOrder": 1,
+      "textAr": "ما طبيعة منشأتكم؟",
+      "textEn": "What type of entity are you?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "registered_sub",
+          "labelAr": "مقاول باطن مسجّل (سجل تجاري ورخصة مقاولات)",
+          "labelEn": "Registered subcontractor",
+          "order": 1
+        },
+        {
+          "value": "workshop",
+          "labelAr": "ورشة متخصصة (لها موقع ومعدات وعمالة)",
+          "labelEn": "Specialized workshop",
+          "order": 2
+        },
+        {
+          "value": "small_team",
+          "labelAr": "فريق عمل صغير بدون سجل تجاري",
+          "labelEn": "Small unregistered crew",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "⭐ سؤال التوجيه — يفصل الورشة عن مقاول الباطن المسجّل، وهما عملان مختلفان تماماً"
+    },
+    {
+      "code": "WS-01",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 1,
+      "textAr": "ما تخصص ورشتكم؟",
+      "textEn": "What is your workshop's trade?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "steel_works",
+          "labelAr": "حدادة وأعمال معدنية",
+          "labelEn": "Steel & metal works",
+          "order": 1
+        },
+        {
+          "value": "carpentry",
+          "labelAr": "نجارة وأثاث",
+          "labelEn": "Carpentry & joinery",
+          "order": 2
+        },
+        {
+          "value": "aluminium",
+          "labelAr": "ألمنيوم وزجاج",
+          "labelEn": "Aluminium & glass",
+          "order": 3
+        },
+        {
+          "value": "marble_tiles",
+          "labelAr": "رخام وبلاط",
+          "labelEn": "Marble & tiling",
+          "order": 4
+        },
+        {
+          "value": "hvac_ws",
+          "labelAr": "تكييف وتمديدات",
+          "labelEn": "HVAC fabrication",
+          "order": 5
+        },
+        {
+          "value": "electrical_ws",
+          "labelAr": "لوحات وتمديدات كهربائية",
+          "labelEn": "Electrical panels & wiring",
+          "order": 6
+        },
+        {
+          "value": "plumbing_ws",
+          "labelAr": "سباكة وتمديدات صحية",
+          "labelEn": "Plumbing works",
+          "order": 7
+        },
+        {
+          "value": "paint_ws",
+          "labelAr": "دهانات وديكور",
+          "labelEn": "Painting & decoration",
+          "order": 8
+        },
+        {
+          "value": "gypsum",
+          "labelAr": "جبس وأسقف مستعارة",
+          "labelEn": "Gypsum & false ceilings",
+          "order": 9
+        },
+        {
+          "value": "concrete_precast",
+          "labelAr": "خرسانة مسبقة الصب",
+          "labelEn": "Precast concrete",
+          "order": 10
+        },
+        {
+          "value": "other_ws",
+          "labelAr": "أخرى",
+          "labelEn": "Other",
+          "order": 11
+        }
+      ],
+      "scale": null,
+      "note": "التخصص يحدد ما تشتريه وما تنتجه وما يُطلب منها"
+    },
+    {
+      "code": "WS-02",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 2,
+      "textAr": "أين تُنفَّذ أعمالكم؟",
+      "textEn": "Where is your work executed?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "workshop_only",
+          "labelAr": "في الورشة فقط ثم يُسلَّم",
+          "labelEn": "In the workshop, then delivered",
+          "order": 1
+        },
+        {
+          "value": "site_only",
+          "labelAr": "في موقع المشروع فقط",
+          "labelEn": "On site only",
+          "order": 2
+        },
+        {
+          "value": "both",
+          "labelAr": "تصنيع في الورشة وتركيب في الموقع",
+          "labelEn": "Fabricated in workshop, installed on site",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "يحدد إن كانت الورشة منتجاً (تبيع) أم منفّذاً (خدمة) أم الاثنين"
+    },
+    {
+      "code": "WS-03",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 3,
+      "textAr": "هل تبيعون منتجات جاهزة إضافة إلى التنفيذ؟",
+      "textEn": "Do you also sell finished products?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "yes_main",
+          "labelAr": "نعم، وهو نشاطنا الأساسي",
+          "labelEn": "Yes, it is our main activity",
+          "order": 1
+        },
+        {
+          "value": "yes_secondary",
+          "labelAr": "نعم، بشكل ثانوي",
+          "labelEn": "Yes, secondary",
+          "order": 2
+        },
+        {
+          "value": "no",
+          "labelAr": "لا، تنفيذ فقط",
+          "labelEn": "No, execution only",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ إن كانت الإجابة نعم فالورشة **بائع في السوق أيضاً** — وهذا يغيّر مكانها في المنصة"
+    },
+    {
+      "code": "WS-04",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 4,
+      "textAr": "ما طاقتكم الإنتاجية الشهرية؟",
+      "textEn": "Your monthly production capacity?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "1_3",
+          "labelAr": "١–٣ أعمال",
+          "labelEn": "1–3 jobs",
+          "order": 1
+        },
+        {
+          "value": "4_10",
+          "labelAr": "٤–١٠ أعمال",
+          "labelEn": "4–10 jobs",
+          "order": 2
+        },
+        {
+          "value": "11_25",
+          "labelAr": "١١–٢٥ عملاً",
+          "labelEn": "11–25 jobs",
+          "order": 3
+        },
+        {
+          "value": "gt25",
+          "labelAr": "أكثر من ٢٥",
+          "labelEn": "Over 25",
+          "order": 4
+        },
+        {
+          "value": "depends",
+          "labelAr": "حسب حجم كل عمل",
+          "labelEn": "Depends on job size",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "أساس مطابقة حجم الطلب بالورشة المناسبة"
+    },
+    {
+      "code": "WS-05",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 5,
+      "textAr": "هل طاقتكم مستغلة بالكامل حالياً؟",
+      "textEn": "Is your capacity currently fully utilized?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "over",
+          "labelAr": "أكثر من طاقتنا — نرفض أعمالاً",
+          "labelEn": "Over capacity — we decline work",
+          "order": 1
+        },
+        {
+          "value": "full",
+          "labelAr": "مستغلة بالكامل",
+          "labelEn": "Fully utilized",
+          "order": 2
+        },
+        {
+          "value": "partial",
+          "labelAr": "مستغلة جزئياً — نستطيع استقبال المزيد",
+          "labelEn": "Partially — we can take more",
+          "order": 3
+        },
+        {
+          "value": "low",
+          "labelAr": "منخفضة — نبحث عن أعمال",
+          "labelEn": "Low — we are looking for work",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐ الطاقة العاطلة هي ما تبيعه المنصة للورشة — إن كانت مشغولة فالعرض لا يعنيها"
+    },
+    {
+      "code": "WS-06",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 6,
+      "textAr": "من يوفّر المواد في أعمالكم؟",
+      "textEn": "Who supplies the materials in your jobs?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "we_buy",
+          "labelAr": "نشتريها بأنفسنا",
+          "labelEn": "We buy them",
+          "order": 1
+        },
+        {
+          "value": "client_supplies",
+          "labelAr": "العميل يوفّرها",
+          "labelEn": "Client supplies",
+          "order": 2
+        },
+        {
+          "value": "mixed",
+          "labelAr": "حسب الاتفاق",
+          "labelEn": "Depends on the agreement",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "⭐ يحدد إن كانت الورشة مشترياً في السوق — وغالباً هي كذلك"
+    },
+    {
+      "code": "WS-07",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 7,
+      "textAr": "ما نسبة تكلفة المواد من قيمة العمل؟",
+      "textEn": "Material cost as a share of job value",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "lt30",
+          "labelAr": "أقل من ٣٠٪",
+          "labelEn": "Under 30%",
+          "order": 1
+        },
+        {
+          "value": "30_50",
+          "labelAr": "٣٠–٥٠٪",
+          "labelEn": "30–50%",
+          "order": 2
+        },
+        {
+          "value": "51_70",
+          "labelAr": "٥١–٧٠٪",
+          "labelEn": "51–70%",
+          "order": 3
+        },
+        {
+          "value": "gt70",
+          "labelAr": "أكثر من ٧٠٪",
+          "labelEn": "Over 70%",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "نسبة عالية = حساسية شديدة لسعر المواد = قيمة كبيرة من السوق"
+    },
+    {
+      "code": "WS-08",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 8,
+      "textAr": "كيف تحدّدون سعر العمل؟",
+      "textEn": "How do you price a job?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "per_sqm",
+          "labelAr": "بالمتر المربع/الطولي",
+          "labelEn": "Per square/linear metre",
+          "order": 1
+        },
+        {
+          "value": "per_weight",
+          "labelAr": "بالوزن (كجم/طن)",
+          "labelEn": "By weight",
+          "order": 2
+        },
+        {
+          "value": "per_piece",
+          "labelAr": "بالقطعة",
+          "labelEn": "Per piece",
+          "order": 3
+        },
+        {
+          "value": "cost_plus",
+          "labelAr": "تكلفة + هامش",
+          "labelEn": "Cost plus margin",
+          "order": 4
+        },
+        {
+          "value": "experience",
+          "labelAr": "بالخبرة والتقدير",
+          "labelEn": "By experience/judgement",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "الحدس = خطر خسارة، وهو مدخل مباشر لمساعد التسعير"
+    },
+    {
+      "code": "WS-09",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "WORKSHOP",
+      "sectionTitleAr": "بيانات الورشة",
+      "sectionTitleEn": "Workshop Profile",
+      "sectionOrder": 6,
+      "questionOrder": 9,
+      "textAr": "هل سبق أن خسرتم في عمل بسبب خطأ في التسعير؟",
+      "textEn": "Ever lost money on a job due to mispricing?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SUBR-01",
+        "op": "eq",
+        "value": "workshop"
+      },
+      "options": [
+        {
+          "value": "yes_often",
+          "labelAr": "نعم، أكثر من مرة",
+          "labelEn": "Yes, more than once",
+          "order": 1
+        },
+        {
+          "value": "yes_once",
+          "labelAr": "نعم، مرة",
+          "labelEn": "Yes, once",
+          "order": 2
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 3
+        },
+        {
+          "value": "dont_know",
+          "labelAr": "لا نحسبها بدقة",
+          "labelEn": "We don't track it precisely",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "يبرر منتج «إنذار السعر تحت التكلفة»"
+    },
+    {
+      "code": "INDR-01",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "IND_TYPE",
+      "sectionTitleAr": "نوع النشاط",
+      "sectionTitleEn": "Your Activity",
+      "sectionOrder": 5,
+      "questionOrder": 1,
+      "textAr": "أي وصف ينطبق عليك أكثر؟",
+      "textEn": "Which best describes you?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "freelancer",
+          "labelAr": "مهني مستقل — أقدّم خدمة هندسية أو فنية (تصميم، إشراف، حصر كميات)",
+          "labelEn": "Independent professional",
+          "order": 1
+        },
+        {
+          "value": "skilled",
+          "labelAr": "عامل أو فني ماهر — أنفّذ بيدي",
+          "labelEn": "Skilled worker / technician",
+          "order": 2
+        },
+        {
+          "value": "driver",
+          "labelAr": "أملك مركبة نقل وأعمل لحسابي",
+          "labelEn": "I own a vehicle and work for myself",
+          "order": 3
+        },
+        {
+          "value": "jobseeker",
+          "labelAr": "خريج أو باحث عن عمل أو تدريب",
+          "labelEn": "Graduate / job or training seeker",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐ سؤال التوجيه — يستبدل مساراً واحداً بـ٦٧ سؤالاً بأربعة مسارات قصيرة"
+    },
+    {
+      "code": "FR-01",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "FREELANCER",
+      "sectionTitleAr": "المهني المستقل",
+      "sectionTitleEn": "Independent Professional",
+      "sectionOrder": 6,
+      "questionOrder": 1,
+      "textAr": "ما خدمتكم الأساسية؟",
+      "textEn": "Your primary service?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "freelancer"
+      },
+      "options": [
+        {
+          "value": "design",
+          "labelAr": "تصميم معماري أو إنشائي",
+          "labelEn": "Architectural / structural design",
+          "order": 1
+        },
+        {
+          "value": "supervision",
+          "labelAr": "إشراف هندسي",
+          "labelEn": "Site supervision",
+          "order": 2
+        },
+        {
+          "value": "qs",
+          "labelAr": "حصر كميات وتسعير",
+          "labelEn": "Quantity surveying",
+          "order": 3
+        },
+        {
+          "value": "pm",
+          "labelAr": "إدارة مشاريع",
+          "labelEn": "Project management",
+          "order": 4
+        },
+        {
+          "value": "bim",
+          "labelAr": "نمذجة BIM",
+          "labelEn": "BIM modelling",
+          "order": 5
+        },
+        {
+          "value": "safety",
+          "labelAr": "سلامة وجودة",
+          "labelEn": "Safety & quality",
+          "order": 6
+        },
+        {
+          "value": "mep_design",
+          "labelAr": "تصميم كهروميكانيكي",
+          "labelEn": "MEP design",
+          "order": 7
+        },
+        {
+          "value": "interior",
+          "labelAr": "تصميم داخلي",
+          "labelEn": "Interior design",
+          "order": 8
+        },
+        {
+          "value": "other_fr",
+          "labelAr": "أخرى",
+          "labelEn": "Other",
+          "order": 9
+        }
+      ],
+      "scale": null,
+      "note": "تحديد التخصص للمطابقة"
+    },
+    {
+      "code": "FR-02",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "FREELANCER",
+      "sectionTitleAr": "المهني المستقل",
+      "sectionTitleEn": "Independent Professional",
+      "sectionOrder": 6,
+      "questionOrder": 2,
+      "textAr": "كيف تحصلون على مشاريعكم اليوم؟",
+      "textEn": "How do you get your projects today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "freelancer"
+      },
+      "options": [
+        {
+          "value": "word_mouth",
+          "labelAr": "توصية ومعرفة شخصية",
+          "labelEn": "Word of mouth",
+          "order": 1
+        },
+        {
+          "value": "prev_clients",
+          "labelAr": "عملاء سابقون",
+          "labelEn": "Repeat clients",
+          "order": 2
+        },
+        {
+          "value": "social",
+          "labelAr": "وسائل التواصل",
+          "labelEn": "Social media",
+          "order": 3
+        },
+        {
+          "value": "freelance_sites",
+          "labelAr": "منصات عمل حر عالمية",
+          "labelEn": "Global freelance sites",
+          "order": 4
+        },
+        {
+          "value": "offices",
+          "labelAr": "مكاتب هندسية أتعاون معها",
+          "labelEn": "Engineering offices",
+          "order": 5
+        },
+        {
+          "value": "hard",
+          "labelAr": "بصعوبة، لا قناة ثابتة",
+          "labelEn": "With difficulty, no stable channel",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي"
+    },
+    {
+      "code": "FR-03",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "FREELANCER",
+      "sectionTitleAr": "المهني المستقل",
+      "sectionTitleEn": "Independent Professional",
+      "sectionOrder": 6,
+      "questionOrder": 3,
+      "textAr": "كيف تسعّرون خدمتكم؟",
+      "textEn": "How do you price your service?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "freelancer"
+      },
+      "options": [
+        {
+          "value": "hourly",
+          "labelAr": "بالساعة",
+          "labelEn": "Hourly",
+          "order": 1
+        },
+        {
+          "value": "per_project",
+          "labelAr": "بالمشروع",
+          "labelEn": "Per project",
+          "order": 2
+        },
+        {
+          "value": "per_sqm_fr",
+          "labelAr": "بمساحة المشروع",
+          "labelEn": "By project area",
+          "order": 3
+        },
+        {
+          "value": "percent",
+          "labelAr": "نسبة من قيمة المشروع",
+          "labelEn": "% of project value",
+          "order": 4
+        },
+        {
+          "value": "monthly",
+          "labelAr": "بعقد شهري",
+          "labelEn": "Monthly retainer",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يمهّد لمرجع تسعير الخدمات"
+    },
+    {
+      "code": "FR-04",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "FREELANCER",
+      "sectionTitleAr": "المهني المستقل",
+      "sectionTitleEn": "Independent Professional",
+      "sectionOrder": 6,
+      "questionOrder": 4,
+      "textAr": "ما أكبر تحدٍ يواجهكم؟",
+      "textEn": "Your biggest challenge?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "freelancer"
+      },
+      "options": [
+        {
+          "value": "finding_work",
+          "labelAr": "إيجاد عمل ثابت",
+          "labelEn": "Finding steady work",
+          "order": 1
+        },
+        {
+          "value": "late_pay",
+          "labelAr": "تأخر تحصيل الأتعاب",
+          "labelEn": "Late payment",
+          "order": 2
+        },
+        {
+          "value": "price_pressure",
+          "labelAr": "ضغط على الأسعار",
+          "labelEn": "Price pressure",
+          "order": 3
+        },
+        {
+          "value": "no_credibility",
+          "labelAr": "إثبات الخبرة لعميل جديد",
+          "labelEn": "Proving credibility",
+          "order": 4
+        },
+        {
+          "value": "scope_creep",
+          "labelAr": "توسّع النطاق بلا مقابل",
+          "labelEn": "Scope creep",
+          "order": 5
+        },
+        {
+          "value": "no_contract",
+          "labelAr": "العمل بدون عقد واضح",
+          "labelEn": "Working without a clear contract",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "ترتيب أولويات المنتج للمستقل"
+    },
+    {
+      "code": "FR-05",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "FREELANCER",
+      "sectionTitleAr": "المهني المستقل",
+      "sectionTitleEn": "Independent Professional",
+      "sectionOrder": 6,
+      "questionOrder": 5,
+      "textAr": "ما مدى اهتمامكم بمنصة تصلكم منها مشاريع مطابقة لتخصصكم مع ضمان الأتعاب؟",
+      "textEn": "Interest in matched projects with fee protection",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "freelancer"
+      },
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "اختبار العرض الأساسي للمستقل"
+    },
+    {
+      "code": "SK-01",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "SKILLED",
+      "sectionTitleAr": "العامل الماهر",
+      "sectionTitleEn": "Skilled Worker",
+      "sectionOrder": 6,
+      "questionOrder": 1,
+      "textAr": "ما مهنتكم؟",
+      "textEn": "What is your trade?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "skilled"
+      },
+      "options": [
+        {
+          "value": "electrician",
+          "labelAr": "كهربائي",
+          "labelEn": "Electrician",
+          "order": 1
+        },
+        {
+          "value": "plumber",
+          "labelAr": "سبّاك",
+          "labelEn": "Plumber",
+          "order": 2
+        },
+        {
+          "value": "tiler",
+          "labelAr": "بليّط",
+          "labelEn": "Tiler",
+          "order": 3
+        },
+        {
+          "value": "painter",
+          "labelAr": "دهّان",
+          "labelEn": "Painter",
+          "order": 4
+        },
+        {
+          "value": "carpenter",
+          "labelAr": "نجّار",
+          "labelEn": "Carpenter",
+          "order": 5
+        },
+        {
+          "value": "steel_fixer",
+          "labelAr": "حدّاد تسليح",
+          "labelEn": "Steel fixer",
+          "order": 6
+        },
+        {
+          "value": "mason",
+          "labelAr": "بنّاء",
+          "labelEn": "Mason",
+          "order": 7
+        },
+        {
+          "value": "ac_tech",
+          "labelAr": "فني تكييف",
+          "labelEn": "AC technician",
+          "order": 8
+        },
+        {
+          "value": "welder",
+          "labelAr": "لحّام",
+          "labelEn": "Welder",
+          "order": 9
+        },
+        {
+          "value": "gypsum_w",
+          "labelAr": "فني جبس",
+          "labelEn": "Gypsum installer",
+          "order": 10
+        },
+        {
+          "value": "helper",
+          "labelAr": "عامل مساعد",
+          "labelEn": "General helper",
+          "order": 11
+        },
+        {
+          "value": "other_sk",
+          "labelAr": "أخرى",
+          "labelEn": "Other",
+          "order": 12
+        }
+      ],
+      "scale": null,
+      "note": "التصنيف الأساسي للمطابقة"
+    },
+    {
+      "code": "SK-02",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "SKILLED",
+      "sectionTitleAr": "العامل الماهر",
+      "sectionTitleEn": "Skilled Worker",
+      "sectionOrder": 6,
+      "questionOrder": 2,
+      "textAr": "كيف تجدون العمل حالياً؟",
+      "textEn": "How do you find work now?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "skilled"
+      },
+      "options": [
+        {
+          "value": "contractor_fixed",
+          "labelAr": "مقاول ثابت أعمل معه",
+          "labelEn": "A regular contractor",
+          "order": 1
+        },
+        {
+          "value": "gathering",
+          "labelAr": "التجمّع في مواقع العمالة",
+          "labelEn": "Labour gathering points",
+          "order": 2
+        },
+        {
+          "value": "friends",
+          "labelAr": "أصدقاء وزملاء",
+          "labelEn": "Friends and peers",
+          "order": 3
+        },
+        {
+          "value": "whatsapp_g",
+          "labelAr": "مجموعات واتساب",
+          "labelEn": "WhatsApp groups",
+          "order": 4
+        },
+        {
+          "value": "direct",
+          "labelAr": "عملاء يتصلون بي",
+          "labelEn": "Direct client calls",
+          "order": 5
+        },
+        {
+          "value": "difficult",
+          "labelAr": "بصعوبة",
+          "labelEn": "With difficulty",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي"
+    },
+    {
+      "code": "SK-03",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "SKILLED",
+      "sectionTitleAr": "العامل الماهر",
+      "sectionTitleEn": "Skilled Worker",
+      "sectionOrder": 6,
+      "questionOrder": 3,
+      "textAr": "كيف تتقاضون أجركم؟",
+      "textEn": "How are you paid?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "skilled"
+      },
+      "options": [
+        {
+          "value": "daily",
+          "labelAr": "باليومية",
+          "labelEn": "Daily wage",
+          "order": 1
+        },
+        {
+          "value": "piece",
+          "labelAr": "بالمقطوعية",
+          "labelEn": "Per piece/job",
+          "order": 2
+        },
+        {
+          "value": "monthly_sk",
+          "labelAr": "براتب شهري",
+          "labelEn": "Monthly salary",
+          "order": 3
+        },
+        {
+          "value": "mixed_sk",
+          "labelAr": "يختلف",
+          "labelEn": "It varies",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "يحدد شكل منتج الدفع للعامل"
+    },
+    {
+      "code": "SK-04",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "SKILLED",
+      "sectionTitleAr": "العامل الماهر",
+      "sectionTitleEn": "Skilled Worker",
+      "sectionOrder": 6,
+      "questionOrder": 4,
+      "textAr": "هل تأخّر أحد في دفع أجركم؟",
+      "textEn": "Has anyone delayed your pay?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "skilled"
+      },
+      "options": [
+        {
+          "value": "yes_often_sk",
+          "labelAr": "نعم، كثيراً",
+          "labelEn": "Yes, often",
+          "order": 1
+        },
+        {
+          "value": "yes_some",
+          "labelAr": "نعم، أحياناً",
+          "labelEn": "Yes, sometimes",
+          "order": 2
+        },
+        {
+          "value": "no_sk",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 3
+        },
+        {
+          "value": "lost",
+          "labelAr": "نعم، وضاع حقي",
+          "labelEn": "Yes, and I never got paid",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐ ألم العامل الأول — ويبرر ضمان الأجرة عبر المنصة"
+    },
+    {
+      "code": "SK-05",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "SKILLED",
+      "sectionTitleAr": "العامل الماهر",
+      "sectionTitleEn": "Skilled Worker",
+      "sectionOrder": 6,
+      "questionOrder": 5,
+      "textAr": "ما مدى اهتمامكم بمنصة تعرض مهارتك وتضمن أجرك؟",
+      "textEn": "Interest in a platform that showcases your skill and guarantees your pay",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "skilled"
+      },
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "اختبار العرض الأساسي للعامل"
+    },
+    {
+      "code": "DR-01",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "DRIVER",
+      "sectionTitleAr": "مالك مركبة النقل",
+      "sectionTitleEn": "Vehicle Owner",
+      "sectionOrder": 6,
+      "questionOrder": 1,
+      "textAr": "ما نوع مركبتكم؟",
+      "textEn": "What type of vehicle do you own?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "driver"
+      },
+      "options": [
+        {
+          "value": "pickup",
+          "labelAr": "بيك أب / وانيت",
+          "labelEn": "Pickup",
+          "order": 1
+        },
+        {
+          "value": "light_truck",
+          "labelAr": "شاحنة خفيفة",
+          "labelEn": "Light truck",
+          "order": 2
+        },
+        {
+          "value": "heavy_truck",
+          "labelAr": "شاحنة ثقيلة",
+          "labelEn": "Heavy truck",
+          "order": 3
+        },
+        {
+          "value": "tipper",
+          "labelAr": "قلاب",
+          "labelEn": "Tipper",
+          "order": 4
+        },
+        {
+          "value": "mixer",
+          "labelAr": "خلاطة خرسانة",
+          "labelEn": "Concrete mixer",
+          "order": 5
+        },
+        {
+          "value": "crane",
+          "labelAr": "ونش / رافعة",
+          "labelEn": "Crane",
+          "order": 6
+        },
+        {
+          "value": "lowbed",
+          "labelAr": "لوبد لنقل المعدات",
+          "labelEn": "Lowbed",
+          "order": 7
+        },
+        {
+          "value": "water_tank",
+          "labelAr": "صهريج مياه",
+          "labelEn": "Water tanker",
+          "order": 8
+        }
+      ],
+      "scale": null,
+      "note": "أساس مطابقة الحمولة بالمركبة"
+    },
+    {
+      "code": "DR-02",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "DRIVER",
+      "sectionTitleAr": "مالك مركبة النقل",
+      "sectionTitleEn": "Vehicle Owner",
+      "sectionOrder": 6,
+      "questionOrder": 2,
+      "textAr": "كيف تصلكم طلبات النقل اليوم؟",
+      "textEn": "How do you receive transport requests?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "driver"
+      },
+      "options": [
+        {
+          "value": "known_clients",
+          "labelAr": "عملاء دائمون",
+          "labelEn": "Regular clients",
+          "order": 1
+        },
+        {
+          "value": "waiting",
+          "labelAr": "الانتظار في مواقف الشاحنات",
+          "labelEn": "Waiting at truck stops",
+          "order": 2
+        },
+        {
+          "value": "broker_dr",
+          "labelAr": "وسيط نقل",
+          "labelEn": "Transport broker",
+          "order": 3
+        },
+        {
+          "value": "whatsapp_dr",
+          "labelAr": "مجموعات واتساب",
+          "labelEn": "WhatsApp groups",
+          "order": 4
+        },
+        {
+          "value": "apps",
+          "labelAr": "تطبيقات نقل",
+          "labelEn": "Transport apps",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي"
+    },
+    {
+      "code": "DR-03",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "DRIVER",
+      "sectionTitleAr": "مالك مركبة النقل",
+      "sectionTitleEn": "Vehicle Owner",
+      "sectionOrder": 6,
+      "questionOrder": 3,
+      "textAr": "ما نسبة رحلاتكم التي تعودون فيها فارغين؟",
+      "textEn": "What share of your trips return empty?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "driver"
+      },
+      "options": [
+        {
+          "value": "almost_all",
+          "labelAr": "تقريباً كل الرحلات",
+          "labelEn": "Almost all",
+          "order": 1
+        },
+        {
+          "value": "most",
+          "labelAr": "أغلبها",
+          "labelEn": "Most",
+          "order": 2
+        },
+        {
+          "value": "half",
+          "labelAr": "نصفها",
+          "labelEn": "About half",
+          "order": 3
+        },
+        {
+          "value": "few",
+          "labelAr": "قليل منها",
+          "labelEn": "Few",
+          "order": 4
+        },
+        {
+          "value": "rare",
+          "labelAr": "نادراً",
+          "labelEn": "Rarely",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ أكبر هدر في نقل مواد البناء — وأسهل قيمة تثبتها المنصة بالرقم"
+    },
+    {
+      "code": "DR-04",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "DRIVER",
+      "sectionTitleAr": "مالك مركبة النقل",
+      "sectionTitleEn": "Vehicle Owner",
+      "sectionOrder": 6,
+      "questionOrder": 4,
+      "textAr": "ما مدى اهتمامكم بتطبيق يملأ رحلة العودة بحمولة مدفوعة؟",
+      "textEn": "Interest in an app that fills your return trip with a paid load",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "driver"
+      },
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐ عرض القيمة الأوضح والأسهل قياساً في المنصة كلها"
+    },
+    {
+      "code": "JS-01",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "JOBSEEKER",
+      "sectionTitleAr": "الباحث عن عمل أو تدريب",
+      "sectionTitleEn": "Job & Training Seeker",
+      "sectionOrder": 6,
+      "questionOrder": 1,
+      "textAr": "ما مؤهلكم؟",
+      "textEn": "Your qualification?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "jobseeker"
+      },
+      "options": [
+        {
+          "value": "eng_degree",
+          "labelAr": "بكالوريوس هندسة",
+          "labelEn": "Engineering degree",
+          "order": 1
+        },
+        {
+          "value": "diploma",
+          "labelAr": "دبلوم فني",
+          "labelEn": "Technical diploma",
+          "order": 2
+        },
+        {
+          "value": "high_school",
+          "labelAr": "ثانوية عامة",
+          "labelEn": "High school",
+          "order": 3
+        },
+        {
+          "value": "vocational",
+          "labelAr": "تدريب مهني",
+          "labelEn": "Vocational training",
+          "order": 4
+        },
+        {
+          "value": "none_js",
+          "labelAr": "بدون مؤهل رسمي",
+          "labelEn": "No formal qualification",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "تصنيف للتوظيف والتدريب"
+    },
+    {
+      "code": "JS-02",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "JOBSEEKER",
+      "sectionTitleAr": "الباحث عن عمل أو تدريب",
+      "sectionTitleEn": "Job & Training Seeker",
+      "sectionOrder": 6,
+      "questionOrder": 2,
+      "textAr": "ما الذي تبحثون عنه؟",
+      "textEn": "What are you looking for?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "jobseeker"
+      },
+      "options": [
+        {
+          "value": "job",
+          "labelAr": "وظيفة بدوام كامل",
+          "labelEn": "Full-time job",
+          "order": 1
+        },
+        {
+          "value": "training",
+          "labelAr": "تدريب أو تدريب تعاوني",
+          "labelEn": "Training / internship",
+          "order": 2
+        },
+        {
+          "value": "both_js",
+          "labelAr": "الاثنان",
+          "labelEn": "Both",
+          "order": 3
+        },
+        {
+          "value": "courses",
+          "labelAr": "دورات لرفع مهاراتي",
+          "labelEn": "Courses to upskill",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "يفصل مسار التوظيف عن التدريب"
+    },
+    {
+      "code": "JS-03",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "JOBSEEKER",
+      "sectionTitleAr": "الباحث عن عمل أو تدريب",
+      "sectionTitleEn": "Job & Training Seeker",
+      "sectionOrder": 6,
+      "questionOrder": 3,
+      "textAr": "ما أكبر عائق أمامكم؟",
+      "textEn": "Your biggest obstacle?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "jobseeker"
+      },
+      "options": [
+        {
+          "value": "no_experience",
+          "labelAr": "اشتراط الخبرة",
+          "labelEn": "Experience required",
+          "order": 1
+        },
+        {
+          "value": "no_wasta",
+          "labelAr": "لا أعرف أحداً في القطاع",
+          "labelEn": "No connections",
+          "order": 2
+        },
+        {
+          "value": "no_vacancies",
+          "labelAr": "قلة الوظائف المعلنة",
+          "labelEn": "Few advertised vacancies",
+          "order": 3
+        },
+        {
+          "value": "no_reply",
+          "labelAr": "لا أتلقى رداً على تقديماتي",
+          "labelEn": "No replies to applications",
+          "order": 4
+        },
+        {
+          "value": "no_skills",
+          "labelAr": "ينقصني تدريب عملي",
+          "labelEn": "I lack practical training",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحدد ما تحله المنصة فعلاً"
+    },
+    {
+      "code": "JS-04",
+      "accountTypes": [
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "JOBSEEKER",
+      "sectionTitleAr": "الباحث عن عمل أو تدريب",
+      "sectionTitleEn": "Job & Training Seeker",
+      "sectionOrder": 6,
+      "questionOrder": 4,
+      "textAr": "ما مدى اهتمامكم بمنصة تربط التدريب بفرصة عمل فعلية؟",
+      "textEn": "Interest in a platform linking training to a real job",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INDR-01",
+        "op": "eq",
+        "value": "jobseeker"
+      },
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "اختبار ربط خط التدريب بخط التوظيف"
+    },
+    {
+      "code": "FL-01",
+      "accountTypes": [
+        "COMPANY",
+        "CONTRACTOR",
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "FLEET",
+      "sectionTitleAr": "أسطول النقل",
+      "sectionTitleEn": "Transport Fleet",
+      "sectionOrder": 40,
+      "questionOrder": 1,
+      "textAr": "هل تملكون أسطول نقل خاص؟",
+      "textEn": "Do you own a transport fleet?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_service",
+          "labelAr": "نعم، ونقدّم خدمة نقل للغير",
+          "labelEn": "Yes, and we offer transport services",
+          "order": 1
+        },
+        {
+          "value": "yes_internal",
+          "labelAr": "نعم، لاستخدامنا فقط",
+          "labelEn": "Yes, for internal use only",
+          "order": 2
+        },
+        {
+          "value": "no_fl",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "سؤال البوابة لقسم الأسطول — يظهر للشركات والمقاولين والموردين"
+    },
+    {
+      "code": "FL-02",
+      "accountTypes": [
+        "COMPANY",
+        "CONTRACTOR",
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "FLEET",
+      "sectionTitleAr": "أسطول النقل",
+      "sectionTitleEn": "Transport Fleet",
+      "sectionOrder": 40,
+      "questionOrder": 2,
+      "textAr": "كم مركبة في أسطولكم؟",
+      "textEn": "How many vehicles in your fleet?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "FL-01",
+        "op": "neq",
+        "value": "no_fl"
+      },
+      "options": [
+        {
+          "value": "1_3f",
+          "labelAr": "١–٣",
+          "labelEn": "1–3",
+          "order": 1
+        },
+        {
+          "value": "4_10f",
+          "labelAr": "٤–١٠",
+          "labelEn": "4–10",
+          "order": 2
+        },
+        {
+          "value": "11_30f",
+          "labelAr": "١١–٣٠",
+          "labelEn": "11–30",
+          "order": 3
+        },
+        {
+          "value": "gt30f",
+          "labelAr": "أكثر من ٣٠",
+          "labelEn": "Over 30",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "حجم الطاقة المتاحة للسوق"
+    },
+    {
+      "code": "FL-03",
+      "accountTypes": [
+        "COMPANY",
+        "CONTRACTOR",
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "FLEET",
+      "sectionTitleAr": "أسطول النقل",
+      "sectionTitleEn": "Transport Fleet",
+      "sectionOrder": 40,
+      "questionOrder": 3,
+      "textAr": "ما نسبة استغلال أسطولكم؟",
+      "textEn": "Fleet utilization rate?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "FL-01",
+        "op": "neq",
+        "value": "no_fl"
+      },
+      "options": [
+        {
+          "value": "lt40",
+          "labelAr": "أقل من ٤٠٪",
+          "labelEn": "Under 40%",
+          "order": 1
+        },
+        {
+          "value": "40_70",
+          "labelAr": "٤٠–٧٠٪",
+          "labelEn": "40–70%",
+          "order": 2
+        },
+        {
+          "value": "71_90",
+          "labelAr": "٧١–٩٠٪",
+          "labelEn": "71–90%",
+          "order": 3
+        },
+        {
+          "value": "gt90",
+          "labelAr": "أكثر من ٩٠٪",
+          "labelEn": "Over 90%",
+          "order": 4
+        },
+        {
+          "value": "unknown_fl",
+          "labelAr": "لا نقيسها",
+          "labelEn": "Not measured",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐ الطاقة العاطلة = ما تبيعه المنصة"
+    },
+    {
+      "code": "FL-04",
+      "accountTypes": [
+        "COMPANY",
+        "CONTRACTOR",
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "FLEET",
+      "sectionTitleAr": "أسطول النقل",
+      "sectionTitleEn": "Transport Fleet",
+      "sectionOrder": 40,
+      "questionOrder": 4,
+      "textAr": "ما مدى اهتمامكم بتأجير الطاقة الفائضة من أسطولكم عبر المنصة؟",
+      "textEn": "Interest in monetizing spare fleet capacity via the platform",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": {
+        "questionCode": "FL-01",
+        "op": "neq",
+        "value": "no_fl"
+      },
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "يحوّل تكلفة ثابتة إلى إيراد"
+    },
+    {
+      "code": "INV-01",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 1,
+      "textAr": "كيف تديرون المخزون اليوم؟",
+      "textEn": "How do you manage inventory today?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "erp",
+          "labelAr": "نظام ERP متكامل",
+          "labelEn": "Full ERP system",
+          "order": 1
+        },
+        {
+          "value": "accounting",
+          "labelAr": "برنامج محاسبة فيه مخزون",
+          "labelEn": "Accounting software with inventory",
+          "order": 2
+        },
+        {
+          "value": "pos",
+          "labelAr": "نظام نقاط بيع",
+          "labelEn": "POS system",
+          "order": 3
+        },
+        {
+          "value": "excel_inv",
+          "labelAr": "ملفات إكسل",
+          "labelEn": "Excel files",
+          "order": 4
+        },
+        {
+          "value": "paper_inv",
+          "labelAr": "دفاتر ورقية",
+          "labelEn": "Paper ledgers",
+          "order": 5
+        },
+        {
+          "value": "none_inv",
+          "labelAr": "لا نتابع المخزون بنظام",
+          "labelEn": "No system",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "⭐ يحدد جدوى الربط التلقائي أصلاً"
+    },
+    {
+      "code": "INV-02",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 2,
+      "textAr": "ما اسم النظام الذي تستخدمونه؟",
+      "textEn": "Which system do you use?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INV-01",
+        "op": "in",
+        "value": [
+          "erp",
+          "accounting",
+          "pos"
+        ]
+      },
+      "options": [
+        {
+          "value": "sap",
+          "labelAr": "SAP",
+          "labelEn": "SAP",
+          "order": 1
+        },
+        {
+          "value": "oracle",
+          "labelAr": "Oracle",
+          "labelEn": "Oracle",
+          "order": 2
+        },
+        {
+          "value": "odoo",
+          "labelAr": "Odoo",
+          "labelEn": "Odoo",
+          "order": 3
+        },
+        {
+          "value": "dynamics",
+          "labelAr": "Microsoft Dynamics",
+          "labelEn": "Microsoft Dynamics",
+          "order": 4
+        },
+        {
+          "value": "zoho",
+          "labelAr": "Zoho",
+          "labelEn": "Zoho",
+          "order": 5
+        },
+        {
+          "value": "quickbooks",
+          "labelAr": "QuickBooks",
+          "labelEn": "QuickBooks",
+          "order": 6
+        },
+        {
+          "value": "tally",
+          "labelAr": "Tally",
+          "labelEn": "Tally",
+          "order": 7
+        },
+        {
+          "value": "focus",
+          "labelAr": "Focus",
+          "labelEn": "Focus",
+          "order": 8
+        },
+        {
+          "value": "sage",
+          "labelAr": "Sage",
+          "labelEn": "Sage",
+          "order": 9
+        },
+        {
+          "value": "local_sys",
+          "labelAr": "نظام محلي مخصص",
+          "labelEn": "Custom local system",
+          "order": 10
+        },
+        {
+          "value": "none_sys",
+          "labelAr": "لا يوجد",
+          "labelEn": "None",
+          "order": 11
+        }
+      ],
+      "scale": null,
+      "note": "⭐ يعطيك قائمة أولويات التكامل مرتّبة بالطلب الفعلي — ونظام ABC ذكر SAP و Odoo كأول تكامل"
+    },
+    {
+      "code": "INV-03",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 3,
+      "textAr": "هل يوفّر نظامكم إمكانية التصدير الآلي أو الربط (API)؟",
+      "textEn": "Does your system support API or automatic export?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "INV-01",
+        "op": "in",
+        "value": [
+          "erp",
+          "accounting",
+          "pos"
+        ]
+      },
+      "options": [
+        {
+          "value": "yes_api",
+          "labelAr": "نعم، يوجد API",
+          "labelEn": "Yes, it has an API",
+          "order": 1
+        },
+        {
+          "value": "yes_export",
+          "labelAr": "نعم، تصدير ملفات مجدول",
+          "labelEn": "Yes, scheduled file export",
+          "order": 2
+        },
+        {
+          "value": "manual_only",
+          "labelAr": "تصدير يدوي فقط",
+          "labelEn": "Manual export only",
+          "order": 3
+        },
+        {
+          "value": "no_api",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 4
+        },
+        {
+          "value": "dont_know_api",
+          "labelAr": "لا أعرف",
+          "labelEn": "I don't know",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يفصل من يمكن ربطه تلقائياً عمّن يحتاج رفعاً يدوياً"
+    },
+    {
+      "code": "INV-04",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 4,
+      "textAr": "كل كم تتحدّث كميات المخزون لديكم؟",
+      "textEn": "How often is inventory updated?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "realtime",
+          "labelAr": "لحظياً مع كل حركة",
+          "labelEn": "Real time",
+          "order": 1
+        },
+        {
+          "value": "daily_inv",
+          "labelAr": "يومياً",
+          "labelEn": "Daily",
+          "order": 2
+        },
+        {
+          "value": "weekly_inv",
+          "labelAr": "أسبوعياً",
+          "labelEn": "Weekly",
+          "order": 3
+        },
+        {
+          "value": "monthly_inv",
+          "labelAr": "شهرياً",
+          "labelEn": "Monthly",
+          "order": 4
+        },
+        {
+          "value": "stocktake",
+          "labelAr": "عند الجرد فقط",
+          "labelEn": "Only at stocktake",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحدد إن كانت الكمية المعروضة على المنصة ستكون موثوقة"
+    },
+    {
+      "code": "INV-05",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 5,
+      "textAr": "هل توافقون على ربط مخزونكم بالمنصة ليظهر التوفر تلقائياً؟",
+      "textEn": "Would you link your inventory so availability shows automatically?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_full",
+          "labelAr": "نعم، ربط كامل بالكميات",
+          "labelEn": "Yes, full sync with quantities",
+          "order": 1
+        },
+        {
+          "value": "yes_availability",
+          "labelAr": "نعم، لكن التوفر فقط دون كميات",
+          "labelEn": "Yes, availability only, no quantities",
+          "order": 2
+        },
+        {
+          "value": "yes_manual",
+          "labelAr": "نعم، لكن برفع يدوي دوري",
+          "labelEn": "Yes, but manual periodic upload",
+          "order": 3
+        },
+        {
+          "value": "maybe",
+          "labelAr": "ربما، أحتاج تفاصيل أكثر",
+          "labelEn": "Maybe, I need more detail",
+          "order": 4
+        },
+        {
+          "value": "no_sync",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ السؤال المحوري لمنتج «المخزون الحي» — إن رفض الأغلبية فالمنتج يُبنى يدوياً"
+    },
+    {
+      "code": "INV-06",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 6,
+      "textAr": "ما سبب تحفّظكم على الربط؟",
+      "textEn": "Why the reservation about linking?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": false,
+      "showIf": {
+        "questionCode": "INV-05",
+        "op": "in",
+        "value": [
+          "maybe",
+          "no_sync",
+          "yes_manual",
+          "yes_availability"
+        ]
+      },
+      "options": [
+        {
+          "value": "competitors",
+          "labelAr": "لا أريد منافسيّ أن يعرفوا مخزوني",
+          "labelEn": "Competitors would see my stock",
+          "order": 1
+        },
+        {
+          "value": "price_expose",
+          "labelAr": "سيكشف أسعاري",
+          "labelEn": "It would expose my prices",
+          "order": 2
+        },
+        {
+          "value": "tech_hard",
+          "labelAr": "صعوبة تقنية",
+          "labelEn": "Technically difficult",
+          "order": 3
+        },
+        {
+          "value": "data_trust",
+          "labelAr": "لا أثق بأمان البيانات",
+          "labelEn": "Data security concerns",
+          "order": 4
+        },
+        {
+          "value": "no_time",
+          "labelAr": "لا وقت لدينا لإدارته",
+          "labelEn": "No time to manage it",
+          "order": 5
+        },
+        {
+          "value": "inaccurate",
+          "labelAr": "بياناتي غير دقيقة أصلاً",
+          "labelEn": "My data isn't accurate anyway",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "يفسّر الرفض ويحدد كيف يُعالَج"
+    },
+    {
+      "code": "INV-07",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 7,
+      "textAr": "كم صنفاً يمكنكم عرضه على المنصة في البداية؟",
+      "textEn": "How many SKUs could you list initially?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt20",
+          "labelAr": "أقل من ٢٠",
+          "labelEn": "Under 20",
+          "order": 1
+        },
+        {
+          "value": "20_100",
+          "labelAr": "٢٠–١٠٠",
+          "labelEn": "20–100",
+          "order": 2
+        },
+        {
+          "value": "101_500",
+          "labelAr": "١٠١–٥٠٠",
+          "labelEn": "101–500",
+          "order": 3
+        },
+        {
+          "value": "gt500",
+          "labelAr": "أكثر من ٥٠٠",
+          "labelEn": "Over 500",
+          "order": 4
+        },
+        {
+          "value": "all_inv",
+          "labelAr": "كل ما لدينا",
+          "labelEn": "Everything we carry",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "تخطيط حجم الكتالوج الفعلي عند الإطلاق"
+    },
+    {
+      "code": "INV-08",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 8,
+      "textAr": "هل لديكم صور ومواصفات جاهزة للمنتجات؟",
+      "textEn": "Do you have product images and specs ready?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_all_img",
+          "labelAr": "نعم، لكل المنتجات",
+          "labelEn": "Yes, for all products",
+          "order": 1
+        },
+        {
+          "value": "yes_some_img",
+          "labelAr": "نعم، لبعضها",
+          "labelEn": "Yes, for some",
+          "order": 2
+        },
+        {
+          "value": "supplier_img",
+          "labelAr": "صور من الشركة المصنّعة",
+          "labelEn": "Manufacturer images",
+          "order": 3
+        },
+        {
+          "value": "no_img",
+          "labelAr": "لا يوجد",
+          "labelEn": "None",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "بدونها الكتالوج لا يبيع — ويحدد حجم عمل الإدخال"
+    },
+    {
+      "code": "INV-09",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 9,
+      "textAr": "من سيدير بيانات منتجاتكم على المنصة؟",
+      "textEn": "Who would manage your product data on the platform?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "owner_inv",
+          "labelAr": "المالك بنفسه",
+          "labelEn": "The owner",
+          "order": 1
+        },
+        {
+          "value": "sales_inv",
+          "labelAr": "موظف مبيعات",
+          "labelEn": "A sales employee",
+          "order": 2
+        },
+        {
+          "value": "accountant_inv",
+          "labelAr": "المحاسب",
+          "labelEn": "The accountant",
+          "order": 3
+        },
+        {
+          "value": "it_inv",
+          "labelAr": "مسؤول تقني",
+          "labelEn": "IT staff",
+          "order": 4
+        },
+        {
+          "value": "nobody",
+          "labelAr": "لا أحد متفرّغ لذلك",
+          "labelEn": "Nobody is available",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐ «لا أحد» تعني أن المنصة يجب أن تتولى الإدخال نيابةً عنه وإلا لن يُطلق"
+    },
+    {
+      "code": "INV-10",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "INVENTORY_SYNC",
+      "sectionTitleAr": "المخزون وربطه بالمنصة",
+      "sectionTitleEn": "Inventory & Platform Sync",
+      "sectionOrder": 25,
+      "questionOrder": 10,
+      "textAr": "ما مدى اهتمامكم بأن تصل الطلبات من المنصة مباشرة إلى نظامكم؟",
+      "textEn": "Interest in orders flowing straight into your system",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "يختبر التكامل ثنائي الاتجاه — لا عرضاً فقط بل استقبال أوامر"
+    },
+    {
+      "code": "AIS-01",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 1,
+      "textAr": "كم ساعة أسبوعياً تقضونها في إعداد عروض الأسعار؟",
+      "textEn": "Hours per week spent preparing quotations",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt3",
+          "labelAr": "أقل من ٣ ساعات",
+          "labelEn": "Under 3 h",
+          "order": 1
+        },
+        {
+          "value": "3_8",
+          "labelAr": "٣–٨ ساعات",
+          "labelEn": "3–8 h",
+          "order": 2
+        },
+        {
+          "value": "9_20",
+          "labelAr": "٩–٢٠ ساعة",
+          "labelEn": "9–20 h",
+          "order": 3
+        },
+        {
+          "value": "gt20",
+          "labelAr": "أكثر من ٢٠ ساعة",
+          "labelEn": "Over 20 h",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐ يحوّل الوفر إلى رقم — أساس حساب العائد"
+    },
+    {
+      "code": "AIS-02",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 2,
+      "textAr": "هل خسرتم طلبات بسبب تأخّركم في الرد؟",
+      "textEn": "Have you lost orders because you replied late?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_many",
+          "labelAr": "نعم، كثيراً",
+          "labelEn": "Yes, many",
+          "order": 1
+        },
+        {
+          "value": "yes_few",
+          "labelAr": "نعم، أحياناً",
+          "labelEn": "Yes, sometimes",
+          "order": 2
+        },
+        {
+          "value": "no_late",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 3
+        },
+        {
+          "value": "dont_know_late",
+          "labelAr": "لا نعرف",
+          "labelEn": "We don't know",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ البحث يقول إن هذا من أهم أسباب خسارة الطلب — والرسالة التي تقنع المورّد ليست «اكشف سعرك» بل «ردّ أسرع»"
+    },
+    {
+      "code": "AIS-03",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 3,
+      "textAr": "هل تقبلون أن يولّد النظام عرض سعر نيابةً عنكم من أسعاركم المسجّلة؟",
+      "textEn": "Would you let the system auto-generate quotes from your stored prices?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_auto",
+          "labelAr": "نعم، إرسال آلي كامل",
+          "labelEn": "Yes, fully automatic",
+          "order": 1
+        },
+        {
+          "value": "yes_review",
+          "labelAr": "نعم، بعد مراجعتي واعتمادي",
+          "labelEn": "Yes, after my review",
+          "order": 2
+        },
+        {
+          "value": "draft_only",
+          "labelAr": "مسودة فقط أعدّلها",
+          "labelEn": "Draft only, I edit it",
+          "order": 3
+        },
+        {
+          "value": "no_auto",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐ يحدد درجة الأتمتة المقبولة — Parspec تدّعي تحسين ٥٠–١٠٠٪ في إنتاجية إعداد العروض"
+    },
+    {
+      "code": "AIS-04",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 4,
+      "textAr": "ما مدى اهتمامكم بتنبيه فوري: «طلب جديد يطابق مخزونك»؟",
+      "textEn": "Interest in an instant alert: a new request matches your stock",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "المطابقة الذكية — المرحلة الأولى في خارطة الذكاء الاصطناعي"
+    },
+    {
+      "code": "AIS-05",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 5,
+      "textAr": "ما مدى اهتمامكم بمعرفة موقع سعركم من متوسط السوق قبل إرسال العرض؟",
+      "textEn": "Interest in seeing how your price compares to market average before sending",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐ يستخدم مؤشر الأسعار — ميزتك الدفاعية — لصالح المورّد لا ضده"
+    },
+    {
+      "code": "AIS-06",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 6,
+      "textAr": "ما مدى اهتمامكم بتوصية بالسعر الذي يرفع احتمال فوزكم بالطلب؟",
+      "textEn": "Interest in a recommended price that raises your win probability",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "تحويل المؤشر من معلومة إلى قرار"
+    },
+    {
+      "code": "AIS-07",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 7,
+      "textAr": "ما مدى اهتمامكم بتوقّع ما سيُطلب من مواد الشهر القادم؟",
+      "textEn": "Interest in forecasting what will be demanded next month",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "التنبؤ بالطلب — يقلّل المخزون الراكد ويمنع نفاد الأصناف"
+    },
+    {
+      "code": "AIS-08",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 8,
+      "textAr": "ما مدى اهتمامكم بتقييم ائتماني للمشتري قبل منحه الآجل؟",
+      "textEn": "Interest in a credit score for buyers before granting terms",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐ يوسّع مبيعاته لا يقيّدها — الرسالة: «بِع بالآجل بثقة» لا «ارفض الآجل»"
+    },
+    {
+      "code": "AIS-09",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 9,
+      "textAr": "لو رفعت هذه الأدوات مبيعاتكم ١٠٪، كم تقبلون أن تدفعوا مقابلها؟",
+      "textEn": "If these tools raised your sales 10%, what would you pay?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "nothing_ai",
+          "labelAr": "لا شيء، أتوقعها ضمن الخدمة",
+          "labelEn": "Nothing, I expect it included",
+          "order": 1
+        },
+        {
+          "value": "up10_ai",
+          "labelAr": "حتى ١٠٪ من الزيادة",
+          "labelEn": "Up to 10% of the uplift",
+          "order": 2
+        },
+        {
+          "value": "up25_ai",
+          "labelAr": "حتى ٢٥٪ من الزيادة",
+          "labelEn": "Up to 25% of the uplift",
+          "order": 3
+        },
+        {
+          "value": "fixed_ai",
+          "labelAr": "أفضّل اشتراكاً شهرياً ثابتاً",
+          "labelEn": "I prefer a fixed monthly fee",
+          "order": 4
+        },
+        {
+          "value": "commission_ai",
+          "labelAr": "أفضّل عمولة على الصفقة",
+          "labelEn": "I prefer a per-deal commission",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ يختبر نموذج «الدفع مقابل النتيجة» بدل الاشتراك الثابت"
+    },
+    {
+      "code": "AIS-10",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "AI_SELLER",
+      "sectionTitleAr": "الذكاء الاصطناعي في البيع",
+      "sectionTitleEn": "AI for Selling",
+      "sectionOrder": 60,
+      "questionOrder": 10,
+      "textAr": "هل توافقون على استخدام بيانات صفقاتكم — بشكل مجهول — لبناء مؤشر أسعار يستفيد منه الجميع؟",
+      "textEn": "Would you allow anonymized deal data to build a shared price index?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_data",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "yes_if_benefit",
+          "labelAr": "نعم، بشرط أن أستفيد من المؤشر",
+          "labelEn": "Yes, if I get access to the index",
+          "order": 2
+        },
+        {
+          "value": "yes_aggregated",
+          "labelAr": "نعم، إذا كانت مجمّعة تماماً ولا تُنسب إلينا",
+          "labelEn": "Yes, if fully aggregated and unattributable",
+          "order": 3
+        },
+        {
+          "value": "no_data",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐⭐ بدون موافقة الأغلبية لا يقوم مؤشر الأسعار — وهو الميزة الدفاعية الوحيدة للمنصة"
+    },
+    {
+      "code": "AIQ-01",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 1,
+      "textAr": "كيف تحسبون الكميات اليوم؟",
+      "textEn": "How do you calculate quantities today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "manual_dwg",
+          "labelAr": "يدوياً من المخططات الورقية",
+          "labelEn": "Manually from paper drawings",
+          "order": 1
+        },
+        {
+          "value": "cad",
+          "labelAr": "من ملفات CAD",
+          "labelEn": "From CAD files",
+          "order": 2
+        },
+        {
+          "value": "excel_q",
+          "labelAr": "جداول إكسل",
+          "labelEn": "Excel sheets",
+          "order": 3
+        },
+        {
+          "value": "takeoff_sw",
+          "labelAr": "برنامج حصر متخصص",
+          "labelEn": "Dedicated takeoff software",
+          "order": 4
+        },
+        {
+          "value": "bim_q",
+          "labelAr": "من نموذج BIM",
+          "labelEn": "From a BIM model",
+          "order": 5
+        },
+        {
+          "value": "consultant_q",
+          "labelAr": "الاستشاري يزوّدنا بها",
+          "labelEn": "Provided by the consultant",
+          "order": 6
+        },
+        {
+          "value": "estimate_q",
+          "labelAr": "تقدير تقريبي بالخبرة",
+          "labelEn": "Rough estimate from experience",
+          "order": 7
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي — «تقدير تقريبي» وحده يبرّر المنتج"
+    },
+    {
+      "code": "AIQ-02",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 2,
+      "textAr": "ما البرنامج الذي تستخدمونه للحصر؟",
+      "textEn": "Which takeoff software do you use?",
+      "answerType": "SINGLE_CHOICE",
+      "required": false,
+      "showIf": {
+        "questionCode": "AIQ-01",
+        "op": "includes",
+        "value": "takeoff_sw"
+      },
+      "options": [
+        {
+          "value": "autocad",
+          "labelAr": "AutoCAD",
+          "labelEn": "AutoCAD",
+          "order": 1
+        },
+        {
+          "value": "revit",
+          "labelAr": "Revit",
+          "labelEn": "Revit",
+          "order": 2
+        },
+        {
+          "value": "planswift",
+          "labelAr": "PlanSwift",
+          "labelEn": "PlanSwift",
+          "order": 3
+        },
+        {
+          "value": "bluebeam",
+          "labelAr": "Bluebeam",
+          "labelEn": "Bluebeam",
+          "order": 4
+        },
+        {
+          "value": "costx",
+          "labelAr": "CostX",
+          "labelEn": "CostX",
+          "order": 5
+        },
+        {
+          "value": "cubicost",
+          "labelAr": "Cubicost / Glodon",
+          "labelEn": "Cubicost / Glodon",
+          "order": 6
+        },
+        {
+          "value": "excel_only",
+          "labelAr": "إكسل فقط",
+          "labelEn": "Excel only",
+          "order": 7
+        },
+        {
+          "value": "none_q",
+          "labelAr": "لا نستخدم برنامجاً",
+          "labelEn": "None",
+          "order": 8
+        }
+      ],
+      "scale": null,
+      "note": "يحدد شركاء التكامل بدل بناء أداة منافسة من الصفر"
+    },
+    {
+      "code": "AIQ-03",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 3,
+      "textAr": "ما صيغة الملفات التي تستلمونها عادةً؟",
+      "textEn": "What file formats do you usually receive?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "pdf_vector",
+          "labelAr": "PDF من برنامج (نصوص قابلة للتحديد)",
+          "labelEn": "Vector PDF",
+          "order": 1
+        },
+        {
+          "value": "pdf_scan",
+          "labelAr": "PDF مسحوب ضوئياً",
+          "labelEn": "Scanned PDF",
+          "order": 2
+        },
+        {
+          "value": "dwg",
+          "labelAr": "ملفات DWG / DXF",
+          "labelEn": "DWG / DXF",
+          "order": 3
+        },
+        {
+          "value": "bim_file",
+          "labelAr": "نماذج BIM (RVT / IFC)",
+          "labelEn": "BIM models",
+          "order": 4
+        },
+        {
+          "value": "paper_q",
+          "labelAr": "مخططات ورقية",
+          "labelEn": "Paper drawings",
+          "order": 5
+        },
+        {
+          "value": "images_q",
+          "labelAr": "صور من الجوال",
+          "labelEn": "Phone photos",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "⭐ حاسم تقنياً: PDF مسحوب ضوئياً أصعب بكثير من DWG — يحدد جدوى الحصر الآلي أصلاً"
+    },
+    {
+      "code": "AIQ-04",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 4,
+      "textAr": "كم يستغرق حصر كميات مشروع متوسط؟",
+      "textEn": "How long does takeoff for a medium project take?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt1d_q",
+          "labelAr": "أقل من يوم",
+          "labelEn": "Under a day",
+          "order": 1
+        },
+        {
+          "value": "1_3d_q",
+          "labelAr": "١–٣ أيام",
+          "labelEn": "1–3 days",
+          "order": 2
+        },
+        {
+          "value": "4_7d_q",
+          "labelAr": "٤–٧ أيام",
+          "labelEn": "4–7 days",
+          "order": 3
+        },
+        {
+          "value": "1_3w_q",
+          "labelAr": "١–٣ أسابيع",
+          "labelEn": "1–3 weeks",
+          "order": 4
+        },
+        {
+          "value": "gt3w_q",
+          "labelAr": "أكثر من ٣ أسابيع",
+          "labelEn": "Over 3 weeks",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐ الدراسة الأكاديمية تقول ٧١٪ توفير وقت — هذا الرقم هو المقام في المعادلة"
+    },
+    {
+      "code": "AIQ-05",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 5,
+      "textAr": "من ينفّذ الحصر لديكم؟",
+      "textEn": "Who performs the takeoff?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "tech_office",
+          "labelAr": "المكتب الفني",
+          "labelEn": "In-house technical office",
+          "order": 1
+        },
+        {
+          "value": "owner_q",
+          "labelAr": "المالك أو المدير بنفسه",
+          "labelEn": "The owner/manager",
+          "order": 2
+        },
+        {
+          "value": "external_q",
+          "labelAr": "مكتب خارجي بأجر",
+          "labelEn": "An external paid office",
+          "order": 3
+        },
+        {
+          "value": "consultant_gives",
+          "labelAr": "الاستشاري",
+          "labelEn": "The consultant",
+          "order": 4
+        },
+        {
+          "value": "site_eng_q",
+          "labelAr": "مهندس الموقع",
+          "labelEn": "Site engineer",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحدد المستخدم الفعلي للأداة"
+    },
+    {
+      "code": "AIQ-06",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 6,
+      "textAr": "ما الفرق المعتاد بين الكميات المقدّرة والمنفّذة فعلياً؟",
+      "textEn": "Typical gap between estimated and actual quantities",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt5_q",
+          "labelAr": "أقل من ٥٪",
+          "labelEn": "Under 5%",
+          "order": 1
+        },
+        {
+          "value": "5_10_q",
+          "labelAr": "٥–١٠٪",
+          "labelEn": "5–10%",
+          "order": 2
+        },
+        {
+          "value": "11_20_q",
+          "labelAr": "١١–٢٠٪",
+          "labelEn": "11–20%",
+          "order": 3
+        },
+        {
+          "value": "gt20_q",
+          "labelAr": "أكثر من ٢٠٪",
+          "labelEn": "Over 20%",
+          "order": 4
+        },
+        {
+          "value": "dont_measure_q",
+          "labelAr": "لا نقيسه",
+          "labelEn": "We don't measure it",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐ يقيس حجم الهدر بالرقم — وهو ما ستقلّله المنصة"
+    },
+    {
+      "code": "AIQ-07",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 7,
+      "textAr": "هل خسرتم مالاً بسبب خطأ في الكميات؟",
+      "textEn": "Have you lost money due to a quantity error?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_big",
+          "labelAr": "نعم، خسارة كبيرة",
+          "labelEn": "Yes, a large loss",
+          "order": 1
+        },
+        {
+          "value": "yes_small_q",
+          "labelAr": "نعم، خسائر بسيطة متكررة",
+          "labelEn": "Yes, small recurring losses",
+          "order": 2
+        },
+        {
+          "value": "no_q",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 3
+        },
+        {
+          "value": "dont_know_q",
+          "labelAr": "لا نعرف",
+          "labelEn": "We don't know",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "يحوّل المشكلة من رأي إلى واقعة مالية"
+    },
+    {
+      "code": "AIQ-08",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 8,
+      "textAr": "ما مدى اهتمامكم برفع المخطط والحصول على الكميات آلياً؟",
+      "textEn": "Interest in uploading a drawing and getting quantities automatically",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "اختبار منتج الحصر الآلي"
+    },
+    {
+      "code": "AIQ-09",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 9,
+      "textAr": "هل تثقون بحصر آلي دقته ٩٠٪ إذا راجعه مهندسكم قبل الاعتماد؟",
+      "textEn": "Would you trust a 90%-accurate auto takeoff reviewed by your engineer?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_trust",
+          "labelAr": "نعم، هذا يكفينا",
+          "labelEn": "Yes, that is enough",
+          "order": 1
+        },
+        {
+          "value": "yes_if_95",
+          "labelAr": "نعم لكن أحتاج ٩٥٪ فأكثر",
+          "labelEn": "Yes but I need 95%+",
+          "order": 2
+        },
+        {
+          "value": "only_draft",
+          "labelAr": "أستخدمه كمسودة أولية فقط",
+          "labelEn": "Only as a first draft",
+          "order": 3
+        },
+        {
+          "value": "no_trust",
+          "labelAr": "لا أثق بحصر آلي",
+          "labelEn": "I would not trust it",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ الدقة الواقعية في السوق ٨٥–٩٠٪ لا ٩٩٪ — هذا السؤال يختبر القبول بالواقع لا بالوعد"
+    },
+    {
+      "code": "AIQ-10",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 10,
+      "textAr": "ما مدى اهتمامكم بتسعير بنود BOQ آلياً من أسعار صفقات حقيقية على المنصة؟",
+      "textEn": "Interest in auto-pricing BOQ items from real platform transaction prices",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐⭐⭐ هذا هو المنتج الذي لا يملكه أحد في العالم لسوق الخليج — لا يحتاج قراءة مخططات، ويستخدم بياناتك الحصرية"
+    },
+    {
+      "code": "AIQ-11",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_QUANTITIES",
+      "sectionTitleAr": "الكميات والحصر",
+      "sectionTitleEn": "Quantities & Takeoff",
+      "sectionOrder": 30,
+      "questionOrder": 11,
+      "textAr": "ما مدى اهتمامكم بإنذار: «سعر هذا البند في عرضك أعلى/أقل من السوق بنسبة كذا»؟",
+      "textEn": "Interest in an alert: this line item is above/below market by X%",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "يمنع العرض الخاسر قبل تقديمه — وهو الأثر المالي الأكبر لمقاول الباطن والورشة"
+    },
+    {
+      "code": "AIT-01",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TRACKING",
+      "sectionTitleAr": "متابعة التنفيذ",
+      "sectionTitleEn": "Execution Tracking",
+      "sectionOrder": 35,
+      "questionOrder": 1,
+      "textAr": "كيف تتابعون تقدّم العمل في الموقع اليوم؟",
+      "textEn": "How do you track site progress today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "daily_visit",
+          "labelAr": "زيارة يومية للموقع",
+          "labelEn": "Daily site visit",
+          "order": 1
+        },
+        {
+          "value": "supervisor_report",
+          "labelAr": "تقرير المشرف",
+          "labelEn": "Supervisor report",
+          "order": 2
+        },
+        {
+          "value": "whatsapp_photos",
+          "labelAr": "صور عبر واتساب",
+          "labelEn": "WhatsApp photos",
+          "order": 3
+        },
+        {
+          "value": "excel_track",
+          "labelAr": "جدول إكسل",
+          "labelEn": "Excel tracker",
+          "order": 4
+        },
+        {
+          "value": "pm_software",
+          "labelAr": "برنامج إدارة مشاريع",
+          "labelEn": "PM software",
+          "order": 5
+        },
+        {
+          "value": "no_tracking",
+          "labelAr": "لا يوجد نظام متابعة",
+          "labelEn": "No tracking system",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي — «صور واتساب» هي الإجابة الأشيع، وهي مدخل المنتج"
+    },
+    {
+      "code": "AIT-02",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TRACKING",
+      "sectionTitleAr": "متابعة التنفيذ",
+      "sectionTitleEn": "Execution Tracking",
+      "sectionOrder": 35,
+      "questionOrder": 2,
+      "textAr": "متى تكتشفون التأخير عادةً؟",
+      "textEn": "When do you usually discover a delay?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "immediately",
+          "labelAr": "فور حدوثه",
+          "labelEn": "Immediately",
+          "order": 1
+        },
+        {
+          "value": "within_week",
+          "labelAr": "خلال أسبوع",
+          "labelEn": "Within a week",
+          "order": 2
+        },
+        {
+          "value": "within_month",
+          "labelAr": "خلال شهر",
+          "labelEn": "Within a month",
+          "order": 3
+        },
+        {
+          "value": "at_milestone",
+          "labelAr": "عند مرحلة تسليم",
+          "labelEn": "At a milestone",
+          "order": 4
+        },
+        {
+          "value": "at_handover",
+          "labelAr": "عند التسليم النهائي",
+          "labelEn": "At final handover",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ «عند التسليم» = خسارة مؤكدة. هذا السؤال يقيس قيمة الإنذار المبكر مباشرة"
+    },
+    {
+      "code": "AIT-03",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TRACKING",
+      "sectionTitleAr": "متابعة التنفيذ",
+      "sectionTitleEn": "Execution Tracking",
+      "sectionOrder": 35,
+      "questionOrder": 3,
+      "textAr": "ما نسبة مشاريعكم التي تأخّرت عن الجدول؟",
+      "textEn": "Share of your projects that ran late",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt10_t",
+          "labelAr": "أقل من ١٠٪",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_30_t",
+          "labelAr": "١٠–٣٠٪",
+          "labelEn": "10–30%",
+          "order": 2
+        },
+        {
+          "value": "31_60_t",
+          "labelAr": "٣١–٦٠٪",
+          "labelEn": "31–60%",
+          "order": 3
+        },
+        {
+          "value": "gt60_t",
+          "labelAr": "أكثر من ٦٠٪",
+          "labelEn": "Over 60%",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "المرجع: ٧٥٪ من المشاريع الحكومية السعودية تجاوزت الجدول (MOMRA)"
+    },
+    {
+      "code": "AIT-04",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TRACKING",
+      "sectionTitleAr": "متابعة التنفيذ",
+      "sectionTitleEn": "Execution Tracking",
+      "sectionOrder": 35,
+      "questionOrder": 4,
+      "textAr": "ما أكثر أسباب التأخير لديكم؟",
+      "textEn": "Most common causes of delay",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "material_late",
+          "labelAr": "تأخر وصول المواد",
+          "labelEn": "Late materials",
+          "order": 1
+        },
+        {
+          "value": "labor_short",
+          "labelAr": "نقص العمالة",
+          "labelEn": "Labour shortage",
+          "order": 2
+        },
+        {
+          "value": "payment_delay_t",
+          "labelAr": "تأخر الدفعات",
+          "labelEn": "Payment delays",
+          "order": 3
+        },
+        {
+          "value": "design_change",
+          "labelAr": "تعديلات التصميم",
+          "labelEn": "Design changes",
+          "order": 4
+        },
+        {
+          "value": "approvals",
+          "labelAr": "تأخر الاعتمادات",
+          "labelEn": "Approval delays",
+          "order": 5
+        },
+        {
+          "value": "sub_delay",
+          "labelAr": "تأخر مقاول الباطن",
+          "labelEn": "Subcontractor delays",
+          "order": 6
+        },
+        {
+          "value": "rework_t",
+          "labelAr": "إعادة عمل بسبب أخطاء",
+          "labelEn": "Rework due to errors",
+          "order": 7
+        }
+      ],
+      "scale": null,
+      "note": "يربط التأخير بالسوق والعمالة — وكلاهما منتج في المنصة"
+    },
+    {
+      "code": "AIT-05",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TRACKING",
+      "sectionTitleAr": "متابعة التنفيذ",
+      "sectionTitleEn": "Execution Tracking",
+      "sectionOrder": 35,
+      "questionOrder": 5,
+      "textAr": "كم ساعة أسبوعياً تقضونها في إعداد التقارير والمتابعة؟",
+      "textEn": "Hours per week spent on reporting and follow-up",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt2_t",
+          "labelAr": "أقل من ساعتين",
+          "labelEn": "Under 2 h",
+          "order": 1
+        },
+        {
+          "value": "2_5_t",
+          "labelAr": "٢–٥ ساعات",
+          "labelEn": "2–5 h",
+          "order": 2
+        },
+        {
+          "value": "6_15_t",
+          "labelAr": "٦–١٥ ساعة",
+          "labelEn": "6–15 h",
+          "order": 3
+        },
+        {
+          "value": "gt15_t",
+          "labelAr": "أكثر من ١٥ ساعة",
+          "labelEn": "Over 15 h",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐ يحوّل «كسب الوقت» إلى رقم قابل للتسعير"
+    },
+    {
+      "code": "AIT-06",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TRACKING",
+      "sectionTitleAr": "متابعة التنفيذ",
+      "sectionTitleEn": "Execution Tracking",
+      "sectionOrder": 35,
+      "questionOrder": 6,
+      "textAr": "ما مدى اهتمامكم بتقرير تقدّم آلي يُبنى من صور الموقع؟",
+      "textEn": "Interest in an automatic progress report built from site photos",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "المرجع: Buildots حقّقت مع Intel توفير ٤٫٣٪ في تكلفة إعادة العمل و٤–٦ أسابيع تأخير مُتجنَّب"
+    },
+    {
+      "code": "AIT-07",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TRACKING",
+      "sectionTitleAr": "متابعة التنفيذ",
+      "sectionTitleEn": "Execution Tracking",
+      "sectionOrder": 35,
+      "questionOrder": 7,
+      "textAr": "ما مدى اهتمامكم بإنذار مبكر بالتأخر قبل وقوعه؟",
+      "textEn": "Interest in an early warning before a delay happens",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐ يقابل AIT-02 مباشرة"
+    },
+    {
+      "code": "AIT-08",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TRACKING",
+      "sectionTitleAr": "متابعة التنفيذ",
+      "sectionTitleEn": "Execution Tracking",
+      "sectionOrder": 35,
+      "questionOrder": 8,
+      "textAr": "ما مدى اهتمامكم بتأكيد استلام المواد في الموقع رقمياً (صورة + كمية + مطابقة للطلب)؟",
+      "textEn": "Interest in digital site delivery confirmation (photo + quantity + PO match)",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "يغلق الحلقة بين السوق والموقع — ويحمي المشتري والمورّد معاً"
+    },
+    {
+      "code": "AIT-09",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TIME",
+      "sectionTitleAr": "الوقت والقيمة",
+      "sectionTitleEn": "Time & Value",
+      "sectionOrder": 65,
+      "questionOrder": 1,
+      "textAr": "ما أكثر ثلاثة أعمال تستهلك وقتكم؟ (اختر ٣)",
+      "textEn": "Which three tasks consume most of your time? (pick 3)",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "t_quantities",
+          "labelAr": "حساب الكميات",
+          "labelEn": "Quantity takeoff",
+          "order": 1
+        },
+        {
+          "value": "t_pricing",
+          "labelAr": "إعداد التسعير والعروض",
+          "labelEn": "Pricing and bids",
+          "order": 2
+        },
+        {
+          "value": "t_suppliers",
+          "labelAr": "البحث عن موردين ومقارنة أسعار",
+          "labelEn": "Finding suppliers and comparing prices",
+          "order": 3
+        },
+        {
+          "value": "t_labor",
+          "labelAr": "تدبير العمالة",
+          "labelEn": "Sourcing labour",
+          "order": 4
+        },
+        {
+          "value": "t_followup",
+          "labelAr": "متابعة الموقع",
+          "labelEn": "Site follow-up",
+          "order": 5
+        },
+        {
+          "value": "t_collection",
+          "labelAr": "ملاحقة التحصيل",
+          "labelEn": "Chasing payments",
+          "order": 6
+        },
+        {
+          "value": "t_reports",
+          "labelAr": "إعداد التقارير",
+          "labelEn": "Reporting",
+          "order": 7
+        },
+        {
+          "value": "t_paperwork",
+          "labelAr": "المعاملات والأوراق",
+          "labelEn": "Paperwork and permits",
+          "order": 8
+        }
+      ],
+      "scale": null,
+      "note": "⭐ يكشف الأولوية بلغة المستخدم لا بلغة المنتج — ويوجّه ترتيب بناء أدوات الذكاء الاصطناعي"
+    },
+    {
+      "code": "AIT-10",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TIME",
+      "sectionTitleAr": "الوقت والقيمة",
+      "sectionTitleEn": "Time & Value",
+      "sectionOrder": 65,
+      "questionOrder": 2,
+      "textAr": "لو وفّرت المنصة عليكم ١٪ من تكلفة المشروع، كم تقبلون أن تدفعوا مقابلها؟",
+      "textEn": "If the platform saved you 1% of project cost, what would you pay?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "nothing_t",
+          "labelAr": "لا شيء",
+          "labelEn": "Nothing",
+          "order": 1
+        },
+        {
+          "value": "up10_t",
+          "labelAr": "حتى ١٠٪ من الوفر",
+          "labelEn": "Up to 10% of the saving",
+          "order": 2
+        },
+        {
+          "value": "up25_t",
+          "labelAr": "حتى ٢٥٪ من الوفر",
+          "labelEn": "Up to 25% of the saving",
+          "order": 3
+        },
+        {
+          "value": "up50_t",
+          "labelAr": "حتى ٥٠٪ من الوفر",
+          "labelEn": "Up to 50% of the saving",
+          "order": 4
+        },
+        {
+          "value": "fixed_t",
+          "labelAr": "أفضّل اشتراكاً ثابتاً",
+          "labelEn": "I prefer a fixed subscription",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ يختبر نموذج «الدفع مقابل الوفر» — أقوى نموذج تسعير ممكن، وهو ما يجعل المنصة مربحة للطرفين"
+    },
+    {
+      "code": "AIT-11",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "AI_TIME",
+      "sectionTitleAr": "الوقت والقيمة",
+      "sectionTitleEn": "Time & Value",
+      "sectionOrder": 65,
+      "questionOrder": 3,
+      "textAr": "هل توافقون على استخدام بيانات مشترياتكم — مجهولة — لبناء مؤشر أسعار تستفيدون منه؟",
+      "textEn": "Would you allow anonymized purchase data to build a price index you benefit from?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_data_b",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "yes_if_benefit_b",
+          "labelAr": "نعم، بشرط أن أستفيد من المؤشر",
+          "labelEn": "Yes, if I benefit from it",
+          "order": 2
+        },
+        {
+          "value": "yes_aggregated_b",
+          "labelAr": "نعم، إذا كانت مجمّعة ولا تُنسب إلينا",
+          "labelEn": "Yes, if fully aggregated",
+          "order": 3
+        },
+        {
+          "value": "no_data_b",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐⭐ الوجه الآخر لـ AIS-10 — المؤشر يحتاج موافقة الطرفين"
+    },
+    {
+      "code": "SELL-01",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 1,
+      "textAr": "ما فئات المواد التي توفّرونها؟",
+      "textEn": "Which material categories do you supply?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "concrete",
+          "labelAr": "خرسانة ومواد أساسية (أسمنت، رمل، بحص)",
+          "labelEn": "Concrete & base materials",
+          "order": 1
+        },
+        {
+          "value": "steel",
+          "labelAr": "حديد ومعادن",
+          "labelEn": "Steel & metals",
+          "order": 2
+        },
+        {
+          "value": "blocks",
+          "labelAr": "بلوك وطابوق ومواد بناء",
+          "labelEn": "Blocks & masonry",
+          "order": 3
+        },
+        {
+          "value": "finishes",
+          "labelAr": "تشطيبات (بلاط، رخام، دهانات)",
+          "labelEn": "Finishes (tiles, marble, paint)",
+          "order": 4
+        },
+        {
+          "value": "wood",
+          "labelAr": "أخشاب ومنتجاتها",
+          "labelEn": "Wood & wood products",
+          "order": 5
+        },
+        {
+          "value": "glass_alum",
+          "labelAr": "زجاج وألمنيوم",
+          "labelEn": "Glass & aluminium",
+          "order": 6
+        },
+        {
+          "value": "mep_elec",
+          "labelAr": "كهرباء ومواد كهربائية",
+          "labelEn": "Electrical materials",
+          "order": 7
+        },
+        {
+          "value": "mep_plumb",
+          "labelAr": "سباكة وأدوات صحية",
+          "labelEn": "Plumbing & sanitary",
+          "order": 8
+        },
+        {
+          "value": "hvac",
+          "labelAr": "تكييف وتهوية",
+          "labelEn": "HVAC",
+          "order": 9
+        },
+        {
+          "value": "insulation",
+          "labelAr": "عزل مائي وحراري",
+          "labelEn": "Waterproofing & insulation",
+          "order": 10
+        },
+        {
+          "value": "doors_windows",
+          "labelAr": "أبواب ونوافذ",
+          "labelEn": "Doors & windows",
+          "order": 11
+        },
+        {
+          "value": "safety",
+          "labelAr": "سلامة ومكافحة حريق",
+          "labelEn": "Safety & firefighting",
+          "order": 12
+        },
+        {
+          "value": "tools",
+          "labelAr": "عدد ومستهلكات",
+          "labelEn": "Tools & consumables",
+          "order": 13
+        },
+        {
+          "value": "equipment",
+          "labelAr": "معدات ومكائن",
+          "labelEn": "Equipment & machinery",
+          "order": 14
+        },
+        {
+          "value": "other",
+          "labelAr": "أخرى",
+          "labelEn": "Other",
+          "order": 15
+        }
+      ],
+      "scale": null,
+      "note": "أساس تصنيف السوق ومطابقة الطلبات بالموردين"
+    },
+    {
+      "code": "SELL-02",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 2,
+      "textAr": "ما طبيعة نشاطكم في هذه المواد؟",
+      "textEn": "What is your role in these materials?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "manufacturer",
+          "labelAr": "مصنّع",
+          "labelEn": "Manufacturer",
+          "order": 1
+        },
+        {
+          "value": "exclusive_agent",
+          "labelAr": "وكيل حصري",
+          "labelEn": "Exclusive agent",
+          "order": 2
+        },
+        {
+          "value": "authorized_dist",
+          "labelAr": "موزّع معتمد",
+          "labelEn": "Authorized distributor",
+          "order": 3
+        },
+        {
+          "value": "importer",
+          "labelAr": "مستورد مباشر",
+          "labelEn": "Direct importer",
+          "order": 4
+        },
+        {
+          "value": "wholesaler",
+          "labelAr": "تاجر جملة",
+          "labelEn": "Wholesaler",
+          "order": 5
+        },
+        {
+          "value": "retailer",
+          "labelAr": "تاجر تجزئة",
+          "labelEn": "Retailer",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "الفارق الحقيقي بين المورّد والتاجر — يحدد الثقة والسعر"
+    },
+    {
+      "code": "SELL-03",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 3,
+      "textAr": "كم عدد الأصناف التي توفّرونها تقريباً؟",
+      "textEn": "Approximately how many SKUs do you carry?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt50",
+          "labelAr": "أقل من ٥٠",
+          "labelEn": "Under 50",
+          "order": 1
+        },
+        {
+          "value": "50_200",
+          "labelAr": "٥٠–٢٠٠",
+          "labelEn": "50–200",
+          "order": 2
+        },
+        {
+          "value": "200_1000",
+          "labelAr": "٢٠٠–١٬٠٠٠",
+          "labelEn": "200–1,000",
+          "order": 3
+        },
+        {
+          "value": "1000_5000",
+          "labelAr": "١٬٠٠٠–٥٬٠٠٠",
+          "labelEn": "1,000–5,000",
+          "order": 4
+        },
+        {
+          "value": "gt5000",
+          "labelAr": "أكثر من ٥٬٠٠٠",
+          "labelEn": "Over 5,000",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحدد حجم الكتالوج المطلوب رفعه للمنصة"
+    },
+    {
+      "code": "SELL-04",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 4,
+      "textAr": "من كم مورّد تشترون تقريباً؟",
+      "textEn": "Approximately how many suppliers do you buy from?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt5",
+          "labelAr": "أقل من ٥",
+          "labelEn": "Under 5",
+          "order": 1
+        },
+        {
+          "value": "5_15",
+          "labelAr": "٥–١٥",
+          "labelEn": "5–15",
+          "order": 2
+        },
+        {
+          "value": "16_40",
+          "labelAr": "١٦–٤٠",
+          "labelEn": "16–40",
+          "order": 3
+        },
+        {
+          "value": "gt40",
+          "labelAr": "أكثر من ٤٠",
+          "labelEn": "Over 40",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "يميّز التاجر المتعدد عن المورّد المتخصص"
+    },
+    {
+      "code": "SELL-05",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 5,
+      "textAr": "هل لديكم شهادات مطابقة أو اعتماد للمواد التي توفّرونها؟",
+      "textEn": "Do you hold conformity or approval certificates?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_all",
+          "labelAr": "نعم، لكل المواد",
+          "labelEn": "Yes, for all",
+          "order": 1
+        },
+        {
+          "value": "yes_some",
+          "labelAr": "نعم، لبعضها",
+          "labelEn": "Yes, for some",
+          "order": 2
+        },
+        {
+          "value": "in_progress",
+          "labelAr": "قيد الإصدار",
+          "labelEn": "In progress",
+          "order": 3
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "شرط أساسي لادعاء «مواد معتمدة» على المنصة"
+    },
+    {
+      "code": "SELL-06",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 6,
+      "textAr": "كيف تصلكم طلبات التسعير اليوم؟",
+      "textEn": "How do you receive price requests today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "whatsapp",
+          "labelAr": "واتساب",
+          "labelEn": "WhatsApp",
+          "order": 1
+        },
+        {
+          "value": "phone",
+          "labelAr": "مكالمة هاتفية",
+          "labelEn": "Phone call",
+          "order": 2
+        },
+        {
+          "value": "email",
+          "labelAr": "بريد إلكتروني",
+          "labelEn": "Email",
+          "order": 3
+        },
+        {
+          "value": "visit",
+          "labelAr": "زيارة مباشرة للمعرض/المكتب",
+          "labelEn": "In-person visit",
+          "order": 4
+        },
+        {
+          "value": "broker",
+          "labelAr": "عبر وسيط أو مندوب",
+          "labelEn": "Via broker/agent",
+          "order": 5
+        },
+        {
+          "value": "portal",
+          "labelAr": "نظام إلكتروني للعميل",
+          "labelEn": "Client e-portal",
+          "order": 6
+        },
+        {
+          "value": "other",
+          "labelAr": "أخرى",
+          "labelEn": "Other",
+          "order": 7
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي — بدونه لا نعرف ماذا تستبدل المنصة"
+    },
+    {
+      "code": "SELL-07",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 7,
+      "textAr": "كم طلب تسعير يصلكم شهرياً في المتوسط؟",
+      "textEn": "How many price requests do you receive monthly?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt10",
+          "labelAr": "أقل من ١٠",
+          "labelEn": "Under 10",
+          "order": 1
+        },
+        {
+          "value": "10_30",
+          "labelAr": "١٠–٣٠",
+          "labelEn": "10–30",
+          "order": 2
+        },
+        {
+          "value": "31_100",
+          "labelAr": "٣١–١٠٠",
+          "labelEn": "31–100",
+          "order": 3
+        },
+        {
+          "value": "101_300",
+          "labelAr": "١٠١–٣٠٠",
+          "labelEn": "101–300",
+          "order": 4
+        },
+        {
+          "value": "gt300",
+          "labelAr": "أكثر من ٣٠٠",
+          "labelEn": "Over 300",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يقيس حجم السوق الفعلي وقابليته للأتمتة"
+    },
+    {
+      "code": "SELL-08",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 8,
+      "textAr": "كم يستغرق إعداد عرض السعر الواحد؟",
+      "textEn": "How long does preparing one quotation take?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt30m",
+          "labelAr": "أقل من ٣٠ دقيقة",
+          "labelEn": "Under 30 min",
+          "order": 1
+        },
+        {
+          "value": "30m_2h",
+          "labelAr": "٣٠ دقيقة – ساعتان",
+          "labelEn": "30 min – 2 h",
+          "order": 2
+        },
+        {
+          "value": "2h_1d",
+          "labelAr": "ساعتان – يوم",
+          "labelEn": "2 h – 1 day",
+          "order": 3
+        },
+        {
+          "value": "1_3d",
+          "labelAr": "١–٣ أيام",
+          "labelEn": "1–3 days",
+          "order": 4
+        },
+        {
+          "value": "gt3d",
+          "labelAr": "أكثر من ٣ أيام",
+          "labelEn": "Over 3 days",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحوّل «الوفر في الوقت» إلى رقم قابل للقياس"
+    },
+    {
+      "code": "SELL-09",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 9,
+      "textAr": "ما نسبة العروض التي تتحوّل إلى أمر شراء فعلي؟",
+      "textEn": "What share of quotations convert to orders?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt10",
+          "labelAr": "أقل من ١٠٪",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "١٠–٢٥٪",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "26_50",
+          "labelAr": "٢٦–٥٠٪",
+          "labelEn": "26–50%",
+          "order": 3
+        },
+        {
+          "value": "51_75",
+          "labelAr": "٥١–٧٥٪",
+          "labelEn": "51–75%",
+          "order": 4
+        },
+        {
+          "value": "gt75",
+          "labelAr": "أكثر من ٧٥٪",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "نسبة منخفضة = وقت مهدور = أقوى دافع للانضمام"
+    },
+    {
+      "code": "SELL-10",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 10,
+      "textAr": "ما أكثر أسباب خسارة الطلب؟",
+      "textEn": "Most common reasons you lose an order",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "price",
+          "labelAr": "السعر أعلى من المنافس",
+          "labelEn": "Price too high",
+          "order": 1
+        },
+        {
+          "value": "lead_time",
+          "labelAr": "مدة التسليم طويلة",
+          "labelEn": "Lead time too long",
+          "order": 2
+        },
+        {
+          "value": "credit",
+          "labelAr": "لم نوافق على البيع بالآجل",
+          "labelEn": "Declined credit terms",
+          "order": 3
+        },
+        {
+          "value": "quality_spec",
+          "labelAr": "المواصفة غير مطابقة",
+          "labelEn": "Spec mismatch",
+          "order": 4
+        },
+        {
+          "value": "slow_reply",
+          "labelAr": "تأخرنا في الرد",
+          "labelEn": "Slow response",
+          "order": 5
+        },
+        {
+          "value": "no_stock",
+          "labelAr": "عدم توفر المخزون",
+          "labelEn": "Out of stock",
+          "order": 6
+        },
+        {
+          "value": "unknown",
+          "labelAr": "لا نعرف، لا يصلنا رد",
+          "labelEn": "We never find out",
+          "order": 7
+        }
+      ],
+      "scale": null,
+      "note": "«لا نعرف، لا يصلنا رد» وحده يبرر ميزة تتبع العروض"
+    },
+    {
+      "code": "SELL-11",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 11,
+      "textAr": "كم مرة تتغيّر أسعاركم؟",
+      "textEn": "How often do your prices change?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "daily",
+          "labelAr": "يومياً",
+          "labelEn": "Daily",
+          "order": 1
+        },
+        {
+          "value": "weekly",
+          "labelAr": "أسبوعياً",
+          "labelEn": "Weekly",
+          "order": 2
+        },
+        {
+          "value": "monthly",
+          "labelAr": "شهرياً",
+          "labelEn": "Monthly",
+          "order": 3
+        },
+        {
+          "value": "quarterly",
+          "labelAr": "كل ٣ أشهر",
+          "labelEn": "Quarterly",
+          "order": 4
+        },
+        {
+          "value": "rarely",
+          "labelAr": "نادراً / أسعار ثابتة",
+          "labelEn": "Rarely / fixed",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحدد هل السوق يحتاج أسعاراً حيّة أم قائمة ثابتة"
+    },
+    {
+      "code": "SELL-12",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 12,
+      "textAr": "هل توافقون على عرض أسعاركم بشكل معلن على المنصة؟",
+      "textEn": "Would you display your prices publicly on the platform?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_public",
+          "labelAr": "نعم، معلنة للجميع",
+          "labelEn": "Yes, public to all",
+          "order": 1
+        },
+        {
+          "value": "yes_range",
+          "labelAr": "نعم، كنطاق سعري فقط",
+          "labelEn": "Yes, as a price range",
+          "order": 2
+        },
+        {
+          "value": "yes_registered",
+          "labelAr": "نعم، للمشترين المسجّلين فقط",
+          "labelEn": "Yes, registered buyers only",
+          "order": 3
+        },
+        {
+          "value": "on_request",
+          "labelAr": "لا، بالطلب فقط",
+          "labelEn": "No, on request only",
+          "order": 4
+        },
+        {
+          "value": "no",
+          "labelAr": "لا إطلاقاً",
+          "labelEn": "Absolutely not",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ أخطر سؤال في المحور — إن رفض الأغلبية تسقط فكرة السوق المعلن"
+    },
+    {
+      "code": "SELL-13",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 13,
+      "textAr": "إن كان لديكم تحفّظ على إعلان الأسعار، ما سببه؟",
+      "textEn": "If you have reservations about public pricing, why?",
+      "answerType": "TEXTAREA",
+      "required": false,
+      "showIf": {
+        "questionCode": "SELL-12",
+        "op": "in",
+        "value": [
+          "on_request",
+          "no",
+          "yes_range"
+        ]
+      },
+      "options": null,
+      "scale": null,
+      "note": "يفسّر الرقم — بدونه نعرف «لا» ولا نعرف كيف نعالجها"
+    },
+    {
+      "code": "SELL-14",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 14,
+      "textAr": "هل لديكم قائمة أسعار أو كتالوج رقمي جاهز؟",
+      "textEn": "Do you have a digital catalog or price list ready?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_erp",
+          "labelAr": "نعم، في نظام ERP (SAP / Odoo / غيره)",
+          "labelEn": "Yes, in an ERP (SAP/Odoo/other)",
+          "order": 1
+        },
+        {
+          "value": "yes_website",
+          "labelAr": "نعم، على موقعنا الإلكتروني",
+          "labelEn": "Yes, on our website",
+          "order": 2
+        },
+        {
+          "value": "yes_excel",
+          "labelAr": "نعم، ملف إكسل أو PDF",
+          "labelEn": "Yes, Excel or PDF file",
+          "order": 3
+        },
+        {
+          "value": "paper",
+          "labelAr": "ورقي فقط",
+          "labelEn": "Paper only",
+          "order": 4
+        },
+        {
+          "value": "none",
+          "labelAr": "لا يوجد",
+          "labelEn": "None",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحدد كلفة إدخال المورّد إلى السوق، ويمهّد لتكامل ERP"
+    },
+    {
+      "code": "SELL-15",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 15,
+      "textAr": "ما الحد الأدنى لقيمة الطلب لديكم؟",
+      "textEn": "What is your minimum order value?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "none",
+          "labelAr": "لا يوجد حد أدنى",
+          "labelEn": "No minimum",
+          "order": 1
+        },
+        {
+          "value": "lt1k",
+          "labelAr": "أقل من ١٬٠٠٠",
+          "labelEn": "Under 1,000",
+          "order": 2
+        },
+        {
+          "value": "1k_5k",
+          "labelAr": "١٬٠٠٠–٥٬٠٠٠",
+          "labelEn": "1,000–5,000",
+          "order": 3
+        },
+        {
+          "value": "5k_20k",
+          "labelAr": "٥٬٠٠٠–٢٠٬٠٠٠",
+          "labelEn": "5,000–20,000",
+          "order": 4
+        },
+        {
+          "value": "gt20k",
+          "labelAr": "أكثر من ٢٠٬٠٠٠",
+          "labelEn": "Over 20,000",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحدد أي المشترين يمكن خدمتهم فعلاً — العملة حسب دولة المستخدم"
+    },
+    {
+      "code": "SELL-16",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 16,
+      "textAr": "ما مدة التسليم المعتادة بعد أمر الشراء؟",
+      "textEn": "Typical delivery lead time after PO",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "same_day",
+          "labelAr": "نفس اليوم",
+          "labelEn": "Same day",
+          "order": 1
+        },
+        {
+          "value": "1_3d",
+          "labelAr": "١–٣ أيام",
+          "labelEn": "1–3 days",
+          "order": 2
+        },
+        {
+          "value": "4_7d",
+          "labelAr": "٤–٧ أيام",
+          "labelEn": "4–7 days",
+          "order": 3
+        },
+        {
+          "value": "1_4w",
+          "labelAr": "أسبوع – ٤ أسابيع",
+          "labelEn": "1–4 weeks",
+          "order": 4
+        },
+        {
+          "value": "gt4w",
+          "labelAr": "أكثر من شهر (طلب خاص)",
+          "labelEn": "Over a month (special order)",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "مؤشر تنافسي أساسي في السوق"
+    },
+    {
+      "code": "SELL-17",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 17,
+      "textAr": "من يتحمّل نقل البضاعة عادةً؟",
+      "textEn": "Who handles delivery?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "us_own_fleet",
+          "labelAr": "نحن بأسطولنا الخاص",
+          "labelEn": "We do, own fleet",
+          "order": 1
+        },
+        {
+          "value": "us_3pl",
+          "labelAr": "نحن عبر شركة نقل",
+          "labelEn": "We do, via 3PL",
+          "order": 2
+        },
+        {
+          "value": "buyer",
+          "labelAr": "المشتري",
+          "labelEn": "The buyer",
+          "order": 3
+        },
+        {
+          "value": "depends",
+          "labelAr": "حسب قيمة الطلب",
+          "labelEn": "Depends on order value",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "يربط السوق بمنتج النقل واللوجستيات"
+    },
+    {
+      "code": "SELL-18",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 18,
+      "textAr": "ما المناطق التي تخدمونها؟",
+      "textEn": "Which regions do you serve?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": null,
+      "note": "أساس المطابقة الجغرافية — الخيارات ديناميكية حسب دولة المستخدم",
+      "optionSource": {
+        "type": "REGIONS_BY_COUNTRY",
+        "from": "profile.country"
+      }
+    },
+    {
+      "code": "SELL-19",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 19,
+      "textAr": "ما مدة السداد التي تمنحونها للعملاء؟",
+      "textEn": "What payment terms do you grant customers?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "cash_only",
+          "labelAr": "نقداً فقط / دفع مقدم",
+          "labelEn": "Cash / prepayment only",
+          "order": 1
+        },
+        {
+          "value": "d15",
+          "labelAr": "١٥ يوماً",
+          "labelEn": "15 days",
+          "order": 2
+        },
+        {
+          "value": "d30",
+          "labelAr": "٣٠ يوماً",
+          "labelEn": "30 days",
+          "order": 3
+        },
+        {
+          "value": "d60",
+          "labelAr": "٦٠ يوماً",
+          "labelEn": "60 days",
+          "order": 4
+        },
+        {
+          "value": "d90plus",
+          "labelAr": "٩٠ يوماً فأكثر",
+          "labelEn": "90+ days",
+          "order": 5
+        },
+        {
+          "value": "case_by_case",
+          "labelAr": "حسب العميل",
+          "labelEn": "Case by case",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "الائتمان هو العملة الحقيقية في سوق مواد البناء"
+    },
+    {
+      "code": "SELL-20",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 20,
+      "textAr": "ما نسبة الذمم المتأخرة عن موعدها لديكم؟",
+      "textEn": "What share of your receivables is overdue?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt5",
+          "labelAr": "أقل من ٥٪",
+          "labelEn": "Under 5%",
+          "order": 1
+        },
+        {
+          "value": "5_15",
+          "labelAr": "٥–١٥٪",
+          "labelEn": "5–15%",
+          "order": 2
+        },
+        {
+          "value": "16_30",
+          "labelAr": "١٦–٣٠٪",
+          "labelEn": "16–30%",
+          "order": 3
+        },
+        {
+          "value": "gt30",
+          "labelAr": "أكثر من ٣٠٪",
+          "labelEn": "Over 30%",
+          "order": 4
+        },
+        {
+          "value": "dont_track",
+          "labelAr": "لا نتابعها بدقة",
+          "labelEn": "We don't track precisely",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يقيس الألم بالمال — أقوى مبرر لمنتج ضمان الدفع"
+    },
+    {
+      "code": "SELL-21",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 21,
+      "textAr": "هل سبق أن أوقفتم التوريد لعميل بسبب عدم السداد؟",
+      "textEn": "Ever stopped supplying a client over non-payment?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_often",
+          "labelAr": "نعم، متكرر",
+          "labelEn": "Yes, often",
+          "order": 1
+        },
+        {
+          "value": "yes_once",
+          "labelAr": "نعم، مرة أو مرتين",
+          "labelEn": "Yes, once or twice",
+          "order": 2
+        },
+        {
+          "value": "no",
+          "labelAr": "لم يحدث",
+          "labelEn": "Never",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "يحوّل المشكلة من رأي إلى واقعة"
+    },
+    {
+      "code": "SELL-22",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 22,
+      "textAr": "ما مدى اهتمامكم بضمان الدفع عبر المنصة (تحتجز المنصة المبلغ وتفرج عنه عند التسليم)؟",
+      "textEn": "Interest in platform-guaranteed payment (escrow released on delivery)",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐ اختبار مباشر لمنتج المحفظة الآمنة"
+    },
+    {
+      "code": "SELL-23",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 23,
+      "textAr": "ما مدى استعدادكم للبيع لمشترٍ جديد لم تتعاملوا معه، إذا كان موثّقاً على المنصة والدفع مضمون؟",
+      "textEn": "Willingness to sell to a new verified buyer with guaranteed payment",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐⭐ جوهر فرضية المنصة من جانب البيع"
+    },
+    {
+      "code": "SELL-24",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 24,
+      "textAr": "هل تشاركون في مناقصات توريد المواد حالياً؟",
+      "textEn": "Do you participate in material supply tenders?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_regular",
+          "labelAr": "نعم، بانتظام",
+          "labelEn": "Yes, regularly",
+          "order": 1
+        },
+        {
+          "value": "yes_sometimes",
+          "labelAr": "نعم، أحياناً",
+          "labelEn": "Yes, sometimes",
+          "order": 2
+        },
+        {
+          "value": "no_no_access",
+          "labelAr": "لا، لا تصلنا دعوات",
+          "labelEn": "No, we get no invitations",
+          "order": 3
+        },
+        {
+          "value": "no_complex",
+          "labelAr": "لا، الإجراءات معقدة",
+          "labelEn": "No, too complex",
+          "order": 4
+        },
+        {
+          "value": "no_never",
+          "labelAr": "لا، لا يناسب نشاطنا",
+          "labelEn": "No, not relevant to us",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يفصل من يحتاج منتج المناقصات عمّن يحتاج السوق فقط"
+    },
+    {
+      "code": "SELL-25",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 25,
+      "textAr": "ما أكبر صعوبة تواجهكم في مناقصات المواد؟",
+      "textEn": "Biggest difficulties in material tenders",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "SELL-24",
+        "op": "neq",
+        "value": "no_never"
+      },
+      "options": [
+        {
+          "value": "no_invites",
+          "labelAr": "لا تصلنا الدعوات أصلاً",
+          "labelEn": "We never get invited",
+          "order": 1
+        },
+        {
+          "value": "short_deadline",
+          "labelAr": "المهلة قصيرة جداً",
+          "labelEn": "Deadlines too short",
+          "order": 2
+        },
+        {
+          "value": "unclear_specs",
+          "labelAr": "المواصفات غير واضحة",
+          "labelEn": "Unclear specifications",
+          "order": 3
+        },
+        {
+          "value": "huge_quantities",
+          "labelAr": "الكميات أكبر من طاقتنا",
+          "labelEn": "Quantities exceed capacity",
+          "order": 4
+        },
+        {
+          "value": "price_race",
+          "labelAr": "منافسة سعرية غير واقعية",
+          "labelEn": "Unrealistic price competition",
+          "order": 5
+        },
+        {
+          "value": "no_feedback",
+          "labelAr": "لا نعرف نتيجة المناقصة",
+          "labelEn": "No result feedback",
+          "order": 6
+        },
+        {
+          "value": "payment_terms",
+          "labelAr": "شروط الدفع غير مقبولة",
+          "labelEn": "Unacceptable payment terms",
+          "order": 7
+        }
+      ],
+      "scale": null,
+      "note": "كل خيار يترجم إلى ميزة محددة في منتج المناقصات"
+    },
+    {
+      "code": "SELL-26",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 26,
+      "textAr": "ما مدى اهتمامكم بتلقّي دعوات مناقصات مواد مطابقة لتخصصكم تلقائياً؟",
+      "textEn": "Interest in auto-matched material tender invitations",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "اختبار مباشر لميزة المطابقة الذكية"
+    },
+    {
+      "code": "SELL-27",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 27,
+      "textAr": "كيف تتعاملون مع تقلّب سعر الصرف وتكاليف الشحن؟",
+      "textEn": "How do you handle currency and shipping volatility?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": false,
+      "showIf": null,
+      "options": [
+        {
+          "value": "price_validity",
+          "labelAr": "نحدد صلاحية قصيرة للعرض",
+          "labelEn": "Short quote validity",
+          "order": 1
+        },
+        {
+          "value": "buffer_margin",
+          "labelAr": "نضيف هامش أمان",
+          "labelEn": "Add buffer margin",
+          "order": 2
+        },
+        {
+          "value": "hedge",
+          "labelAr": "تغطية / تعاقد مسبق",
+          "labelEn": "Hedging / forward contracts",
+          "order": 3
+        },
+        {
+          "value": "pass_through",
+          "labelAr": "نحمّلها على العميل",
+          "labelEn": "Pass through to client",
+          "order": 4
+        },
+        {
+          "value": "absorb",
+          "labelAr": "نتحمّلها",
+          "labelEn": "We absorb it",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "خاص بالتاجر المستورد، ويؤثر على تصميم عرض الأسعار"
+    },
+    {
+      "code": "SELL-28",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 28,
+      "textAr": "ما نسبة الطلبات التي تُرجع أو تُشتكى بسبب الجودة؟",
+      "textEn": "What share of orders are returned or disputed for quality?",
+      "answerType": "SINGLE_CHOICE",
+      "required": false,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt1",
+          "labelAr": "أقل من ١٪",
+          "labelEn": "Under 1%",
+          "order": 1
+        },
+        {
+          "value": "1_3",
+          "labelAr": "١–٣٪",
+          "labelEn": "1–3%",
+          "order": 2
+        },
+        {
+          "value": "4_10",
+          "labelAr": "٤–١٠٪",
+          "labelEn": "4–10%",
+          "order": 3
+        },
+        {
+          "value": "gt10",
+          "labelAr": "أكثر من ١٠٪",
+          "labelEn": "Over 10%",
+          "order": 4
+        },
+        {
+          "value": "dont_track",
+          "labelAr": "لا نتابعها",
+          "labelEn": "Not tracked",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يبني مؤشر جودة المورّد في المنصة"
+    },
+    {
+      "code": "SELL-29",
+      "accountTypes": [
+        "SUPPLIER",
+        "TRADER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 29,
+      "textAr": "كيف تجدون عملاء جدداً اليوم؟",
+      "textEn": "How do you find new customers today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "word_mouth",
+          "labelAr": "التوصية والسمعة",
+          "labelEn": "Word of mouth",
+          "order": 1
+        },
+        {
+          "value": "sales_reps",
+          "labelAr": "مندوبو مبيعات",
+          "labelEn": "Sales reps",
+          "order": 2
+        },
+        {
+          "value": "exhibitions",
+          "labelAr": "المعارض والفعاليات",
+          "labelEn": "Exhibitions",
+          "order": 3
+        },
+        {
+          "value": "social",
+          "labelAr": "وسائل التواصل",
+          "labelEn": "Social media",
+          "order": 4
+        },
+        {
+          "value": "website",
+          "labelAr": "موقعنا الإلكتروني",
+          "labelEn": "Our website",
+          "order": 5
+        },
+        {
+          "value": "directories",
+          "labelAr": "أدلة ومواقع تصنيف",
+          "labelEn": "Directories",
+          "order": 6
+        },
+        {
+          "value": "inbound",
+          "labelAr": "يأتون إلينا مباشرة",
+          "labelEn": "They come to us",
+          "order": 7
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي لقناة الاكتساب"
+    },
+    {
+      "code": "BUY-01",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 1,
+      "textAr": "ما فئات المواد التي تشترونها بشكل متكرر؟",
+      "textEn": "Which material categories do you buy regularly?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "concrete",
+          "labelAr": "خرسانة ومواد أساسية (أسمنت، رمل، بحص)",
+          "labelEn": "Concrete & base materials",
+          "order": 1
+        },
+        {
+          "value": "steel",
+          "labelAr": "حديد ومعادن",
+          "labelEn": "Steel & metals",
+          "order": 2
+        },
+        {
+          "value": "blocks",
+          "labelAr": "بلوك وطابوق ومواد بناء",
+          "labelEn": "Blocks & masonry",
+          "order": 3
+        },
+        {
+          "value": "finishes",
+          "labelAr": "تشطيبات (بلاط، رخام، دهانات)",
+          "labelEn": "Finishes (tiles, marble, paint)",
+          "order": 4
+        },
+        {
+          "value": "wood",
+          "labelAr": "أخشاب ومنتجاتها",
+          "labelEn": "Wood & wood products",
+          "order": 5
+        },
+        {
+          "value": "glass_alum",
+          "labelAr": "زجاج وألمنيوم",
+          "labelEn": "Glass & aluminium",
+          "order": 6
+        },
+        {
+          "value": "mep_elec",
+          "labelAr": "كهرباء ومواد كهربائية",
+          "labelEn": "Electrical materials",
+          "order": 7
+        },
+        {
+          "value": "mep_plumb",
+          "labelAr": "سباكة وأدوات صحية",
+          "labelEn": "Plumbing & sanitary",
+          "order": 8
+        },
+        {
+          "value": "hvac",
+          "labelAr": "تكييف وتهوية",
+          "labelEn": "HVAC",
+          "order": 9
+        },
+        {
+          "value": "insulation",
+          "labelAr": "عزل مائي وحراري",
+          "labelEn": "Waterproofing & insulation",
+          "order": 10
+        },
+        {
+          "value": "doors_windows",
+          "labelAr": "أبواب ونوافذ",
+          "labelEn": "Doors & windows",
+          "order": 11
+        },
+        {
+          "value": "safety",
+          "labelAr": "سلامة ومكافحة حريق",
+          "labelEn": "Safety & firefighting",
+          "order": 12
+        },
+        {
+          "value": "tools",
+          "labelAr": "عدد ومستهلكات",
+          "labelEn": "Tools & consumables",
+          "order": 13
+        },
+        {
+          "value": "equipment",
+          "labelAr": "معدات ومكائن",
+          "labelEn": "Equipment & machinery",
+          "order": 14
+        },
+        {
+          "value": "other",
+          "labelAr": "أخرى",
+          "labelEn": "Other",
+          "order": 15
+        }
+      ],
+      "scale": null,
+      "note": "مطابقة المشتري بالموردين المناسبين"
+    },
+    {
+      "code": "BUY-02",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 2,
+      "textAr": "ما حجم مشترياتكم من المواد شهرياً تقريباً؟",
+      "textEn": "Approximate monthly material spend",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "lt50k",
+          "labelAr": "أقل من ٥٠ ألف",
+          "labelEn": "Under 50k",
+          "order": 1
+        },
+        {
+          "value": "50_250k",
+          "labelAr": "٥٠–٢٥٠ ألف",
+          "labelEn": "50–250k",
+          "order": 2
+        },
+        {
+          "value": "250k_1m",
+          "labelAr": "٢٥٠ ألف – مليون",
+          "labelEn": "250k–1M",
+          "order": 3
+        },
+        {
+          "value": "1_5m",
+          "labelAr": "١–٥ مليون",
+          "labelEn": "1–5M",
+          "order": 4
+        },
+        {
+          "value": "gt5m",
+          "labelAr": "أكثر من ٥ مليون",
+          "labelEn": "Over 5M",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "أهم مؤشر تأهيل للمشتري — العملة حسب دولة المستخدم"
+    },
+    {
+      "code": "BUY-03",
+      "accountTypes": [
+        "CONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 3,
+      "textAr": "من يتخذ قرار الشراء لديكم؟",
+      "textEn": "Who makes the purchasing decision?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "owner_manager",
+          "labelAr": "المالك / المدير العام",
+          "labelEn": "Owner / GM",
+          "order": 1
+        },
+        {
+          "value": "procurement_dept",
+          "labelAr": "قسم المشتريات",
+          "labelEn": "Procurement dept",
+          "order": 2
+        },
+        {
+          "value": "project_manager",
+          "labelAr": "مدير المشروع",
+          "labelEn": "Project manager",
+          "order": 3
+        },
+        {
+          "value": "site_engineer",
+          "labelAr": "مهندس الموقع",
+          "labelEn": "Site engineer",
+          "order": 4
+        },
+        {
+          "value": "multiple",
+          "labelAr": "أكثر من جهة حسب القيمة",
+          "labelEn": "Multiple, by value",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يحدد لمن نصمّم الواجهة ومن نستهدف بالتسويق"
+    },
+    {
+      "code": "BUY-04",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 4,
+      "textAr": "كيف تشترون المواد اليوم؟",
+      "textEn": "How do you buy materials today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "fixed_suppliers",
+          "labelAr": "موردون ثابتون نتعامل معهم دائماً",
+          "labelEn": "Fixed regular suppliers",
+          "order": 1
+        },
+        {
+          "value": "compare_quotes",
+          "labelAr": "نطلب عروضاً ونقارن",
+          "labelEn": "Request and compare quotes",
+          "order": 2
+        },
+        {
+          "value": "broker",
+          "labelAr": "عبر وسيط أو مندوب",
+          "labelEn": "Via broker/agent",
+          "order": 3
+        },
+        {
+          "value": "market_visit",
+          "labelAr": "زيارة الأسواق والمعارض",
+          "labelEn": "Visiting markets",
+          "order": 4
+        },
+        {
+          "value": "tender",
+          "labelAr": "مناقصة رسمية",
+          "labelEn": "Formal tender",
+          "order": 5
+        },
+        {
+          "value": "online",
+          "labelAr": "منصات إلكترونية",
+          "labelEn": "Online platforms",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي — نقطة القياس الأساسية"
+    },
+    {
+      "code": "BUY-05",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 5,
+      "textAr": "كم مورّداً تطلبون منه عرض سعر للبند الواحد عادةً؟",
+      "textEn": "How many suppliers do you request quotes from per item?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "one",
+          "labelAr": "واحد فقط",
+          "labelEn": "One only",
+          "order": 1
+        },
+        {
+          "value": "two_three",
+          "labelAr": "٢–٣",
+          "labelEn": "2–3",
+          "order": 2
+        },
+        {
+          "value": "four_five",
+          "labelAr": "٤–٥",
+          "labelEn": "4–5",
+          "order": 3
+        },
+        {
+          "value": "gt5",
+          "labelAr": "أكثر من ٥",
+          "labelEn": "Over 5",
+          "order": 4
+        },
+        {
+          "value": "varies",
+          "labelAr": "حسب قيمة البند",
+          "labelEn": "Varies by value",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يقيس الاحتكاك اليوم وقيمة المقارنة الآلية"
+    },
+    {
+      "code": "BUY-06",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 6,
+      "textAr": "كم يستغرق حتى تجمعوا عروضاً كافية للمقارنة؟",
+      "textEn": "How long until you have enough quotes to compare?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "same_day",
+          "labelAr": "نفس اليوم",
+          "labelEn": "Same day",
+          "order": 1
+        },
+        {
+          "value": "1_2d",
+          "labelAr": "١–٢ يوم",
+          "labelEn": "1–2 days",
+          "order": 2
+        },
+        {
+          "value": "3_7d",
+          "labelAr": "٣–٧ أيام",
+          "labelEn": "3–7 days",
+          "order": 3
+        },
+        {
+          "value": "1_2w",
+          "labelAr": "أسبوع – أسبوعان",
+          "labelEn": "1–2 weeks",
+          "order": 4
+        },
+        {
+          "value": "gt2w",
+          "labelAr": "أكثر من أسبوعين",
+          "labelEn": "Over 2 weeks",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يترجم الوفر الزمني إلى رقم قابل للعرض"
+    },
+    {
+      "code": "BUY-07",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 7,
+      "textAr": "ما أكبر المشاكل في شراء المواد؟",
+      "textEn": "Biggest problems in buying materials",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "price_opacity",
+          "labelAr": "عدم وضوح الأسعار الحقيقية",
+          "labelEn": "Price opacity",
+          "order": 1
+        },
+        {
+          "value": "price_volatility",
+          "labelAr": "تقلّب الأسعار",
+          "labelEn": "Price volatility",
+          "order": 2
+        },
+        {
+          "value": "late_delivery",
+          "labelAr": "تأخر التوريد",
+          "labelEn": "Late delivery",
+          "order": 3
+        },
+        {
+          "value": "quality_mismatch",
+          "labelAr": "المواد لا تطابق المواصفة",
+          "labelEn": "Spec mismatch",
+          "order": 4
+        },
+        {
+          "value": "no_credit",
+          "labelAr": "صعوبة الشراء بالآجل",
+          "labelEn": "Hard to get credit",
+          "order": 5
+        },
+        {
+          "value": "finding_supplier",
+          "labelAr": "صعوبة إيجاد مورّد موثوق",
+          "labelEn": "Finding a trusted supplier",
+          "order": 6
+        },
+        {
+          "value": "slow_quotes",
+          "labelAr": "بطء الحصول على العروض",
+          "labelEn": "Slow quotes",
+          "order": 7
+        },
+        {
+          "value": "after_sales",
+          "labelAr": "لا توجد مسؤولية بعد التسليم",
+          "labelEn": "No after-sales accountability",
+          "order": 8
+        }
+      ],
+      "scale": null,
+      "note": "ترتيب الخيارات يحدد أولوية بناء ميزات السوق"
+    },
+    {
+      "code": "BUY-08",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 8,
+      "textAr": "ما معايير اختياركم للمورّد؟",
+      "textEn": "Criteria for choosing a supplier",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "price",
+          "labelAr": "السعر",
+          "labelEn": "Price",
+          "order": 1
+        },
+        {
+          "value": "quality",
+          "labelAr": "الجودة والمواصفة",
+          "labelEn": "Quality & spec",
+          "order": 2
+        },
+        {
+          "value": "lead_time",
+          "labelAr": "سرعة التسليم",
+          "labelEn": "Lead time",
+          "order": 3
+        },
+        {
+          "value": "credit",
+          "labelAr": "مدة السداد",
+          "labelEn": "Payment terms",
+          "order": 4
+        },
+        {
+          "value": "reputation",
+          "labelAr": "السمعة والتجربة السابقة",
+          "labelEn": "Reputation",
+          "order": 5
+        },
+        {
+          "value": "after_sales",
+          "labelAr": "خدمة ما بعد البيع",
+          "labelEn": "After-sales service",
+          "order": 6
+        },
+        {
+          "value": "location",
+          "labelAr": "قرب الموقع",
+          "labelEn": "Proximity",
+          "order": 7
+        }
+      ],
+      "scale": null,
+      "note": "يحدد أي بيانات يجب أن تظهر في بطاقة المورّد"
+    },
+    {
+      "code": "BUY-09",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 9,
+      "textAr": "هل تشترون من مورّد لم تتعاملوا معه من قبل؟",
+      "textEn": "Do you buy from a supplier you have never dealt with?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_easily",
+          "labelAr": "نعم، بسهولة",
+          "labelEn": "Yes, easily",
+          "order": 1
+        },
+        {
+          "value": "yes_small",
+          "labelAr": "نعم، لكن بطلبات صغيرة أولاً",
+          "labelEn": "Yes, small orders first",
+          "order": 2
+        },
+        {
+          "value": "yes_if_verified",
+          "labelAr": "نعم، إذا كان موثّقاً ومُقيّماً",
+          "labelEn": "Yes, if verified & rated",
+          "order": 3
+        },
+        {
+          "value": "rarely",
+          "labelAr": "نادراً جداً",
+          "labelEn": "Very rarely",
+          "order": 4
+        },
+        {
+          "value": "never",
+          "labelAr": "لا، أبداً",
+          "labelEn": "Never",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "⭐⭐ يقابل SELL-23 — الفرضية تُختبر من الطرفين"
+    },
+    {
+      "code": "BUY-10",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 10,
+      "textAr": "ما الذي يجعلكم تثقون بمورّد جديد؟",
+      "textEn": "What would make you trust a new supplier?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "verified_docs",
+          "labelAr": "توثيق السجل التجاري والتراخيص",
+          "labelEn": "Verified registration & licenses",
+          "order": 1
+        },
+        {
+          "value": "ratings",
+          "labelAr": "تقييمات مشترين آخرين",
+          "labelEn": "Other buyers' ratings",
+          "order": 2
+        },
+        {
+          "value": "escrow",
+          "labelAr": "ضمان الدفع عبر المنصة",
+          "labelEn": "Platform payment guarantee",
+          "order": 3
+        },
+        {
+          "value": "samples",
+          "labelAr": "عينات قبل الشراء",
+          "labelEn": "Samples first",
+          "order": 4
+        },
+        {
+          "value": "return_policy",
+          "labelAr": "سياسة إرجاع واضحة",
+          "labelEn": "Clear return policy",
+          "order": 5
+        },
+        {
+          "value": "site_visit",
+          "labelAr": "زيارة المصنع أو المستودع",
+          "labelEn": "Factory/warehouse visit",
+          "order": 6
+        },
+        {
+          "value": "platform_guarantee",
+          "labelAr": "ضمان المنصة للجودة",
+          "labelEn": "Platform quality guarantee",
+          "order": 7
+        }
+      ],
+      "scale": null,
+      "note": "يرتّب ميزات الثقة حسب أثرها على قرار الشراء"
+    },
+    {
+      "code": "BUY-11",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 11,
+      "textAr": "هل واجهتم مشاكل دفع أو نزاعات مع موردين؟",
+      "textEn": "Have you had payment problems or disputes with suppliers?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_often",
+          "labelAr": "نعم، متكرر",
+          "labelEn": "Yes, often",
+          "order": 1
+        },
+        {
+          "value": "yes_sometimes",
+          "labelAr": "نعم، أحياناً",
+          "labelEn": "Yes, sometimes",
+          "order": 2
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "يقابل SELL-21 — نقارن رواية الطرفين"
+    },
+    {
+      "code": "BUY-12",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 12,
+      "textAr": "ما مدى اهتمامكم بحساب ضمان يحتجز المبلغ حتى استلام المواد ومطابقتها؟",
+      "textEn": "Interest in escrow holding funds until materials are received and verified",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐ الوجه الآخر لـ SELL-22"
+    },
+    {
+      "code": "BUY-13",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 13,
+      "textAr": "ما مدة السداد التي تحتاجونها من الموردين؟",
+      "textEn": "What payment terms do you need from suppliers?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "cash",
+          "labelAr": "نشتري نقداً",
+          "labelEn": "We pay cash",
+          "order": 1
+        },
+        {
+          "value": "d30",
+          "labelAr": "٣٠ يوماً",
+          "labelEn": "30 days",
+          "order": 2
+        },
+        {
+          "value": "d60",
+          "labelAr": "٦٠ يوماً",
+          "labelEn": "60 days",
+          "order": 3
+        },
+        {
+          "value": "d90",
+          "labelAr": "٩٠ يوماً",
+          "labelEn": "90 days",
+          "order": 4
+        },
+        {
+          "value": "linked",
+          "labelAr": "مرتبطة بتحصيلنا من المالك",
+          "labelEn": "Linked to our own collection",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "مقارنته بـ SELL-19 تكشف الفجوة الحقيقية في السوق"
+    },
+    {
+      "code": "BUY-14",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 14,
+      "textAr": "ما مدى اهتمامكم بتمويل شراء المواد (شراء الآن والسداد بعد التحصيل)؟",
+      "textEn": "Interest in material purchase financing",
+      "answerType": "LINEAR_SCALE",
+      "required": false,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "يختبر منتج التمويل قبل بنائه"
+    },
+    {
+      "code": "BUY-15",
+      "accountTypes": [
+        "CONTRACTOR",
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 15,
+      "textAr": "هل تتأثر عروضكم للمشاريع بتقلّب أسعار المواد؟",
+      "textEn": "Do material price swings affect your project bids?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_lost",
+          "labelAr": "نعم، وخسرنا أموالاً بسببها",
+          "labelEn": "Yes, and we lost money",
+          "order": 1
+        },
+        {
+          "value": "yes_margin",
+          "labelAr": "نعم، نضيف هامش أمان",
+          "labelEn": "Yes, we add a buffer",
+          "order": 2
+        },
+        {
+          "value": "yes_clause",
+          "labelAr": "نعم، لكن نضع بند تعديل أسعار",
+          "labelEn": "Yes, but we add an escalation clause",
+          "order": 3
+        },
+        {
+          "value": "no",
+          "labelAr": "لا يؤثر كثيراً",
+          "labelEn": "Not much",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "يربط السوق بمنتج المناقصات ويبرر مؤشر الأسعار"
+    },
+    {
+      "code": "BUY-16",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 16,
+      "textAr": "ما مدى اهتمامكم بسوق مواد بأسعار معلنة ومقارنة مباشرة؟",
+      "textEn": "Interest in a marketplace with published, comparable prices",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐ الوجه الآخر لـ SELL-12 — أهم مقارنة في الاستبيان"
+    },
+    {
+      "code": "BUY-17",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 17,
+      "textAr": "ما مدى اهتمامكم بطرح مناقصة مواد على المنصة واستقبال عروض متعددة؟",
+      "textEn": "Interest in publishing a material tender",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "يقابل SELL-26"
+    },
+    {
+      "code": "BUY-18",
+      "accountTypes": [
+        "OWNER",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 18,
+      "textAr": "هل تحتاجون توصيلاً إلى موقع المشروع؟",
+      "textEn": "Do you need delivery to the project site?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "always",
+          "labelAr": "دائماً",
+          "labelEn": "Always",
+          "order": 1
+        },
+        {
+          "value": "usually",
+          "labelAr": "غالباً",
+          "labelEn": "Usually",
+          "order": 2
+        },
+        {
+          "value": "sometimes",
+          "labelAr": "أحياناً",
+          "labelEn": "Sometimes",
+          "order": 3
+        },
+        {
+          "value": "never",
+          "labelAr": "لا، ننقل بأنفسنا",
+          "labelEn": "No, we transport ourselves",
+          "order": 4
+        }
+      ],
+      "scale": null,
+      "note": "يربط السوق بمنتج النقل"
+    },
+    {
+      "code": "BUY-19",
+      "accountTypes": [
+        "CONTRACTOR",
+        "COMPANY"
+      ],
+      "sectionCode": "MARKET_BUY",
+      "sectionTitleAr": "كيف تشترون المواد",
+      "sectionTitleEn": "How You Buy Materials",
+      "sectionOrder": 20,
+      "questionOrder": 19,
+      "textAr": "من يستلم المواد في الموقع ويتحقق من مطابقتها؟",
+      "textEn": "Who receives and verifies materials on site?",
+      "answerType": "SINGLE_CHOICE",
+      "required": false,
+      "showIf": null,
+      "options": [
+        {
+          "value": "site_engineer",
+          "labelAr": "مهندس الموقع",
+          "labelEn": "Site engineer",
+          "order": 1
+        },
+        {
+          "value": "storekeeper",
+          "labelAr": "أمين المستودع",
+          "labelEn": "Storekeeper",
+          "order": 2
+        },
+        {
+          "value": "foreman",
+          "labelAr": "المشرف / المعلّم",
+          "labelEn": "Foreman",
+          "order": 3
+        },
+        {
+          "value": "qc",
+          "labelAr": "قسم الجودة",
+          "labelEn": "QC department",
+          "order": 4
+        },
+        {
+          "value": "no_process",
+          "labelAr": "لا يوجد إجراء واضح",
+          "labelEn": "No clear process",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "«لا يوجد إجراء واضح» يفتح باب ميزة تأكيد الاستلام الرقمي"
+    },
+    {
+      "code": "WATCH-01",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "MARKET_WATCH",
+      "sectionTitleAr": "تقدير التكلفة ومتابعة الأسعار",
+      "sectionTitleEn": "Cost Estimating & Price Watch",
+      "sectionOrder": 20,
+      "questionOrder": 1,
+      "textAr": "هل تُعدّون تقديرات تكلفة (Cost Estimate) للمالك؟",
+      "textEn": "Do you prepare cost estimates for owners?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_always",
+          "labelAr": "نعم، دائماً",
+          "labelEn": "Yes, always",
+          "order": 1
+        },
+        {
+          "value": "yes_sometimes",
+          "labelAr": "نعم، أحياناً",
+          "labelEn": "Yes, sometimes",
+          "order": 2
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "سؤال البوابة لهذا القسم"
+    },
+    {
+      "code": "WATCH-02",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "MARKET_WATCH",
+      "sectionTitleAr": "تقدير التكلفة ومتابعة الأسعار",
+      "sectionTitleEn": "Cost Estimating & Price Watch",
+      "sectionOrder": 20,
+      "questionOrder": 2,
+      "textAr": "من أين تحصلون على أسعار المواد للتقدير؟",
+      "textEn": "Where do you get material prices for estimating?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "WATCH-01",
+        "op": "neq",
+        "value": "no"
+      },
+      "options": [
+        {
+          "value": "own_db",
+          "labelAr": "قاعدة أسعار داخلية",
+          "labelEn": "Internal price database",
+          "order": 1
+        },
+        {
+          "value": "call_suppliers",
+          "labelAr": "اتصال مباشر بالموردين",
+          "labelEn": "Calling suppliers",
+          "order": 2
+        },
+        {
+          "value": "old_projects",
+          "labelAr": "أسعار مشاريع سابقة",
+          "labelEn": "Past project prices",
+          "order": 3
+        },
+        {
+          "value": "published_index",
+          "labelAr": "مؤشرات أسعار منشورة",
+          "labelEn": "Published indices",
+          "order": 4
+        },
+        {
+          "value": "contractor_quotes",
+          "labelAr": "عروض المقاولين",
+          "labelEn": "Contractor quotes",
+          "order": 5
+        },
+        {
+          "value": "guess",
+          "labelAr": "تقدير تقريبي",
+          "labelEn": "Rough estimate",
+          "order": 6
+        }
+      ],
+      "scale": null,
+      "note": "⭐ البديل الحالي — «تقدير تقريبي» وحده يبرر مؤشر الأسعار"
+    },
+    {
+      "code": "WATCH-03",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "MARKET_WATCH",
+      "sectionTitleAr": "تقدير التكلفة ومتابعة الأسعار",
+      "sectionTitleEn": "Cost Estimating & Price Watch",
+      "sectionOrder": 20,
+      "questionOrder": 3,
+      "textAr": "كم مرة تحدّثون أسعاركم المرجعية؟",
+      "textEn": "How often do you update your reference prices?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "WATCH-01",
+        "op": "neq",
+        "value": "no"
+      },
+      "options": [
+        {
+          "value": "weekly",
+          "labelAr": "أسبوعياً",
+          "labelEn": "Weekly",
+          "order": 1
+        },
+        {
+          "value": "monthly",
+          "labelAr": "شهرياً",
+          "labelEn": "Monthly",
+          "order": 2
+        },
+        {
+          "value": "quarterly",
+          "labelAr": "كل ٣ أشهر",
+          "labelEn": "Quarterly",
+          "order": 3
+        },
+        {
+          "value": "yearly",
+          "labelAr": "سنوياً",
+          "labelEn": "Yearly",
+          "order": 4
+        },
+        {
+          "value": "rarely",
+          "labelAr": "نادراً",
+          "labelEn": "Rarely",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يقيس قدم البيانات المستخدمة في التقدير"
+    },
+    {
+      "code": "WATCH-04",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "MARKET_WATCH",
+      "sectionTitleAr": "تقدير التكلفة ومتابعة الأسعار",
+      "sectionTitleEn": "Cost Estimating & Price Watch",
+      "sectionOrder": 20,
+      "questionOrder": 4,
+      "textAr": "ما مدى تطابق تقديراتكم مع العروض الفعلية للمقاولين؟",
+      "textEn": "How close are your estimates to actual contractor bids?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "WATCH-01",
+        "op": "neq",
+        "value": "no"
+      },
+      "options": [
+        {
+          "value": "within5",
+          "labelAr": "فرق أقل من ٥٪",
+          "labelEn": "Within 5%",
+          "order": 1
+        },
+        {
+          "value": "within15",
+          "labelAr": "٥–١٥٪",
+          "labelEn": "5–15%",
+          "order": 2
+        },
+        {
+          "value": "within30",
+          "labelAr": "١٥–٣٠٪",
+          "labelEn": "15–30%",
+          "order": 3
+        },
+        {
+          "value": "over30",
+          "labelAr": "أكثر من ٣٠٪",
+          "labelEn": "Over 30%",
+          "order": 4
+        },
+        {
+          "value": "dont_measure",
+          "labelAr": "لا نقيس ذلك",
+          "labelEn": "We don't measure",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "يقيس حجم المشكلة برقم — أقوى مدخل لبيع مؤشر الأسعار"
+    },
+    {
+      "code": "WATCH-05",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "MARKET_WATCH",
+      "sectionTitleAr": "تقدير التكلفة ومتابعة الأسعار",
+      "sectionTitleEn": "Cost Estimating & Price Watch",
+      "sectionOrder": 20,
+      "questionOrder": 5,
+      "textAr": "ما مدى اهتمامكم بمؤشر أسعار مواد محدّث من صفقات فعلية على المنصة؟",
+      "textEn": "Interest in a live material price index from real platform transactions",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": null,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "⭐ اختبار منتج «مؤشر الأسعار» — منتج بيانات مستقل"
+    },
+    {
+      "code": "WATCH-06",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "MARKET_WATCH",
+      "sectionTitleAr": "تقدير التكلفة ومتابعة الأسعار",
+      "sectionTitleEn": "Cost Estimating & Price Watch",
+      "sectionOrder": 20,
+      "questionOrder": 6,
+      "textAr": "هل تعتمدون قوائم موردين مؤهّلين للمالك؟",
+      "textEn": "Do you approve qualified supplier lists for owners?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "yes_formal",
+          "labelAr": "نعم، بإجراء رسمي",
+          "labelEn": "Yes, formally",
+          "order": 1
+        },
+        {
+          "value": "yes_informal",
+          "labelAr": "نعم، بشكل غير رسمي",
+          "labelEn": "Yes, informally",
+          "order": 2
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 3
+        }
+      ],
+      "scale": null,
+      "note": "الاستشاري بوابة دخول الموردين للمشاريع الكبيرة"
+    },
+    {
+      "code": "WATCH-07",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "MARKET_WATCH",
+      "sectionTitleAr": "تقدير التكلفة ومتابعة الأسعار",
+      "sectionTitleEn": "Cost Estimating & Price Watch",
+      "sectionOrder": 20,
+      "questionOrder": 7,
+      "textAr": "ما مدى اهتمامكم باستخدام موردين موثّقين من المنصة في قوائمكم المعتمدة؟",
+      "textEn": "Interest in using platform-verified suppliers in your approved lists",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "showIf": {
+        "questionCode": "WATCH-06",
+        "op": "neq",
+        "value": "no"
+      },
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "يقيس دخول المنصة للمشاريع الكبيرة عبر بوابة الاستشاري"
+    }
+  ],
+  "editsToExistingQuestions": [
+    {
+      "op": "RECODE",
+      "accountType": "CONTRACTOR",
+      "sectionCode": "OPERATIONS",
+      "from": "O1",
+      "to": "OP1",
+      "reason": "تعارض كود مع سؤال في قسم OPEN — الإجابات تتداخل"
+    },
+    {
+      "op": "RECODE",
+      "accountType": "CONTRACTOR",
+      "sectionCode": "OPERATIONS",
+      "from": "O2",
+      "to": "OP2",
+      "reason": "تعارض كود مع سؤال في قسم OPEN"
+    },
+    {
+      "op": "FIX_TEXT",
+      "accountType": "CONTRACTOR",
+      "code": "P1",
+      "textAr": "كيف توفّرون المواد حالياً؟"
+    },
+    {
+      "op": "FIX_TEXT",
+      "accountType": "SUPPLIER",
+      "code": "S10",
+      "textAr": "هل لديكم كتالوج رقمي للمنتجات؟"
+    },
+    {
+      "op": "FIX_TEXT",
+      "accountType": "SUPPLIER",
+      "code": "__SECTION_CATALOG__",
+      "sectionTitleAr": "الكتالوج والرقمنة"
+    },
+    {
+      "op": "FIX_TEXT",
+      "accountType": "CONSULTANT",
+      "code": "Q26",
+      "textAr": "كيف تنفذون حصر الكميات (Quantity Takeoff)؟"
+    },
+    {
+      "op": "FIX_TEXT",
+      "accountType": "CONSULTANT",
+      "code": "Q27",
+      "textAr": "مدى الاهتمام بالذكاء الاصطناعي في حصر الكميات"
+    },
+    {
+      "op": "FIX_TEXT",
+      "accountType": "COMPANY",
+      "code": "AI4",
+      "textAr": "مدى الاهتمام بالصيانة التنبؤية بالذكاء الاصطناعي"
+    },
+    {
+      "op": "FIX_TEXT",
+      "accountType": "SUBCONTRACTOR",
+      "code": "Q31",
+      "textAr": "مدى الاهتمام بحماية المدفوعات عبر حساب ضمان"
+    },
+    {
+      "op": "FIX_TEXT",
+      "accountType": "OWNER",
+      "code": "Q21",
+      "textAr": "مدى الاهتمام بحماية المدفوعات عبر حساب ضمان"
+    },
+    {
+      "op": "DELETE",
+      "accountType": "CONTRACTOR",
+      "code": "T1",
+      "reason": "مكرر حرفياً مع TR0 — اجعل قسم TRANSPORT_LOGISTICS مشروطاً بـ TR0 بدلاً منه",
+      "then": {
+        "op": "SET_SECTION_SHOWIF",
+        "accountType": "CONTRACTOR",
+        "sectionCode": "TRANSPORT_LOGISTICS",
+        "showIf": {
+          "questionCode": "TR0",
+          "op": "eq",
+          "value": "yes"
+        }
+      }
+    },
+    {
+      "op": "SET_OPTIONAL",
+      "targets": [
+        [
+          "OWNER",
+          "Q4"
+        ],
+        [
+          "CONSULTANT",
+          "Q7"
+        ],
+        [
+          "CONTRACTOR",
+          "R3"
+        ],
+        [
+          "CONTRACTOR",
+          "B3"
+        ],
+        [
+          "SUBCONTRACTOR",
+          "Q12"
+        ],
+        [
+          "SUPPLIER",
+          "S2"
+        ],
+        [
+          "COMPANY",
+          "Q17"
+        ],
+        [
+          "ENTITY",
+          "R1"
+        ]
+      ]
+    },
+    {
+      "op": "SET_QUESTION_SHOWIF",
+      "codeAllTypes": "W2",
+      "showIf": {
+        "questionCode": "W1",
+        "op": "eq",
+        "value": "subscription"
+      },
+      "reason": "سقف الاشتراك لا معنى له لمن اختار نموذج عمولة"
+    },
+    {
+      "op": "COUNTRY_CONDITIONAL",
+      "codes": [
+        "HC2",
+        "B3",
+        "E3"
+      ],
+      "reason": "أسئلة مكتوبة على أساس السعودية — يجب أن تتبدّل حسب profile.country"
+    },
+    {
+      "op": "SIMPLIFY",
+      "codeAllTypes": "M1",
+      "to": "اختر أهم ٣ ميزات (بدون ترتيب)",
+      "metadata": {
+        "maxSelect": 3
+      },
+      "reason": "الترتيب بالسحب والإفلات يخفض الإكمال وتحليله معقّد"
+    },
+    {
+      "op": "MERGE",
+      "pairs": [
+        [
+          "OWNER",
+          "Q22",
+          "Q23"
+        ],
+        [
+          "SUBCONTRACTOR",
+          "Q18",
+          "Q19"
+        ],
+        [
+          "INDIVIDUAL",
+          "P9",
+          "P10"
+        ],
+        [
+          "INDIVIDUAL",
+          "C4",
+          "C5"
+        ],
+        [
+          "INDIVIDUAL",
+          "C4",
+          "C6"
+        ]
+      ]
+    },
+    {
+      "op": "MOVE_TO_PROFILE",
+      "targets": [
+        [
+          "INDIVIDUAL",
+          "E4"
+        ],
+        [
+          "INDIVIDUAL",
+          "T1"
+        ],
+        [
+          "INDIVIDUAL",
+          "T2"
+        ],
+        [
+          "INDIVIDUAL",
+          "T3"
+        ],
+        [
+          "INDIVIDUAL",
+          "B3"
+        ],
+        [
+          "INDIVIDUAL",
+          "C7"
+        ],
+        [
+          "INDIVIDUAL",
+          "P8"
+        ]
+      ],
+      "reason": "بيانات ملف تعريفي تُجمع بعد التسجيل، وليست أسئلة تحقق"
+    },
+    {
+      "op": "REBUILD_SECTIONS",
+      "accountType": "INDIVIDUAL",
+      "remove": [
+        "ENG",
+        "SKILLED",
+        "FREELANCER",
+        "TRANSPORT",
+        "INTERN_JOB"
+      ],
+      "replaceWith": [
+        "IND_TYPE",
+        "FREELANCER",
+        "SKILLED",
+        "DRIVER",
+        "JOBSEEKER"
+      ],
+      "reason": "مسار واحد بـ٦٧ سؤالاً يُستبدل بأربعة مسارات موجّهة بـ INDR-01"
+    },
+    {
+      "op": "REPLACE",
+      "accountType": "ENTITY",
+      "codes": [
+        "W1",
+        "W2",
+        "W3"
+      ],
+      "reason": "جهة حكومية لا تشترك شهرياً — استبدل بنموذج التعاون ودورة الاعتماد وصاحب القرار"
+    },
+    {
+      "op": "REPLACE",
+      "targets": [
+        [
+          "ENTITY",
+          "AI2"
+        ],
+        [
+          "SUPPLIER",
+          "AI2"
+        ]
+      ],
+      "reason": "حصر الكميات غير ذي صلة بهما — بديل: مراقبة الامتثال (جهة) / التسعير الآلي والتنبؤ بالطلب (مورّد)"
+    },
+    {
+      "op": "DROP_COLUMNS",
+      "columns": [
+        "keepForThisType",
+        "delete",
+        "notes"
+      ],
+      "reason": "أعمدة سير عمل في الإكسل وليست جزءاً من الـ schema"
+    },
+    {
+      "op": "DROP_SHEET",
+      "sheet": "Sheet1",
+      "reason": "٦٤ صفاً من نسخة أقدم — خطر استيرادها بالخطأ"
+    }
+  ]
+}

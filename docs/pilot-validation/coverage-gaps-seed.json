@@ -1,0 +1,3551 @@
+{
+  "version": "2026-08-21-coverage-gaps",
+  "defaultScale": {
+    "min": 1,
+    "max": 5,
+    "minLabelAr": "غير مهتم إطلاقاً",
+    "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+    "minLabelEn": "Not interested at all",
+    "maxLabelEn": "Very interested, would use immediately"
+  },
+  "metadata": {
+    "accountTypeSelectionNotes": {
+      "supplierVsTrader": {
+        "titleAr": "الفرق بين مورّد وتاجر",
+        "titleEn": "Supplier vs Trader",
+        "supplierAr": "مورّد: يصنّع أو يمتلك مخزوناً ويورّد مباشرة للمشاريع",
+        "supplierEn": "Supplier: manufactures or holds inventory and supplies directly to projects",
+        "traderAr": "تاجر: يشتري ويبيع دون تصنيع، غالباً استيراد وتوزيع",
+        "traderEn": "Trader: buys and resells without manufacturing, often import & distribution",
+        "noteAr": "⚠️ الفرق غير واضح للمستجيب — يجب عرض هذا التعريف في شاشة اختيار الفئة لتقليل التلوث",
+        "noteEn": "⚠️ Distinction is unclear to respondents — show this definition on account type selection to reduce misclassification"
+      }
+    },
+    "implementationNotes": {
+      "entityR1Optional": "ENT-4 — جعل R1 (حجم المعاملات السنوية) اختيارياً عند تطبيق البذرة على القالب الحالي",
+      "supplierAi2Replace": "SUP-AI — استبدال AI2 الحالي بـ SUP-AI1 و SUP-AI2 عند الدمج",
+      "entityPaymentReplace": "ENT-1 — استبدال W1/W2/W3 بـ ENT-W1/ENT-W2/ENT-W3 عند الدمج",
+      "entityAi2Replace": "ENT-2 — استبدال AI2 بـ ENT-AI2 عند الدمج"
+    }
+  },
+  "newQuestions": [
+    {
+      "code": "CNT-TP1",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 1,
+      "textAr": "ما متوسط مدة تحصيل مستخلصاتكم من المالك؟",
+      "textEn": "Average time to collect payment certificates from owners",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_30",
+          "labelAr": "أقل من 30 يوماً",
+          "labelEn": "Under 30 days",
+          "order": 1
+        },
+        {
+          "value": "30_60",
+          "labelAr": "30–60 يوماً",
+          "labelEn": "30–60 days",
+          "order": 2
+        },
+        {
+          "value": "60_90",
+          "labelAr": "60–90 يوماً",
+          "labelEn": "60–90 days",
+          "order": 3
+        },
+        {
+          "value": "over_90",
+          "labelAr": "أكثر من 90 يوماً",
+          "labelEn": "Over 90 days",
+          "order": 4
+        },
+        {
+          "value": "varies",
+          "labelAr": "يختلف حسب المشروع",
+          "labelEn": "Varies by project",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-TP2",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 2,
+      "textAr": "ما متوسط مدة سدادكم للمقاولين من الباطن والموردين؟",
+      "textEn": "Average time you pay subcontractors and suppliers",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_30",
+          "labelAr": "أقل من 30 يوماً",
+          "labelEn": "Under 30 days",
+          "order": 1
+        },
+        {
+          "value": "30_60",
+          "labelAr": "30–60 يوماً",
+          "labelEn": "30–60 days",
+          "order": 2
+        },
+        {
+          "value": "60_90",
+          "labelAr": "60–90 يوماً",
+          "labelEn": "60–90 days",
+          "order": 3
+        },
+        {
+          "value": "over_90",
+          "labelAr": "أكثر من 90 يوماً",
+          "labelEn": "Over 90 days",
+          "order": 4
+        },
+        {
+          "value": "varies",
+          "labelAr": "يختلف حسب المشروع",
+          "labelEn": "Varies by project",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-TP3",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 3,
+      "textAr": "هل واجهتم نزاعات دفع؟ ومع من؟",
+      "textEn": "Have you faced payment disputes, and with whom?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "owner",
+          "labelAr": "المالك / المطوّر",
+          "labelEn": "Owner / developer",
+          "order": 1
+        },
+        {
+          "value": "subcontractor",
+          "labelAr": "مقاول باطن",
+          "labelEn": "Subcontractor",
+          "order": 2
+        },
+        {
+          "value": "supplier",
+          "labelAr": "مورّد",
+          "labelEn": "Supplier",
+          "order": 3
+        },
+        {
+          "value": "consultant",
+          "labelAr": "استشاري",
+          "labelEn": "Consultant",
+          "order": 4
+        },
+        {
+          "value": "none",
+          "labelAr": "لم نواجه نزاعات",
+          "labelEn": "No disputes",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-TP4",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 4,
+      "textAr": "ما مدى اهتمامكم بحساب ضمان (Escrow) يحتجز مستحقاتكم لحين التسليم؟",
+      "textEn": "Interest in an escrow account holding your dues until delivery",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null
+    },
+    {
+      "code": "CNT-TP5",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 5,
+      "textAr": "هل تحتاجون تمويلاً قصير الأجل لتغطية فجوة التحصيل؟",
+      "textEn": "Do you need short-term financing to bridge collection gaps?",
+      "answerType": "LINEAR_SCALE",
+      "required": false,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "يفتح باب منتج التمويل",
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null
+    },
+    {
+      "code": "CNT-TP6",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 6,
+      "textAr": "ما الضمانات التي تطلبونها من المقاول من الباطن قبل التعاقد؟",
+      "textEn": "Guarantees you require from subcontractors before contracting",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": false,
+      "options": [
+        {
+          "value": "performance_bond",
+          "labelAr": "ضمان حسن تنفيذ",
+          "labelEn": "Performance bond",
+          "order": 1
+        },
+        {
+          "value": "advance_guarantee",
+          "labelAr": "ضمان دفعة مقدّمة",
+          "labelEn": "Advance payment guarantee",
+          "order": 2
+        },
+        {
+          "value": "insurance",
+          "labelAr": "تأمين",
+          "labelEn": "Insurance",
+          "order": 3
+        },
+        {
+          "value": "references",
+          "labelAr": "مراجع سابقة",
+          "labelEn": "Past references",
+          "order": 4
+        },
+        {
+          "value": "retention",
+          "labelAr": "حجز مستحقات / retention",
+          "labelEn": "Retention holdback",
+          "order": 5
+        },
+        {
+          "value": "none",
+          "labelAr": "لا نطلب ضمانات",
+          "labelEn": "No guarantees required",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-PR1",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "PRICING",
+      "questionOrder": 1,
+      "textAr": "كم يستغرق إعداد عرض سعر لمشروع متوسط؟",
+      "textEn": "Time to prepare a bid for a medium project",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_3d",
+          "labelAr": "أقل من 3 أيام",
+          "labelEn": "Under 3 days",
+          "order": 1
+        },
+        {
+          "value": "3_7d",
+          "labelAr": "3–7 أيام",
+          "labelEn": "3–7 days",
+          "order": 2
+        },
+        {
+          "value": "1_2w",
+          "labelAr": "1–2 أسبوع",
+          "labelEn": "1–2 weeks",
+          "order": 3
+        },
+        {
+          "value": "2_4w",
+          "labelAr": "2–4 أسابيع",
+          "labelEn": "2–4 weeks",
+          "order": 4
+        },
+        {
+          "value": "over_4w",
+          "labelAr": "أكثر من 4 أسابيع",
+          "labelEn": "Over 4 weeks",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "التسعير وإعداد العروض",
+      "sectionTitleEn": "Pricing & Bidding",
+      "sectionOrder": 18,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-PR2",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "PRICING",
+      "questionOrder": 2,
+      "textAr": "ما أساس تسعيركم؟",
+      "textEn": "Basis of your pricing",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "unit_rates",
+          "labelAr": "أسعار الوحدات / BOQ",
+          "labelEn": "Unit rates / BOQ",
+          "order": 1
+        },
+        {
+          "value": "lump_sum",
+          "labelAr": "مبلغ إجمالي ثابت",
+          "labelEn": "Lump sum",
+          "order": 2
+        },
+        {
+          "value": "cost_plus",
+          "labelAr": "تكلفة + هامش",
+          "labelEn": "Cost plus margin",
+          "order": 3
+        },
+        {
+          "value": "historical",
+          "labelAr": "بيانات مشاريع سابقة",
+          "labelEn": "Historical project data",
+          "order": 4
+        },
+        {
+          "value": "mixed",
+          "labelAr": "مزيج",
+          "labelEn": "Mixed approach",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "التسعير وإعداد العروض",
+      "sectionTitleEn": "Pricing & Bidding",
+      "sectionOrder": 18,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-PR3",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "PRICING",
+      "questionOrder": 3,
+      "textAr": "كم مورّداً تطلبون منه عرض سعر لكل بند عادةً؟",
+      "textEn": "Suppliers asked to quote per line item",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "one",
+          "labelAr": "مورّد واحد",
+          "labelEn": "One supplier",
+          "order": 1
+        },
+        {
+          "value": "two_three",
+          "labelAr": "2–3 موردين",
+          "labelEn": "2–3 suppliers",
+          "order": 2
+        },
+        {
+          "value": "four_plus",
+          "labelAr": "4 أو أكثر",
+          "labelEn": "4 or more",
+          "order": 3
+        },
+        {
+          "value": "varies",
+          "labelAr": "يختلف حسب البند",
+          "labelEn": "Varies by item",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "التسعير وإعداد العروض",
+      "sectionTitleEn": "Pricing & Bidding",
+      "sectionOrder": 18,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-PR4",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "PRICING",
+      "questionOrder": 4,
+      "textAr": "ما نسبة العروض التي خسرتموها بسبب ارتفاع سعر المواد؟",
+      "textEn": "Bids lost due to material price increases",
+      "answerType": "SINGLE_CHOICE",
+      "required": false,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "التسعير وإعداد العروض",
+      "sectionTitleEn": "Pricing & Bidding",
+      "sectionOrder": 18,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-SC1",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "SUBCONTRACTING",
+      "questionOrder": 1,
+      "textAr": "كيف تجدون المقاولين من الباطن اليوم؟",
+      "textEn": "How do you find subcontractors today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "network",
+          "labelAr": "شبكة علاقات شخصية",
+          "labelEn": "Personal network",
+          "order": 1
+        },
+        {
+          "value": "past_projects",
+          "labelAr": "مشاريع سابقة",
+          "labelEn": "Past projects",
+          "order": 2
+        },
+        {
+          "value": "tender_invite",
+          "labelAr": "دعوة مناقصة / RFQ",
+          "labelEn": "Tender / RFQ invite",
+          "order": 3
+        },
+        {
+          "value": "brokers",
+          "labelAr": "وسطاء",
+          "labelEn": "Brokers",
+          "order": 4
+        },
+        {
+          "value": "platforms",
+          "labelAr": "منصات / إعلانات",
+          "labelEn": "Platforms / ads",
+          "order": 5
+        },
+        {
+          "value": "walk_in",
+          "labelAr": "تقديم مباشر",
+          "labelEn": "Direct approach",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "إدارة المقاولين من الباطن",
+      "sectionTitleEn": "Subcontractor Management",
+      "sectionOrder": 22,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-SC2",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "SUBCONTRACTING",
+      "questionOrder": 2,
+      "textAr": "كم مقاولاً من الباطن يعمل معكم حالياً؟",
+      "textEn": "Active subcontractors currently",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "1_3",
+          "labelAr": "1–3",
+          "labelEn": "1–3",
+          "order": 1
+        },
+        {
+          "value": "4_10",
+          "labelAr": "4–10",
+          "labelEn": "4–10",
+          "order": 2
+        },
+        {
+          "value": "11_25",
+          "labelAr": "11–25",
+          "labelEn": "11–25",
+          "order": 3
+        },
+        {
+          "value": "over_25",
+          "labelAr": "أكثر من 25",
+          "labelEn": "Over 25",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "إدارة المقاولين من الباطن",
+      "sectionTitleEn": "Subcontractor Management",
+      "sectionOrder": 22,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-SC3",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "SUBCONTRACTING",
+      "questionOrder": 3,
+      "textAr": "ما أكبر مشكلة مع المقاولين من الباطن؟",
+      "textEn": "Biggest problem with subcontractors",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "quality",
+          "labelAr": "جودة التنفيذ",
+          "labelEn": "Execution quality",
+          "order": 1
+        },
+        {
+          "value": "delays",
+          "labelAr": "تأخير",
+          "labelEn": "Delays",
+          "order": 2
+        },
+        {
+          "value": "pricing",
+          "labelAr": "التسعير",
+          "labelEn": "Pricing",
+          "order": 3
+        },
+        {
+          "value": "safety",
+          "labelAr": "السلامة",
+          "labelEn": "Safety",
+          "order": 4
+        },
+        {
+          "value": "coordination",
+          "labelAr": "التنسيق",
+          "labelEn": "Coordination",
+          "order": 5
+        },
+        {
+          "value": "payment",
+          "labelAr": "المدفوعات",
+          "labelEn": "Payments",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "إدارة المقاولين من الباطن",
+      "sectionTitleEn": "Subcontractor Management",
+      "sectionOrder": 22,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-SC4",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "SUBCONTRACTING",
+      "questionOrder": 4,
+      "textAr": "هل سبق أن تضررتم من مقاول باطن لم تتحققوا من سجله؟",
+      "textEn": "Harmed by an unvetted subcontractor before?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "إدارة المقاولين من الباطن",
+      "sectionTitleEn": "Subcontractor Management",
+      "sectionOrder": 22,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-EX1",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "OPERATIONS",
+      "questionOrder": 10,
+      "textAr": "ما نسبة مشاريعكم التي تُسلَّم في موعدها؟",
+      "textEn": "Share of projects delivered on schedule",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "التشغيل والتنفيذ",
+      "sectionTitleEn": "Operations & Execution",
+      "sectionOrder": 25,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-EX2",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "OPERATIONS",
+      "questionOrder": 11,
+      "textAr": "ما تكرار إعادة العمل بسبب الجودة؟",
+      "textEn": "Frequency of rework due to quality issues",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "rare",
+          "labelAr": "نادراً",
+          "labelEn": "Rarely",
+          "order": 1
+        },
+        {
+          "value": "occasional",
+          "labelAr": "أحياناً",
+          "labelEn": "Occasionally",
+          "order": 2
+        },
+        {
+          "value": "frequent",
+          "labelAr": "متكرر",
+          "labelEn": "Frequently",
+          "order": 3
+        },
+        {
+          "value": "major_issue",
+          "labelAr": "مشكلة كبيرة",
+          "labelEn": "Major ongoing issue",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "التشغيل والتنفيذ",
+      "sectionTitleEn": "Operations & Execution",
+      "sectionOrder": 25,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-EX3",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "OPERATIONS",
+      "questionOrder": 12,
+      "textAr": "كيف تتابعون تقدم الأعمال في الموقع اليوم؟",
+      "textEn": "How do you track site progress today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "daily_reports",
+          "labelAr": "تقارير يومية",
+          "labelEn": "Daily reports",
+          "order": 1
+        },
+        {
+          "value": "site_visits",
+          "labelAr": "زيارات موقع",
+          "labelEn": "Site visits",
+          "order": 2
+        },
+        {
+          "value": "photos",
+          "labelAr": "صور / فيديو",
+          "labelEn": "Photos / video",
+          "order": 3
+        },
+        {
+          "value": "pm_software",
+          "labelAr": "برنامج إدارة مشاريع",
+          "labelEn": "PM software",
+          "order": 4
+        },
+        {
+          "value": "whatsapp",
+          "labelAr": "واتساب / مجموعات",
+          "labelEn": "WhatsApp groups",
+          "order": 5
+        },
+        {
+          "value": "spreadsheets",
+          "labelAr": "جداول / Excel",
+          "labelEn": "Spreadsheets",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "التشغيل والتنفيذ",
+      "sectionTitleEn": "Operations & Execution",
+      "sectionOrder": 25,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-HR1",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "HUMAN_CAPITAL",
+      "questionOrder": 5,
+      "textAr": "ما أكبر تحدٍ في توفير العمالة؟",
+      "textEn": "Biggest labor availability challenge",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "skilled_shortage",
+          "labelAr": "نقص العمالة الماهرة",
+          "labelEn": "Skilled labor shortage",
+          "order": 1
+        },
+        {
+          "value": "cost",
+          "labelAr": "ارتفاع التكلفة",
+          "labelEn": "Rising labor cost",
+          "order": 2
+        },
+        {
+          "value": "visa_sponsorship",
+          "labelAr": "التأشيرات / الكفالة",
+          "labelEn": "Visas / sponsorship",
+          "order": 3
+        },
+        {
+          "value": "turnover",
+          "labelAr": "دوران العمالة",
+          "labelEn": "High turnover",
+          "order": 4
+        },
+        {
+          "value": "seasonal",
+          "labelAr": "موسمية الطلب",
+          "labelEn": "Seasonal demand",
+          "order": 5
+        },
+        {
+          "value": "compliance",
+          "labelAr": "متطلبات تنظيمية",
+          "labelEn": "Regulatory compliance",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "رأس المال البشري",
+      "sectionTitleEn": "Human Capital",
+      "sectionOrder": 28,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-EQ1",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "EQUIPMENT",
+      "questionOrder": 1,
+      "textAr": "معداتكم: تملّك أم تأجير؟",
+      "textEn": "Equipment: owned vs rented",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "mostly_owned",
+          "labelAr": "معظمها مملوكة",
+          "labelEn": "Mostly owned",
+          "order": 1
+        },
+        {
+          "value": "mostly_rented",
+          "labelAr": "معظمها مؤجّرة",
+          "labelEn": "Mostly rented",
+          "order": 2
+        },
+        {
+          "value": "mixed",
+          "labelAr": "مزيج",
+          "labelEn": "Mixed",
+          "order": 3
+        },
+        {
+          "value": "minimal",
+          "labelAr": "معدات محدودة",
+          "labelEn": "Minimal equipment",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "المعدات",
+      "sectionTitleEn": "Equipment",
+      "sectionOrder": 32,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-EQ2",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "EQUIPMENT",
+      "questionOrder": 2,
+      "textAr": "كيف تستأجرون المعدات اليوم؟",
+      "textEn": "How do you rent equipment today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "direct_rental",
+          "labelAr": "شركات تأجير مباشرة",
+          "labelEn": "Direct rental companies",
+          "order": 1
+        },
+        {
+          "value": "subcontractor",
+          "labelAr": "عبر مقاول باطن",
+          "labelEn": "Via subcontractor",
+          "order": 2
+        },
+        {
+          "value": "project_owner",
+          "labelAr": "يوفرها المالك",
+          "labelEn": "Provided by owner",
+          "order": 3
+        },
+        {
+          "value": "brokers",
+          "labelAr": "وسطاء",
+          "labelEn": "Brokers",
+          "order": 4
+        },
+        {
+          "value": "online",
+          "labelAr": "منصات / إعلانات",
+          "labelEn": "Online / ads",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "المعدات",
+      "sectionTitleEn": "Equipment",
+      "sectionOrder": 32,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNT-BIM1",
+      "accountTypes": [
+        "CONTRACTOR"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 5,
+      "textAr": "هل تستلمون نماذج BIM من الاستشاري؟",
+      "textEn": "Do you receive BIM models from the consultant?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "always",
+          "labelAr": "دائماً",
+          "labelEn": "Always",
+          "order": 1
+        },
+        {
+          "value": "sometimes",
+          "labelAr": "أحياناً",
+          "labelEn": "Sometimes",
+          "order": 2
+        },
+        {
+          "value": "rarely",
+          "labelAr": "نادراً",
+          "labelEn": "Rarely",
+          "order": 3
+        },
+        {
+          "value": "never",
+          "labelAr": "لا",
+          "labelEn": "Never",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "OWN-T1",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "TENDERS",
+      "questionOrder": 1,
+      "textAr": "كيف تطرحون المشروع على المقاولين اليوم؟",
+      "textEn": "How do you invite contractors to bid today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "direct_invite",
+          "labelAr": "دعوة مباشرة لمقاولين معروفين",
+          "labelEn": "Direct invite to known contractors",
+          "order": 1
+        },
+        {
+          "value": "consultant",
+          "labelAr": "عبر الاستشاري",
+          "labelEn": "Via consultant",
+          "order": 2
+        },
+        {
+          "value": "public_tender",
+          "labelAr": "مناقصة عامة",
+          "labelEn": "Public tender",
+          "order": 3
+        },
+        {
+          "value": "rfq_informal",
+          "labelAr": "RFQ غير رسمي",
+          "labelEn": "Informal RFQ",
+          "order": 4
+        },
+        {
+          "value": "brokers",
+          "labelAr": "وسطاء",
+          "labelEn": "Brokers",
+          "order": 5
+        }
+      ],
+      "note": "سؤال التحقق الأهم — البديل الحالي",
+      "sectionTitleAr": "المناقصات والتعاقد",
+      "sectionTitleEn": "Tenders & Contracting",
+      "sectionOrder": 12,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "OWN-T2",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "TENDERS",
+      "questionOrder": 2,
+      "textAr": "كم مقاولاً تدعون عادةً للمنافسة؟",
+      "textEn": "How many contractors do you typically invite to bid?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "1_2",
+          "labelAr": "1–2",
+          "labelEn": "1–2",
+          "order": 1
+        },
+        {
+          "value": "3_5",
+          "labelAr": "3–5",
+          "labelEn": "3–5",
+          "order": 2
+        },
+        {
+          "value": "6_10",
+          "labelAr": "6–10",
+          "labelEn": "6–10",
+          "order": 3
+        },
+        {
+          "value": "over_10",
+          "labelAr": "أكثر من 10",
+          "labelEn": "Over 10",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "المناقصات والتعاقد",
+      "sectionTitleEn": "Tenders & Contracting",
+      "sectionOrder": 12,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "OWN-T3",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "TENDERS",
+      "questionOrder": 3,
+      "textAr": "ما معيار الترسية لديكم؟ (أقل سعر / أفضل قيمة / سمعة)",
+      "textEn": "Your award criteria (lowest price / best value / reputation)",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "lowest_price",
+          "labelAr": "أقل سعر",
+          "labelEn": "Lowest price",
+          "order": 1
+        },
+        {
+          "value": "best_value",
+          "labelAr": "أفضل قيمة",
+          "labelEn": "Best value",
+          "order": 2
+        },
+        {
+          "value": "reputation",
+          "labelAr": "السمعة والخبرة",
+          "labelEn": "Reputation & experience",
+          "order": 3
+        },
+        {
+          "value": "combined",
+          "labelAr": "معايير مركّبة",
+          "labelEn": "Combined criteria",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "المناقصات والتعاقد",
+      "sectionTitleEn": "Tenders & Contracting",
+      "sectionOrder": 12,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "OWN-S1",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "TENDERS",
+      "questionOrder": 4,
+      "textAr": "ما إجمالي إنفاقكم الإنشائي السنوي تقريباً؟",
+      "textEn": "Approximate annual construction spend",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_5m",
+          "labelAr": "أقل من 5 ملايين",
+          "labelEn": "Under 5M",
+          "order": 1
+        },
+        {
+          "value": "5_20m",
+          "labelAr": "5–20 مليون",
+          "labelEn": "5–20M",
+          "order": 2
+        },
+        {
+          "value": "20_100m",
+          "labelAr": "20–100 مليون",
+          "labelEn": "20–100M",
+          "order": 3
+        },
+        {
+          "value": "over_100m",
+          "labelAr": "أكثر من 100 مليون",
+          "labelEn": "Over 100M",
+          "order": 4
+        },
+        {
+          "value": "prefer_not",
+          "labelAr": "أفضل عدم الإفصاح",
+          "labelEn": "Prefer not to say",
+          "order": 5
+        }
+      ],
+      "note": "أهم مؤشر تأهيل",
+      "sectionTitleAr": "المناقصات والتعاقد",
+      "sectionTitleEn": "Tenders & Contracting",
+      "sectionOrder": 12,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "OWN-E1",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "EXECUTION",
+      "questionOrder": 1,
+      "textAr": "كيف تتابعون تقدم المشروع اليوم؟",
+      "textEn": "How do you track project progress today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "consultant_reports",
+          "labelAr": "تقارير الاستشاري",
+          "labelEn": "Consultant reports",
+          "order": 1
+        },
+        {
+          "value": "site_visits",
+          "labelAr": "زيارات موقع",
+          "labelEn": "Site visits",
+          "order": 2
+        },
+        {
+          "value": "pm_software",
+          "labelAr": "برنامج إدارة مشاريع",
+          "labelEn": "PM software",
+          "order": 3
+        },
+        {
+          "value": "contractor_updates",
+          "labelAr": "تحديثات المقاول",
+          "labelEn": "Contractor updates",
+          "order": 4
+        },
+        {
+          "value": "photos",
+          "labelAr": "صور / فيديو",
+          "labelEn": "Photos / video",
+          "order": 5
+        },
+        {
+          "value": "spreadsheets",
+          "labelAr": "جداول / Excel",
+          "labelEn": "Spreadsheets",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "التنفيذ والمتابعة",
+      "sectionTitleEn": "Execution & Tracking",
+      "sectionOrder": 30,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "OWN-E2",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "EXECUTION",
+      "questionOrder": 2,
+      "textAr": "ما نسبة مشاريعكم التي تأخرت عن الجدول؟",
+      "textEn": "Share of projects delayed vs schedule",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "التنفيذ والمتابعة",
+      "sectionTitleEn": "Execution & Tracking",
+      "sectionOrder": 30,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "OWN-D1",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 1,
+      "textAr": "ما مستوى الأنظمة الرقمية لديكم حالياً؟",
+      "textEn": "Current level of digital systems",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "manual",
+          "labelAr": "عمليات يدوية / بريد وواتساب",
+          "labelEn": "Manual / email & WhatsApp",
+          "order": 1
+        },
+        {
+          "value": "basic",
+          "labelAr": "أدوات أساسية (Excel)",
+          "labelEn": "Basic tools (Excel)",
+          "order": 2
+        },
+        {
+          "value": "partial",
+          "labelAr": "أنظمة جزئية",
+          "labelEn": "Partial systems",
+          "order": 3
+        },
+        {
+          "value": "integrated",
+          "labelAr": "أنظمة متكاملة",
+          "labelEn": "Integrated systems",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "OWN-D2",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 2,
+      "textAr": "ما مدى اهتمامكم بتقارير آلية عن تقدم المشروع؟",
+      "textEn": "Interest in automated project progress reports",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null
+    },
+    {
+      "code": "OWN-TR1",
+      "accountTypes": [
+        "OWNER"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 1,
+      "textAr": "هل ستتعاملون مع مقاول لم تعرفوه شخصياً إذا كان موثّقاً ومُقيّماً؟",
+      "textEn": "Would you work with an unknown but verified & rated contractor?",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "جوهر فرضية المنصة",
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null
+    },
+    {
+      "code": "CNS-O1",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "OPPORTUNITIES",
+      "questionOrder": 1,
+      "textAr": "كيف تحصلون على مشاريع جديدة اليوم؟",
+      "textEn": "How do you win new projects today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "referrals",
+          "labelAr": "إحالات / شبكة",
+          "labelEn": "Referrals / network",
+          "order": 1
+        },
+        {
+          "value": "repeat_clients",
+          "labelAr": "عملاء متكررون",
+          "labelEn": "Repeat clients",
+          "order": 2
+        },
+        {
+          "value": "tenders",
+          "labelAr": "مناقصات",
+          "labelEn": "Tenders",
+          "order": 3
+        },
+        {
+          "value": "direct_approach",
+          "labelAr": "تقديم مباشر",
+          "labelEn": "Direct approach",
+          "order": 4
+        },
+        {
+          "value": "partnerships",
+          "labelAr": "شراكات",
+          "labelEn": "Partnerships",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "الفرص والعمل",
+      "sectionTitleEn": "Opportunities & Work",
+      "sectionOrder": 14,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNS-O2",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "OPPORTUNITIES",
+      "questionOrder": 2,
+      "textAr": "ما نسبة أعمالكم من عملاء متكررين؟",
+      "textEn": "Share of work from repeat clients",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "الفرص والعمل",
+      "sectionTitleEn": "Opportunities & Work",
+      "sectionOrder": 14,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNS-T1",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 1,
+      "textAr": "هل تواجهون تأخراً في تحصيل أتعابكم؟",
+      "textEn": "Do you experience delays collecting fees?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNS-T2",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 2,
+      "textAr": "ما مدى اهتمامكم بحساب ضمان لأتعاب الاستشارة؟",
+      "textEn": "Interest in escrow for consulting fees",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null
+    },
+    {
+      "code": "CNS-M1",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "TENDERS",
+      "questionOrder": 1,
+      "textAr": "هل تديرون المناقصات نيابة عن المالك؟",
+      "textEn": "Do you manage tenders on behalf of owners?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "المناقصات والتعاقد",
+      "sectionTitleEn": "Tenders & Contracting",
+      "sectionOrder": 12,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNS-M2",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "TENDERS",
+      "questionOrder": 2,
+      "textAr": "كيف تقيّمون عروض المقاولين اليوم؟",
+      "textEn": "How do you evaluate contractor bids today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "price",
+          "labelAr": "السعر",
+          "labelEn": "Price",
+          "order": 1
+        },
+        {
+          "value": "technical",
+          "labelAr": "الجدول الفني",
+          "labelEn": "Technical proposal",
+          "order": 2
+        },
+        {
+          "value": "experience",
+          "labelAr": "الخبرة والمراجع",
+          "labelEn": "Experience & references",
+          "order": 3
+        },
+        {
+          "value": "schedule",
+          "labelAr": "الجدول الزمني",
+          "labelEn": "Schedule",
+          "order": 4
+        },
+        {
+          "value": "compliance",
+          "labelAr": "الامتثال",
+          "labelEn": "Compliance",
+          "order": 5
+        },
+        {
+          "value": "interviews",
+          "labelAr": "مقابلات / زيارات",
+          "labelEn": "Interviews / site visits",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "المناقصات والتعاقد",
+      "sectionTitleEn": "Tenders & Contracting",
+      "sectionOrder": 12,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CNS-P1",
+      "accountTypes": [
+        "CONSULTANT"
+      ],
+      "sectionCode": "OPERATIONS",
+      "questionOrder": 1,
+      "textAr": "ما أكثر ما يعطّل تسليم مخرجاتكم؟",
+      "textEn": "What most delays your deliverables?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "client_approval",
+          "labelAr": "موافقات العميل",
+          "labelEn": "Client approvals",
+          "order": 1
+        },
+        {
+          "value": "scope_changes",
+          "labelAr": "تغييرات النطاق",
+          "labelEn": "Scope changes",
+          "order": 2
+        },
+        {
+          "value": "data_gaps",
+          "labelAr": "نقص بيانات / مخططات",
+          "labelEn": "Missing data / drawings",
+          "order": 3
+        },
+        {
+          "value": "coordination",
+          "labelAr": "تنسيق مع جهات أخرى",
+          "labelEn": "Coordination with others",
+          "order": 4
+        },
+        {
+          "value": "staffing",
+          "labelAr": "نقص الكادر",
+          "labelEn": "Staffing gaps",
+          "order": 5
+        },
+        {
+          "value": "payment",
+          "labelAr": "تأخر الدفع",
+          "labelEn": "Payment delays",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "التشغيل والتنفيذ",
+      "sectionTitleEn": "Operations & Execution",
+      "sectionOrder": 25,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUB-B1",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "BOQ",
+      "questionOrder": 1,
+      "textAr": "كيف تستلمون الكميات؟ (BOQ جاهز من المقاول / تحصرون بأنفسكم / رسومات فقط)",
+      "textEn": "How do you receive quantities? (BOQ from contractor / self takeoff / drawings only)",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "boq_from_contractor",
+          "labelAr": "BOQ جاهز من المقاول",
+          "labelEn": "BOQ from main contractor",
+          "order": 1
+        },
+        {
+          "value": "self_takeoff",
+          "labelAr": "تحصرون بأنفسكم",
+          "labelEn": "Self quantity takeoff",
+          "order": 2
+        },
+        {
+          "value": "drawings_only",
+          "labelAr": "رسومات فقط",
+          "labelEn": "Drawings only",
+          "order": 3
+        },
+        {
+          "value": "mixed",
+          "labelAr": "مزيج",
+          "labelEn": "Mixed",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "الكميات و BOQ",
+      "sectionTitleEn": "Quantities & BOQ",
+      "sectionOrder": 20,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUB-B2",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "BOQ",
+      "questionOrder": 2,
+      "textAr": "هل سبق أن تضررتم من كميات خاطئة في العقد؟",
+      "textEn": "Have incorrect contract quantities harmed you before?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "الكميات و BOQ",
+      "sectionTitleEn": "Quantities & BOQ",
+      "sectionOrder": 20,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUB-C1",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "OPPORTUNITIES",
+      "questionOrder": 1,
+      "textAr": "ما نسبة أعمالكم القادمة من مقاول رئيسي واحد؟",
+      "textEn": "Share of work from a single main contractor",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "الفرص والعمل",
+      "sectionTitleEn": "Opportunities & Work",
+      "sectionOrder": 14,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUB-L1",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "LOGISTICS",
+      "questionOrder": 1,
+      "textAr": "من يتحمل نقل المواد في أعمالكم؟",
+      "textEn": "Who bears material transport in your work?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "us",
+          "labelAr": "نحن",
+          "labelEn": "Us (subcontractor)",
+          "order": 1
+        },
+        {
+          "value": "main_contractor",
+          "labelAr": "المقاول الرئيسي",
+          "labelEn": "Main contractor",
+          "order": 2
+        },
+        {
+          "value": "supplier",
+          "labelAr": "المورّد",
+          "labelEn": "Supplier",
+          "order": 3
+        },
+        {
+          "value": "owner",
+          "labelAr": "المالك",
+          "labelEn": "Owner",
+          "order": 4
+        },
+        {
+          "value": "shared",
+          "labelAr": "مشترك / حسب العقد",
+          "labelEn": "Shared / per contract",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "النقل واللوجستيات",
+      "sectionTitleEn": "Transport & Logistics",
+      "sectionOrder": 38,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUB-T1",
+      "accountTypes": [
+        "SUBCONTRACTOR"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 1,
+      "textAr": "هل سبق أن رفضتم فرصة لعدم قدرتكم على تقييم جدية العميل؟",
+      "textEn": "Have you declined opportunities due to inability to assess client seriousness?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-CR1",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "CREDIT",
+      "questionOrder": 1,
+      "textAr": "ما مدة السداد التي تمنحونها للمقاولين؟",
+      "textEn": "Payment terms you grant contractors",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "cash",
+          "labelAr": "نقد / فوري",
+          "labelEn": "Cash / immediate",
+          "order": 1
+        },
+        {
+          "value": "15_30",
+          "labelAr": "15–30 يوماً",
+          "labelEn": "15–30 days",
+          "order": 2
+        },
+        {
+          "value": "30_60",
+          "labelAr": "30–60 يوماً",
+          "labelEn": "30–60 days",
+          "order": 3
+        },
+        {
+          "value": "60_90",
+          "labelAr": "60–90 يوماً",
+          "labelEn": "60–90 days",
+          "order": 4
+        },
+        {
+          "value": "over_90",
+          "labelAr": "أكثر من 90 يوماً",
+          "labelEn": "Over 90 days",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "الائتمان والتحصيل",
+      "sectionTitleEn": "Credit & Collections",
+      "sectionOrder": 16,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-CR2",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "CREDIT",
+      "questionOrder": 2,
+      "textAr": "ما نسبة الذمم المتأخرة لديكم؟",
+      "textEn": "Share of overdue receivables",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "الائتمان والتحصيل",
+      "sectionTitleEn": "Credit & Collections",
+      "sectionOrder": 16,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-CR3",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "CREDIT",
+      "questionOrder": 3,
+      "textAr": "ما مدى اهتمامكم بضمان الدفع عبر المنصة؟",
+      "textEn": "Interest in platform-guaranteed payment",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "sectionTitleAr": "الائتمان والتحصيل",
+      "sectionTitleEn": "Credit & Collections",
+      "sectionOrder": 16,
+      "showIf": null
+    },
+    {
+      "code": "SUP-CR4",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "CREDIT",
+      "questionOrder": 4,
+      "textAr": "هل سبق أن أوقفتم التوريد بسبب عدم السداد؟",
+      "textEn": "Have you stopped supply due to non-payment?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "الائتمان والتحصيل",
+      "sectionTitleEn": "Credit & Collections",
+      "sectionOrder": 16,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-R1",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "RFQ",
+      "questionOrder": 1,
+      "textAr": "كم طلب عرض سعر يصلكم شهرياً؟",
+      "textEn": "RFQs received per month",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10",
+          "labelEn": "Under 10",
+          "order": 1
+        },
+        {
+          "value": "10_30",
+          "labelAr": "10–30",
+          "labelEn": "10–30",
+          "order": 2
+        },
+        {
+          "value": "30_100",
+          "labelAr": "30–100",
+          "labelEn": "30–100",
+          "order": 3
+        },
+        {
+          "value": "over_100",
+          "labelAr": "أكثر من 100",
+          "labelEn": "Over 100",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "طلبات التسعير",
+      "sectionTitleEn": "RFQ Flow",
+      "sectionOrder": 19,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-R2",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "RFQ",
+      "questionOrder": 2,
+      "textAr": "كيف تصلكم الطلبات اليوم؟ (واتساب / هاتف / بريد / نظام)",
+      "textEn": "How do RFQs reach you today? (WhatsApp / phone / email / system)",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "whatsapp",
+          "labelAr": "واتساب",
+          "labelEn": "WhatsApp",
+          "order": 1
+        },
+        {
+          "value": "phone",
+          "labelAr": "هاتف",
+          "labelEn": "Phone",
+          "order": 2
+        },
+        {
+          "value": "email",
+          "labelAr": "بريد إلكتروني",
+          "labelEn": "Email",
+          "order": 3
+        },
+        {
+          "value": "system",
+          "labelAr": "نظام / ERP",
+          "labelEn": "System / ERP",
+          "order": 4
+        },
+        {
+          "value": "in_person",
+          "labelAr": "زيارة مباشرة",
+          "labelEn": "In person",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "طلبات التسعير",
+      "sectionTitleEn": "RFQ Flow",
+      "sectionOrder": 19,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-R3",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "RFQ",
+      "questionOrder": 3,
+      "textAr": "كم يستغرق إعداد عرض السعر الواحد؟",
+      "textEn": "Time to prepare one quote",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_1h",
+          "labelAr": "أقل من ساعة",
+          "labelEn": "Under 1 hour",
+          "order": 1
+        },
+        {
+          "value": "1_4h",
+          "labelAr": "1–4 ساعات",
+          "labelEn": "1–4 hours",
+          "order": 2
+        },
+        {
+          "value": "half_day",
+          "labelAr": "نصف يوم",
+          "labelEn": "Half day",
+          "order": 3
+        },
+        {
+          "value": "full_day",
+          "labelAr": "يوم كامل أو أكثر",
+          "labelEn": "Full day or more",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "طلبات التسعير",
+      "sectionTitleEn": "RFQ Flow",
+      "sectionOrder": 19,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-R4",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "RFQ",
+      "questionOrder": 4,
+      "textAr": "ما نسبة العروض التي تتحول إلى طلبات فعلية؟",
+      "textEn": "Share of quotes that convert to orders",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "طلبات التسعير",
+      "sectionTitleEn": "RFQ Flow",
+      "sectionOrder": 19,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-Q1",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "QUALITY",
+      "questionOrder": 1,
+      "textAr": "ما نسبة الطلبات التي تُرجع أو تُشتكى بسبب الجودة؟",
+      "textEn": "Share of orders returned or complained about (quality)",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "الجودة والمرتجعات",
+      "sectionTitleEn": "Quality & Returns",
+      "sectionOrder": 21,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SUP-AI1",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 10,
+      "textAr": "ما مدى اهتمامكم بالتسعير الآلي للعروض؟",
+      "textEn": "Interest in automated quote pricing",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "بديل AI2 — حصر الكميات غير ذي صلة بالمورّد",
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null
+    },
+    {
+      "code": "SUP-AI2",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 11,
+      "textAr": "ما مدى اهتمامكم بالتنبؤ بالطلب؟",
+      "textEn": "Interest in demand forecasting",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "بديل AI2 — حصر الكميات غير ذي صلة بالمورّد",
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null
+    },
+    {
+      "code": "TRD-TP1",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 1,
+      "textAr": "هل واجهتم شيكات مرتجعة أو تعثّر سداد؟",
+      "textEn": "Have you faced bounced checks or payment defaults?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "TRD-TP2",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 2,
+      "textAr": "ما نسبة مبيعاتكم بالآجل؟",
+      "textEn": "Share of sales on credit",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "TRD-TP3",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 3,
+      "textAr": "ما مدى اهتمامكم بضمان الدفع عبر المنصة؟",
+      "textEn": "Interest in platform-guaranteed payment",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null
+    },
+    {
+      "code": "TRD-C1",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "CLIENTS",
+      "questionOrder": 1,
+      "textAr": "كيف تجدون عملاء جدداً اليوم؟",
+      "textEn": "How do you find new customers today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "network",
+          "labelAr": "شبكة علاقات",
+          "labelEn": "Personal network",
+          "order": 1
+        },
+        {
+          "value": "walk_in",
+          "labelAr": "زيارات / معارض",
+          "labelEn": "Walk-in / exhibitions",
+          "order": 2
+        },
+        {
+          "value": "online",
+          "labelAr": "إعلانات / منصات",
+          "labelEn": "Online / platforms",
+          "order": 3
+        },
+        {
+          "value": "contractors",
+          "labelAr": "مقاولون / مشاريع",
+          "labelEn": "Contractors / projects",
+          "order": 4
+        },
+        {
+          "value": "agents",
+          "labelAr": "وكلاء / موزّعون",
+          "labelEn": "Agents / distributors",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "العملاء والمبيعات",
+      "sectionTitleEn": "Clients & Sales",
+      "sectionOrder": 20,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "TRD-P1",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "PRICING",
+      "questionOrder": 1,
+      "textAr": "كيف تحدّدون أسعاركم مع تقلب سعر الصرف والشحن؟",
+      "textEn": "How do you set prices amid FX and shipping volatility?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "fixed_margin",
+          "labelAr": "هامش ثابت",
+          "labelEn": "Fixed margin",
+          "order": 1
+        },
+        {
+          "value": "index_linked",
+          "labelAr": "ربط بمؤشر / سعر صرف",
+          "labelEn": "Index / FX linked",
+          "order": 2
+        },
+        {
+          "value": "quote_validity",
+          "labelAr": "صلاحية محددة للعرض",
+          "labelEn": "Limited quote validity",
+          "order": 3
+        },
+        {
+          "value": "stock_cost",
+          "labelAr": "تكلفة المخزون الفعلية",
+          "labelEn": "Actual stock cost",
+          "order": 4
+        },
+        {
+          "value": "market_daily",
+          "labelAr": "متابعة السوق يومياً",
+          "labelEn": "Daily market tracking",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "التسعير وإعداد العروض",
+      "sectionTitleEn": "Pricing & Bidding",
+      "sectionOrder": 18,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "TRD-L1",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "LOGISTICS",
+      "questionOrder": 1,
+      "textAr": "من يتحمل الشحن والتوصيل؟",
+      "textEn": "Who bears shipping and delivery?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "trader",
+          "labelAr": "التاجر",
+          "labelEn": "Trader",
+          "order": 1
+        },
+        {
+          "value": "customer",
+          "labelAr": "العميل",
+          "labelEn": "Customer",
+          "order": 2
+        },
+        {
+          "value": "third_party",
+          "labelAr": "شركة شحن",
+          "labelEn": "Third-party carrier",
+          "order": 3
+        },
+        {
+          "value": "depends",
+          "labelAr": "حسب الاتفاق",
+          "labelEn": "Depends on agreement",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "النقل واللوجستيات",
+      "sectionTitleEn": "Transport & Logistics",
+      "sectionOrder": 38,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "TRD-D1",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 1,
+      "textAr": "ما مستوى أنظمتكم الرقمية (مخزون / فوترة)؟",
+      "textEn": "Level of digital systems (inventory / invoicing)",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "manual",
+          "labelAr": "يدوي / Excel",
+          "labelEn": "Manual / Excel",
+          "order": 1
+        },
+        {
+          "value": "basic",
+          "labelAr": "برنامج أساسي",
+          "labelEn": "Basic software",
+          "order": 2
+        },
+        {
+          "value": "integrated",
+          "labelAr": "ERP متكامل",
+          "labelEn": "Integrated ERP",
+          "order": 3
+        },
+        {
+          "value": "none",
+          "labelAr": "لا يوجد",
+          "labelEn": "None",
+          "order": 4
+        }
+      ],
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "TRD-D2",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 2,
+      "textAr": "ما مدى اهتمامكم بعرض مخزونكم مباشرة على المنصة؟",
+      "textEn": "Interest in listing inventory live on the platform",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null
+    },
+    {
+      "code": "TRD-HR1",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "HUMAN_CAPITAL",
+      "questionOrder": 1,
+      "textAr": "هل لديكم موظفون (غير المالكين)؟",
+      "textEn": "Do you have employees (not just owners)?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "note": "مكافئ HC0 — قسم الموارد البشرية للتاجر",
+      "sectionTitleAr": "رأس المال البشري",
+      "sectionTitleEn": "Human Capital",
+      "sectionOrder": 28,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "TRD-HR2",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "HUMAN_CAPITAL",
+      "questionOrder": 2,
+      "textAr": "إجمالي الموظفين (مباشر + غير مباشر)",
+      "textEn": "Total employees (direct + indirect)",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "TRD-HR1",
+        "op": "eq",
+        "value": "yes"
+      },
+      "options": [
+        {
+          "value": "1_5",
+          "labelAr": "1–5",
+          "labelEn": "1–5",
+          "order": 1
+        },
+        {
+          "value": "6_20",
+          "labelAr": "6–20",
+          "labelEn": "6–20",
+          "order": 2
+        },
+        {
+          "value": "21_50",
+          "labelAr": "21–50",
+          "labelEn": "21–50",
+          "order": 3
+        },
+        {
+          "value": "51_200",
+          "labelAr": "51–200",
+          "labelEn": "51–200",
+          "order": 4
+        },
+        {
+          "value": "over_200",
+          "labelAr": "أكثر من 200",
+          "labelEn": "Over 200",
+          "order": 5
+        }
+      ],
+      "note": "مكافئ HC1",
+      "sectionTitleAr": "رأس المال البشري",
+      "sectionTitleEn": "Human Capital",
+      "sectionOrder": 28,
+      "scale": null
+    },
+    {
+      "code": "TRD-HR3",
+      "accountTypes": [
+        "TRADER"
+      ],
+      "sectionCode": "HUMAN_CAPITAL",
+      "questionOrder": 3,
+      "textAr": "أكبر تحدٍ في الموارد البشرية",
+      "textEn": "Biggest workforce challenge",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "showIf": {
+        "questionCode": "TRD-HR1",
+        "op": "eq",
+        "value": "yes"
+      },
+      "options": [
+        {
+          "value": "hiring",
+          "labelAr": "التوظيف",
+          "labelEn": "Hiring",
+          "order": 1
+        },
+        {
+          "value": "retention",
+          "labelAr": "الاحتفاظ",
+          "labelEn": "Retention",
+          "order": 2
+        },
+        {
+          "value": "cost",
+          "labelAr": "التكلفة",
+          "labelEn": "Cost",
+          "order": 3
+        },
+        {
+          "value": "training",
+          "labelAr": "التدريب",
+          "labelEn": "Training",
+          "order": 4
+        },
+        {
+          "value": "compliance",
+          "labelAr": "الامتثال / السعودة",
+          "labelEn": "Compliance / localization",
+          "order": 5
+        },
+        {
+          "value": "productivity",
+          "labelAr": "الإنتاجية",
+          "labelEn": "Productivity",
+          "order": 6
+        }
+      ],
+      "note": "مكافئ HC3 — HC2 (نسبة السعوديين) اختياري حسب البلد",
+      "sectionTitleAr": "رأس المال البشري",
+      "sectionTitleEn": "Human Capital",
+      "sectionOrder": 28,
+      "scale": null
+    },
+    {
+      "code": "COM-O1",
+      "accountTypes": [
+        "COMPANY"
+      ],
+      "sectionCode": "OPPORTUNITIES",
+      "questionOrder": 1,
+      "textAr": "كيف تحصلون على عقود جديدة اليوم؟",
+      "textEn": "How do you win new contracts today?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "tenders",
+          "labelAr": "مناقصات",
+          "labelEn": "Tenders",
+          "order": 1
+        },
+        {
+          "value": "direct",
+          "labelAr": "تعاقد مباشر",
+          "labelEn": "Direct contracting",
+          "order": 2
+        },
+        {
+          "value": "referrals",
+          "labelAr": "إحالات",
+          "labelEn": "Referrals",
+          "order": 3
+        },
+        {
+          "value": "framework",
+          "labelAr": "اتفاقيات إطارية",
+          "labelEn": "Framework agreements",
+          "order": 4
+        },
+        {
+          "value": "partners",
+          "labelAr": "شركاء / مقاولون",
+          "labelEn": "Partners / contractors",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "الفرص والعمل",
+      "sectionTitleEn": "Opportunities & Work",
+      "sectionOrder": 14,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "COM-O2",
+      "accountTypes": [
+        "COMPANY"
+      ],
+      "sectionCode": "OPPORTUNITIES",
+      "questionOrder": 2,
+      "textAr": "ما نسبة تجديد عقودكم سنوياً؟",
+      "textEn": "Annual contract renewal rate",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_10",
+          "labelAr": "أقل من 10%",
+          "labelEn": "Under 10%",
+          "order": 1
+        },
+        {
+          "value": "10_25",
+          "labelAr": "10–25%",
+          "labelEn": "10–25%",
+          "order": 2
+        },
+        {
+          "value": "25_50",
+          "labelAr": "25–50%",
+          "labelEn": "25–50%",
+          "order": 3
+        },
+        {
+          "value": "50_75",
+          "labelAr": "50–75%",
+          "labelEn": "50–75%",
+          "order": 4
+        },
+        {
+          "value": "over_75",
+          "labelAr": "أكثر من 75%",
+          "labelEn": "Over 75%",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "الفرص والعمل",
+      "sectionTitleEn": "Opportunities & Work",
+      "sectionOrder": 14,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "COM-T1",
+      "accountTypes": [
+        "COMPANY"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 1,
+      "textAr": "هل تواجهون تأخراً في تحصيل مستحقات عقود الصيانة؟",
+      "textEn": "Delays collecting maintenance contract dues?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "نعم",
+          "labelEn": "Yes",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا",
+          "labelEn": "No",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "COM-T2",
+      "accountTypes": [
+        "COMPANY"
+      ],
+      "sectionCode": "TRUST_PAYMENTS",
+      "questionOrder": 2,
+      "textAr": "ما مدى اهتمامكم بربط الدفع بمؤشرات الأداء (SLA)؟",
+      "textEn": "Interest in payment linked to SLA metrics",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "sectionTitleAr": "المدفوعات والثقة",
+      "sectionTitleEn": "Payments & Trust",
+      "sectionOrder": 15,
+      "showIf": null
+    },
+    {
+      "code": "COM-S1",
+      "accountTypes": [
+        "COMPANY"
+      ],
+      "sectionCode": "PROCUREMENT",
+      "questionOrder": 1,
+      "textAr": "كيف تشترون قطع الغيار والمستهلكات؟",
+      "textEn": "How do you buy spare parts and consumables?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "approved_vendors",
+          "labelAr": "موردون معتمدون",
+          "labelEn": "Approved vendors",
+          "order": 1
+        },
+        {
+          "value": "project_by_project",
+          "labelAr": "حسب المشروع",
+          "labelEn": "Project by project",
+          "order": 2
+        },
+        {
+          "value": "stock_program",
+          "labelAr": "برنامج مخزون",
+          "labelEn": "Stock program",
+          "order": 3
+        },
+        {
+          "value": "emergency",
+          "labelAr": "طوارئ / أي مورّد",
+          "labelEn": "Emergency / any supplier",
+          "order": 4
+        },
+        {
+          "value": "manufacturer",
+          "labelAr": "مباشرة من المصنع",
+          "labelEn": "Direct from manufacturer",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "المشتريات",
+      "sectionTitleEn": "Procurement",
+      "sectionOrder": 22,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "COM-S2",
+      "accountTypes": [
+        "COMPANY"
+      ],
+      "sectionCode": "PROCUREMENT",
+      "questionOrder": 2,
+      "textAr": "ما أكبر مشكلة في توفير قطع الغيار؟",
+      "textEn": "Biggest spare parts sourcing problem",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "availability",
+          "labelAr": "عدم التوفر",
+          "labelEn": "Unavailability",
+          "order": 1
+        },
+        {
+          "value": "lead_time",
+          "labelAr": "وقت التوريد الطويل",
+          "labelEn": "Long lead time",
+          "order": 2
+        },
+        {
+          "value": "price",
+          "labelAr": "السعر",
+          "labelEn": "Price",
+          "order": 3
+        },
+        {
+          "value": "quality",
+          "labelAr": "الجودة / التقليد",
+          "labelEn": "Quality / counterfeits",
+          "order": 4
+        },
+        {
+          "value": "approval",
+          "labelAr": "موافقات / بيروقراطية",
+          "labelEn": "Approvals / bureaucracy",
+          "order": 5
+        }
+      ],
+      "sectionTitleAr": "المشتريات",
+      "sectionTitleEn": "Procurement",
+      "sectionOrder": 22,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "ENT-W1",
+      "accountTypes": [
+        "ENTITY"
+      ],
+      "sectionCode": "ENTITY_COOPERATION",
+      "questionOrder": 1,
+      "textAr": "ما نموذج التعاون المفضل مع المنصة؟",
+      "textEn": "Preferred cooperation model with the platform",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "mou",
+          "labelAr": "اتفاقية تعاون (MoU)",
+          "labelEn": "Memorandum of understanding",
+          "order": 1
+        },
+        {
+          "value": "api",
+          "labelAr": "تكامل API",
+          "labelEn": "API integration",
+          "order": 2
+        },
+        {
+          "value": "license",
+          "labelAr": "ترخيص مؤسسي",
+          "labelEn": "Institutional license",
+          "order": 3
+        },
+        {
+          "value": "pilot",
+          "labelAr": "مشروع تجريبي",
+          "labelEn": "Pilot project",
+          "order": 4
+        }
+      ],
+      "note": "ENT-1 — بديل W1 (جهة لا تشترك شهرياً)",
+      "sectionTitleAr": "نموذج التعاون",
+      "sectionTitleEn": "Cooperation Model",
+      "sectionOrder": 65,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "ENT-W2",
+      "accountTypes": [
+        "ENTITY"
+      ],
+      "sectionCode": "ENTITY_COOPERATION",
+      "questionOrder": 2,
+      "textAr": "ما دورة الاعتماد المتوقعة لديكم؟",
+      "textEn": "Expected approval cycle on your side",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "under_1m",
+          "labelAr": "أقل من شهر",
+          "labelEn": "Under 1 month",
+          "order": 1
+        },
+        {
+          "value": "1_3m",
+          "labelAr": "1–3 أشهر",
+          "labelEn": "1–3 months",
+          "order": 2
+        },
+        {
+          "value": "3_6m",
+          "labelAr": "3–6 أشهر",
+          "labelEn": "3–6 months",
+          "order": 3
+        },
+        {
+          "value": "over_6m",
+          "labelAr": "أكثر من 6 أشهر",
+          "labelEn": "Over 6 months",
+          "order": 4
+        }
+      ],
+      "note": "ENT-1 — بديل W2",
+      "sectionTitleAr": "نموذج التعاون",
+      "sectionTitleEn": "Cooperation Model",
+      "sectionOrder": 65,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "ENT-W3",
+      "accountTypes": [
+        "ENTITY"
+      ],
+      "sectionCode": "ENTITY_COOPERATION",
+      "questionOrder": 3,
+      "textAr": "من الجهة صاحبة القرار للتعاون؟",
+      "textEn": "Decision-making unit for cooperation",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "it",
+          "labelAr": "تقنية المعلومات",
+          "labelEn": "IT department",
+          "order": 1
+        },
+        {
+          "value": "procurement",
+          "labelAr": "المشتريات",
+          "labelEn": "Procurement",
+          "order": 2
+        },
+        {
+          "value": "legal",
+          "labelAr": "القانونية",
+          "labelEn": "Legal",
+          "order": 3
+        },
+        {
+          "value": "executive",
+          "labelAr": "الإدارة العليا",
+          "labelEn": "Executive leadership",
+          "order": 4
+        },
+        {
+          "value": "committee",
+          "labelAr": "لجنة مشتركة",
+          "labelEn": "Joint committee",
+          "order": 5
+        }
+      ],
+      "note": "ENT-1 — بديل W3",
+      "sectionTitleAr": "نموذج التعاون",
+      "sectionTitleEn": "Cooperation Model",
+      "sectionOrder": 65,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "ENT-AI2",
+      "accountTypes": [
+        "ENTITY"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 10,
+      "textAr": "ما مدى اهتمامكم بمراقبة الامتثال آلياً؟",
+      "textEn": "Interest in automated compliance monitoring",
+      "answerType": "LINEAR_SCALE",
+      "required": true,
+      "options": null,
+      "scale": {
+        "min": 1,
+        "max": 5,
+        "minLabelAr": "غير مهتم إطلاقاً",
+        "maxLabelAr": "مهتم جداً وسأستخدمه فوراً",
+        "minLabelEn": "Not interested at all",
+        "maxLabelEn": "Very interested, would use immediately"
+      },
+      "note": "ENT-2 — بديل AI2 (حصر الكميات غير ذي صلة)",
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null
+    },
+    {
+      "code": "ENT-D1",
+      "accountTypes": [
+        "ENTITY"
+      ],
+      "sectionCode": "AI_DIGITAL",
+      "questionOrder": 11,
+      "textAr": "ما البيانات التي يمكنكم مشاركتها مع القطاع الخاص؟",
+      "textEn": "What data can you share with the private sector?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "tender_stats",
+          "labelAr": "إحصاءات المناقصات",
+          "labelEn": "Tender statistics",
+          "order": 1
+        },
+        {
+          "value": "compliance",
+          "labelAr": "بيانات امتثال / تراخيص",
+          "labelEn": "Compliance / license data",
+          "order": 2
+        },
+        {
+          "value": "standards",
+          "labelAr": "معايير / لوائح",
+          "labelEn": "Standards / regulations",
+          "order": 3
+        },
+        {
+          "value": "training",
+          "labelAr": "برامج تدريب",
+          "labelEn": "Training programs",
+          "order": 4
+        },
+        {
+          "value": "none",
+          "labelAr": "لا يمكن مشاركة بيانات",
+          "labelEn": "Cannot share data",
+          "order": 5
+        },
+        {
+          "value": "case_by_case",
+          "labelAr": "حسب الحالة",
+          "labelEn": "Case by case",
+          "order": 6
+        }
+      ],
+      "note": "ENT-3 — إضافة مقترحة",
+      "sectionTitleAr": "الجاهزية الرقمية والذكاء الاصطناعي",
+      "sectionTitleEn": "Digital & AI Readiness",
+      "sectionOrder": 55,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "ALT1",
+      "accountTypes": [
+        "OWNER",
+        "CONSULTANT",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "SUPPLIER",
+        "TRADER",
+        "COMPANY",
+        "ENTITY",
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "PLATFORM_UNIVERSAL",
+      "questionOrder": 1,
+      "textAr": "كيف تنجزون هذا العمل اليوم بدون منصة؟",
+      "textEn": "How do you accomplish this work today without a platform?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "whatsapp",
+          "labelAr": "واتساب / مكالمات",
+          "labelEn": "WhatsApp / calls",
+          "order": 1
+        },
+        {
+          "value": "email",
+          "labelAr": "بريد / مستندات",
+          "labelEn": "Email / documents",
+          "order": 2
+        },
+        {
+          "value": "spreadsheets",
+          "labelAr": "Excel / جداول",
+          "labelEn": "Spreadsheets",
+          "order": 3
+        },
+        {
+          "value": "erp",
+          "labelAr": "أنظمة ERP / داخلية",
+          "labelEn": "ERP / internal systems",
+          "order": 4
+        },
+        {
+          "value": "brokers",
+          "labelAr": "وسطاء / شبكة",
+          "labelEn": "Brokers / network",
+          "order": 5
+        },
+        {
+          "value": "manual_site",
+          "labelAr": "زيارات موقع",
+          "labelEn": "Site visits",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "فرضية المنصة",
+      "sectionTitleEn": "Platform Hypothesis",
+      "sectionOrder": 70,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "ALT2",
+      "accountTypes": [
+        "OWNER",
+        "CONSULTANT",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "SUPPLIER",
+        "TRADER",
+        "COMPANY",
+        "ENTITY",
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "PLATFORM_UNIVERSAL",
+      "questionOrder": 2,
+      "textAr": "ما أكثر ما يزعجكم في الطريقة الحالية؟",
+      "textEn": "What annoys you most about the current way?",
+      "answerType": "TEXTAREA",
+      "required": false,
+      "options": null,
+      "scale": null,
+      "sectionTitleAr": "فرضية المنصة",
+      "sectionTitleEn": "Platform Hypothesis",
+      "sectionOrder": 70,
+      "showIf": null
+    },
+    {
+      "code": "PMF1",
+      "accountTypes": [
+        "OWNER",
+        "CONSULTANT",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "SUPPLIER",
+        "TRADER",
+        "COMPANY",
+        "ENTITY",
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "PLATFORM_UNIVERSAL",
+      "questionOrder": 3,
+      "textAr": "كيف ستشعرون لو لم تعد منصة ABC متاحة؟ (محبط جداً / محبط قليلاً / لا يهم)",
+      "textEn": "How would you feel if ABC platform were no longer available?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "very_disappointed",
+          "labelAr": "محبط جداً",
+          "labelEn": "Very disappointed",
+          "order": 1
+        },
+        {
+          "value": "somewhat_disappointed",
+          "labelAr": "محبط قليلاً",
+          "labelEn": "Somewhat disappointed",
+          "order": 2
+        },
+        {
+          "value": "not_disappointed",
+          "labelAr": "لا يهم",
+          "labelEn": "Not disappointed",
+          "order": 3
+        }
+      ],
+      "note": "سؤال PMF الكلاسيكي",
+      "sectionTitleAr": "فرضية المنصة",
+      "sectionTitleEn": "Platform Hypothesis",
+      "sectionOrder": 70,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "TRUST1",
+      "accountTypes": [
+        "OWNER",
+        "CONSULTANT",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "SUPPLIER",
+        "TRADER",
+        "COMPANY",
+        "ENTITY",
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "PLATFORM_UNIVERSAL",
+      "questionOrder": 4,
+      "textAr": "ما الذي يجعلكم تثقون بطرف لم تتعاملوا معه من قبل؟",
+      "textEn": "What makes you trust a party you have not worked with before?",
+      "answerType": "MULTIPLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "verification",
+          "labelAr": "توثيق / تحقق رسمي",
+          "labelEn": "Official verification",
+          "order": 1
+        },
+        {
+          "value": "ratings",
+          "labelAr": "تقييمات / مراجعات",
+          "labelEn": "Ratings / reviews",
+          "order": 2
+        },
+        {
+          "value": "references",
+          "labelAr": "مراجع مشاريع",
+          "labelEn": "Project references",
+          "order": 3
+        },
+        {
+          "value": "guarantees",
+          "labelAr": "ضمانات / escrow",
+          "labelEn": "Guarantees / escrow",
+          "order": 4
+        },
+        {
+          "value": "personal_intro",
+          "labelAr": "تعارف شخصي",
+          "labelEn": "Personal introduction",
+          "order": 5
+        },
+        {
+          "value": "trial",
+          "labelAr": "تجربة صغيرة أولاً",
+          "labelEn": "Small trial first",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "فرضية المنصة",
+      "sectionTitleEn": "Platform Hypothesis",
+      "sectionOrder": 70,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "SRC1",
+      "accountTypes": [
+        "OWNER",
+        "CONSULTANT",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "SUPPLIER",
+        "TRADER",
+        "COMPANY",
+        "ENTITY",
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "PLATFORM_UNIVERSAL",
+      "questionOrder": 5,
+      "textAr": "كيف عرفتم عن منصة ABC؟",
+      "textEn": "How did you hear about ABC platform?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "referral",
+          "labelAr": "إحالة / زميل",
+          "labelEn": "Referral / colleague",
+          "order": 1
+        },
+        {
+          "value": "social",
+          "labelAr": "وسائل التواصل",
+          "labelEn": "Social media",
+          "order": 2
+        },
+        {
+          "value": "event",
+          "labelAr": "فعالية / معرض",
+          "labelEn": "Event / exhibition",
+          "order": 3
+        },
+        {
+          "value": "search",
+          "labelAr": "بحث على الإنترنت",
+          "labelEn": "Online search",
+          "order": 4
+        },
+        {
+          "value": "partner",
+          "labelAr": "شريك / جهة",
+          "labelEn": "Partner / organization",
+          "order": 5
+        },
+        {
+          "value": "other",
+          "labelAr": "أخرى",
+          "labelEn": "Other",
+          "order": 6
+        }
+      ],
+      "sectionTitleAr": "فرضية المنصة",
+      "sectionTitleEn": "Platform Hypothesis",
+      "sectionOrder": 70,
+      "showIf": null,
+      "scale": null
+    },
+    {
+      "code": "CONSENT1",
+      "accountTypes": [
+        "OWNER",
+        "CONSULTANT",
+        "CONTRACTOR",
+        "SUBCONTRACTOR",
+        "SUPPLIER",
+        "TRADER",
+        "COMPANY",
+        "ENTITY",
+        "INDIVIDUAL"
+      ],
+      "sectionCode": "PLATFORM_UNIVERSAL",
+      "questionOrder": 6,
+      "textAr": "الموافقة على استخدام بياناتكم للتواصل",
+      "textEn": "Consent to use your data for follow-up contact",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "options": [
+        {
+          "value": "yes",
+          "labelAr": "أوافق",
+          "labelEn": "I agree",
+          "order": 1
+        },
+        {
+          "value": "no",
+          "labelAr": "لا أوافق",
+          "labelEn": "I do not agree",
+          "order": 2
+        }
+      ],
+      "sectionTitleAr": "فرضية المنصة",
+      "sectionTitleEn": "Platform Hypothesis",
+      "sectionOrder": 70,
+      "showIf": null,
+      "scale": null
+    }
+  ],
+  "editsToExistingQuestions": []
+}

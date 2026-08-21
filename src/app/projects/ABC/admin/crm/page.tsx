@@ -1,99 +1,149 @@
-"use client"
+﻿"use client";
 
-import { useEffect, useState } from "react"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Users, Target, CalendarCheck, FileText, Plus, TrendingUp, Activity } from "lucide-react"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { Users, Target, Plus } from "lucide-react";
+import AdminSurveyShell from "@/components/admin/AdminSurveyShell";
+import { useLanguage } from "@/lib/LanguageContext";
+import { isPlatformStaffRole } from "@/lib/auth/platform-admin";
+import type { TranslationKey } from "@/lib/translations";
 
 interface CrmStats {
-  totalLeads: number
-  totalContacts: number
-  totalOpportunities: number
-  totalActivities: number
-  openTasks: number
-  upcomingMeetings: number
+  totalLeads: number;
+  totalContacts: number;
+  totalOpportunities: number;
+  totalActivities: number;
+  openTasks: number;
+  upcomingMeetings: number;
 }
 
 export default function AdminCrmPage() {
-  const { data: session } = useSession()
-  const router = useRouter()
-  const [stats, setStats] = useState<CrmStats>({ totalLeads: 0, totalContacts: 0, totalOpportunities: 0, totalActivities: 0, openTasks: 0, upcomingMeetings: 0 })
-  const [loading, setLoading] = useState(true)
+  const { t } = useLanguage();
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [stats, setStats] = useState<CrmStats>({
+    totalLeads: 0,
+    totalContacts: 0,
+    totalOpportunities: 0,
+    totalActivities: 0,
+    openTasks: 0,
+    upcomingMeetings: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!session) return
-    if ((session.user as { id: string; role: string }).role !== "ADMIN") { router.push("/projects/ABC?login=1"); return }
+    const role = (session?.user as { role?: string } | undefined)?.role;
+    if (!session) return;
+    if (!isPlatformStaffRole(role)) {
+      router.push("/projects/ABC?login=1");
+      return;
+    }
+
     Promise.all([
-      fetch("/api/crm/leads?limit=1").then(r => r.json()),
-      fetch("/api/crm/contacts?limit=1").then(r => r.json()),
-      fetch("/api/crm/opportunities?limit=1").then(r => r.json()),
-      fetch("/api/crm/activities?limit=1").then(r => r.json()),
-      fetch("/api/crm/tasks?status=IN_PROGRESS&limit=1").then(r => r.json()),
-      fetch("/api/crm/meetings?limit=1").then(r => r.json()),
-    ]).then(([leads, contacts, opportunities, activities, tasks, meetings]) => {
-      setStats({
-        totalLeads: leads.total ?? 0,
-        totalContacts: contacts.total ?? 0,
-        totalOpportunities: opportunities.total ?? 0,
-        totalActivities: activities.total ?? 0,
-        openTasks: tasks.total ?? 0,
-        upcomingMeetings: meetings.total ?? 0,
+      fetch("/api/crm/leads?limit=1").then((r) => r.json()),
+      fetch("/api/crm/contacts?limit=1").then((r) => r.json()),
+      fetch("/api/crm/opportunities?limit=1").then((r) => r.json()),
+      fetch("/api/crm/activities?limit=1").then((r) => r.json()),
+      fetch("/api/crm/tasks?status=IN_PROGRESS&limit=1").then((r) => r.json()),
+      fetch("/api/crm/meetings?limit=1").then((r) => r.json()),
+    ])
+      .then(([leads, contacts, opportunities, activities, tasks, meetings]) => {
+        setStats({
+          totalLeads: leads.total ?? 0,
+          totalContacts: contacts.total ?? 0,
+          totalOpportunities: opportunities.total ?? 0,
+          totalActivities: activities.total ?? 0,
+          openTasks: tasks.total ?? 0,
+          upcomingMeetings: meetings.total ?? 0,
+        });
+        setLoading(false);
       })
-      setLoading(false)
-    }).catch(() => setLoading(false))
-  }, [session, router])
+      .catch(() => {
+        setLoadError(t("crmLoadError"));
+        setLoading(false);
+      });
+  }, [session, router, t]);
 
-  if (loading) return <div className="p-8 text-center text-surface-500">جاري التحميل...</div>
+const statCards: {
+    labelKey: TranslationKey;
+    value: number;
+    icon: typeof Users;
+    color: string;
+    href: string;
+  }[] = [
+    { labelKey: "crmStatLeads", value: stats.totalLeads, icon: Users, color: "bg-info-500", href: "/projects/ABC/admin/crm/leads" },
+    { labelKey: "crmStatContacts", value: stats.totalContacts, icon: Users, color: "bg-success-500", href: "/projects/ABC/admin/crm/contacts" },
+    { labelKey: "crmStatOpportunities", value: stats.totalOpportunities, icon: Target, color: "bg-flagship-500", href: "/projects/ABC/admin/crm/opportunities" },
+  ];
 
-  const cards = [
-    { label: "إجمالي العملاء المحتملين", value: stats.totalLeads, icon: Users, color: "bg-info-500", href: "/projects/ABC/admin/crm/leads" },
-    { label: "جهات الاتصال", value: stats.totalContacts, icon: Users, color: "bg-success-500", href: "/projects/ABC/admin/crm/contacts" },
-    { label: "الفرص", value: stats.totalOpportunities, icon: Target, color: "bg-flagship-500", href: "/projects/ABC/admin/crm/opportunities" },
-    { label: "النشاطات", value: stats.totalActivities, icon: Activity, color: "bg-flagship-500", href: "/projects/ABC/admin/crm/activities" },
-    { label: "المهام المفتوحة", value: stats.openTasks, icon: CalendarCheck, color: "bg-amber-500", href: "/projects/ABC/admin/crm/tasks" },
-    { label: "الاجتماعات القادمة", value: stats.upcomingMeetings, icon: TrendingUp, color: "bg-teal-500", href: "/projects/ABC/admin/crm/meetings" },
-  ]
+  const featureCards: { titleKey: TranslationKey; descKey: TranslationKey; href: string; icon: typeof Users; color: string }[] = [
+    { titleKey: "crmLeadsTitle", descKey: "crmLeadsDesc", href: "/projects/ABC/admin/crm/leads", icon: Users, color: "text-info-600" },
+    { titleKey: "crmContactsTitle", descKey: "crmContactsDesc", href: "/projects/ABC/admin/crm/contacts", icon: Users, color: "text-success-600" },
+    { titleKey: "crmOpportunitiesTitle", descKey: "crmOpportunitiesDesc", href: "/projects/ABC/admin/crm/opportunities", icon: Target, color: "text-flagship-600" },
+  ];
+
+  const isEmpty = Object.values(stats).every((v) => v === 0);
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold">CRM</h1>
-          <p className="text-surface-500 mt-1">إدارة العلاقات مع العملاء</p>
-        </div>
-        <Link href="/projects/ABC/admin/crm/leads/new" className="flex items-center gap-2 bg-info-600 text-white px-4 py-2 rounded-lg hover:bg-info-700">
-          <Plus size={20} /> عميل محتمل جديد
+    <AdminSurveyShell
+      title={t("adminCrm")}
+      subtitle={t("crmSubtitle")}
+      loading={loading}
+      actions={
+        <Link
+          href="/projects/ABC/admin/crm/leads/new"
+          className="inline-flex items-center gap-2 bg-secondary-500 text-white px-4 py-2 text-sm font-semibold hover:bg-secondary-600 rounded-none"
+        >
+          <Plus size={18} />
+          {t("crmNewLead")}
         </Link>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        {cards.map((card) => (
-          <Link key={card.label} href={card.href} className="bg-white border rounded-xl p-5 flex items-center gap-4 hover:shadow-md transition">
-            <div className={`${card.color} p-3 rounded-lg text-white`}><card.icon size={24} /></div>
-            <div>
-              <p className="text-2xl font-bold">{card.value}</p>
-              <p className="text-surface-500 text-sm">{card.label}</p>
+      }
+    >
+      {loadError ? (
+        <p className="text-sm text-danger-600 mb-4">{loadError}</p>
+      ) : null}
+
+      {isEmpty && !loadError ? (
+        <div className="mb-6 border border-surface-200 bg-surface-50/80 px-4 py-3 text-sm text-surface-600 rounded-none">
+          {t("crmEmptyHint")}
+        </div>
+      ) : null}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+        {statCards.map((card) => (
+          <Link
+            key={card.labelKey}
+            href={card.href}
+            className="bg-white border border-surface-200 rounded-none p-4 flex items-center gap-4 hover:border-secondary-300 transition-colors"
+          >
+            <div className={`${card.color} p-3 rounded-none text-white shrink-0`}>
+              <card.icon size={22} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-2xl font-bold text-surface-900">{card.value}</p>
+              <p className="text-surface-500 text-sm">{t(card.labelKey)}</p>
             </div>
           </Link>
         ))}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Link href="/projects/ABC/admin/crm/leads" className="bg-white border rounded-xl p-6 hover:shadow-md transition">
-          <Users className="text-info-600 mb-3" size={32} />
-          <h3 className="font-bold text-lg mb-2">العملاء المحتملين</h3>
-          <p className="text-surface-500 text-sm">إدارة ومتابعة العملاء المحتملين وتحويلهم إلى جهات اتصال</p>
-        </Link>
-        <Link href="/projects/ABC/admin/crm/contacts" className="bg-white border rounded-xl p-6 hover:shadow-md transition">
-          <Users className="text-success-600 mb-3" size={32} />
-          <h3 className="font-bold text-lg mb-2">جهات الاتصال</h3>
-          <p className="text-surface-500 text-sm">قاعدة بيانات جهات الاتصال والعملاء</p>
-        </Link>
-        <Link href="/projects/ABC/admin/crm/opportunities" className="bg-white border rounded-xl p-6 hover:shadow-md transition">
-          <Target className="text-flagship-600 mb-3" size={32} />
-          <h3 className="font-bold text-lg mb-2">الفرص</h3>
-          <p className="text-surface-500 text-sm">تتبع صفقات وفرص البيع عبر مراحل التقدم</p>
-        </Link>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        {featureCards.map((card) => (
+          <Link
+            key={card.titleKey}
+            href={card.href}
+            className="bg-white border border-surface-200 rounded-none p-5 hover:border-secondary-300 transition-colors"
+          >
+            <card.icon className={`${card.color} mb-3`} size={28} />
+            <h3 className="font-bold text-lg mb-2 text-surface-900">{t(card.titleKey)}</h3>
+            <p className="text-surface-500 text-sm">{t(card.descKey)}</p>
+          </Link>
+        ))}
       </div>
-    </div>
-  )
+    </AdminSurveyShell>
+  );
 }
+

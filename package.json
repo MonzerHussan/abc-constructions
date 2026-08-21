@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:3002": "next dev -p 3002",
+    "dev:post-task": "powershell -ExecutionPolicy Bypass -File scripts/post-task-dev.ps1",
     "dev:stable": "powershell -ExecutionPolicy Bypass -File scripts/dev-watchdog.ps1",
     "setup:local": "powershell -ExecutionPolicy Bypass -File scripts/setup-local-dev.ps1",
     "setup:onedrive-cache": "powershell -ExecutionPolicy Bypass -File scripts/exclude-onedrive-cache.ps1",
@@ -19,6 +20,8 @@
     "start:ci": "next start",
     "typecheck": "tsc --noEmit",
     "prisma:seed": "tsx prisma/seed.ts",
+    "survey:apply-seed": "npx tsx scripts/apply-survey-seed.ts --all",
+    "survey:apply-all-seeds": "npx tsx scripts/apply-survey-seed.ts --all",
     "prisma:migrate": "prisma migrate dev --name research_lab",
     "postinstall": "prisma generate"
   },

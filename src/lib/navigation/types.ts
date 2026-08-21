@@ -14,8 +14,13 @@ export type UserRole =
   | "FREELANCER"
   | "SUPPLIER"
   | "TRADER"
+  | "INDIVIDUAL"
+  | "COMPANY"
+  | "ENTITY"
   | "ADMIN"
-  | "SUPER_ADMIN";
+  | "SUPER_ADMIN"
+  | "CONTENT_ADMIN"
+  | "FINANCE_ADMIN";
 
 export interface EntityRegistryMe {
   isOnboarded: boolean;
@@ -40,8 +45,13 @@ export const ROLE_DEFAULT_ROUTE: Record<UserRole, string> = {
   FREELANCER: "/projects/ABC/jobs",
   SUPPLIER: "/projects/ABC/marketplace",
   TRADER: "/projects/ABC/marketplace",
+  INDIVIDUAL: "/projects/ABC/projects",
+  COMPANY: "/projects/ABC/projects",
+  ENTITY: "/projects/ABC/projects",
   ADMIN: "/projects/ABC/admin",
   SUPER_ADMIN: "/projects/ABC/admin",
+  CONTENT_ADMIN: "/projects/ABC/admin",
+  FINANCE_ADMIN: "/projects/ABC/admin",
 };
 
 export const PUBLIC_PATHS = [

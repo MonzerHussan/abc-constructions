@@ -1,34 +1,36 @@
 "use client"
 
-import { Newspaper, BookOpen, FileText, Image } from "lucide-react"
+import { Newspaper, BookOpen, FileText, Image as ImageIcon } from "lucide-react"
+import AdminSurveyShell from "@/components/admin/AdminSurveyShell"
+import { useLanguage } from "@/lib/LanguageContext"
+import type { TranslationKey } from "@/lib/translations"
 
 export default function AdminContentPage() {
+  const { t } = useLanguage()
+  const cards: { icon: typeof FileText; labelKey: TranslationKey; descKey: TranslationKey }[] = [
+    { icon: Newspaper, labelKey: "contentNews", descKey: "contentNewsDesc" },
+    { icon: BookOpen, labelKey: "contentArticles", descKey: "contentArticlesDesc" },
+    { icon: FileText, labelKey: "contentKnowledge", descKey: "contentKnowledgeDesc" },
+    { icon: ImageIcon, labelKey: "contentMedia", descKey: "contentMediaDesc" },
+  ]
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold text-surface-900 mb-2">إدارة المحتوى</h1>
-      <p className="text-surface-500 mb-8">إدارة الأخبار والمقالات والأدلة الفنية</p>
-
+    <AdminSurveyShell title={t("adminContent")} subtitle={t("adminContentSubtitle")}>
       <div className="grid gap-4 md:grid-cols-2">
-        {[
-          { icon: Newspaper, label: "الأخبار", desc: "إدارة الأخبار والإعلانات" },
-          { icon: BookOpen, label: "المقالات", desc: "المقالات والأدلة الفنية" },
-          { icon: FileText, label: "مركز المعرفة", desc: "قاعدة المعرفة والأسئلة الشائعة" },
-          { icon: Image, label: "الوسائط", desc: "إدارة الصور والفيديوهات" },
-        ].map((item) => {
+        {cards.map((item) => {
           const Icon = item.icon
           return (
-            <div key={item.label} className="flex items-center gap-4 p-6 bg-white border rounded-xl hover:shadow-md transition-shadow">
-              <div className="w-12 h-12 bg-flagship-50 rounded-xl flex items-center justify-center">
+            <div key={item.labelKey} className="flex items-center gap-4 p-5 bg-white border border-surface-200 rounded-none hover:border-secondary-300 transition-colors">
+              <div className="w-12 h-12 bg-flagship-50 rounded-none flex items-center justify-center">
                 <Icon className="w-6 h-6 text-flagship-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-surface-900">{item.label}</h3>
-                <p className="text-sm text-surface-500">{item.desc}</p>
+                <h3 className="font-semibold text-surface-900">{t(item.labelKey)}</h3>
+                <p className="text-sm text-surface-500">{t(item.descKey)}</p>
               </div>
             </div>
           )
         })}
       </div>
-    </div>
+    </AdminSurveyShell>
   )
 }

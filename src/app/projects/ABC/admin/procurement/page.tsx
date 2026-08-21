@@ -1,10 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ShoppingCart, FileText, Send, Receipt, TrendingUp, DollarSign, Package, Users } from "lucide-react"
+import { ShoppingCart, FileText, Send, Receipt, DollarSign, Package } from "lucide-react"
+import AdminSurveyShell from "@/components/admin/AdminSurveyShell"
+import { useLanguage } from "@/lib/LanguageContext"
+import type { TranslationKey } from "@/lib/translations"
 
 export default function AdminProcurementPage() {
+  const { t } = useLanguage()
   const [stats, setStats] = useState<any>({})
 
   useEffect(() => {
@@ -28,73 +32,73 @@ export default function AdminProcurementPage() {
     })
   }, [])
 
-  const cards = [
-    { label: "طلبات الشراء", labelEn: "Purchase Requests", value: stats.totalPRs, icon: FileText, color: "bg-info-50 text-info-600", href: "/projects/ABC/procurement/purchase-requests" },
-    { label: "بانتظار الموافقة", labelEn: "Pending Approval", value: stats.pendingPRs, icon: Send, color: "bg-amber-50 text-amber-600", href: "/projects/ABC/procurement/purchase-requests?status=PENDING_APPROVAL" },
-    { label: "طلبات عروض الأسعار", labelEn: "RFQs", value: stats.totalRFQs, icon: Package, color: "bg-success-50 text-success-600", href: "/projects/ABC/procurement/rfqs" },
-    { label: "أوامر الشراء", labelEn: "Purchase Orders", value: stats.totalPOs, icon: ShoppingCart, color: "bg-flagship-50 text-flagship-600", href: "/projects/ABC/procurement/purchase-orders" },
-    { label: "فواتير معلقة", labelEn: "Pending Invoices", value: stats.pendingInvoices, icon: Receipt, color: "bg-danger-50 text-danger-600", href: "/projects/ABC/procurement/invoices" },
-    { label: "إجمالي الإنفاق", labelEn: "Total Spend", value: `${stats.totalSpend?.toFixed(0) || 0} ريال`, icon: DollarSign, color: "bg-emerald-50 text-emerald-600" },
+  const cards: {
+    labelKey: TranslationKey
+    value: string | number
+    icon: typeof FileText
+    color: string
+    href: string
+  }[] = [
+    { labelKey: "totalPRs", value: stats.totalPRs, icon: FileText, color: "bg-info-50 text-info-600", href: "/projects/ABC/procurement/purchase-requests" },
+    { labelKey: "pendingPRs", value: stats.pendingPRs, icon: Send, color: "bg-amber-50 text-amber-600", href: "/projects/ABC/procurement/purchase-requests?status=PENDING_APPROVAL" },
+    { labelKey: "activeRFQs", value: stats.totalRFQs, icon: Package, color: "bg-success-50 text-success-600", href: "/projects/ABC/procurement/rfqs" },
+    { labelKey: "totalPOs", value: stats.totalPOs, icon: ShoppingCart, color: "bg-flagship-50 text-flagship-600", href: "/projects/ABC/procurement/purchase-orders" },
+    { labelKey: "pendingInvoices", value: stats.pendingInvoices, icon: Receipt, color: "bg-danger-50 text-danger-600", href: "/projects/ABC/procurement/invoices" },
+    { labelKey: "monthlySpend", value: `${stats.totalSpend?.toFixed(0) || 0} ${t("currency")}`, icon: DollarSign, color: "bg-emerald-50 text-emerald-600", href: "/projects/ABC/procurement/invoices" },
   ]
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-surface-900">إدارة المشتريات</h1>
-        <p className="text-surface-500 mt-1">Procurement Administration Panel</p>
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+    <AdminSurveyShell title={t("procurementDashboard")} subtitle={t("procurementSubtitle")}>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
         {cards.map((card) => {
           const Icon = card.icon
           return (
-            <div key={card.label} className="bg-white border rounded-xl p-4">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${card.color}`}>
+            <Link key={card.labelKey} href={card.href} className="bg-surface-50/60 border border-surface-200 rounded-none p-4 hover:border-secondary-300 transition-colors">
+              <div className={`w-10 h-10 rounded-none flex items-center justify-center mb-3 ${card.color}`}>
                 <Icon className="w-5 h-5" />
               </div>
               <p className="text-2xl font-bold text-surface-900">{card.value}</p>
-              <p className="text-xs text-surface-500 mt-1">{card.label}</p>
-              <p className="text-[10px] text-surface-400">{card.labelEn}</p>
-            </div>
+              <p className="text-xs text-surface-500 mt-1">{t(card.labelKey)}</p>
+            </Link>
           )
         })}
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <Link href="/projects/ABC/procurement/purchase-requests" className="bg-white border rounded-xl p-6 hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-info-50 rounded-xl flex items-center justify-center">
+      <div className="grid md:grid-cols-2 gap-4">
+        <Link href="/projects/ABC/procurement/purchase-requests" className="bg-white border border-surface-200 rounded-none p-5 hover:border-secondary-300 transition-colors">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-info-50 rounded-none flex items-center justify-center">
               <FileText className="w-5 h-5 text-info-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-surface-900">إدارة طلبات الشراء</h3>
-              <p className="text-sm text-surface-500">عرض ومراجعة واعتماد طلبات الشراء</p>
+              <h3 className="font-semibold text-surface-900">{t("purchaseRequests")}</h3>
+              <p className="text-sm text-surface-500">{t("prSubtitle")}</p>
             </div>
           </div>
           <div className="text-sm text-surface-600">
             {stats.pendingPRs > 0
-              ? `يوجد ${stats.pendingPRs} طلب بانتظار الموافقة`
-              : "جميع الطلبات تمت معالجتها"}
+              ? `${stats.pendingPRs} ${t("pendingPRs")}`
+              : t("prAllProcessed")}
           </div>
         </Link>
 
-        <Link href="/projects/ABC/procurement/rfqs" className="bg-white border rounded-xl p-6 hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-success-50 rounded-xl flex items-center justify-center">
+        <Link href="/projects/ABC/procurement/rfqs" className="bg-white border border-surface-200 rounded-none p-5 hover:border-secondary-300 transition-colors">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-success-50 rounded-none flex items-center justify-center">
               <Send className="w-5 h-5 text-success-600" />
             </div>
             <div>
-              <h3 className="font-semibold text-surface-900">عروض الأسعار</h3>
-              <p className="text-sm text-surface-500">متابعة طلبات عروض الأسعار والردود</p>
+              <h3 className="font-semibold text-surface-900">{t("rfqs")}</h3>
+              <p className="text-sm text-surface-500">{t("procurementWorkflow")}</p>
             </div>
           </div>
           <div className="text-sm text-surface-600">
             {stats.totalRFQs > 0
-              ? `إجمالي ${stats.totalRFQs} طلب عرض سعر`
-              : "لا توجد طلبات عروض أسعار"}
+              ? `${stats.totalRFQs} ${t("activeRFQs")}`
+              : t("noPurchaseRequests")}
           </div>
         </Link>
       </div>
-    </div>
+    </AdminSurveyShell>
   )
 }

@@ -21,6 +21,8 @@ enum UserRole {
   ENTITY
   ADMIN
   SUPER_ADMIN
+  CONTENT_ADMIN
+  FINANCE_ADMIN
 }
 
 /// Fixed platform account types (9) — used for registration, onboarding, and subcategory scoping.
