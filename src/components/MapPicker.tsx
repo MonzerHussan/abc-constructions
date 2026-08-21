@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useLanguage } from "@/lib/LanguageContext";
+import { getCountryByCode } from "@/lib/data/countries";
 import { MapPin } from "lucide-react";
 import { useState, useCallback, useEffect } from "react";
 
@@ -149,7 +150,8 @@ export default function MapPicker({
           <LeafletMap
             lat={coords?.lat ?? defaultLat}
             lng={coords?.lng ?? defaultLng}
-            zoom={defaultZoom}
+            zoom={defaultZoom ?? getCountryByCode(countryCode)?.zoom}
+            countryCode={countryCode}
             onLocationSelect={confirmLocation}
           />
         </div>
