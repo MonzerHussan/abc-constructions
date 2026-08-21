@@ -22,6 +22,7 @@
     "prisma:seed": "tsx prisma/seed.ts",
     "survey:apply-seed": "npx tsx scripts/apply-survey-seed.ts --all",
     "survey:apply-all-seeds": "npx tsx scripts/apply-survey-seed.ts --all",
+    "survey:apply-production": "npx tsx scripts/apply-seeds-production.ts",
     "prisma:migrate": "prisma migrate dev --name research_lab",
     "postinstall": "prisma generate"
   },
