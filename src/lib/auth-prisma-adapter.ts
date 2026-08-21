@@ -33,6 +33,8 @@ export function AbcPrismaAdapter(prisma: PrismaClient): Adapter {
           name: data.name ?? "",
           emailVerified: data.emailVerified,
           avatar: data.image ?? undefined,
+          // OAuth-only users must confirm account type during onboarding.
+          roleConfirmed: false,
         },
       })
       return toAdapterUser(user)

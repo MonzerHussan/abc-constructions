@@ -9,11 +9,19 @@ import { verifySync } from "otplib"
 import { authConfig } from "@/auth.config"
 import { rateLimit } from "@/lib/rate-limit"
 import { isGoogleOAuthConfigured } from "@/lib/google-oauth"
+import { GOOGLE_ONBOARDING_CALLBACK } from "@/lib/auth/role-selection"
 
 loadEnvConfig(process.cwd())
 
 const LOGIN_LIMIT = 15
 const LOGIN_WINDOW_MS = 15 * 60 * 1000
+
+async function loadUserAuthFlags(userId: string) {
+  return prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true, roleConfirmed: true },
+  })
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -23,6 +31,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       ? [Google({
           clientId: process.env.AUTH_GOOGLE_ID!,
           clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+          issuer: "https://accounts.google.com",
+          allowDangerousEmailAccountLinking: false,
         })]
       : []),
     Credentials({
@@ -76,20 +86,50 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.role = (user as any).role
-        token.id = user.id
+  events: {
+    async linkAccount({ user, account }) {
+      if (account.provider === "google" && user.id) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { roleConfirmed: false },
+        })
       }
+    },
+  },
+  callbacks: {
+    async jwt({ token, user, trigger }) {
+      if (user) {
+        token.id = user.id
+        token.role = (user as { role?: string }).role
+        token.roleConfirmed = (user as { roleConfirmed?: boolean }).roleConfirmed ?? false
+      }
+
+      if ((trigger === "update" || token.roleConfirmed === undefined) && token.id) {
+        const dbUser = await loadUserAuthFlags(token.id as string)
+        if (dbUser) {
+          token.role = dbUser.role
+          token.roleConfirmed = dbUser.roleConfirmed
+        }
+      }
+
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
-        ;(session.user as { id: string; role?: unknown }).role = token.role
+        ;(session.user as { id: string; role?: unknown; roleConfirmed?: boolean }).role = token.role
+        ;(session.user as { roleConfirmed?: boolean }).roleConfirmed = Boolean(token.roleConfirmed)
       }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      try {
+        if (new URL(url).origin === baseUrl) return url
+      } catch {
+        return `${baseUrl}${GOOGLE_ONBOARDING_CALLBACK}`
+      }
+      return `${baseUrl}${GOOGLE_ONBOARDING_CALLBACK}`
     },
   },
 })
