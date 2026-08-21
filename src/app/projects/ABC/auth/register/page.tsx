@@ -84,6 +84,7 @@ export default function RegisterPage() {
         phone: form.phone,
         companyName: form.companyName,
         companyType: "",
+        jobTitle: "",
         countryCode: "AE",
         city: "",
         role: selectedRole,

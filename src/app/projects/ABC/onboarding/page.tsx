@@ -22,6 +22,7 @@ import { isPlatformAdminRole, getAdminLandingPath } from "@/lib/auth/platform-ad
 import type { UserRole } from "@/lib/navigation/types";
 import { isUsableMediaUrl } from "@/lib/utils";
 import { HEADER_LOGOUT_BUTTON } from "@/lib/header-control-styles";
+import type { PublicSectionContent } from "@/modules/onboarding-survey";
 
 function headerDisplayName(
   isIndividual: boolean,

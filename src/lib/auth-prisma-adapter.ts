@@ -41,7 +41,7 @@ export function AbcPrismaAdapter(prisma: PrismaClient): Adapter {
       const user = await prisma.user.update({
         where: { id: data.id },
         data: {
-          ...(data.name !== undefined ? { name: data.name } : {}),
+          ...(data.name !== undefined ? { name: data.name ?? "" } : {}),
           ...(data.email !== undefined ? { email: data.email } : {}),
           ...(data.emailVerified !== undefined ? { emailVerified: data.emailVerified } : {}),
           ...(data.image !== undefined ? { avatar: data.image } : {}),
