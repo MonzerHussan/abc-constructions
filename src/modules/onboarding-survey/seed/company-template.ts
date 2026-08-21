@@ -9,7 +9,7 @@ import {
   openSection,
   paymentSection,
   platformValueSection,
-  REGIONS,
+  REGIONS_OPTION_META,
   YES_NO,
 } from './seed-helpers';
 
@@ -206,8 +206,9 @@ export function companySections(): SeedSection[] {
           questionTextEn: 'Service regions',
           questionTextAr: 'مناطق الخدمة',
           answerType: 'MULTIPLE_CHOICE',
-          options: REGIONS,
+          options: [],
           sortOrder: 2,
+          metadata: REGIONS_OPTION_META,
         },
       ],
     },

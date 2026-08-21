@@ -10,7 +10,7 @@ import {
   paymentSection,
   platformValueSection,
   PROJECT_SIZE,
-  transportPlugIn,
+  unifiedTransportSection,
   YES_NO,
 } from './seed-helpers';
 
@@ -175,24 +175,8 @@ export function contractorSections(): SeedSection[] {
         },
       ],
     },
-    {
-      code: 'TRANSPORT_GATE',
-      titleEn: 'Transport Services',
-      titleAr: 'خدمات النقل',
-      sortOrder: 5,
-      questions: [
-        {
-          code: 'TR0',
-          questionTextEn: 'Do you operate own transport/logistics?',
-          questionTextAr: 'هل تشغّلون نقل/لوجستيات خاصة؟',
-          answerType: 'SINGLE_CHOICE',
-          options: YES_NO,
-          sortOrder: 0,
-        },
-      ],
-    },
+    unifiedTransportSection(5),
     humanCapitalPlugIn('HC0'),
-    transportPlugIn({ questionCode: 'TR0', op: 'eq', value: 'yes' }),
     aiDigitalSection(6),
     platformValueSection([
       ['boq_ai', 'AI BOQ/quantities', 'AI للكميات'],

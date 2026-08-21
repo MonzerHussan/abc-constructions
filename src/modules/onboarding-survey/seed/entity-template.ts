@@ -6,7 +6,7 @@ import {
   openSection,
   paymentSection,
   platformValueSection,
-  REGIONS,
+  REGIONS_OPTION_META,
   YES_NO,
 } from './seed-helpers';
 
@@ -65,8 +65,9 @@ export function entitySections(): SeedSection[] {
           questionTextEn: 'Geographic scope',
           questionTextAr: 'النطاق الجغرافي',
           answerType: 'MULTIPLE_CHOICE',
-          options: REGIONS,
+          options: [],
           sortOrder: 2,
+          metadata: REGIONS_OPTION_META,
         },
       ],
     },

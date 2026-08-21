@@ -10,6 +10,7 @@ import { isPlatformAccountType } from "@/lib/account-types";
 import type { Prisma, OnboardingAnswerType } from "@/generated/prisma/client";
 import type { ShowIfRule } from "@/lib/onboarding/survey-show-if";
 import type { SeedOption } from "./individual-template";
+import { applySurveyUxPatches } from "./survey-ux-patches";
 
 const DEFAULT_SEED_PATH = join(
   process.cwd(),
@@ -108,6 +109,10 @@ function toMetadata(q: SeedJsonQuestion): Record<string, unknown> | undefined {
   const meta: Record<string, unknown> = {};
   if (q.scale) meta.scale = q.scale;
   if (q.note) meta.note = q.note;
+  const loose = q as SeedJsonQuestion & { optionSource?: { type: string; from?: string } };
+  if (loose.optionSource?.type === "REGIONS_BY_COUNTRY") {
+    meta.optionSource = "REGIONS_BY_COUNTRY";
+  }
   return Object.keys(meta).length ? meta : undefined;
 }
 
@@ -319,6 +324,8 @@ export async function applyAllSurveySeeds(): Promise<ApplySurveySeedResult[]> {
   for (const path of paths) {
     results.push(await applySurveySeed(path));
   }
+  const ux = await applySurveyUxPatches();
+  console.log("[survey-ux-patches]", ux);
   return results;
 }
 

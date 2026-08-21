@@ -6,7 +6,7 @@ import {
   paymentSection,
   platformValueSection,
   PROJECT_SIZE,
-  REGIONS,
+  REGIONS_OPTION_META,
   YES_NO,
 } from './seed-helpers';
 
@@ -59,8 +59,9 @@ export function ownerSections(): SeedSection[] {
           questionTextEn: 'Project locations',
           questionTextAr: 'مواقع المشاريع',
           answerType: 'MULTIPLE_CHOICE',
-          options: REGIONS,
+          options: [],
           sortOrder: 2,
+          metadata: REGIONS_OPTION_META,
         },
         {
           code: 'Q4',

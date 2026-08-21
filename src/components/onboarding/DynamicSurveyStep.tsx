@@ -301,7 +301,7 @@ export function DynamicSurveyStep({
         )}
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {questions.map((q) => (
           <SurveyQuestionField
             key={q.id}
@@ -309,6 +309,7 @@ export function DynamicSurveyStep({
             value={answers[q.code]}
             onChange={handleAnswerChange}
             error={errors[q.code]}
+            countryCode={profile.countryCode || profile.country}
           />
         ))}
       </div>

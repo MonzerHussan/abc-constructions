@@ -27,35 +27,33 @@ function parseEnvValue(raw: string): string {
   return val;
 }
 
-function loadDbUrl(path: string): string {
-  const fromEnv = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
-  if (fromEnv) {
-    const url = parseEnvValue(fromEnv);
-    if (/^postgresql:\/\//.test(url)) return url;
-  }
+function loadDbUrl(): string {
+  // Ignore inherited shell env (vercel env pull / env run may leave placeholder refs).
+  delete process.env.DATABASE_URL;
+  delete process.env.DIRECT_URL;
 
-  if (!existsSync(path)) {
-    console.error(`Missing ${path}. Run: vercel env pull .env.production.local --environment=production --yes`);
-    process.exit(1);
-  }
-
+  const envFiles = [join(root, ".env"), envPath];
   let directUrl: string | undefined;
   let databaseUrl: string | undefined;
 
-  for (const raw of readFileSync(path, "utf8").split(/\r?\n/)) {
-    const line = raw.trim();
-    if (!line || line.startsWith("#")) continue;
-    const eq = line.indexOf("=");
-    if (eq < 1) continue;
-    const key = line.slice(0, eq).trim();
-    const val = parseEnvValue(line.slice(eq + 1));
-    if (key === "DIRECT_URL") directUrl = val;
-    if (key === "DATABASE_URL") databaseUrl = val;
+  for (const file of envFiles) {
+    if (!existsSync(file)) continue;
+    for (const raw of readFileSync(file, "utf8").split(/\r?\n/)) {
+      const line = raw.trim();
+      if (!line || line.startsWith("#")) continue;
+      const eq = line.indexOf("=");
+      if (eq < 1) continue;
+      const key = line.slice(0, eq).trim();
+      const val = parseEnvValue(line.slice(eq + 1));
+      if (key === "DIRECT_URL" && val.length > 20) directUrl = val;
+      if (key === "DATABASE_URL" && val.length > 20) databaseUrl = val;
+    }
+    if (directUrl || databaseUrl) break;
   }
 
   const url = directUrl ?? databaseUrl;
   if (!url) {
-    console.error("DATABASE_URL/DIRECT_URL not found in production env file.");
+    console.error("DATABASE_URL/DIRECT_URL not found in .env.production.local or .env");
     process.exit(1);
   }
   if (!/^postgresql:\/\//.test(url)) {
@@ -66,7 +64,7 @@ function loadDbUrl(path: string): string {
   return url;
 }
 
-const dbUrl = loadDbUrl(envPath);
+const dbUrl = loadDbUrl();
 writeFileSync(migrateEnvPath, `DATABASE_URL=${dbUrl}\n`, "utf8");
 
 const env = { ...process.env, DATABASE_URL: dbUrl };

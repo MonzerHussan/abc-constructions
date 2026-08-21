@@ -6,7 +6,7 @@ import {
   openSection,
   paymentSection,
   platformValueSection,
-  REGIONS,
+  REGIONS_OPTION_META,
 } from './seed-helpers';
 
 export function traderSections(): SeedSection[] {
@@ -48,8 +48,9 @@ export function traderSections(): SeedSection[] {
           questionTextEn: 'Trading regions',
           questionTextAr: 'مناطق التجارة',
           answerType: 'MULTIPLE_CHOICE',
-          options: REGIONS,
+          options: [],
           sortOrder: 2,
+          metadata: REGIONS_OPTION_META,
         },
       ],
     },

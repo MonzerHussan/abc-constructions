@@ -111,6 +111,12 @@ async function upsertTemplate(
       });
     }
   }
+
+  const activeCodes = sections.map((s) => s.code);
+  await prisma.onboardingSurveySection.updateMany({
+    where: { templateId: template.id, code: { notIn: activeCodes } },
+    data: { isActive: false },
+  });
 }
 
 /** Seeds missing templates only (first run). */

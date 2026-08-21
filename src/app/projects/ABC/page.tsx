@@ -20,7 +20,6 @@ import AdCard, { adGridClass } from "@/components/homepage/AdCard";
 import ZoneCard from "@/components/homepage/ZoneCard";
 import RegisterInline from "@/components/homepage/RegisterInline";
 import LoginInline from "@/components/homepage/LoginInline";
-import SupplierTraderHint from "@/components/homepage/SupplierTraderHint";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/lib/LanguageContext";
 import { HOMEPAGE_DEFAULTS, mergeHomepageData, type HomepageData } from "@/lib/homepage-defaults";
@@ -55,15 +54,15 @@ interface BelowAdsContent {
   footerAddress: string;
 }
 
-const CREATE_ACCOUNT_ROLES: { labelKey: TranslationKey; descKey?: TranslationKey }[] = [
+const CREATE_ACCOUNT_ROLES: { labelKey: TranslationKey }[] = [
   { labelKey: "accountCategoryEntity" },
   { labelKey: "accountCategoryCompany" },
   { labelKey: "accountCategoryOwner" },
   { labelKey: "accountCategoryConsultant" },
   { labelKey: "accountCategoryContractor" },
   { labelKey: "accountCategorySubcontractor" },
-  { labelKey: "accountCategorySupplier", descKey: "obTypeSupplierDesc" },
-  { labelKey: "accountCategoryTrader", descKey: "obTypeTraderDesc" },
+  { labelKey: "accountCategorySupplier" },
+  { labelKey: "accountCategoryTrader" },
   { labelKey: "accountCategoryIndividual" },
 ];
 
@@ -199,22 +198,12 @@ function CreateAccountMenu({ dir, onSelect }: { dir: "rtl" | "ltr"; onSelect: (l
                 setOpen(false);
                 onSelect(item.labelKey);
               }}
-              className="flex w-full flex-col items-start gap-0.5 px-4 py-2.5 text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors text-start"
+              className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors text-start"
             >
-              <span className="flex items-center gap-3 w-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-secondary-400 shrink-0" />
-                {t(item.labelKey)}
-              </span>
-              {item.descKey ? (
-                <span className="text-[10px] text-surface-500 font-normal ps-5 leading-snug">
-                  {t(item.descKey)}
-                </span>
-              ) : null}
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary-400 shrink-0" />
+              {t(item.labelKey)}
             </button>
           ))}
-          <div className="mx-3 mt-1 mb-0.5 border-t border-surface-100 pt-2">
-            <SupplierTraderHint />
-          </div>
         </div>
       )}
     </div>

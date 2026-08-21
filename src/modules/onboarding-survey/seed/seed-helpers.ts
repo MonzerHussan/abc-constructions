@@ -21,6 +21,10 @@ export const LIKERT = mcOptions([
   ['5', '5 - Very important', '5 - مهم جداً'],
 ]);
 
+export const REGIONS_OPTION_META = { optionSource: "REGIONS_BY_COUNTRY" as const };
+export const NATIONALS_OPTION_META = { optionSource: "NATIONALS_PERCENT" as const };
+
+/** @deprecated Use REGIONS_OPTION_META — options resolved from profile.country at runtime */
 export const REGIONS = mcOptions([
   ['riyadh', 'Riyadh', 'الرياض'],
   ['jeddah', 'Jeddah', 'جدة'],
@@ -56,6 +60,7 @@ export function companyProfileSection(sortOrder = 0): SeedSection {
           ['gt15', 'More than 15 years', 'أكثر من 15 سنة'],
         ]),
         sortOrder: 0,
+        metadata: { compactNumeric: true },
       },
       {
         code: 'K2',
@@ -66,14 +71,16 @@ export function companyProfileSection(sortOrder = 0): SeedSection {
           ['0', 'None', 'لا يوجد'], ['1_3', '1-3', '1-3'], ['4_10', '4-10', '4-10'], ['gt10', 'More than 10', 'أكثر من 10'],
         ]),
         sortOrder: 1,
+        metadata: { compactNumeric: true },
       },
       {
         code: 'K3',
         questionTextEn: 'Primary operating regions',
         questionTextAr: 'المناطق الرئيسية للعمل',
         answerType: 'MULTIPLE_CHOICE',
-        options: REGIONS,
+        options: [],
         sortOrder: 2,
+        metadata: REGIONS_OPTION_META,
       },
       {
         code: 'K4',
@@ -109,17 +116,16 @@ export function humanCapitalPlugIn(hasEmployeesCode = 'HC0'): SeedSection {
           ['51_200', '51-200', '51-200'], ['gt200', 'More than 200', 'أكثر من 200'],
         ]),
         sortOrder: 0,
+        metadata: { compactNumeric: true },
       },
       {
         code: 'HC2',
-        questionTextEn: 'Saudi nationals percentage',
-        questionTextAr: 'نسبة السعوديين',
+        questionTextEn: 'Nationals percentage in workforce',
+        questionTextAr: 'نسبة المواطنين في القوى العاملة',
         answerType: 'SINGLE_CHOICE',
-        options: mcOptions([
-          ['lt25', 'Less than 25%', 'أقل من 25%'], ['25_50', '25-50%', '25-50%'],
-          ['51_75', '51-75%', '51-75%'], ['gt75', 'More than 75%', 'أكثر من 75%'],
-        ]),
+        options: [],
         sortOrder: 1,
+        metadata: { ...NATIONALS_OPTION_META, compactNumeric: true },
       },
       {
         code: 'HC3',
@@ -149,6 +155,102 @@ export function employeesGateQuestion(code = 'HC0', sortOrder = 5): SeedQuestion
   };
 }
 
+const HAS_TRANSPORT: ShowIfRule = {
+  questionCode: "TR0",
+  op: "in",
+  value: ["yes", "yes_service", "yes_internal"],
+};
+
+/** Single-screen transport section (gate + fleet + regions + GPS). */
+export function unifiedTransportSection(sortOrder = 5): SeedSection {
+  return {
+    code: "TRANSPORT",
+    titleEn: "Transport & Logistics",
+    titleAr: "النقل واللوجستيات",
+    sortOrder,
+    questions: [
+      {
+        code: "TR0",
+        questionTextEn: "Do you own a transport fleet or operate private logistics?",
+        questionTextAr: "هل تملكون أسطول نقل أو تشغّلون لوجستيات خاصة؟",
+        answerType: "SINGLE_CHOICE",
+        options: mcOptions([
+          ["yes_service", "Yes, we offer transport services", "نعم، ونقدّم خدمة نقل للغير"],
+          ["yes_internal", "Yes, internal use only", "نعم، لاستخدامنا فقط"],
+          ["no", "No", "لا"],
+        ]),
+        sortOrder: 0,
+      },
+      {
+        code: "TR_FLEET",
+        questionTextEn: "How many vehicles in your fleet?",
+        questionTextAr: "كم مركبة في أسطولكم؟",
+        answerType: "SINGLE_CHOICE",
+        options: mcOptions([
+          ["1_3", "1-3", "1-3"],
+          ["4_10", "4-10", "4-10"],
+          ["11_30", "11-30", "11-30"],
+          ["gt30", "30+", "30+"],
+        ]),
+        sortOrder: 1,
+        showIf: HAS_TRANSPORT,
+        metadata: { compactNumeric: true },
+      },
+      {
+        code: "TR_UTIL",
+        questionTextEn: "Fleet utilization rate?",
+        questionTextAr: "ما نسبة استغلال الأسطول؟",
+        answerType: "SINGLE_CHOICE",
+        options: mcOptions([
+          ["lt40", "<40%", "أقل من 40%"],
+          ["40_70", "40-70%", "40-70%"],
+          ["71_90", "71-90%", "71-90%"],
+          ["gt90", "90%+", "90%+"],
+          ["unknown", "Don't know", "لا نعرف"],
+        ]),
+        sortOrder: 2,
+        showIf: HAS_TRANSPORT,
+        metadata: { compactNumeric: true },
+      },
+      {
+        code: "TR_REGIONS",
+        questionTextEn: "Service regions",
+        questionTextAr: "مناطق الخدمة",
+        answerType: "MULTIPLE_CHOICE",
+        options: [],
+        sortOrder: 3,
+        showIf: HAS_TRANSPORT,
+        metadata: REGIONS_OPTION_META,
+      },
+      {
+        code: "TR_GPS",
+        questionTextEn: "GPS/tracking system in use?",
+        questionTextAr: "هل تستخدمون نظام تتبع/GPS؟",
+        answerType: "SINGLE_CHOICE",
+        options: YES_NO,
+        sortOrder: 4,
+        showIf: HAS_TRANSPORT,
+      },
+      {
+        code: "TR_RENT",
+        questionTextEn: "Interest in renting excess fleet capacity via platform?",
+        questionTextAr: "الاهتمام بتأجير الطاقة الفائضة عبر المنصة؟",
+        answerType: "LINEAR_SCALE",
+        options: mcOptions([
+          ["1", "1", "1"],
+          ["2", "2", "2"],
+          ["3", "3", "3"],
+          ["4", "4", "4"],
+          ["5", "5", "5"],
+        ]),
+        sortOrder: 5,
+        showIf: { questionCode: "TR0", op: "eq", value: "yes_service" },
+      },
+    ],
+  };
+}
+
+/** @deprecated Use unifiedTransportSection */
 export function transportPlugIn(showIf?: ShowIfRule): SeedSection {
   return {
     code: 'TRANSPORT_LOGISTICS',
