@@ -29,7 +29,6 @@ import {
   isOrgTypeOther,
   resolveCompanyTypeForApi,
 } from "@/lib/registration/org-type-select"
-import SupplierTraderHint from "@/components/homepage/SupplierTraderHint"
 
 type RegisterInlineProps = {
   dir: "rtl" | "ltr"
@@ -96,8 +95,6 @@ export default function RegisterInline({
 
   const isEntity = categoryKey === "accountCategoryEntity"
   const isIndividual = categoryKey === "accountCategoryIndividual"
-  const showSupplierTraderHint =
-    categoryKey === "accountCategorySupplier" || categoryKey === "accountCategoryTrader"
   const orgNameLabel = isEntity ? t("entityName") : t("companyName")
   const orgTypeLabel = isEntity ? t("entityType") : isIndividual ? t("category") : t("companyType")
 
@@ -260,8 +257,6 @@ export default function RegisterInline({
           {error && (
             <div className="bg-danger-50 text-danger-600 text-xs rounded-none px-3 py-2">{error}</div>
           )}
-
-          {showSupplierTraderHint && <SupplierTraderHint />}
 
           {!isIndividual && (
             <div className="grid grid-cols-2 gap-2">
