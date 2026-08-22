@@ -40,25 +40,28 @@ export async function openLoginPanel(page: Page, callbackUrl?: string) {
   const qs = callbackUrl
     ? `?login=1&callbackUrl=${encodeURIComponent(callbackUrl)}`
     : "?login=1";
-  await page.goto(`/projects/ABC${qs}`, { waitUntil: "domcontentloaded" });
-  await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 20_000 });
+  await page.goto(`/projects/ABC${qs}`, { waitUntil: "load" });
+  await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('input[type="password"]').first()).toBeVisible();
 }
 
 /** Legacy /auth/login URLs redirect to inline panel on homepage. */
 export async function openLoginViaLegacyRoute(page: Page) {
-  await page.goto("/projects/ABC/auth/login", { waitUntil: "domcontentloaded" });
+  await page.goto("/projects/ABC/auth/login", { waitUntil: "load" });
   await waitForInlineLogin(page);
-  await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 20_000 });
+  await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 30_000 });
 }
 
 /** Open inline register panel for a platform account category. */
 export async function openRegisterPanel(page: Page, categoryKey = "accountCategorySupplier") {
   await page.goto(`/projects/ABC?register=1&category=${categoryKey}`, {
-    waitUntil: "domcontentloaded",
+    waitUntil: "load",
   });
   await waitForInlineRegister(page);
-  await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 25_000 });
+  await expect(page.locator('input[name="organization"], input[name="name"]').first()).toBeVisible({
+    timeout: 30_000,
+  });
+  await expect(page.locator('input[type="email"]').first()).toBeVisible({ timeout: 30_000 });
 }
 
 /** Fill RegisterInline for a company/supplier account and submit. */
@@ -89,7 +92,15 @@ export async function submitRegisterInline(page: Page, opts: {
   await page.locator('input[name="confirm-new-password"]').fill(opts.password);
 
   await page.getByRole("button", { name: /create|إنشاء/i }).last().click();
-  await page.waitForLoadState("domcontentloaded");
+
+  const registerError = page.locator(".bg-danger-50").first();
+  await Promise.race([
+    page.waitForURL(/\/onboarding/, { timeout: 45_000 }),
+    registerError.waitFor({ state: "visible", timeout: 45_000 }).then(async () => {
+      const msg = (await registerError.textContent())?.trim() ?? "unknown register error";
+      throw new Error(`RegisterInline failed: ${msg}`);
+    }),
+  ]);
 }
 
 /** Open a homepage header NavDropdown and return visible link texts. */

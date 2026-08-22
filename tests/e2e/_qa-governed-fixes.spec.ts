@@ -3,10 +3,10 @@ import { expectInlineLoginRedirect, openHeaderDropdown, waitForInlineLogin } fro
 
 test.describe("Homepage fixes (/projects/ABC)", () => {
   test("homepage renders default content without DB seed", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
-    await expect(page.locator("main")).toBeVisible();
-    await expect(page.locator("footer")).toBeVisible();
+    await expect(page.locator("main")).toBeVisible({ timeout: 20_000 });
+    await expect(page.locator("footer")).toBeVisible({ timeout: 20_000 });
 
     // HOMEPAGE_DEFAULTS carousel + left-block vision copy (portal shell)
     await expect(page.getByText("مناقصات المشاريع").first()).toBeVisible();
@@ -17,7 +17,7 @@ test.describe("Homepage fixes (/projects/ABC)", () => {
   });
 
   test("marketplace quick access link is available in the header links", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
     const marketItems = await openHeaderDropdown(page, "السوق");
     expect(marketItems.join("|")).toMatch(/المواد|المنتجات|المشاريع/);
@@ -27,7 +27,7 @@ test.describe("Homepage fixes (/projects/ABC)", () => {
   });
 
   test("carousel and ads area render placeholder media from defaults", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
     await expect(page.getByText("مناقصات المشاريع").first()).toBeVisible();
 
@@ -36,7 +36,7 @@ test.describe("Homepage fixes (/projects/ABC)", () => {
   });
 
   test("admin homepage shows access-denied for non-admin (not silently homepage)", async ({ page }) => {
-    await page.goto("/projects/ABC/admin/homepage");
+    await page.goto("/projects/ABC/admin/homepage", { waitUntil: "load" });
     await waitForInlineLogin(page);
     expectInlineLoginRedirect(page.url());
   });

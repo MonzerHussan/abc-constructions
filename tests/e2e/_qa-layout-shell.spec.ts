@@ -3,7 +3,7 @@ import { openHeaderDropdown, openLoginPanel } from "./helpers/portal-auth";
 
 test.describe("Homepage layout shell (/projects/ABC)", () => {
   test("hero content and CTA render from defaults without seed", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
     await expect(page.locator("main")).toBeVisible();
     await expect(page.locator("footer")).toBeVisible();
@@ -15,7 +15,7 @@ test.describe("Homepage layout shell (/projects/ABC)", () => {
   });
 
   test("navbar menus open on click and show exact items with prefixed links", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
     const bids = await openHeaderDropdown(page, "المناقصات");
     expect(bids.join("|")).toContain("المشاريع");
@@ -32,12 +32,12 @@ test.describe("Homepage layout shell (/projects/ABC)", () => {
   });
 
   test("register and login links point to the platform auth routes", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
+    await page.goto("/projects/ABC", { waitUntil: "load" });
 
     await openLoginPanel(page);
     await expect(page.getByRole("button", { name: /google/i })).toBeVisible();
 
-    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
+    await page.goto("/projects/ABC", { waitUntil: "load" });
     await page.locator("header button").filter({ hasText: "إنشاء حساب" }).first().click();
     await expect(page.locator("header div.absolute.top-full button").first()).toBeVisible({ timeout: 5_000 });
 
