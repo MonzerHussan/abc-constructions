@@ -8,65 +8,32 @@ interface StepIndicatorProps {
 }
 
 export function StepIndicator({ steps, current }: StepIndicatorProps) {
-  const { t, dir } = useLanguage();
+  const { t } = useLanguage();
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between">
-        {steps.map((stepKey, index) => {
-          const stepNumber = index + 1;
-          const isActive = stepNumber === current;
-          const isCompleted = stepNumber < current;
-          const isLast = index === steps.length - 1;
+    <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }}>
+      {steps.map((stepKey, index) => {
+        const stepNumber = index + 1;
+        const isActive = stepNumber === current;
+        const isCompleted = stepNumber < current;
 
-          return (
-            <div key={stepKey} className="flex items-center flex-1">
-              <div className="flex flex-col items-center">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-colors ${
-                    isActive
-                      ? "bg-secondary-500 border-secondary-500 text-white"
-                      : isCompleted
-                        ? "bg-success-500 border-success-500 text-white"
-                        : "bg-white border-surface-300 text-surface-500"
-                  }`}
-                >
-                  {isCompleted ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                  ) : (
-                    stepNumber
-                  )}
-                </div>
-                <span
-                  className={`mt-2 text-xs font-medium text-center ${
-                    isActive ? "text-secondary-600" : "text-surface-500"
-                  }`}
-                >
-                  {t(stepKey as never)}
-                </span>
-              </div>
-              {!isLast && (
-                <div
-                  className={`h-1 flex-1 mx-2 transition-colors ${
-                    stepNumber < current ? "bg-secondary-500" : "bg-surface-200"
-                  }`}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
+        return (
+          <div
+            key={stepKey}
+            className={`border px-2 py-1.5 text-center transition-colors ${
+              isActive
+                ? "border-secondary-500 bg-secondary-50 text-secondary-700"
+                : isCompleted
+                  ? "border-success-500 bg-success-50 text-success-700"
+                  : "border-surface-200 bg-white text-surface-500"
+            }`}
+          >
+            <span className="block text-[10px] font-semibold leading-tight truncate">
+              {t(stepKey as never)}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }

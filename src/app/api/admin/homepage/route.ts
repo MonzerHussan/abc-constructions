@@ -39,14 +39,15 @@ export async function GET() {
   const guard = await requireAdmin()
   if ("error" in guard) return NextResponse.json({ error: guard.error }, { status: guard.status })
 
-  const [content, slides, videos, ads] = await Promise.all([
+  const [content, slides, videos, ads, zones] = await Promise.all([
     prisma.homepageContent.findFirst({ orderBy: { createdAt: "desc" } }),
     prisma.carouselSlide.findMany({ orderBy: { sortOrder: "asc" } }),
     prisma.videoSection.findMany({ orderBy: { sortOrder: "asc" } }),
     prisma.ad.findMany({ orderBy: { sortOrder: "asc" } }),
+    prisma.homepageZone.findMany({ orderBy: { sortOrder: "asc" } }),
   ])
 
-  return NextResponse.json({ content, slides, videos, ads })
+  return NextResponse.json({ content, slides, videos, ads, zones })
 }
 
 export async function PUT(req: Request) {

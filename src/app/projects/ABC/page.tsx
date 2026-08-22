@@ -1,353 +1,719 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import {
   User,
   Play,
-  ChevronRight,
+  ChevronDown,
+  Building2,
+  ShieldCheck,
+  Smartphone,
+  LogOut,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
 import HomepageCarousel from "@/components/homepage/HomepageCarousel";
 import VideoCard from "@/components/homepage/VideoCard";
 import AdsBanner from "@/components/homepage/AdsBanner";
+import AdCard, { adGridClass } from "@/components/homepage/AdCard";
+import ZoneCard from "@/components/homepage/ZoneCard";
+import RegisterInline from "@/components/homepage/RegisterInline";
+import LoginInline from "@/components/homepage/LoginInline";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/lib/LanguageContext";
-import { HOMEPAGE_DEFAULTS, type HomepageData } from "@/lib/homepage-defaults";
+import { HOMEPAGE_DEFAULTS, mergeHomepageData, type HomepageData } from "@/lib/homepage-defaults";
+import type { TranslationKey } from "@/lib/translations";
+import { useSearchParams, useRouter } from "next/navigation";
+import AbcLogo from "@/components/AbcLogo";
+import { platformRegisterUrl } from "@/lib/homepage-auth-routes";
 import { cn } from "@/lib/utils";
 
-const HEADER_LINKS = [
-  { href: "/projects/ABC/tenders/projects", key: "bids", label: "Bids" },
-  { href: "/projects/ABC/marketplace", key: "market", label: "Market" },
-  { href: "/projects/ABC/training", key: "community", label: "Community" },
+interface LeftBlockLocalized {
+  type: string;
+  title: string;
+  body: string;
+  imageUrl: string;
+  videoUrl: string;
+  posterUrl: string | null;
+  linkUrl: string | null;
+  enabled: boolean;
+}
+
+interface BelowAdsContent {
+  showHighlights: boolean;
+  highlightsTitle: string;
+  showStats: boolean;
+  stats: Array<{ value: string; label: string }>;
+  showVideosSection: boolean;
+  videosSectionTitle: string;
+  showFooter: boolean;
+  footerAbout: string;
+  footerEmail: string | null;
+  footerPhone: string | null;
+  footerAddress: string;
+}
+
+const CREATE_ACCOUNT_ROLES: { labelKey: TranslationKey }[] = [
+  { labelKey: "accountCategoryEntity" },
+  { labelKey: "accountCategoryCompany" },
+  { labelKey: "accountCategoryOwner" },
+  { labelKey: "accountCategoryConsultant" },
+  { labelKey: "accountCategoryContractor" },
+  { labelKey: "accountCategorySubcontractor" },
+  { labelKey: "accountCategorySupplier" },
+  { labelKey: "accountCategoryTrader" },
+  { labelKey: "accountCategoryIndividual" },
 ];
 
-function RectPanel({
-  className,
-  children,
-  label,
-  dir,
-}: {
-  className?: string;
-  children: React.ReactNode;
-  label?: string;
-  dir: "rtl" | "ltr";
-}) {
+import {
+  LABEL_KEY_TO_PLATFORM_ACCOUNT_TYPE,
+  platformAccountTypeToUserRole,
+} from "@/lib/account-types";
+
+const NAV_GROUPS: {
+  key: string;
+  labelKey: TranslationKey;
+  items: { href: string; labelKey: TranslationKey }[];
+}[] = [
+  {
+    key: "bids",
+    labelKey: "navBids",
+    items: [
+      { href: "/projects/ABC/projects", labelKey: "headProjects" },
+      { href: "/projects/ABC/marketplace", labelKey: "headMaterials" },
+      { href: "/projects/ABC/delivery", labelKey: "headDelivery" },
+      { href: "/projects/ABC/marketplace", labelKey: "headProducts" },
+    ],
+  },
+  {
+    key: "market",
+    labelKey: "navMarketplaceTitle",
+    items: [
+      { href: "/projects/ABC/projects", labelKey: "headProjects" },
+      { href: "/projects/ABC/marketplace", labelKey: "headMaterials" },
+      { href: "/projects/ABC/delivery", labelKey: "headDelivery" },
+      { href: "/projects/ABC/marketplace", labelKey: "headProducts" },
+    ],
+  },
+  {
+    key: "community",
+    labelKey: "navCommunity",
+    items: [
+      { href: "/projects/ABC/jobs", labelKey: "headJobs" },
+      { href: "/projects/ABC/training", labelKey: "headTraining" },
+    ],
+  },
+];
+
+import { HEADER_CONTROL, HEADER_LOGOUT_BUTTON } from "@/lib/header-control-styles";
+
+function NavDropdown({ dir }: { dir: "rtl" | "ltr" }) {
+  const { t } = useLanguage();
+  const [open, setOpen] = useState<string | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(null);
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
   return (
-    <div className={cn("relative overflow-hidden rounded-[1.25rem] border border-white/10", className)}>
-      {label && (
-        <span className="absolute top-3 start-3 z-10 text-[10px] font-bold uppercase tracking-widest text-white/40 bg-black/30 rounded-full px-2.5 py-1">
-          {label}
-        </span>
-      )}
-      {children}
+    <div ref={ref} className="flex items-center gap-1">
+      {NAV_GROUPS.map((g) => (
+        <div key={g.key} className="relative">
+          <button
+            onClick={() => setOpen(open === g.key ? null : g.key)}
+            className={cn("flex items-center gap-1.5 rounded-none", HEADER_CONTROL, "text-surface-700 hover:text-secondary-600 hover:bg-secondary-50")}
+            aria-expanded={open === g.key}
+          >
+            {t(g.labelKey)}
+            <ChevronDown className={cn("w-4 h-4 transition-transform", open === g.key && "rotate-180")} />
+          </button>
+          {open === g.key && (
+            <div
+              dir={dir}
+              className="absolute top-full start-0 mt-2 w-60 bg-white rounded-none shadow-lg border border-surface-100 py-2 z-50"
+            >
+              <div className="px-4 py-2 border-b border-surface-100 mb-1">
+                <p className="text-xs font-semibold text-surface-400 uppercase tracking-wide">{t(g.labelKey)}</p>
+              </div>
+              {g.items.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setOpen(null)}
+                  className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-secondary-400 shrink-0" />
+                  {t(item.labelKey)}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
 
-function UserProfile({ dir }: { dir: "rtl" | "ltr" }) {
+function CreateAccountMenu({ dir, onSelect }: { dir: "rtl" | "ltr"; onSelect: (labelKey: TranslationKey) => void }) {
+  const { t } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className={cn("flex items-center gap-1.5 rounded-none bg-secondary-500 text-white font-semibold text-xs px-2.5 py-1 shadow-md shadow-secondary-500/20 hover:bg-secondary-600 transition-colors", HEADER_CONTROL)}
+        aria-expanded={open}
+      >
+        {t("createAccount")}
+        <ChevronDown className={cn("w-4 h-4 transition-transform", open && "rotate-180")} />
+      </button>
+      {open && (
+        <div
+          dir={dir}
+          className="absolute top-full end-0 mt-2 w-60 bg-white rounded-none shadow-lg border border-surface-100 py-2 z-50"
+        >
+          <div className="px-4 py-2 border-b border-surface-100 mb-1">
+            <p className="text-xs font-semibold text-surface-400 uppercase tracking-wide">{t("register")}</p>
+          </div>
+          {CREATE_ACCOUNT_ROLES.map((item) => (
+            <button
+              key={item.labelKey}
+              onClick={() => {
+                setOpen(false);
+                onSelect(item.labelKey);
+              }}
+              className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors text-start"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary-400 shrink-0" />
+              {t(item.labelKey)}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AccountMenu({ dir, onLogin, onRegisterSelect }: { dir: "rtl" | "ltr"; onLogin: () => void; onRegisterSelect: (labelKey: TranslationKey) => void }) {
   const { data: session, status } = useSession();
   const { t } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   const loggedIn = status === "authenticated";
   const name = session?.user?.name;
   const email = session?.user?.email;
 
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-white/10 border border-white/15 p-3">
-      <div className="w-11 h-11 rounded-full bg-secondary-500 flex items-center justify-center shrink-0">
-        {loggedIn ? (
-          <span className="text-white font-bold">
-            {(name || email || "U").slice(0, 1).toUpperCase()}
-          </span>
-        ) : (
-          <User className="w-5 h-5 text-white" />
-        )}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-white truncate">
-          {loggedIn ? name || email : t("guest")}
-        </p>
-        <p className="text-xs text-white/60 truncate">
-          {loggedIn ? email : "Guest"}
-        </p>
-      </div>
-      {loggedIn ? (
-        <Link
-          href="/projects/ABC/organization"
-          className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white"
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-3 rounded-none bg-white/10 border border-white/15 p-2 w-full text-left hover:bg-white/15 transition-colors"
+        aria-expanded={open}
+      >
+        <div className="w-11 h-11 rounded-full bg-secondary-500 flex items-center justify-center shrink-0">
+          {loggedIn ? (
+            <span className="text-white font-bold">{(name || email || "U").slice(0, 1).toUpperCase()}</span>
+          ) : (
+            <User className="w-5 h-5 text-white" />
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-white truncate">{loggedIn ? name || email : t("guest")}</p>
+          <p className="text-xs text-white/60 truncate">
+            {loggedIn ? email : t("login")}
+          </p>
+        </div>
+        <ChevronDown className={cn("w-4 h-4 text-white/70 transition-transform", open && "rotate-180")} />
+      </button>
+
+      {open && (
+        <div
+          dir={dir}
+          className="absolute bottom-full start-0 mb-2 w-full min-w-[220px] bg-white rounded-none shadow-lg border border-surface-100 py-2 z-50"
         >
-          <User className="w-4 h-4" />
-        </Link>
-      ) : (
-        <Link
-          href="/projects/ABC/auth/login"
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-secondary-500 text-white text-sm font-bold hover:bg-secondary-600 transition-colors"
-        >
-          {t("login")}
-        </Link>
+          {loggedIn ? (
+            <>
+              <div className="px-4 py-2 border-b">
+                <p className="font-medium text-sm">{name || "مستخدم"}</p>
+                <p className="text-xs text-surface-500">{email}</p>
+              </div>
+              <Link href="/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50 transition-colors">
+                <User className="w-4 h-4 text-surface-400" />
+                {t("profile")}
+              </Link>
+              <Link href="/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50 transition-colors">
+                <Building2 className="w-4 h-4 text-surface-400" />
+                {t("dashboard")}
+              </Link>
+              <Link href="/projects/ABC/organization" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50 transition-colors">
+                <Building2 className="w-4 h-4 text-surface-400" />
+                {t("myOrganization")}
+              </Link>
+              <Link href="/projects/ABC/verification" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50 transition-colors">
+                <ShieldCheck className="w-4 h-4 text-surface-400" />
+                {t("verification")}
+              </Link>
+              <Link href="/projects/ABC/settings/mfa" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50 transition-colors">
+                <Smartphone className="w-4 h-4 text-surface-400" />
+                MFA
+              </Link>
+              <hr className="my-1" />
+              <button onClick={() => signOut({ callbackUrl: "/projects/ABC" })} className="flex items-center gap-2 px-4 py-2 text-sm text-danger-600 hover:bg-danger-50 w-full transition-colors">
+                <LogOut className="w-4 h-4" />
+                {t("logout")}
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  onLogin();
+                }}
+                className="block w-full px-4 py-2.5 text-sm font-semibold text-surface-700 hover:bg-surface-50 transition-colors text-start"
+              >
+                {t("login")}
+              </button>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  onRegisterSelect("accountCategoryOwner");
+                }}
+                className="block w-full px-4 py-2.5 text-sm font-semibold text-secondary-600 hover:bg-secondary-50 transition-colors text-start"
+              >
+                {t("register")}
+              </button>
+            </>
+          )}
+        </div>
       )}
     </div>
   );
 }
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-surface-50" dir="rtl" />}>
+      <HomePageContent />
+    </Suspense>
+  );
+}
+
+function HomePageContent() {
   const { t, dir, language } = useLanguage();
+  const { status } = useSession();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const loggedIn = status === "authenticated";
   const [data, setData] = useState<HomepageData>(HOMEPAGE_DEFAULTS);
+  const [pendingRegister, setPendingRegister] = useState<{
+    role: string
+    label: string
+    categoryKey: TranslationKey
+  } | null>(null)
+  const [pendingLogin, setPendingLogin] = useState(false)
+  const authPanelRef = useRef<HTMLDivElement>(null)
+
+  function closeAuthPanel() {
+    setPendingLogin(false)
+    setPendingRegister(null)
+    router.replace("/projects/ABC", { scroll: false })
+  }
+
+  function openRegisterFromCategory(labelKey: TranslationKey) {
+    setPendingLogin(false);
+    const accountType = LABEL_KEY_TO_PLATFORM_ACCOUNT_TYPE[labelKey];
+    setPendingRegister({
+      role: accountType ? platformAccountTypeToUserRole(accountType) : "INDIVIDUAL",
+      label: t(labelKey),
+      categoryKey: labelKey,
+    });
+  }
 
   useEffect(() => {
-    fetch(`/api/homepage`)
+    const login = searchParams.get("login");
+    const register = searchParams.get("register");
+    const category = searchParams.get("category");
+
+    if (login === "1") {
+      setPendingRegister(null);
+      setPendingLogin(true);
+      return;
+    }
+
+    if (register === "1") {
+      setPendingLogin(false);
+      const labelKey = (
+        category && category in LABEL_KEY_TO_PLATFORM_ACCOUNT_TYPE
+          ? category
+          : "accountCategoryOwner"
+      ) as TranslationKey;
+      const accountType = LABEL_KEY_TO_PLATFORM_ACCOUNT_TYPE[labelKey];
+      setPendingRegister({
+        role: accountType ? platformAccountTypeToUserRole(accountType) : "INDIVIDUAL",
+        label: t(labelKey),
+        categoryKey: labelKey,
+      });
+    }
+  }, [searchParams, t]);
+
+  useEffect(() => {
+    if (!pendingLogin && !pendingRegister) return
+
+    function handlePageButtonClick(e: MouseEvent) {
+      const target = e.target as HTMLElement
+      if (authPanelRef.current?.contains(target)) return
+
+      const clickedControl = target.closest("button, a, [role='button'], input[type='submit']")
+      if (clickedControl) {
+        closeAuthPanel()
+      }
+    }
+
+    document.addEventListener("click", handlePageButtonClick, true)
+    return () => document.removeEventListener("click", handlePageButtonClick, true)
+  }, [pendingLogin, pendingRegister])
+
+  useEffect(() => {
+    fetch(`/api/homepage`, { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((res) => {
-        if (res?.data) setData(res.data);
+        if (res?.data) setData(mergeHomepageData(res.data));
       })
       .catch(() => {});
   }, []);
 
+  const zones = data.zones ?? HOMEPAGE_DEFAULTS.zones;
+  const ads = data.ads ?? HOMEPAGE_DEFAULTS.ads;
+  const slides = data.slides ?? HOMEPAGE_DEFAULTS.slides;
+  const videos = data.videos ?? HOMEPAGE_DEFAULTS.videos;
+
   const c = data.content;
   const L = language;
 
-  const introTitle = L === "en" ? c.introTitleEn : L === "ur" ? c.introTitleUr : c.introTitle;
-  const introBody = L === "en" ? c.introBodyEn : L === "ur" ? c.introBodyUr : c.introBody;
-  const visionTitle = L === "en" ? c.visionTitleEn : L === "ur" ? c.visionTitleUr : c.visionTitle;
-  const visionBody = L === "en" ? c.visionBodyEn : L === "ur" ? c.visionBodyUr : c.visionBody;
-  const primaryCta = L === "en" ? c.primaryCtaLabelEn : L === "ur" ? c.primaryCtaLabelUr : c.primaryCtaLabel;
-  const secondaryCta = L === "en" ? c.secondaryCtaLabelEn : L === "ur" ? c.secondaryCtaLabelUr : c.secondaryCtaLabel;
+  function handleCreateCategory(labelKey: TranslationKey) {
+    openRegisterFromCategory(labelKey);
+    router.replace(platformRegisterUrl(labelKey), { scroll: false });
+  }
 
-  const firstVideo = data.videos[0];
-  const firstAd = data.ads[0];
-  const secondAd = data.ads[1];
+  function openLogin() {
+    setPendingRegister(null);
+    setPendingLogin(true);
+    router.replace("/projects/ABC?login=1", { scroll: false });
+  }
 
-  const headerLabels: Record<string, string> =
-    L === "ar"
-      ? { bids: "╪º┘ä┘à┘å╪º┘é╪╡╪º╪¬", market: "╪º┘ä╪│┘ê┘é", community: "╪º┘ä┘à╪¼╪¬┘à╪╣" }
+  // Left-column admin zone
+  const lbBlock = (c as unknown as { leftBlock?: LeftBlockLocalized | undefined }).leftBlock as LeftBlockLocalized | undefined;
+  const lbEnabled = lbBlock ? lbBlock.enabled : c.leftBlockEnabled;
+  const lbType = lbBlock ? lbBlock.type : c.leftBlockType;
+  const lbTitle = lbBlock
+    ? lbBlock.title
+    : L === "en"
+      ? c.leftBlockTitleEn || c.leftBlockTitle
       : L === "ur"
-        ? { bids: "┘à┘å╪º┘é╪╡╪º╪¬", market: "╪¿╪º╪▓╪º╪▒", community: "┌⌐┘à█î┘ê┘å┘╣█î" }
-        : { bids: "Bids", market: "Market", community: "Community" };
+        ? c.leftBlockTitleUr || c.leftBlockTitle
+        : c.leftBlockTitle;
+  const lbBody = lbBlock
+    ? lbBlock.body
+    : L === "en"
+      ? c.leftBlockBodyEn || c.leftBlockBody
+      : L === "ur"
+        ? c.leftBlockBodyUr || c.leftBlockBody
+        : c.leftBlockBody;
+  const lbImageUrl = lbBlock ? lbBlock.imageUrl : c.leftBlockImageUrl;
+  const lbVideoUrl = lbBlock ? lbBlock.videoUrl : c.leftBlockVideoUrl;
+  const lbPosterUrl = lbBlock ? lbBlock.posterUrl : c.leftBlockPosterUrl;
+  const lbLinkUrl = lbBlock ? lbBlock.linkUrl : c.leftBlockLinkUrl;
+
+  // Below-ads sections (localized from the API)
+  const belowRaw = (c as unknown as Partial<BelowAdsContent>);
+  const below: BelowAdsContent = {
+    showHighlights: belowRaw.showHighlights ?? true,
+    highlightsTitle: belowRaw.highlightsTitle ?? "أبرز ما في المنصة",
+    showStats: belowRaw.showStats ?? true,
+    stats: belowRaw.stats ?? [
+      { value: "2,500+", label: "مشاريع منجزة" },
+      { value: "1,800+", label: "مقاولون موثوقون" },
+      { value: "10,000+", label: "خامات" },
+      { value: "3,200+", label: "عطاءات ممنوحة" },
+    ],
+    showVideosSection: belowRaw.showVideosSection ?? true,
+    videosSectionTitle: belowRaw.videosSectionTitle ?? "اكتشف المنصة",
+    showFooter: belowRaw.showFooter ?? true,
+    footerAbout: belowRaw.footerAbout ?? "",
+    footerEmail: belowRaw.footerEmail ?? null,
+    footerPhone: belowRaw.footerPhone ?? null,
+    footerAddress: belowRaw.footerAddress ?? "",
+  };
 
   return (
     <div className="min-h-screen bg-surface-50" dir={dir}>
-      <Navbar />
-
-      {/* ===== Main screen (no vertical scroll) ===== */}
-      <main className="max-w-[1600px] mx-auto px-0 sm:px-3 lg:pt-3">
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(240px,340px)_1fr_minmax(240px,300px)] gap-0 lg:gap-4 lg:h-[calc(100dvh-6rem)]">
-          {/* ===== LEFT COLUMN ΓÇö full height (logo, CTA, dynamic content, profile) ===== */}
-          <section className="flex flex-col justify-between gap-6 p-6 lg:p-8 rounded-none lg:rounded-3xl gradient-hero text-white min-h-[420px] lg:min-h-full">
-            <div className="flex flex-col items-start gap-6">
-              <div className="flex items-center gap-3">
-                <Image
-                  src="/logo.png"
-                  alt="ABC"
-                  width={72}
-                  height={72}
-                  priority
-                  className="w-18 h-18 rounded-2xl shadow-2xl ring-1 ring-white/20"
-                />
-                <span className="text-3xl font-extrabold tracking-tight text-white">ABC</span>
-              </div>
-
-              <div className="flex flex-col gap-3 w-full">
-                <Link
-                  href={c.primaryCtaHref}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors shadow-lg shadow-secondary-500/25"
-                >
-                  {primaryCta}
-                  <ChevronRight className={cn("w-4 h-4", dir === "rtl" && "rotate-180")} />
-                </Link>
-                <Link
-                  href={c.secondaryCtaHref}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-white/25 bg-white/5 text-white rounded-xl font-medium hover:bg-white/10 transition-colors"
-                >
-                  {secondaryCta}
-                </Link>
-              </div>
-
-              {/* Dynamic content block */}
-              <div className="w-full p-4 rounded-2xl bg-white/10 border border-white/10">
-                <p className="text-xs font-bold uppercase tracking-widest text-accent-400 mb-2">
-                  {visionTitle}
-                </p>
-                <p className="text-sm leading-relaxed text-white/75 line-clamp-4">{visionBody}</p>
-              </div>
-            </div>
-
-            {/* User profile */}
-            <div className="pt-4">
-              <UserProfile dir={dir} />
-            </div>
-          </section>
-
-          {/* ===== RIGHT AREA (header on top, then Rect 2 + Rect 4/5) ===== */}
-          <div className="flex flex-col gap-4 lg:min-h-full">
-            {/* Header above right area ΓÇö Bids | Market | Community */}
-            <header className="flex items-center justify-between gap-4 bg-white/90 backdrop-blur rounded-xl border border-surface-200 px-4 py-3 shadow-sm">
-              <nav className="flex items-center gap-1 overflow-x-auto">
-                {HEADER_LINKS.map((link) => (
-                  <Link
-                    key={link.key}
-                    href={link.href}
-                    className="px-3 py-2 rounded-lg text-sm font-semibold text-surface-700 hover:text-secondary-600 hover:bg-secondary-50 transition-colors whitespace-nowrap"
-                  >
-                    {headerLabels[link.key]}
-                  </Link>
-                ))}
-              </nav>
-              <span className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-accent-600 bg-accent-50 rounded-full px-3 py-1.5 whitespace-nowrap">
-                <span className="w-2 h-2 rounded-full bg-accent-500 animate-pulse" />
-                {language === "en" ? "Live" : "┘à╪¿╪º╪┤╪▒"}
-              </span>
-            </header>
-
-            {/* Rect 2 (largest) fills remaining space between header and rect 3 */}
-            <RectPanel
-              label={language === "en" ? "Rect 2 ΓÇö Media" : "╪º┘ä┘à╪│╪¬╪╖┘è┘ä 2 ΓÇö ┘ê╪│╪º╪ª╪╖"}
-              dir={dir}
-              className="flex-1 lg:min-h-0 gradient-hero"
-            >
-              <div className="min-h-[380px] lg:h-full">
-                <HomepageCarousel slides={data.slides} dir={dir} fill />
-              </div>
-            </RectPanel>
-
-            {/* Rect 3 (purple) ΓÇö bottom of right column, full header width */}
-            <RectPanel
-              label={language === "en" ? "Rect 3 ΓÇö CTA" : "╪º┘ä┘à╪│╪¬╪╖┘è┘ä 3 ΓÇö ╪»╪╣┘ê╪⌐"}
-              dir={dir}
-              className="flex-1 bg-[linear-gradient(135deg,var(--flagship-500),var(--flagship-700))]"
-            >
-              <div className="flex items-center gap-4 p-5 lg:p-6 text-white">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-xl font-extrabold mb-1">{introTitle}</h3>
-                  <p className="text-sm text-white/80 line-clamp-2">{introBody}</p>
-                </div>
-                <Link
-                  href={c.primaryCtaHref}
-                  className="shrink-0 inline-flex items-center gap-2 px-5 py-3 bg-secondary-500 text-white rounded-xl font-bold text-sm hover:bg-secondary-600 transition-colors shadow-lg"
-                >
-                  {primaryCta}
-                </Link>
-              </div>
-            </RectPanel>
+      {/* ===== Main screen (no vertical scroll, edge to edge) ===== */}
+      <main className="max-w-[1600px] mx-auto lg:grid lg:grid-cols-[260px_1fr] lg:gap-1 lg:h-[100dvh]">
+        {/* ===== LEFT COLUMN — full height from top of screen ===== */}
+        <section className="flex flex-col justify-between gap-3 p-2 lg:p-2.5 gradient-hero text-white min-h-[420px] lg:min-h-full">
+          {/* Logo — ABC All About Construction */}
+          <div className="flex items-center">
+            <AbcLogo
+              background="dark"
+              alt="ABC - All About Construction"
+              width={220}
+              height={120}
+              priority
+              className="w-full max-w-[220px] h-auto object-contain"
+            />
           </div>
 
-          {/* ===== RIGHT COLUMN (4 top, 5 bottom) ΓÇö same width as left column ===== */}
-          <section className="flex flex-col gap-4 lg:mt-0">
-            {/* Rect 4 (top) */}
-            <RectPanel
-              label={language === "en" ? "Rect 4 ΓÇö Video" : "╪º┘ä┘à╪│╪¬╪╖┘è┘ä 4 ΓÇö ┘ü┘è╪»┘è┘ê"}
-              dir={dir}
-              className="flex-1 bg-white"
-            >
-              {firstVideo ? (
-                <VideoCard video={firstVideo} />
-              ) : (
-                <div className="aspect-video bg-surface-100 rounded-2xl flex items-center justify-center">
-                  <Play className="w-10 h-10 text-surface-300" />
+          {/* Admin-controlled interstitial: text / image / video */}
+          <div className="flex-1 flex flex-col justify-center min-h-0">
+            {lbEnabled && lbType === "video" && lbVideoUrl && (
+              <a
+                href={lbVideoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block rounded-none overflow-hidden border border-white/10 card-hover"
+              >
+                <div className="relative aspect-video bg-black">
+                  {lbPosterUrl ? (
+                    <Image src={lbPosterUrl} alt={lbTitle || "video"} fill className="object-cover" />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-800 to-primary-900" />
+                  )}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+                    <span className="w-14 h-14 bg-secondary-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <Play className="w-6 h-6 text-white fill-white" />
+                    </span>
+                  </div>
                 </div>
-              )}
-            </RectPanel>
+              </a>
+            )}
 
-            {/* Rect 5 (bottom) */}
-            <RectPanel
-              label={language === "en" ? "Rect 5 ΓÇö Ads" : "╪º┘ä┘à╪│╪¬╪╖┘è┘ä 5 ΓÇö ╪Ñ╪╣┘ä╪º┘å╪º╪¬"}
-              dir={dir}
-              className="flex-1 bg-white"
-            >
-              {firstAd ? (
-                <AdsBanner ads={[firstAd]} />
+            {lbEnabled && lbType === "image" && lbImageUrl &&
+              (lbLinkUrl ? (
+                <a
+                  href={lbLinkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block rounded-none overflow-hidden border border-white/10 card-hover"
+                >
+                  <div className="relative aspect-square">
+                    <Image src={lbImageUrl} alt={lbTitle || "image"} fill className="object-cover" />
+                  </div>
+                </a>
               ) : (
-                <div className="h-36 bg-surface-100 rounded-2xl flex items-center justify-center text-sm text-surface-400">
-                  No ads yet
+                <div className="rounded-none overflow-hidden border border-white/10">
+                  <div className="relative aspect-square">
+                    <Image src={lbImageUrl} alt={lbTitle || "image"} fill className="object-cover" />
+                  </div>
+                </div>
+              ))}
+
+            {lbEnabled && lbType === "text" && (lbTitle || lbBody) && (
+              <div className="rounded-none border border-white/10 bg-white/10 p-2">
+                {lbTitle && (
+                  <p className="text-xs font-bold uppercase tracking-widest text-accent-400 mb-2">{lbTitle}</p>
+                )}
+                {lbBody && <p className="text-sm leading-relaxed text-white/75 line-clamp-6">{lbBody}</p>}
+              </div>
+            )}
+          </div>
+
+          {/* Guest / visitor button */}
+          <AccountMenu dir={dir} onLogin={openLogin} onRegisterSelect={handleCreateCategory} />
+        </section>
+
+        {/* ===== MAIN AREA — full-width header (after left column), then middle + right columns ===== */}
+        <div className="relative flex flex-col gap-1 py-2 lg:py-0 lg:min-h-0">
+          <header className="relative z-20 flex items-center justify-between gap-2 bg-white/90 backdrop-blur rounded-none border border-surface-200 px-3 py-1.5 shadow-sm lg:min-h-0">
+            <NavDropdown dir={dir} />
+            <div className="flex items-center gap-1.5 shrink-0">
+              <div className="rounded-none">
+                <LanguageSwitcher />
+              </div>
+              {loggedIn ? (
+                <button
+                  type="button"
+                  onClick={() => signOut({ callbackUrl: "/projects/ABC" })}
+                  className={HEADER_LOGOUT_BUTTON}
+                >
+                  <LogOut className="w-3.5 h-3.5 shrink-0" />
+                  {t("logout")}
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={openLogin}
+                    className={cn("rounded-none", HEADER_CONTROL, "text-surface-700 hover:text-secondary-600")}
+                  >
+                    {t("login")}
+                  </button>
+                  <CreateAccountMenu dir={dir} onSelect={handleCreateCategory} />
+                </>
+              )}
+            </div>
+          </header>
+
+          <div className="grid flex-1 gap-1 lg:min-h-0 lg:grid-cols-[1fr_280px]">
+            {/* Middle: auth panel → carousel → ads (same column width) */}
+            <div className="relative flex flex-col gap-1 lg:min-h-0 flex-1">
+              <div className="relative flex-1 overflow-hidden lg:min-h-0 gradient-hero rounded-none border-0">
+                <div className="relative min-h-[380px] lg:h-full">
+                  <HomepageCarousel slides={slides} dir={dir} fill />
+                </div>
+              </div>
+
+              {ads.length > 0 && (
+                <div className="shrink-0">
+                  <div className={`grid gap-1 ${adGridClass(ads.length)}`}>
+                    {ads.slice(0, 4).map((ad) => (
+                      <AdCard key={ad.id} ad={ad} />
+                    ))}
+                  </div>
                 </div>
               )}
-            </RectPanel>
-          </section>
+
+              {(pendingLogin || pendingRegister) && (
+                <div
+                  className="absolute inset-0 z-30 flex items-start justify-center overflow-y-auto bg-black/55 backdrop-blur-[2px] p-2 pt-3"
+                  onClick={closeAuthPanel}
+                  role="presentation"
+                >
+                  <div ref={authPanelRef} className="w-full max-w-full" onClick={(e) => e.stopPropagation()}>
+                    {pendingLogin ? (
+                      <LoginInline
+                        dir={dir}
+                        onClose={closeAuthPanel}
+                        onOpenRegister={(role, label, categoryKey) => {
+                          setPendingLogin(false);
+                          setPendingRegister({ role, label, categoryKey });
+                        }}
+                      />
+                    ) : (
+                      pendingRegister && (
+                        <RegisterInline
+                          key={pendingRegister.categoryKey}
+                          dir={dir}
+                          role={pendingRegister.role}
+                          roleLabel={pendingRegister.label}
+                          categoryKey={pendingRegister.categoryKey}
+                          onClose={closeAuthPanel}
+                          onOpenLogin={openLogin}
+                        />
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ===== RIGHT COLUMN — admin zones (1-3): text / image / video / mixed, 90° corners ===== */}
+            <section className="flex flex-col gap-1 max-lg:mt-2">
+              {zones.length > 0 ? (
+                zones.map((zone) => (
+                  <ZoneCard key={zone.id} zone={zone} className="flex-1 min-h-0" />
+                ))
+              ) : (
+                <div className="flex-1 min-h-0 flex items-center justify-center bg-white border border-surface-200 rounded-none shadow-sm">
+                  <p className="text-sm text-surface-400">{language === "en" ? "No zones configured" : "لا توجد مناطق مضبوطة"}</p>
+                </div>
+              )}
+            </section>
+          </div>
         </div>
       </main>
 
-      {/* ===== After scroll: additional dynamic content only ===== */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-primary-500">
-              {language === "en" ? "Platform Highlights" : language === "ur" ? "┘╛┘ä█î┘╣ ┘ü╪º╪▒┘à ┌⌐█î ╪¼┌╛┘ä┌⌐█î╪º┌║" : "╪ú╪¿╪▒╪▓ ┘à╪º ┘ü┘è ╪º┘ä┘à┘å╪╡╪⌐"}
-            </h2>
+      {/* ===== After scroll: below-ads content (every section admin-controlled) ===== */}
+      {below.showHighlights && (
+        <section className="py-6">
+          <div className="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
+            <div className="text-center mb-4">
+              <h2 className="text-3xl font-bold text-primary-500">{below.highlightsTitle}</h2>
+            </div>
+            <HomepageCarousel slides={slides} dir={dir} />
           </div>
-          <HomepageCarousel slides={data.slides} dir={dir} />
-        </div>
-      </section>
+        </section>
+      )}
 
-      <AdsBanner ads={data.ads} />
+      <AdsBanner ads={ads} />
 
-      {/* Stats strip ΓÇö additional dynamic section */}
-      <section className="py-10 bg-white border-y border-surface-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div>
-              <p className="text-3xl font-bold text-accent-500">2,500+</p>
-              <p className="text-sm text-surface-600">{language === "en" ? "Completed projects" : "┘à╪┤╪▒┘ê╪╣ ┘à┘â╪¬┘à┘ä"}</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-accent-500">1,800+</p>
-              <p className="text-sm text-surface-600">{language === "en" ? "Verified contractors" : "┘à┘é╪º┘ê┘ä ┘à┘ê╪½┘æ┘é"}</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-accent-500">10,000+</p>
-              <p className="text-sm text-surface-600">{language === "en" ? "Materials" : "┘à┘å╪¬╪¼ ┘à╪¬┘ê┘ü╪▒"}</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-accent-500">3,200+</p>
-              <p className="text-sm text-surface-600">{language === "en" ? "Awarded bids" : "┘à┘å╪º┘é╪╡╪⌐ ┘à┘å╪¼╪▓╪⌐"}</p>
+      {/* Stats strip */}
+      {below.showStats && (
+        <section className="py-5 bg-white border-y border-surface-200">
+          <div className="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+              {below.stats.map((s) => (
+                <div key={s.value}>
+                  <p className="text-3xl font-bold text-accent-500">{s.value}</p>
+                  <p className="text-sm text-surface-600">{s.label}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Projects / videos additional */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h3 className="text-2xl font-bold text-primary-500 mb-6">
-            {language === "en" ? "Discover the Platform" : "╪¬╪╣╪▒┘æ┘ü ╪╣┘ä┘ë ╪º┘ä┘à┘å╪╡╪⌐"}
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.videos.map((video) => (
-              <VideoCard key={video.id} video={video} />
-            ))}
+      {/* Videos grid */}
+      {below.showVideosSection && videos.length > 0 && (
+        <section className="py-6">
+          <div className="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
+            <h3 className="text-2xl font-bold text-primary-500 mb-3">{below.videosSectionTitle}</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {videos.map((video) => (
+                <VideoCard key={video.id} video={video} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer */}
-      <footer className="bg-surface-900 text-surface-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      {below.showFooter && (
+      <footer className="bg-surface-900 text-surface-400 py-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Image src="/logo.png" alt="ABC" width={64} height={64} className="w-16 h-16" />
+              <div className="flex items-center gap-2 mb-2">
+                <AbcLogo background="dark" alt="ABC" width={64} height={64} className="w-16 h-16" />
               </div>
-              <p className="text-sm">{t("appDescription")}</p>
+              <p className="text-sm">{below.footerAbout || t("appDescription")}</p>
             </div>
             <div>
-              <h4 className="text-white font-bold mb-4">{t("services")}</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="/projects/ABC/tenders/projects" className="hover:text-white">{t("modProjectTenders")}</Link>
-                </li>
-                <li>
-                  <Link href="/projects/ABC/tenders/materials" className="hover:text-white">{t("modMaterialTenders")}</Link>
-                </li>
-                <li>
-                  <Link href="/projects/ABC/marketplace" className="hover:text-white">{t("modMarketplace")}</Link>
-                </li>
-                <li>
-                  <Link href="/projects/ABC/jobs" className="hover:text-white">{t("modJobs")}</Link>
-                </li>
+              <h4 className="text-white font-bold mb-2">{t("services")}</h4>
+              <ul className="space-y-1 text-sm">
+                <li><Link href="/projects/ABC/tenders/projects" className="hover:text-white">{t("modProjectTenders")}</Link></li>
+                <li><Link href="/projects/ABC/tenders/materials" className="hover:text-white">{t("modMaterialTenders")}</Link></li>
+                <li><Link href="/projects/ABC/marketplace" className="hover:text-white">{t("modMarketplace")}</Link></li>
+                <li><Link href="/projects/ABC/jobs" className="hover:text-white">{t("modJobs")}</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-bold mb-4">{t("about")}</h4>
-              <ul className="space-y-2 text-sm">
+              <h4 className="text-white font-bold mb-2">{t("about")}</h4>
+              <ul className="space-y-1 text-sm">
                 <li><Link href="/about" className="hover:text-white">{t("about")}</Link></li>
                 <li><Link href="/contact" className="hover:text-white">{t("contact")}</Link></li>
                 <li><Link href="/terms" className="hover:text-white">{t("terms")}</Link></li>
@@ -355,21 +721,20 @@ export default function HomePage() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-bold mb-4">{t("contact")}</h4>
-              <ul className="space-y-2 text-sm">
-                <li>info@abc-constructions.com</li>
-                <li>+966 50 000 0000</li>
-                <li>{language === "en" ? "Riyadh, Saudi Arabia" : "╪º┘ä╪▒┘è╪º╪╢╪î ╪º┘ä┘à┘à┘ä┘â╪⌐ ╪º┘ä╪╣╪▒╪¿┘è╪⌐ ╪º┘ä╪│╪╣┘ê╪»┘è╪⌐"}</li>
+              <h4 className="text-white font-bold mb-2">{t("contact")}</h4>
+              <ul className="space-y-1 text-sm">
+                {below.footerEmail && <li>{below.footerEmail}</li>}
+                {below.footerPhone && <li>{below.footerPhone}</li>}
+                <li>{below.footerAddress || (language === "en" ? "Riyadh, Saudi Arabia" : "الرياض، المملكة العربية السعودية")}</li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-surface-800 mt-8 pt-8 text-center text-sm">
-            <p>┬⌐ 2026 ABC - {t("appFullName")}. {t("allRights")}</p>
+          <div className="border-t border-surface-800 mt-4 pt-4 text-center text-sm">
+            <p>© 2026 ABC - {t("appFullName")}. {t("allRights")}</p>
           </div>
         </div>
       </footer>
+      )}
     </div>
   );
 }
-
-

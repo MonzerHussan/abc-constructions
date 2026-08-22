@@ -5,6 +5,32 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/** True when a string is safe for next/image or video poster src. */
+export function isUsableMediaUrl(url: string | null | undefined): boolean {
+  if (url == null) return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  if (/^[a-zA-Z]:[\\/]/.test(trimmed)) return false;
+  if (trimmed.startsWith("/")) return true;
+  try {
+    new URL(trimmed);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** User-facing hint when a media URL cannot be loaded in the browser. */
+export function getMediaUrlIssue(url: string | null | undefined): string | null {
+  if (url == null || !url.trim()) return null;
+  const trimmed = url.trim();
+  if (/^[a-zA-Z]:[\\/]/.test(trimmed) || trimmed.includes(":\\")) {
+    return "localPathNotAllowed";
+  }
+  if (!isUsableMediaUrl(trimmed)) return "invalidMediaUrl";
+  return null;
+}
+
 export function formatDate(date: Date | string): string {
   return new Intl.DateTimeFormat("ar-EG", {
     year: "numeric",

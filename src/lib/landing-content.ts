@@ -1,6 +1,6 @@
 export const PLATFORM_HOME = "/projects/ABC";
-export const PLATFORM_LOGIN = "/projects/ABC/auth/login";
-export const PLATFORM_REGISTER = "/projects/ABC/auth/register";
+export const PLATFORM_LOGIN = "/projects/ABC?login=1";
+export const PLATFORM_REGISTER = "/projects/ABC?register=1";
 export const PLATFORM_PROJECTS = "/projects";
 export const PLATFORM_SERVICES = "/services";
 export const PLATFORM_MARKETPLACE = "/projects/ABC/marketplace";

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import Providers from "./Providers";
 import AuthProvider from "@/components/AuthProvider";
+import { LOGO_DARK_PILLARS } from "@/lib/brand-logo";
 import { DEFAULT_LOCALE, getDir, isSupportedLocale, LOCALE_COOKIE } from "@/lib/i18n";
 
 const geistMono = Geist_Mono({
@@ -35,6 +36,10 @@ export const metadata: Metadata = {
   title: "ABC - All About Constructions",
   description:
     "The complete platform for construction and contracting - tenders, building materials marketplace, project showcase, jobs, training and delivery",
+  icons: {
+    icon: [{ url: LOGO_DARK_PILLARS, type: "image/png" }],
+    apple: [{ url: LOGO_DARK_PILLARS, type: "image/png" }],
+  },
 };
 
 export default async function RootLayout({

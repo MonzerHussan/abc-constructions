@@ -1,13 +1,6 @@
-import type { Metadata } from "next";
-import LandingFrame from "@/components/landing/LandingFrame";
+import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title:
-    "Intelligent Projects UAE | AI Solutions, Digital Transformation & Business Consultancy in Dubai",
-  description:
-    "Leading UAE business consultancy providing AI automation, e-commerce development, commercial brokerage, investment advisory, and digital transformation services across Dubai, GCC, and Middle East.",
-};
-
-export default function LandingPage() {
-  return <LandingFrame />;
+/** ABC homepage is the product entry point — not the company landing frame. */
+export default function RootPage() {
+  redirect("/projects/ABC");
 }

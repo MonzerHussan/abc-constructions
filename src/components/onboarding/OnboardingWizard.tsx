@@ -1,49 +1,74 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardBody } from "@/components/ui/card";
+import { useSession } from "next-auth/react";
 import { useLanguage } from "@/lib/LanguageContext";
+import { getRoleDefaultRoute, type UserRole } from "@/lib/navigation/types";
+import { toOnboardingAccountType, isIndividualAccountType } from "@/lib/onboarding/account-type-map";
 import { StepIndicator } from "./StepIndicator";
-import { StepAccountType } from "./StepAccountType";
-import { StepDocuments } from "./StepDocuments";
-import { StepSurvey } from "./StepSurvey";
-import { submitOnboarding } from "@/lib/onboarding/api";
+import { StepProfileReview } from "./StepProfileReview";
+import { StepIdentityVerification } from "./StepIdentityVerification";
+import { DynamicSurveyStep } from "./DynamicSurveyStep";
+import { fetchUserMe, submitOnboarding } from "@/lib/onboarding/api";
+import { saveSurveyDataToProfile } from "@/lib/onboarding/survey-client";
+import {
+  buildOnboardingProfileFromSources,
+  clearRegistrationPrefill,
+  loadRegistrationPrefill,
+} from "@/lib/onboarding/prefill-from-registration";
 import type {
   OnboardingState,
   OnboardingProfile,
   OnboardingDocument,
-  OnboardingSurvey,
 } from "@/lib/onboarding/types";
+import type { PublicSectionContent } from "@/modules/onboarding-survey";
+import { isPlatformAccountType } from "@/lib/account-types";
+import AuthPanelLogo from "@/components/homepage/AuthPanelLogo";
+import {
+  AUTH_PANEL_HEADER_SUBTITLE,
+  AUTH_PANEL_HEADER_TITLE,
+} from "@/components/homepage/auth-panel-styles";
+
+const defaultDocuments: OnboardingDocument[] = [
+  {
+    id: "default-commercial",
+    type: "commercialRegistration",
+    file: null,
+    name: "",
+    status: "pending",
+    progress: 0,
+  },
+  {
+    id: "default-national",
+    type: "nationalId",
+    file: null,
+    name: "",
+    status: "pending",
+    progress: 0,
+  },
+];
 
 const initialState: OnboardingState = {
   step: 1,
   profile: {
     accountType: "",
+    platformAccountType: "",
     fullName: "",
     email: "",
     phone: "",
     companyName: "",
+    companyType: "",
+    jobTitle: "",
+    companyDescription: "",
+    country: "",
+    countryCode: "AE",
+    city: "",
+    address: "",
     commercialRegistration: "",
+    requestIdentityVerification: false,
   },
-  documents: [
-    {
-      id: "default-commercial",
-      type: "commercialRegistration",
-      file: null,
-      name: "",
-      status: "pending",
-      progress: 0,
-    },
-    {
-      id: "default-national",
-      type: "nationalId",
-      file: null,
-      name: "",
-      status: "pending",
-      progress: 0,
-    },
-  ],
+  documents: defaultDocuments,
   survey: {
     lookingFor: [],
     selectedCategories: [],
@@ -57,7 +82,7 @@ const initialState: OnboardingState = {
   error: null,
 };
 
-const steps = ["obStep1", "obStep2", "obStep3"];
+const steps = ["obReviewTitle", "obIdentityStep", "obStep3"];
 
 function validateEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -67,12 +92,59 @@ function validatePhone(phone: string): boolean {
   return /^[\+\d\s\-\(\)]{8,}$/.test(phone);
 }
 
-export function OnboardingWizard() {
+interface OnboardingWizardProps {
+  onSectionContentChange?: (content: PublicSectionContent | null) => void;
+}
+
+export function OnboardingWizard(props: OnboardingWizardProps = {}) {
+  const { onSectionContentChange } = props;
   const { t, dir } = useLanguage();
   const router = useRouter();
+  const { data: session } = useSession();
+  const role = (session?.user as { role?: UserRole } | undefined)?.role ?? null;
   const [state, setState] = useState<OnboardingState>(initialState);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [success, setSuccess] = useState<{ trackingId: string } | null>(null);
+  const [success, setSuccess] = useState<{ trackingId: string; goVerification: boolean } | null>(null);
+  const [booting, setBooting] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    const prefill = loadRegistrationPrefill();
+    if (prefill || session?.user) {
+      setState((prev) => ({
+        ...prev,
+        profile: buildOnboardingProfileFromSources({
+          prefill,
+          sessionName: session?.user?.name,
+          sessionEmail: session?.user?.email,
+          sessionRole: role,
+        }),
+      }));
+    }
+    (async () => {
+      try {
+        const user = await fetchUserMe();
+        if (cancelled) return;
+        setState((prev) => ({
+          ...prev,
+          profile: buildOnboardingProfileFromSources({
+            user,
+            prefill,
+            sessionName: session?.user?.name,
+            sessionEmail: session?.user?.email,
+            sessionRole: role,
+          }),
+        }));
+      } catch {
+        /* prefill + session already applied above */
+      } finally {
+        if (!cancelled) setBooting(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [session, role]);
 
   const updateProfile = useCallback((profile: OnboardingProfile) => {
     setState((prev) => ({ ...prev, profile }));
@@ -82,46 +154,40 @@ export function OnboardingWizard() {
     setState((prev) => ({ ...prev, documents }));
   }, []);
 
-  const updateSurvey = useCallback((survey: OnboardingSurvey) => {
-    setState((prev) => ({ ...prev, survey }));
-  }, []);
-
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, string> = {};
+    const { profile } = state;
 
     if (step === 1) {
-      const { profile } = state;
-      if (!profile.accountType) newErrors.accountType = "obRequired";
-      if (!profile.fullName.trim()) newErrors.fullName = "obRequired";
-      if (!profile.companyName.trim()) newErrors.companyName = "obRequired";
+      if (!profile.fullName.trim()) newErrors.fullName = t("obRequired");
       if (!profile.email.trim()) {
-        newErrors.email = "obRequired";
+        newErrors.email = t("obRequired");
       } else if (!validateEmail(profile.email)) {
-        newErrors.email = "obInvalidEmail";
+        newErrors.email = t("obInvalidEmail");
       }
       if (!profile.phone.trim()) {
-        newErrors.phone = "obRequired";
+        newErrors.phone = t("obRequired");
       } else if (!validatePhone(profile.phone)) {
-        newErrors.phone = "obInvalidPhone";
+        newErrors.phone = t("obInvalidPhone");
+      }
+      if (
+        !isIndividualAccountType(profile.platformAccountType || null) &&
+        !profile.companyName.trim()
+      ) {
+        newErrors.companyName = t("obRequired");
+      }
+      if (!profile.companyType.trim()) {
+        newErrors.companyType = t("regTypeRequired");
       }
     }
 
-    if (step === 2) {
-      const uploadedCount = state.documents.filter(
-        (doc) => doc.status === "uploaded"
-      ).length;
-      if (uploadedCount === 0) newErrors.documents = "obDocRequired";
+    if (step === 2 && profile.requestIdentityVerification) {
+      const uploadedCount = state.documents.filter((doc) => doc.status === "uploaded").length;
+      if (uploadedCount === 0) newErrors.documents = t("obDocRequired");
     }
 
     if (step === 3) {
-      const { survey } = state;
-      if (survey.selectedCategories.length === 0)
-        newErrors.selectedCategories = "obRequired";
-      if (survey.subcategories.length === 0)
-        newErrors.subcategories = "obRequired";
-      if (!survey.hasProjects) newErrors.hasProjects = "obRequired";
-      if (!survey.budgetRange) newErrors.budgetRange = "obRequired";
-      if (!survey.urgency) newErrors.urgency = "obRequired";
+      /* Dynamic survey validates per section inside DynamicSurveyStep */
     }
 
     setErrors(newErrors);
@@ -139,15 +205,21 @@ export function OnboardingWizard() {
     setErrors({});
   };
 
-  const handleSubmit = async () => {
-    if (!validateStep(3)) return;
-
+  const handleSurveyComplete = async (surveyAnswers: Record<string, unknown>) => {
     setState((prev) => ({ ...prev, isSubmitting: true, error: null }));
-
     try {
       const response = await submitOnboarding(state);
       if (response.success && response.trackingId) {
-        setSuccess({ trackingId: response.trackingId });
+        await saveSurveyDataToProfile({
+          accountType: state.profile.platformAccountType,
+          answers: surveyAnswers,
+          submittedAt: new Date().toISOString(),
+        }).catch(() => undefined);
+        clearRegistrationPrefill();
+        setSuccess({
+          trackingId: response.trackingId,
+          goVerification: state.profile.requestIdentityVerification,
+        });
       } else {
         setState((prev) => ({
           ...prev,
@@ -164,108 +236,98 @@ export function OnboardingWizard() {
     }
   };
 
-  if (success) {
+  if (booting) {
     return (
-      <Card className="max-w-2xl mx-auto">
-        <CardBody className="p-8 text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-10 h-10 text-green-600"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-primary-500 mb-2">
-            {t("obSuccessTitle")}
-          </h2>
-          <p className="text-surface-600 mb-4">
-            {t("obSuccessMessage")}
-          </p>
-          <p className="text-lg font-bold text-secondary-600 mb-6">
-            {success.trackingId}
-          </p>
-          <button
-            onClick={() => router.push("/contractor")}
-            className="px-8 py-3 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors"
-          >
-            {t("obSuccessCta")}
-          </button>
-        </CardBody>
-      </Card>
+      <div className="flex items-center justify-center py-16">
+        <div className="w-8 h-8 border-4 border-secondary-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (success) {
+    const destination = success.goVerification
+      ? "/projects/ABC/verification"
+      : getRoleDefaultRoute(role);
+    return (
+      <div className="w-full overflow-hidden bg-white border border-surface-200 shadow-2xl p-6 text-center">
+        <h2 className="text-lg font-bold text-primary-500 mb-2">{t("obSuccessTitle")}</h2>
+        <p className="text-xs text-surface-600 mb-4">{t("obSuccessMessage")}</p>
+        <p className="text-sm font-bold text-secondary-600 mb-6">{success.trackingId}</p>
+        <button
+          type="button"
+          onClick={() => router.push(destination)}
+          className="px-6 py-2.5 text-xs font-bold text-white bg-secondary-500 hover:bg-secondary-600"
+        >
+          {t("obSuccessCta")}
+        </button>
+      </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <StepIndicator steps={steps} current={state.step} />
+    <div dir={dir} className="w-full overflow-hidden bg-white border border-surface-200 shadow-2xl">
+      <div className="flex items-center gap-2.5 border-b border-surface-100 px-3 py-2">
+        <AuthPanelLogo alt={t("appName")} />
+        <div className="min-w-0">
+          <p className={AUTH_PANEL_HEADER_TITLE}>{t("obTitle")}</p>
+          <p className={AUTH_PANEL_HEADER_SUBTITLE}>{t("obSubtitle")}</p>
+        </div>
       </div>
 
-      <Card className="overflow-hidden">
-        <CardBody className="p-6 md:p-8">
-          {state.step === 1 && (
-            <StepAccountType
+      <div className="px-3 py-3 space-y-3">
+        <StepIndicator steps={steps} current={state.step} />
+
+        {state.step === 1 && (
+          <StepProfileReview profile={state.profile} onChange={updateProfile} errors={errors} />
+        )}
+        {state.step === 2 && (
+          <StepIdentityVerification
+            profile={state.profile}
+            onProfileChange={updateProfile}
+            documents={state.documents}
+            onDocumentsChange={updateDocuments}
+            errors={errors}
+          />
+        )}
+        {state.step === 3 && isPlatformAccountType(state.profile.platformAccountType) && (
+          <>
+            <p className="text-[10px] text-surface-500">{t("obSurveyAutoSaveHint")}</p>
+            <DynamicSurveyStep
+              platformAccountType={state.profile.platformAccountType}
               profile={state.profile}
-              onChange={updateProfile}
-              errors={errors}
+              onSectionContentChange={onSectionContentChange}
+              onComplete={handleSurveyComplete}
             />
-          )}
-          {state.step === 2 && (
-            <StepDocuments
-              documents={state.documents}
-              onChange={updateDocuments}
-              errors={errors}
-            />
-          )}
-          {state.step === 3 && (
-            <StepSurvey
-              survey={state.survey}
-              onChange={updateSurvey}
-              errors={errors}
-            />
-          )}
+          </>
+        )}
+        {state.step === 3 && !isPlatformAccountType(state.profile.platformAccountType) && (
+          <p className="text-xs text-danger-600">{t("obSelectAccountType")}</p>
+        )}
 
-          {state.error && (
-            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
-              {state.error}
-            </div>
-          )}
+        {state.error && (
+          <div className="bg-danger-50 text-danger-600 text-xs rounded-none px-3 py-2">{state.error}</div>
+        )}
 
-          <div className="mt-8 flex items-center justify-between gap-4">
+        {state.step < 3 && (
+          <div className="flex items-center justify-between gap-2 pt-1">
             <button
+              type="button"
               onClick={handleBack}
               disabled={state.step === 1}
-              className="px-6 py-2.5 border border-surface-300 text-surface-700 rounded-xl font-medium hover:bg-surface-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1.5 text-[11px] font-medium border border-surface-300 text-surface-700 hover:bg-surface-50 disabled:opacity-50"
             >
               {t("obBack")}
             </button>
-
-            {state.step < 3 ? (
-              <button
-                onClick={handleNext}
-                className="px-8 py-2.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors"
-              >
-                {t("obNext")}
-              </button>
-            ) : (
-              <button
-                onClick={handleSubmit}
-                disabled={state.isSubmitting}
-                className="px-8 py-2.5 bg-secondary-500 text-white rounded-xl font-bold hover:bg-secondary-600 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {state.isSubmitting ? t("obSubmitting") : t("obSubmit")}
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={handleNext}
+              className="px-4 py-1.5 text-[11px] font-bold text-white bg-secondary-500 hover:bg-secondary-600"
+            >
+              {t("obNext")}
+            </button>
           </div>
-        </CardBody>
-      </Card>
+        )}
+      </div>
     </div>
   );
 }

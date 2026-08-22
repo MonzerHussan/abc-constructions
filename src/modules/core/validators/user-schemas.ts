@@ -10,6 +10,9 @@ export const SELF_REGISTRATION_ROLES = [
   UserRole.FREELANCER,
   UserRole.SUPPLIER,
   UserRole.TRADER,
+  UserRole.INDIVIDUAL,
+  UserRole.COMPANY,
+  UserRole.ENTITY,
 ] as const;
 
 export const selfRegisterSchema = z.object({
@@ -19,6 +22,10 @@ export const selfRegisterSchema = z.object({
   phone: z.string().optional(),
   role: z.enum(SELF_REGISTRATION_ROLES, { message: 'Invalid role for self-registration' }),
   companyName: z.string().max(200).optional(),
+  companyType: z.string().max(100).optional(),
+  jobTitle: z.string().max(120).optional(),
+  country: z.string().max(100).optional(),
+  city: z.string().max(100).optional(),
 });
 
 export const createUserSchema = z.object({

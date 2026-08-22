@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { entityRegistryService, syncEntityProfileSchema } from '@/modules/entity-registry';
+import { crmBridgeService } from '@/modules/crm';
+import { portalHomeService } from '@/modules/portal';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { validate } from '@/modules/shared/utils/validation';
 import { logger } from '@/modules/shared/utils/logger';
@@ -31,6 +33,34 @@ export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { s
     };
 
     const result = await entityRegistryService.syncEntityProfile(payload);
+
+    // CRM bridge: create/refresh a lead for the onboarded user, keyed by the
+    // unique entity registry ID (idempotent — no duplicate leads on re-sync).
+    try {
+      await crmBridgeService.syncLeadFromEntityRegistry({
+        entity: result.entity,
+        profile: result.profile,
+        userId: sessionUserId,
+      });
+    } catch (bridgeErr) {
+      // CRM must never break onboarding; log and continue.
+      logger.error('CRM lead sync (onboarding) failed', {
+        userId: sessionUserId,
+        error: bridgeErr instanceof Error ? bridgeErr.message : String(bridgeErr),
+      });
+    }
+
+    // Portal bootstrap: map User.role → platform persona and seed org capabilities.
+    try {
+      await portalHomeService.ensurePersonaBootstrap(sessionUserId);
+    } catch (portalErr) {
+      // Portal bootstrap is best-effort; never break onboarding.
+      logger.error('Portal bootstrap (onboarding) failed', {
+        userId: sessionUserId,
+        error: portalErr instanceof Error ? portalErr.message : String(portalErr),
+      });
+    }
+
     return NextResponse.json(success(result), { status: 201 });
   } catch (err) {
     logger.error('sync-entity-profile failed', { error: err instanceof Error ? err.message : String(err) });

@@ -8,6 +8,8 @@ import {
   BarChart3, Megaphone, Scale, TreePine, GraduationCap,
   Settings, Activity,
 } from "lucide-react"
+import AdminSurveyShell from "@/components/admin/AdminSurveyShell"
+import { useLanguage } from "@/lib/LanguageContext"
 
 const departments = [
   {
@@ -141,44 +143,43 @@ const departments = [
 ]
 
 export default function AdminDashboard() {
+  const { t } = useLanguage()
   const [stats, setStats] = useState<any>({})
 
-  useEffect(() => {
+useEffect(() => {
     Promise.all([
       fetch("/api/admin/verifications").then(r => r.ok ? r.json() : []),
-      fetch("/api/organizations").then(r => r.ok ? r.json() : []),
-    ]).then(([verifications, orgs]) => {
+      fetch("/api/admin/organizations").then(r => r.ok ? r.json() : []),
+      fetch("/api/admin/users").then(r => r.ok ? r.json() : []),
+    ]).then(([verifications, orgs, users]) => {
       setStats({
         pendingVerifications: verifications.filter((v: any) => v.status === "PENDING").length,
         totalVerifications: verifications.length,
         organizations: orgs.length,
+        totalUsers: users.length,
+        activeUsers: users.filter((u: any) => u.isActive).length,
       })
     })
   }, [])
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-surface-900">لوحة إدارة المنصة</h1>
-        <p className="text-surface-500 mt-1">Platform Administration Dashboard</p>
-      </div>
-
+    <AdminSurveyShell title={t("adminDashboard")} subtitle={t("adminPlatform")}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white border rounded-xl p-4">
+        <div className="bg-white border border-surface-200 rounded-none p-4">
           <p className="text-2xl font-bold text-surface-900">{stats.pendingVerifications ?? "—"}</p>
-          <p className="text-sm text-surface-500">طلبات توثيق معلقة</p>
+          <p className="text-sm text-surface-500">{t("verificationsPending")}</p>
         </div>
-        <div className="bg-white border rounded-xl p-4">
+        <div className="bg-white border border-surface-200 rounded-none p-4">
           <p className="text-2xl font-bold text-surface-900">{stats.totalVerifications ?? "—"}</p>
-          <p className="text-sm text-surface-500">إجمالي طلبات التوثيق</p>
+          <p className="text-sm text-surface-500">{t("verificationsTotal")}</p>
         </div>
-        <div className="bg-white border rounded-xl p-4">
+        <div className="bg-white border border-surface-200 rounded-none p-4">
           <p className="text-2xl font-bold text-surface-900">{stats.organizations ?? "—"}</p>
-          <p className="text-sm text-surface-500">المؤسسات المسجلة</p>
+          <p className="text-sm text-surface-500">{t("organizationsCount")}</p>
         </div>
-        <div className="bg-white border rounded-xl p-4">
-          <p className="text-2xl font-bold text-surface-900">—</p>
-          <p className="text-sm text-surface-500">المستخدمين النشطين</p>
+        <div className="bg-white border border-surface-200 rounded-none p-4">
+          <p className="text-2xl font-bold text-surface-900">{stats.totalUsers ?? "—"}</p>
+          <p className="text-sm text-surface-500">{t("adminUsers")}</p>
         </div>
       </div>
 
@@ -203,6 +204,6 @@ export default function AdminDashboard() {
           )
         })}
       </div>
-    </div>
+    </AdminSurveyShell>
   )
 }

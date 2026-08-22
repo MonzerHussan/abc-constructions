@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
@@ -12,19 +11,18 @@ import {
   Building2,
   Briefcase,
   GraduationCap,
+  Truck,
   Menu,
   X,
-  User,
   LogOut,
   ChevronDown,
-  Truck,
-  ShieldCheck,
-  Smartphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import AbcLogo from "@/components/AbcLogo";
 import { useLanguage } from "@/lib/LanguageContext";
 import type { TranslationKey } from "@/lib/translations";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { HEADER_LOGOUT_BUTTON } from "@/lib/header-control-styles";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   FileText,
@@ -75,7 +73,6 @@ export default function Navbar() {
   const { data: session, status } = useSession();
   const { t } = useLanguage();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const isLoggedIn = status === "authenticated";
@@ -84,7 +81,6 @@ export default function Navbar() {
     function onClick(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenMenu(null);
-        setUserMenuOpen(false);
       }
     }
     document.addEventListener("mousedown", onClick);
@@ -100,8 +96,8 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center">
-              <Image
-                src="/logo.png"
+              <AbcLogo
+                background="light"
                 alt="ABC"
                 width={64}
                 height={64}
@@ -163,88 +159,30 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {/* Language Switcher */}
+          <div className="flex items-center gap-1.5 shrink-0">
             <LanguageSwitcher />
-
             {isLoggedIn ? (
-              <>
-                <div className="relative">
-                  <button
-                    onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 p-1 rounded-lg hover:bg-surface-100"
-                  >
-                    <div className="w-9 h-9 bg-secondary-100 rounded-full flex items-center justify-center">
-                      <User className="w-5 h-5 text-secondary-600" />
-                    </div>
-                    <ChevronDown className="w-4 h-4 text-surface-500 hidden sm:block" />
-                  </button>
-                  {userMenuOpen && (
-                    <div className="absolute end-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-surface-100 py-2 z-50">
-                      <div className="px-4 py-2 border-b">
-                        <p className="font-medium text-sm">{session?.user?.name || "مستخدم"}</p>
-                        <p className="text-xs text-surface-500">{session?.user?.email}</p>
-                      </div>
-                      <Link
-                        href="/profile"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
-                      >
-                        <User className="w-4 h-4" />
-                        {t("profile")}
-                      </Link>
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
-                      >
-                        <Building2 className="w-4 h-4" />
-                        {t("dashboard")}
-                      </Link>
-                      <Link
-                        href="/projects/ABC/organization"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
-                      >
-                        <Building2 className="w-4 h-4" />
-                        {t("myOrganization")}
-                      </Link>
-                      <Link
-                        href="/projects/ABC/verification"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
-                      >
-                        <ShieldCheck className="w-4 h-4" />
-                        {t("verification")}
-                      </Link>
-                      <Link
-                        href="/projects/ABC/settings/mfa"
-                        onClick={() => setUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-surface-700 hover:bg-surface-50"
-                      >
-                        <Smartphone className="w-4 h-4" />
-                        MFA
-                      </Link>
-                      <hr className="my-1" />
-                      <button onClick={() => signOut({ callbackUrl: "/" })} className="flex items-center gap-2 px-4 py-2 text-sm text-danger-600 hover:bg-danger-50 w-full">
-                        <LogOut className="w-4 h-4" />
-                        {t("logout")}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
+              <button
+                type="button"
+                onClick={() => signOut({ callbackUrl: "/projects/ABC" })}
+                className={HEADER_LOGOUT_BUTTON}
+                aria-label={t("logout")}
+                title={t("logout")}
+              >
+                <LogOut className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline">{t("logout")}</span>
+              </button>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <Link
-                  href="/projects/ABC/auth/login"
-                  className="px-4 py-2 text-sm font-medium text-surface-700 hover:text-surface-900"
+                  href="/projects/ABC?login=1"
+                  className="px-2.5 py-1.5 text-sm font-semibold text-surface-700 hover:text-secondary-600 rounded-none"
                 >
                   {t("login")}
                 </Link>
                 <Link
-                  href="/projects/ABC/auth/register"
-                  className="px-4 py-2 text-sm font-medium bg-secondary-500 text-white rounded-lg hover:bg-secondary-600 transition-colors"
+                  href="/projects/ABC?register=1"
+                  className="px-2.5 py-1.5 text-sm font-semibold bg-secondary-500 text-white rounded-none hover:bg-secondary-600 transition-colors"
                 >
                   {t("register")}
                 </Link>

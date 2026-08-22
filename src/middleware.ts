@@ -2,12 +2,17 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import NextAuth from 'next-auth';
 import { authConfig } from '@/auth.config';
+import {
+  fetchUserOnboardedStatus,
+  isAbcPlatformPath,
+  isPreOnboardingPageAllowed,
+  ONBOARDING_PATH,
+} from '@/lib/onboarding-gate';
+import { isPlatformAdminRole } from '@/lib/auth/platform-admin';
 
 const { auth } = NextAuth(authConfig);
 
 const publicPaths = [
-  '/projects/ABC/auth/login',
-  '/projects/ABC/auth/register',
   '/projects/ABC/auth/forgot-password',
   '/projects/ABC/auth/reset-password',
   '/api/v1/health',
@@ -19,6 +24,7 @@ const publicPaths = [
   '/api/v1/marketplace/categories',
   '/api/v1/marketplace/suppliers',
   '/api/v1/marketplace/compare',
+  '/api/v1/account-types/subcategories/public',
   // Public homepage content (admin writes via /api/admin/homepage/*)
   '/api/homepage',
 ];
@@ -80,6 +86,23 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (shouldSkipAuth(pathname)) return NextResponse.next();
+
+  // Legacy standalone auth pages → inline panels on homepage
+  if (pathname === "/projects/ABC/auth/login") {
+    const url = new URL("/projects/ABC", request.url);
+    url.searchParams.set("login", "1");
+    const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
+    if (callbackUrl) url.searchParams.set("callbackUrl", callbackUrl);
+    return NextResponse.redirect(url);
+  }
+  if (pathname === "/projects/ABC/auth/register") {
+    const url = new URL("/projects/ABC", request.url);
+    url.searchParams.set("register", "1");
+    const category = request.nextUrl.searchParams.get("category");
+    if (category) url.searchParams.set("category", category);
+    return NextResponse.redirect(url);
+  }
+
   if (isPublicPath(pathname)) return NextResponse.next();
 
   if (isApiPath(pathname)) {
@@ -97,16 +120,33 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  const session = await auth();
+
   // Page-level route protection (D6)
   if (isProtectedPage(pathname)) {
-    const session = await auth();
     if (!session?.user) {
-      const loginUrl = new URL('/projects/ABC/auth/login', request.url);
+      const loginUrl = new URL('/projects/ABC', request.url);
+      loginUrl.searchParams.set('login', '1');
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
     // Non-admins still render the page; the admin layout shows an access-denied
     // message instead of silently redirecting to the homepage.
+  }
+
+  // Authenticated users who have not completed onboarding may only reach onboarding
+  // (and password-recovery pages). Guests may still browse the homepage.
+  const sessionRole = (session?.user as { role?: string } | undefined)?.role;
+  if (
+    session?.user &&
+    !isPlatformAdminRole(sessionRole) &&
+    isAbcPlatformPath(pathname) &&
+    !isPreOnboardingPageAllowed(pathname)
+  ) {
+    const onboarded = await fetchUserOnboardedStatus(request);
+    if (!onboarded) {
+      return NextResponse.redirect(new URL(ONBOARDING_PATH, request.url));
+    }
   }
 
   return NextResponse.next();

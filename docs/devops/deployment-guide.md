@@ -18,8 +18,27 @@
 | `AUTH_SECRET` | مفتاح توقيع جلسات Auth.js (32+ حرفاً عشوائياً) | نعم |
 | `AUTH_TRUST_HOST` | `true` عند النشر خلف بروكسي | نعم |
 | `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | بيانات OAuth Google (اختياري) | لا |
+| `AUTH_URL` أو `NEXTAUTH_URL` | عنوان الإنتاج الكامل (مثال: `https://abc-constructions-gray.vercel.app`) | نعم على Vercel |
 
 > استخدم `openssl rand -base64 32` لتوليد `AUTH_SECRET`. لا تضع الأسرار في git أبداً.
+
+### 2.1 Google OAuth على Vercel
+
+1. **Vercel → Project Settings → Environment Variables** (Production + Preview):
+   - `AUTH_GOOGLE_ID`
+   - `AUTH_GOOGLE_SECRET`
+   - `AUTH_URL` = `https://abc-constructions-gray.vercel.app`
+   - `NEXTAUTH_URL` = نفس قيمة `AUTH_URL`
+   - `AUTH_TRUST_HOST` = `true`
+2. **Google Cloud Console → Credentials → OAuth 2.0 Client → Authorized redirect URIs** — أضف:
+   - `https://abc-constructions-gray.vercel.app/api/auth/callback/google`
+   - `http://localhost:3002/api/auth/callback/google` (تطوير محلي)
+3. مزامنة تلقائية من `.env` المحلي:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File scripts/setup-vercel-google-auth.ps1
+   vercel redeploy <آخر-deployment-production>
+   ```
+4. **تحذير:** لا تضف مسافات أو سطر جديد عند لصق `AUTH_GOOGLE_ID` — تسبب خطأ 404 من Google.
 
 ## 3. خطوات النشر
 

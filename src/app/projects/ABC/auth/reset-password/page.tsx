@@ -1,11 +1,11 @@
 ﻿"use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
 import { CheckCircle2, Eye, EyeOff, KeyRound, Loader2, Lock } from "lucide-react"
 import { useLanguage } from "@/lib/LanguageContext"
+import AbcLogo from "@/components/AbcLogo"
 
 function ResetPasswordForm() {
   const { t } = useLanguage()
@@ -69,7 +69,7 @@ function ResetPasswordForm() {
           <span className="font-medium">ØªÙ… ØªØ­Ø¯ÙŠØ« ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ± Ø¨Ù†Ø¬Ø§Ø­</span>
         </div>
         <p>ÙŠÙ…ÙƒÙ†Ùƒ Ø§Ù„Ø¢Ù† ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„ Ø¨ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ± Ø§Ù„Ø¬Ø¯ÙŠØ¯Ø©.</p>
-        <Link href="/projects/ABC/auth/login" className="block text-secondary-600 font-bold hover:text-secondary-700">
+        <Link href="/projects/ABC?login=1" className="block text-secondary-600 font-bold hover:text-secondary-700">
           Ø§Ù„Ø°Ù‡Ø§Ø¨ Ø¥Ù„Ù‰ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„
         </Link>
       </div>
@@ -145,7 +145,7 @@ export default function ResetPasswordPage() {
         <div className="w-full max-w-md">
           <div className="mb-8">
             <Link href="/projects/ABC" className="flex items-center gap-2 mb-6">
-              <Image src="/logo.png" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
+              <AbcLogo background="light" alt={t("appName")} width={40} height={40} priority className="w-10 h-10" />
               <span className="text-xl font-bold text-surface-900">{t("appName")}</span>
             </Link>
             <h1 className="text-2xl font-bold text-surface-900">Ø¥Ø¹Ø§Ø¯Ø© ØªØ¹ÙŠÙŠÙ† ÙƒÙ„Ù…Ø© Ø§Ù„Ù…Ø±ÙˆØ±</h1>

@@ -1,4 +1,39 @@
+import { toOnboardingAccountType } from "@/lib/onboarding/account-type-map";
 import { OnboardingState, OnboardingApiResponse } from "./types";
+
+export interface UserMe {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  role: string;
+  companyName: string | null;
+  companyType: string | null;
+  companyLogo: string | null;
+  country: string | null;
+  city: string | null;
+  address: string | null;
+  bio: string | null;
+  avatar: string | null;
+  location: string | null;
+}
+
+export async function fetchUserMe(): Promise<UserMe> {
+  const res = await fetch("/api/v1/users/me", { cache: "no-store", credentials: "include" });
+  if (!res.ok) throw new Error("Failed to load user profile");
+  const json = (await res.json()) as { data: UserMe };
+  return json.data;
+}
+
+async function patchUserMe(body: Record<string, unknown>): Promise<void> {
+  const res = await fetch("/api/v1/users/me", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error("Failed to update user profile");
+}
 
 /**
  * Real onboarding API service.
@@ -107,8 +142,10 @@ export async function submitOnboarding(
   state: OnboardingState
 ): Promise<OnboardingApiResponse> {
   const { profile, documents, survey } = state;
+  const accountType =
+    profile.accountType || toOnboardingAccountType(profile.platformAccountType);
 
-  if (!profile.accountType || !profile.fullName || !profile.email || !profile.phone) {
+  if (!accountType || !profile.fullName || !profile.email || !profile.phone) {
     return {
       success: false,
       message: "Profile information is incomplete",
@@ -116,8 +153,10 @@ export async function submitOnboarding(
     };
   }
 
-  const uploadedDocs = documents.filter((d) => d.status === "uploaded");
-  if (uploadedDocs.length === 0) {
+  const uploadedDocs = state.profile.requestIdentityVerification
+    ? documents.filter((d) => d.status === "uploaded")
+    : [];
+  if (state.profile.requestIdentityVerification && uploadedDocs.length === 0) {
     return {
       success: false,
       message: "At least one document is required",
@@ -125,26 +164,28 @@ export async function submitOnboarding(
     };
   }
 
-  if (
-    survey.selectedCategories.length === 0 ||
-    survey.subcategories.length === 0 ||
-    !survey.hasProjects ||
-    !survey.budgetRange ||
-    !survey.urgency
-  ) {
-    return {
-      success: false,
-      message: "Survey is incomplete",
-      errors: { survey: "incomplete" },
-    };
-  }
+  /* Dynamic survey validated in DynamicSurveyStep; answers saved via survey-data API */
 
   const { entityType, entitySubtype, crmClassification } =
-    accountTypeToRegistry(profile.accountType);
+    accountTypeToRegistry(accountType);
 
   const languagePreference = htmlLangToLanguagePreference(
     typeof document !== "undefined" ? document.documentElement.lang : "ar"
   );
+
+  await patchUserMe({
+    name: profile.fullName,
+    phone: profile.phone,
+    companyName: profile.companyName || undefined,
+    companyType: profile.companyType || undefined,
+    bio: profile.companyDescription || undefined,
+    country: profile.countryCode || profile.country || undefined,
+    city: profile.city || undefined,
+    address: profile.address || undefined,
+    avatar: profile.avatarUrl,
+    companyLogo: profile.companyLogoUrl,
+    location: profile.location,
+  });
 
   const syncPayload = {
     entity: {
@@ -155,7 +196,7 @@ export async function submitOnboarding(
       contactEmail: profile.email,
       contactPhone: profile.phone,
       languagePreference,
-      location: survey.projectLocations[0] ?? undefined,
+      location: profile.location ?? survey.projectLocations[0] ?? undefined,
       relationshipStatus: "NEW" as const,
       source: "INTERNAL" as const,
       sourceDetail: "onboarding",
@@ -163,7 +204,7 @@ export async function submitOnboarding(
       crmClassification,
     },
     profile: {
-      businessActivity: profile.accountType,
+      businessActivity: accountType,
       companySize: survey.budgetRange,
       relevantCategories: survey.selectedCategories,
       subcategories: survey.subcategories,
@@ -185,12 +226,16 @@ export async function submitOnboarding(
 
 export async function uploadDocument(
   file: File,
-  onProgress: (progress: number) => void
+  onProgress: (progress: number) => void,
+  options?: { purpose?: "verification" },
 ): Promise<{ url: string; name: string }> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     const formData = new FormData();
     formData.append("file", file);
+    if (options?.purpose) {
+      formData.append("purpose", options.purpose);
+    }
 
     xhr.upload.addEventListener("progress", (event) => {
       if (event.lengthComputable) {

@@ -39,9 +39,25 @@ export interface LocalizedHomepageData {
   }>;
   ads: Array<{
     id: string;
+    type: string;
     title: string;
     subtitle: string;
+    body: string;
     imageUrl: string;
+    videoUrl: string | null;
+    posterUrl: string | null;
+    linkUrl: string | null;
+    animation: string;
+  }>;
+  zones: Array<{
+    id: string;
+    type: string;
+    title: string;
+    subtitle: string;
+    body: string;
+    imageUrl: string;
+    videoUrl: string | null;
+    posterUrl: string | null;
     linkUrl: string | null;
     animation: string;
   }>;
@@ -50,21 +66,30 @@ export interface LocalizedHomepageData {
 export async function getHomepageData(
   language: "ar" | "en" | "ur" = "ar",
 ): Promise<LocalizedHomepageData> {
-  const [contentRow, slides, videos, ads] = await Promise.all([
-    prisma.homepageContent.findFirst({ orderBy: { createdAt: "desc" } }),
-    prisma.carouselSlide.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.videoSection.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    }),
-    prisma.ad.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: "asc" },
-    }),
-  ]);
+  let contentRow: Awaited<ReturnType<typeof prisma.homepageContent.findFirst>> = null;
+  let slides: Awaited<ReturnType<typeof prisma.carouselSlide.findMany>> = [];
+  let videos: Awaited<ReturnType<typeof prisma.videoSection.findMany>> = [];
+  let ads: Awaited<ReturnType<typeof prisma.ad.findMany>> = [];
+
+  try {
+    [contentRow, slides, videos, ads] = await Promise.all([
+      prisma.homepageContent.findFirst({ orderBy: { createdAt: "desc" } }),
+      prisma.carouselSlide.findMany({
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.videoSection.findMany({
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+      }),
+      prisma.ad.findMany({
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+      }),
+    ]);
+  } catch (error) {
+    console.error("[homepage] database unavailable, using static defaults", error);
+  }
 
   const d = HOMEPAGE_DEFAULTS;
   const content = contentRow ?? d.content;
@@ -142,6 +167,7 @@ export async function getHomepageData(
     })),
     ads: localizedAds.map((a) => ({
       id: a.id,
+      type: "type" in a && a.type ? String(a.type) : "image",
       title: pickLocale(a.title, a.titleEn ?? a.title, a.titleUr ?? a.title, language),
       subtitle: pickLocale(
         a.subtitle ?? "",
@@ -149,9 +175,42 @@ export async function getHomepageData(
         a.subtitleUr ?? a.subtitle ?? "",
         language,
       ),
+      body:
+        "body" in a && a.body
+          ? pickLocale(
+              String(a.body),
+              ("bodyEn" in a ? a.bodyEn : null) ?? String(a.body),
+              ("bodyUr" in a ? a.bodyUr : null) ?? String(a.body),
+              language,
+            )
+          : "",
       imageUrl: a.imageUrl,
+      videoUrl: "videoUrl" in a ? (a.videoUrl as string | null) : null,
+      posterUrl: "posterUrl" in a ? (a.posterUrl as string | null) : null,
       linkUrl: a.linkUrl,
       animation: a.animation,
+    })),
+    zones: d.zones.map((z) => ({
+      id: z.id,
+      type: z.type,
+      title: pickLocale(z.title, z.titleEn ?? z.title, z.titleUr ?? z.title, language),
+      subtitle: pickLocale(
+        z.subtitle ?? "",
+        z.subtitleEn ?? z.subtitle ?? "",
+        z.subtitleUr ?? z.subtitle ?? "",
+        language,
+      ),
+      body: pickLocale(
+        z.body ?? "",
+        z.bodyEn ?? z.body ?? "",
+        z.bodyUr ?? z.body ?? "",
+        language,
+      ),
+      imageUrl: z.imageUrl,
+      videoUrl: z.videoUrl,
+      posterUrl: z.posterUrl,
+      linkUrl: z.linkUrl,
+      animation: z.animation,
     })),
   };
 }
