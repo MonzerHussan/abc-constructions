@@ -6,13 +6,14 @@ vi.mock("@/lib/prisma", () => ({
       findUnique: vi.fn(),
       create: vi.fn(),
     },
-    userOrganization: {
-      findFirst: vi.fn(),
-    },
-    organization: {
-      findFirst: vi.fn(),
-      create: vi.fn(),
-    },
+  },
+}));
+
+vi.mock("@/modules/core", () => ({
+  orgService: {
+    findPrimaryOrganizationId: vi.fn(),
+    findActiveByName: vi.fn(),
+    createBootstrapOrganization: vi.fn(),
   },
 }));
 
@@ -21,6 +22,7 @@ vi.mock("@/modules/shared/utils/logger", () => ({
 }));
 
 import { prisma } from "@/lib/prisma";
+import { orgService } from "@/modules/core";
 import { CrmBridgeService } from "@/modules/crm/services/CrmBridgeService";
 import type { Entity, Profile } from "@/generated/prisma/client";
 import {
@@ -81,16 +83,7 @@ describe("CrmBridgeService", () => {
     service = new CrmBridgeService();
     vi.clearAllMocks();
     vi.mocked(prisma.lead.findUnique).mockResolvedValue(null);
-    vi.mocked(prisma.userOrganization.findFirst).mockResolvedValue({
-      id: "uo-1",
-      userId: "user-1",
-      organizationId: "org-1",
-      roleId: null,
-      title: null,
-      isPrimary: true,
-      isActive: true,
-      joinedAt: new Date(),
-    });
+    vi.mocked(orgService.findPrimaryOrganizationId).mockResolvedValue("org-1");
     vi.mocked(prisma.lead.create).mockResolvedValue({
       id: "lead-1",
       organizationId: "org-1",
@@ -125,6 +118,7 @@ describe("CrmBridgeService", () => {
 
     expect(result.created).toBe(true);
     expect(result.leadId).toBe("lead-1");
+    expect(orgService.findPrimaryOrganizationId).toHaveBeenCalledWith("user-1");
     expect(prisma.lead.create).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({

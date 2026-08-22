@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { logger } from '@/modules/shared/utils/logger';
 import { eventBus } from '@/modules/shared/events/event-bus';
 import { buildEventName } from '@/modules/shared/events/types';
+import type { OrganizationType } from '@/generated/prisma/client';
 import type { CreateOrgInput } from '@/modules/core/validators/org-schemas';
 
 export class OrganizationService {
@@ -68,6 +69,39 @@ export class OrganizationService {
     return prisma.organization.update({
       where: { id: orgId },
       data: { isVerified: true, verificationLevel: 1 },
+    });
+  }
+
+  /** Primary (or first active) organization for a user — Core SoR for org membership. */
+  async findPrimaryOrganizationId(userId: string): Promise<string | null> {
+    const membership = await prisma.userOrganization.findFirst({
+      where: { userId, isActive: true },
+      orderBy: [{ isPrimary: 'desc' }, { joinedAt: 'asc' }],
+      select: { organizationId: true },
+    });
+    return membership?.organizationId ?? null;
+  }
+
+  async findActiveByName(name: string): Promise<{ id: string } | null> {
+    return prisma.organization.findFirst({
+      where: { name, isActive: true },
+      select: { id: true },
+    });
+  }
+
+  /** System/bootstrap org without owner membership (integration bridges only). */
+  async createBootstrapOrganization(input: {
+    name: string;
+    nameAr?: string;
+    type: OrganizationType;
+  }): Promise<{ id: string }> {
+    return prisma.organization.create({
+      data: {
+        name: input.name,
+        nameAr: input.nameAr,
+        type: input.type,
+      },
+      select: { id: true },
     });
   }
 }

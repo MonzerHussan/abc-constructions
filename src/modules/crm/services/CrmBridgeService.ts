@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
+import { orgService } from "@/modules/core";
 import { logger } from "@/modules/shared/utils/logger";
+import { OrganizationType } from "@/generated/prisma/client";
 import type { Entity, Profile } from "@/generated/prisma/client";
 import { LeadSource } from "@/generated/prisma/client";
 
@@ -44,27 +46,17 @@ function buildLeadNotes(entity: Entity, profile: Profile | null): string {
 export class CrmBridgeService {
   async resolveOrganizationId(userId: string | null | undefined): Promise<string> {
     if (userId) {
-      const membership = await prisma.userOrganization.findFirst({
-        where: { userId, isActive: true },
-        orderBy: [{ isPrimary: "desc" }, { joinedAt: "asc" }],
-        select: { organizationId: true },
-      });
-      if (membership) return membership.organizationId;
+      const orgId = await orgService.findPrimaryOrganizationId(userId);
+      if (orgId) return orgId;
     }
 
-    const existing = await prisma.organization.findFirst({
-      where: { name: PLATFORM_ORG_NAME, isActive: true },
-      select: { id: true },
-    });
+    const existing = await orgService.findActiveByName(PLATFORM_ORG_NAME);
     if (existing) return existing.id;
 
-    const created = await prisma.organization.create({
-      data: {
-        name: PLATFORM_ORG_NAME,
-        nameAr: "منصة ABC",
-        type: "PLATFORM_ADMIN",
-      },
-      select: { id: true },
+    const created = await orgService.createBootstrapOrganization({
+      name: PLATFORM_ORG_NAME,
+      nameAr: "منصة ABC",
+      type: OrganizationType.PLATFORM_ADMIN,
     });
     logger.info("Created platform organization for CRM bridge", { orgId: created.id });
     return created.id;

@@ -1,0 +1,147 @@
+// VS-0 — Platform domain schema (Phase 3)
+// Domain-owned migrations: prisma/platform/migrations/
+// Client output isolated from legacy public schema.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../../src/generated/platform-prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["platform"]
+}
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  PROVISIONING
+
+  @@schema("platform")
+}
+
+enum OutboxStatus {
+  PENDING
+  PUBLISHED
+  FAILED
+
+  @@schema("platform")
+}
+
+model Tenant {
+  id                   String       @id @default(cuid())
+  slug                 String       @unique
+  name                 String
+  status               TenantStatus @default(ACTIVE)
+  /// Legacy Organization.id — opaque UUID reference, no cross-schema FK
+  legacyOrganizationId String?      @unique
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+
+  memberships   TenantMembership[]
+  auditEntries  PlatformAuditEntry[]
+  scopedSecrets TenantScopedSecret[]
+
+  @@schema("platform")
+  @@map("tenant")
+}
+
+model TenantMembership {
+  id        String   @id @default(cuid())
+  tenantId  String
+  /// Legacy User.id — opaque UUID reference, no cross-schema FK
+  userId    String
+  roleKeys  String[] @default([])
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId])
+  @@index([userId])
+  @@schema("platform")
+  @@map("tenant_membership")
+}
+
+/// Tenant-scoped demo resource for VS-0 isolation tests.
+model TenantScopedSecret {
+  id        String   @id @default(cuid())
+  tenantId  String
+  label     String
+  secret    String
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@schema("platform")
+  @@map("tenant_scoped_secret")
+}
+
+model OutboxEvent {
+  id            String       @id @default(cuid())
+  aggregateType String
+  aggregateId   String
+  eventType     String
+  schemaVersion Int          @default(1)
+  payload       Json
+  correlationId String
+  causationId   String?
+  tenantId      String?
+  status        OutboxStatus @default(PENDING)
+  retryCount    Int          @default(0)
+  lastError     String?
+  createdAt     DateTime     @default(now())
+  publishedAt   DateTime?
+
+  @@index([status, createdAt])
+  @@index([correlationId])
+  @@schema("platform")
+  @@map("outbox_event")
+}
+
+model ProcessedEvent {
+  id          String   @id @default(cuid())
+  consumerId  String
+  eventId     String
+  processedAt DateTime @default(now())
+
+  @@unique([consumerId, eventId])
+  @@schema("platform")
+  @@map("processed_event")
+}
+
+/// Append-only platform audit (WORM enforced at service layer).
+model PlatformAuditEntry {
+  id            String   @id @default(cuid())
+  tenantId      String?
+  actorUserId   String?
+  action        String
+  resourceType  String
+  resourceId    String?
+  details       Json?
+  correlationId String?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@index([actorUserId])
+  @@schema("platform")
+  @@map("audit_entry")
+}
+
+model IdempotencyRecord {
+  idempotencyKey String   @id
+  tenantId       String?
+  responseHash   String?
+  createdAt      DateTime @default(now())
+  expiresAt      DateTime
+
+  @@index([expiresAt])
+  @@schema("platform")
+  @@map("idempotency_record")
+}

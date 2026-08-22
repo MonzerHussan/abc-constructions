@@ -5,7 +5,7 @@ import path from 'path';
 const MODULES_DIR = path.resolve(__dirname, '../../src/modules');
 
 const moduleNames = [
-  'core', 'procurement', 'tenders', 'marketplace', 'projects', 'jobs',
+  'core', 'platform', 'procurement', 'tenders', 'marketplace', 'projects', 'jobs',
   'delivery', 'training', 'research', 'crm', 'social', 'notification',
   'workflow', 'rules', 'analytics', 'search', 'storage', 'ai', 'quality', 'financial', 'invoicing',
   'supplier-network', 'product-catalog', 'inventory',
