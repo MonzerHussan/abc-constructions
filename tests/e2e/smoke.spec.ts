@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { openLoginViaLegacyRoute, openRegisterPanel } from './helpers/portal-auth';
 
 test.describe('Security headers & static responses', () => {
   test('landing page loads and serves security headers', async ({ request }) => {
@@ -30,17 +31,17 @@ test.describe('Security headers & static responses', () => {
 
 test.describe('Authentication UI', () => {
   test('login page renders email and password fields', async ({ page }) => {
-    await page.goto('/projects/ABC/auth/login');
+    await openLoginViaLegacyRoute(page);
     await expect(page.getByRole('button', { name: /google/i })).toBeVisible();
     await expect(page.locator('input[type="email"]')).toBeVisible();
     await expect(page.locator('input[type="password"]')).toBeVisible();
   });
 
-test('register page walks the role wizard and renders details form', async ({ page }) => {
-    await page.goto('/projects/ABC/auth/register');
-    await page.locator('div.grid.grid-cols-2 > button').first().click();
-    await page.locator('button[class*="bg-amber-500"]').click();
+  test('register page walks the role wizard and renders details form', async ({ page }) => {
+    await openRegisterPanel(page, 'accountCategoryOwner');
+    await expect(page.locator('input[name="organization"]')).toBeVisible();
     await expect(page.locator('input[type="email"]')).toBeVisible();
-    await expect(page.locator('input[type="password"]')).toBeVisible();
+    await expect(page.locator('input[type="password"]').first()).toBeVisible();
+    await expect(page.getByRole('button', { name: /create|إنشاء/i }).last()).toBeVisible();
   });
 });

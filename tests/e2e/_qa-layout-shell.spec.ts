@@ -1,51 +1,48 @@
 import { test, expect } from "@playwright/test";
+import { openHeaderDropdown, openLoginPanel } from "./helpers/portal-auth";
 
 test.describe("Homepage layout shell (/projects/ABC)", () => {
   test("hero content and CTA render from defaults without seed", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "load" });
+    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
 
-    // Hero region renders even when the DB has no seeded homepage rows
     await expect(page.locator("main")).toBeVisible();
     await expect(page.locator("footer")).toBeVisible();
 
-    // Default CTA labels are always present (HOMEPAGE_DEFAULTS fallback)
-    await expect(page.getByText("ابدأ الآن مجاناً").first()).toBeVisible();
-    await expect(page.getByText("تصفح المناقصات").first()).toBeVisible();
+    // Portal homepage: carousel defaults + header auth controls (replaces legacy hero CTAs)
+    await expect(page.getByText("مناقصات المشاريع").first()).toBeVisible();
+    await expect(page.locator("header button").filter({ hasText: "تسجيل الدخول" }).first()).toBeVisible();
+    await expect(page.locator("header button").filter({ hasText: "إنشاء حساب" }).first()).toBeVisible();
   });
 
   test("navbar menus open on click and show exact items with prefixed links", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "load" });
+    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
 
-    // Bids
-    await page.locator("nav button:has-text('المناقصات')").click();
-    await page.waitForTimeout(250);
-    await expect(page.locator("nav a[href*='/projects/ABC/tenders/']").first()).toBeVisible();
-    const bids = await page.locator("nav div.absolute.top-full a").allTextContents();
-    expect(bids.join("|")).toContain("مناقصات المشاريع");
-    expect(bids.join("|")).toContain("مناقصات المواد");
+    const bids = await openHeaderDropdown(page, "المناقصات");
+    expect(bids.join("|")).toContain("المشاريع");
+    expect(bids.join("|")).toContain("المواد");
+    await expect(page.locator("header a[href*='/projects/ABC/']").first()).toBeVisible();
 
-    // Market
-    await page.locator("nav button:has-text('السوق')").click();
-    await page.waitForTimeout(250);
-    const market = await page.locator("nav div.absolute.top-full a").allTextContents();
-    expect(market.join("|")).toContain("سوق البضائع");
-    expect(market.join("|")).toContain("خدمة التوصيل");
+    const market = await openHeaderDropdown(page, "السوق");
+    expect(market.join("|")).toContain("التوصيل");
+    expect(market.join("|")).toMatch(/المواد|المنتجات/);
 
-    // Community
-    await page.locator("nav button:has-text('المجتمع')").click();
-    await page.waitForTimeout(250);
-    const community = await page.locator("nav div.absolute.top-full a").allTextContents();
+    const community = await openHeaderDropdown(page, "المجتمع");
     expect(community.join("|")).toContain("التدريب");
-    expect(community.join("|")).toContain("التوظيف");
+    expect(community.join("|")).toContain("الوظائف");
   });
 
   test("register and login links point to the platform auth routes", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "load" });
+    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
 
-    const registerLink = page.locator("nav a[href='/projects/ABC/auth/register']").first();
-    await expect(registerLink).toBeVisible();
+    await openLoginPanel(page);
+    await expect(page.getByRole("button", { name: /google/i })).toBeVisible();
 
-    const loginLink = page.locator("nav a[href='/projects/ABC/auth/login']").first();
-    await expect(loginLink).toBeVisible();
+    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
+    await page.locator("header button").filter({ hasText: "إنشاء حساب" }).first().click();
+    await expect(page.locator("header div.absolute.top-full button").first()).toBeVisible({ timeout: 5_000 });
+
+    await page.locator("header div.absolute.top-full button").filter({ hasText: "مورد" }).first().click();
+    await expect(page).toHaveURL(/register=1/);
+    await expect(page.locator('input[type="email"]').first()).toBeVisible();
   });
 });

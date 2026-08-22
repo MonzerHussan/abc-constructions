@@ -1,35 +1,43 @@
 import { test, expect } from "@playwright/test";
+import { expectInlineLoginRedirect, openHeaderDropdown, waitForInlineLogin } from "./helpers/portal-auth";
 
 test.describe("Homepage fixes (/projects/ABC)", () => {
   test("homepage renders default content without DB seed", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "load" });
+    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
 
-    // Default homepage intro content (HOMEPAGE_DEFAULTS fallback) is visible
-    await expect(page.getByText("منصة ABC الشاملة").first()).toBeVisible();
-    await expect(page.getByText("اربط مشاريعك بأفضل المقاولين والمستقلين").first()).toBeVisible();
+    await expect(page.locator("main")).toBeVisible();
+    await expect(page.locator("footer")).toBeVisible();
+
+    // HOMEPAGE_DEFAULTS carousel + left-block vision copy (portal shell)
+    await expect(page.getByText("مناقصات المشاريع").first()).toBeVisible();
+    await expect(page.getByText("رؤيتنا").first()).toBeVisible();
+    await expect(
+      page.getByText(/أن نكون المنصة الرقمية الأولى/).first()
+    ).toBeVisible();
   });
 
   test("marketplace quick access link is available in the header links", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "load" });
+    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
 
-    const marketLink = page.locator("header nav a[href='/projects/ABC/marketplace']").first();
+    const marketItems = await openHeaderDropdown(page, "السوق");
+    expect(marketItems.join("|")).toMatch(/المواد|المنتجات|المشاريع/);
+
+    const marketLink = page.locator("header a[href='/projects/ABC/marketplace']").first();
     await expect(marketLink).toBeVisible();
   });
 
   test("carousel and ads area render placeholder media from defaults", async ({ page }) => {
-    await page.goto("/projects/ABC", { waitUntil: "load" });
+    await page.goto("/projects/ABC", { waitUntil: "domcontentloaded" });
 
-    // Carousel region shows default slide titles even without seed
     await expect(page.getByText("مناقصات المشاريع").first()).toBeVisible();
 
-    // Ads banner region renders (placeholder) — "اشترك الآن" default ad
     const adsText = await page.locator("body").innerText();
     expect(adsText).toContain("اشترك الآن");
   });
 
   test("admin homepage shows access-denied for non-admin (not silently homepage)", async ({ page }) => {
     await page.goto("/projects/ABC/admin/homepage");
-    // unauth -> redirected to login
-    expect(new URL(page.url()).pathname).toBe("/projects/ABC/auth/login");
+    await waitForInlineLogin(page);
+    expectInlineLoginRedirect(page.url());
   });
 });

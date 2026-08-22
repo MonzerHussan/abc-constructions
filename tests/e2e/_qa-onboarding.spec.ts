@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
+import { expectInlineLoginRedirect, openRegisterPanel, submitRegisterInline, waitForInlineLogin } from './helpers/portal-auth';
 
 const base = process.env.E2E_BASE_URL ?? 'http://localhost:3000';
 const stamp = Date.now();
@@ -36,24 +37,8 @@ async function registerSupplier(page: Page, mail: string) {
     }) as any;
     void origClick;
   });
-  await page.goto('/projects/ABC/auth/register');
-  const roleButtons = await page.locator('div.grid.grid-cols-2 > button').all();
-  let clicked = false;
-  for (const b of roleButtons) {
-    const txt = (await b.textContent()) ?? '';
-    if (/supplier|مور|مورد/i.test(txt)) { await b.click(); clicked = true; break; }
-  }
-  if (!clicked) await roleButtons[0].click();
-  await page.getByRole('button', { name: /next|التالي/i }).first().click();
-
-  await page.locator('input[type="text"]').nth(0).fill('QA E2E Supplier');
-  await page.locator('input[type="tel"]').fill('0555123456');
-  await page.locator('input[type="email"]').fill(mail);
-  await page.locator('input[type="password"]').fill(password);
-  await page.locator('input[type="text"]').nth(1).fill('QA Construction Co');
-  await page.locator('input[type="checkbox"]').check();
-  await page.getByRole('button', { name: /create|إنشاء/i }).last().click();
-  await page.waitForLoadState('domcontentloaded');
+  await openRegisterPanel(page, 'accountCategorySupplier');
+  await submitRegisterInline(page, { email: mail, password });
 }
 
 test.describe('QA: full onboarding flow (T1-T4, A1-A5, D1-D2)', () => {
@@ -183,15 +168,15 @@ test.describe('QA: full onboarding flow (T1-T4, A1-A5, D1-D2)', () => {
     // Assert we reached submission state (success screen or persisted onboarding)
     expect(successShown).toBeGreaterThan(0);
 
-    // T4 — Unauthenticated visiting /onboarding → redirected to /auth/login
+    // T4 — Unauthenticated visiting /onboarding → redirected to inline login panel
     const anonCtx = await page.context().browser()!.newContext({
       extraHTTPHeaders: { 'x-forwarded-for': `10.200.${(stamp + 1) % 250}.199` },
     });
     const anonPage = await anonCtx.newPage();
     await anonPage.goto(`${base}/projects/ABC/onboarding`, { waitUntil: 'domcontentloaded' });
-    await anonPage.waitForTimeout(4000);
+    await waitForInlineLogin(anonPage, '/projects/ABC/onboarding');
     console.log('[QA] T4 anon URL:', anonPage.url());
-    expect(anonPage.url().includes('/projects/ABC/auth/login')).toBeTruthy();
+    expectInlineLoginRedirect(anonPage.url(), '/projects/ABC/onboarding');
     await anonCtx.close();
 
     // T3 — Already-onboarded user visiting /onboarding is auto-redirected
