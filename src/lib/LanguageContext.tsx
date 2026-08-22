@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
-import { translations, TranslationKey } from "@/lib/translations";
+import { translations, AnyTranslationKey } from "@/lib/translations";
 import {
   DEFAULT_LOCALE,
   getDir,
@@ -15,7 +15,7 @@ import {
 interface LanguageContextType {
   language: Locale;
   dir: "rtl" | "ltr";
-  t: (key: TranslationKey) => string;
+  t: (key: AnyTranslationKey) => string;
   toggleLanguage: () => void;
   setLanguage: (lang: Locale) => void;
   langLabel: string;
@@ -38,9 +38,9 @@ export function LanguageProvider({
   const dir = getDir(language);
 
   const t = useCallback(
-    (key: TranslationKey): string => {
+    (key: AnyTranslationKey): string => {
       const lang = translations[language] as Record<string, string>;
-      return lang[key] || key;
+      return (lang as Record<string, string>)[key] || key;
     },
     [language]
   );

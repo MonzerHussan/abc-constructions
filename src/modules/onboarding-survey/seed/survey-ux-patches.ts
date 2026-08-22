@@ -27,12 +27,101 @@ export type SurveyUxPatchResult = {
   sectionsDeactivated: number;
   questionsPatched: number;
   questionsMultiEnabled: number;
+  catalogTextFixed: number;
+  supplierSellSplit: number;
 };
+
+const CATALOG_TITLE_AR = "\u0627\u0644\u0643\u0627\u062A\u0627\u0644\u0648\u062C \u0648\u0627\u0644\u0631\u0642\u0645\u0646\u0629";
+const CATALOG_QUESTION_AR =
+  "\u0647\u0644 \u0644\u062F\u064A\u0643\u0645 \u0643\u062A\u0627\u0644\u0648\u062C \u0631\u0642\u0645\u064A \u0644\u0644\u0645\u0646\u062A\u062C\u0627\u062A\u061F";
+
+const SUPPLIER_SELL_OPTIONS = [
+  { value: "manufacturer", labelEn: "Manufacturer", labelAr: "مصنّع" },
+  { value: "exclusive_agent", labelEn: "Exclusive agent", labelAr: "وكيل حصري" },
+  { value: "authorized_dist", labelEn: "Authorized distributor", labelAr: "موزّع معتمد" },
+  { value: "importer", labelEn: "Direct importer", labelAr: "مستورد مباشر" },
+  { value: "stock_supplier", labelEn: "Stock-holding supplier", labelAr: "مورّد بمخزون" },
+] as const;
 
 export async function applySurveyUxPatches(): Promise<SurveyUxPatchResult> {
   let sectionsDeactivated = 0;
   let questionsPatched = 0;
   let questionsMultiEnabled = 0;
+  let catalogTextFixed = 0;
+  let supplierSellSplit = 0;
+
+  const supplierTemplate = await prisma.onboardingSurveyTemplate.findUnique({
+    where: { accountType: "SUPPLIER" },
+  });
+  if (supplierTemplate) {
+    const catalogSection = await prisma.onboardingSurveySection.findFirst({
+      where: { templateId: supplierTemplate.id, code: "CATALOG" },
+    });
+    if (catalogSection && catalogSection.titleAr.includes("alog")) {
+      await prisma.onboardingSurveySection.update({
+        where: { id: catalogSection.id },
+        data: { titleAr: CATALOG_TITLE_AR },
+      });
+      catalogTextFixed++;
+    }
+
+    const s10 =
+      catalogSection &&
+      (await prisma.onboardingSurveyQuestion.findFirst({
+        where: { sectionId: catalogSection.id, code: "S10" },
+      }));
+    if (s10 && /alog/i.test(s10.questionTextAr)) {
+      await prisma.onboardingSurveyQuestion.update({
+        where: { id: s10.id },
+        data: { questionTextAr: CATALOG_QUESTION_AR },
+      });
+      catalogTextFixed++;
+    }
+
+    const sell02 = await prisma.onboardingSurveyQuestion.findFirst({
+      where: {
+        code: "SELL-02",
+        isActive: true,
+        section: { templateId: supplierTemplate.id },
+      },
+    });
+    if (sell02) {
+      await prisma.onboardingSurveyQuestion.update({
+        where: { id: sell02.id },
+        data: { isActive: false },
+      });
+      supplierSellSplit++;
+    }
+
+    const marketSection = await prisma.onboardingSurveySection.findFirst({
+      where: { templateId: supplierTemplate.id, code: "MARKET_SELL" },
+    });
+    if (marketSection) {
+      await prisma.onboardingSurveyQuestion.upsert({
+        where: {
+          sectionId_code: { sectionId: marketSection.id, code: "SUP-SELL-02" },
+        },
+        create: {
+          sectionId: marketSection.id,
+          code: "SUP-SELL-02",
+          questionTextEn: "What is your supplier role in these materials?",
+          questionTextAr: "ما طبيعة نشاطكم كمورّد في هذه المواد؟",
+          answerType: "SINGLE_CHOICE",
+          options: SUPPLIER_SELL_OPTIONS as unknown as Prisma.InputJsonValue,
+          sortOrder: 2,
+          isRequired: true,
+          isActive: true,
+        },
+        update: {
+          questionTextEn: "What is your supplier role in these materials?",
+          questionTextAr: "ما طبيعة نشاطكم كمورّد في هذه المواد؟",
+          options: SUPPLIER_SELL_OPTIONS as unknown as Prisma.InputJsonValue,
+          isActive: true,
+        },
+      });
+      supplierSellSplit++;
+    }
+  }
 
   for (const accountType of PLATFORM_ACCOUNT_TYPE_IDS) {
     const template = await prisma.onboardingSurveyTemplate.findUnique({
@@ -132,7 +221,7 @@ export async function applySurveyUxPatches(): Promise<SurveyUxPatchResult> {
     }
   }
 
-  return { sectionsDeactivated, questionsPatched, questionsMultiEnabled };
+  return { sectionsDeactivated, questionsPatched, questionsMultiEnabled, catalogTextFixed, supplierSellSplit };
 }
 
 /** Re-run template upsert orphans cleanup for one account type. */

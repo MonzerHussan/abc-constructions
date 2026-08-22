@@ -39,7 +39,7 @@ export interface SmartNavigationState {
 export const ROLE_DEFAULT_ROUTE: Record<UserRole, string> = {
   OWNER: "/projects/ABC/projects",
   CONSULTANT: "/projects/ABC/projects",
-  CONTRACTOR: "/projects/ABC/projects",
+CONTRACTOR: "/projects/ABC/contractor",
   SUBCONTRACTOR: "/projects/ABC/projects",
   WORKSHOP: "/projects/ABC/projects",
   FREELANCER: "/projects/ABC/jobs",

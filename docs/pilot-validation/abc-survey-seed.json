@@ -3879,7 +3879,6 @@
     {
       "code": "SELL-02",
       "accountTypes": [
-        "SUPPLIER",
         "TRADER"
       ],
       "sectionCode": "MARKET_SELL",
@@ -3887,8 +3886,8 @@
       "sectionTitleEn": "What You Sell & How",
       "sectionOrder": 20,
       "questionOrder": 2,
-      "textAr": "ما طبيعة نشاطكم في هذه المواد؟",
-      "textEn": "What is your role in these materials?",
+      "textAr": "ما طبيعة نشاطكم كتاجر في هذه المواد؟",
+      "textEn": "What is your trading role in these materials?",
       "answerType": "SINGLE_CHOICE",
       "required": true,
       "showIf": null,
@@ -3931,7 +3930,57 @@
         }
       ],
       "scale": null,
-      "note": "الفارق الحقيقي بين المورّد والتاجر — يحدد الثقة والسعر"
+      "note": "خيارات التاجر فقط — لا تظهر في استبيان المورد"
+    },
+    {
+      "code": "SUP-SELL-02",
+      "accountTypes": [
+        "SUPPLIER"
+      ],
+      "sectionCode": "MARKET_SELL",
+      "sectionTitleAr": "ما تبيعونه وكيف تبيعونه",
+      "sectionTitleEn": "What You Sell & How",
+      "sectionOrder": 20,
+      "questionOrder": 2,
+      "textAr": "ما طبيعة نشاطكم كمورّد في هذه المواد؟",
+      "textEn": "What is your supplier role in these materials?",
+      "answerType": "SINGLE_CHOICE",
+      "required": true,
+      "showIf": null,
+      "options": [
+        {
+          "value": "manufacturer",
+          "labelAr": "مصنّع",
+          "labelEn": "Manufacturer",
+          "order": 1
+        },
+        {
+          "value": "exclusive_agent",
+          "labelAr": "وكيل حصري",
+          "labelEn": "Exclusive agent",
+          "order": 2
+        },
+        {
+          "value": "authorized_dist",
+          "labelAr": "موزّع معتمد",
+          "labelEn": "Authorized distributor",
+          "order": 3
+        },
+        {
+          "value": "importer",
+          "labelAr": "مستورد مباشر",
+          "labelEn": "Direct importer",
+          "order": 4
+        },
+        {
+          "value": "stock_supplier",
+          "labelAr": "مورّد بمخزون",
+          "labelEn": "Stock-holding supplier",
+          "order": 5
+        }
+      ],
+      "scale": null,
+      "note": "خيارات المورد فقط — بدون تاجر جملة/تجزئة"
     },
     {
       "code": "SELL-03",
@@ -6503,6 +6552,12 @@
     }
   ],
   "editsToExistingQuestions": [
+    {
+      "op": "DELETE",
+      "accountType": "SUPPLIER",
+      "code": "SELL-02",
+      "reason": "SELL-02 مخصص للتاجر — استبدل بـ SUP-SELL-02 للمورد"
+    },
     {
       "op": "RECODE",
       "accountType": "CONTRACTOR",

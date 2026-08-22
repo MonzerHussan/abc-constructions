@@ -66,13 +66,13 @@ export function supplierSections(): SeedSection[] {
     {
       code: 'CATALOG',
       titleEn: 'Catalog & Digital',
-      titleAr: 'الكتalog والرقمنة',
+      titleAr: '\u0627\u0644\u0643\u0627\u062A\u0627\u0644\u0648\u062C \u0648\u0627\u0644\u0631\u0642\u0645\u0646\u0629',
       sortOrder: 2,
       questions: [
         {
           code: 'S10',
           questionTextEn: 'Digital product catalog?',
-          questionTextAr: 'كتalog رقمي للمنتجات؟',
+          questionTextAr: '\u0647\u0644 \u0644\u062F\u064A\u0643\u0645 \u0643\u062A\u0627\u0644\u0648\u062C \u0631\u0642\u0645\u064A \u0644\u0644\u0645\u0646\u062A\u062C\u0627\u062A\u061F',
           answerType: 'SINGLE_CHOICE',
           options: YES_NO,
           sortOrder: 0,
@@ -177,7 +177,7 @@ export function supplierSections(): SeedSection[] {
     humanCapitalPlugIn('HC0'),
     aiDigitalSection(6),
     platformValueSection([
-      ['catalog', 'Digital catalog', 'كتalog رقمي'],
+      ['catalog', 'Digital catalog', '\u0643\u062A\u0627\u0644\u0648\u062C \u0631\u0642\u0645\u064A'],
       ['orders', 'Online orders', 'طلبات'],
       ['logistics', 'Delivery matching', 'مطابقة توصيل'],
       ['analytics', 'Sales analytics', 'تحليلات'],

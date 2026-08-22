@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { entityRegistryService, syncEntityProfileSchema } from '@/modules/entity-registry';
 import { crmBridgeService } from '@/modules/crm';
+import { portalHomeService } from '@/modules/portal';
 import { success, error } from '@/modules/shared/utils/response-envelope';
 import { validate } from '@/modules/shared/utils/validation';
 import { logger } from '@/modules/shared/utils/logger';
@@ -46,6 +47,17 @@ export const POST = withAuth(async (request: NextRequest, { sessionUserId }: { s
       logger.error('CRM lead sync (onboarding) failed', {
         userId: sessionUserId,
         error: bridgeErr instanceof Error ? bridgeErr.message : String(bridgeErr),
+      });
+    }
+
+    // Portal bootstrap: map User.role → platform persona and seed org capabilities.
+    try {
+      await portalHomeService.ensurePersonaBootstrap(sessionUserId);
+    } catch (portalErr) {
+      // Portal bootstrap is best-effort; never break onboarding.
+      logger.error('Portal bootstrap (onboarding) failed', {
+        userId: sessionUserId,
+        error: portalErr instanceof Error ? portalErr.message : String(portalErr),
       });
     }
 

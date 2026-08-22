@@ -310,6 +310,50 @@ model Organization {
   supplierReviews       SupplierReview[]         @relation("OrgSupplierReviews")
   favoriteProducts      FavoriteProduct[]        @relation("OrgFavoriteProducts")
   favoriteSuppliers     FavoriteSupplier[]       @relation("OrgFavoriteSuppliers")
+  personas              OrganizationPersona[]
+  capabilities          OrganizationCapability[]
+}
+
+// ============================
+// Portal Persona / Capability (OS entry — Phase 1: Contractor)
+// ============================
+
+enum PortalCapability {
+  PROCUREMENT
+  TENDERING
+  MARKETPLACE
+  PROJECTS
+  WORKFORCE
+  TRAINING
+  SERVICES
+  COMPLIANCE
+}
+
+model OrganizationPersona {
+  id             String             @id @default(cuid())
+  organizationId String
+  persona        PlatformAccountType
+  isPrimary      Boolean            @default(false)
+  isActive       Boolean            @default(true)
+  activatedAt    DateTime           @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, persona])
+  @@index([organizationId])
+}
+
+model OrganizationCapability {
+  id             String           @id @default(cuid())
+  organizationId String
+  capability     PortalCapability
+  enabled        Boolean          @default(true)
+  source         String
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, capability])
+  @@index([organizationId])
 }
 
 model UserOrganization {
