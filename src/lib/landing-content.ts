@@ -68,21 +68,27 @@ export const SERVICES = [
     title: "AI Solutions & Automation",
     description:
       "Leverage cutting-edge AI to automate processes, enhance decision-making, and scale operations efficiently.",
+    href: `${PLATFORM_SERVICES}/ai-solutions-automation`,
     features: [
-      "Process automation & workflow optimization",
-      "AI-powered analytics and decision support",
-      "Integration with existing business systems",
+      "Intelligent process automation",
+      "Predictive analytics & decision support",
+      "Custom AI model development",
+      "Workflow & chatbot integration",
     ],
-    href: PLATFORM_HOME,
   },
   {
-    slug: "ecommerce-solutions",
+    slug: "e-commerce-solutions",
     image: "/assets/ecommerce-BQudAQvV.jpg",
     title: "E-commerce Solutions",
     description:
       "End-to-end e-commerce solutions from setup to optimization, including marketplace integration and digital storefronts.",
-    features: ["Store setup & customization", "Marketplace integration", "Conversion optimization"],
-    href: PLATFORM_MARKETPLACE,
+    href: `${PLATFORM_SERVICES}/e-commerce-solutions`,
+    features: [
+      "Storefront design & development",
+      "Marketplace integration",
+      "Payments & logistics setup",
+      "Conversion & growth optimization",
+    ],
   },
   {
     slug: "management-consultancy",
@@ -90,8 +96,13 @@ export const SERVICES = [
     title: "Management Consultancy",
     description:
       "Strategic business planning, process optimization, and operational excellence to drive growth and efficiency.",
-    features: ["Strategic planning", "Process optimization", "Operational excellence"],
-    href: PLATFORM_HOME,
+    href: `${PLATFORM_SERVICES}/management-consultancy`,
+    features: [
+      "Strategic business planning",
+      "Process optimization",
+      "Operational excellence",
+      "Leadership & organizational development",
+    ],
   },
   {
     slug: "marketing-consultancy",
@@ -99,8 +110,13 @@ export const SERVICES = [
     title: "Marketing Consultancy",
     description:
       "Data-driven marketing strategies, digital campaigns, and brand positioning for maximum market impact.",
-    features: ["Digital marketing strategy", "Brand positioning", "Campaign management"],
-    href: PLATFORM_HOME,
+    href: `${PLATFORM_SERVICES}/marketing-consultancy`,
+    features: [
+      "Data-driven marketing strategy",
+      "Digital campaign management",
+      "Brand positioning",
+      "Performance analytics",
+    ],
   },
   {
     slug: "investment-advisory",
@@ -108,8 +124,13 @@ export const SERVICES = [
     title: "Investment Advisory",
     description:
       "Expert guidance on investment opportunities, portfolio management, and strategic financial planning.",
-    features: ["Investment opportunities", "Portfolio guidance", "Financial planning"],
-    href: PLATFORM_HOME,
+    href: `${PLATFORM_SERVICES}/investment-advisory`,
+    features: [
+      "Investment opportunity assessment",
+      "Portfolio management",
+      "Strategic financial planning",
+      "Risk analysis & mitigation",
+    ],
   },
   {
     slug: "commercial-brokerage",
@@ -117,8 +138,13 @@ export const SERVICES = [
     title: "Commercial Brokerage",
     description:
       "Professional facilitation of business transactions, mergers, acquisitions, and strategic partnerships.",
-    features: ["M&A facilitation", "Strategic partnerships", "Transaction advisory"],
-    href: PLATFORM_HOME,
+    href: `${PLATFORM_SERVICES}/commercial-brokerage`,
+    features: [
+      "Business transactions facilitation",
+      "Mergers & acquisitions advisory",
+      "Strategic partnerships",
+      "Due diligence & valuations",
+    ],
   },
 ];
 
@@ -171,18 +197,18 @@ export const COMPANY_PROJECTS = [
 export const QUICK_LINKS = [
   { label: "Home", href: PLATFORM_HOME },
   { label: "About Us", href: PLATFORM_HOME },
-  { label: "Our Services", href: PLATFORM_HOME },
+  { label: "Our Services", href: PLATFORM_SERVICES },
   { label: "Our Projects", href: PLATFORM_PROJECTS },
   { label: "Contact Us", href: PLATFORM_HOME },
 ];
 
 export const FOOTER_SERVICES = [
-  { label: "AI Solutions & Automation", href: PLATFORM_HOME },
-  { label: "E-commerce Solutions", href: PLATFORM_MARKETPLACE },
-  { label: "Commercial Brokerage", href: PLATFORM_HOME },
-  { label: "Investment Advisory", href: PLATFORM_HOME },
-  { label: "Management Consultancy", href: PLATFORM_HOME },
-  { label: "Marketing Consultancy", href: PLATFORM_HOME },
+  { label: "AI Solutions & Automation", href: `${PLATFORM_SERVICES}/ai-solutions-automation` },
+  { label: "E-commerce Solutions", href: `${PLATFORM_SERVICES}/e-commerce-solutions` },
+  { label: "Commercial Brokerage", href: `${PLATFORM_SERVICES}/commercial-brokerage` },
+  { label: "Investment Advisory", href: `${PLATFORM_SERVICES}/investment-advisory` },
+  { label: "Management Consultancy", href: `${PLATFORM_SERVICES}/management-consultancy` },
+  { label: "Marketing Consultancy", href: `${PLATFORM_SERVICES}/marketing-consultancy` },
 ];
 
 export const LEGAL_LINKS = [

@@ -8,18 +8,13 @@ import {
   PLATFORM_LOGIN,
   PLATFORM_REGISTER,
   PLATFORM_PROJECTS,
-  PLATFORM_MARKETPLACE,
+  PLATFORM_SERVICES,
   WHATSAPP,
 } from "@/lib/landing-content";
+import { SERVICES } from "@/lib/landing-content";
 
-const NAV_SERVICES = [
-  { label: "AI Solutions & Automation", href: PLATFORM_HOME },
-  { label: "E-commerce Solutions", href: PLATFORM_MARKETPLACE },
-  { label: "Commercial Brokerage", href: PLATFORM_HOME },
-  { label: "Investment Advisory", href: PLATFORM_HOME },
-  { label: "Management Consultancy", href: PLATFORM_HOME },
-  { label: "Marketing Consultancy", href: PLATFORM_HOME },
-];
+const NAV_SERVICES = SERVICES.map((s) => ({ label: s.title, href: s.href }));
+const NAV_SERVICES_OVERVIEW = { label: "All Services", href: PLATFORM_SERVICES };
 
 const NAV_PROJECTS = [
   { label: "All Projects", href: PLATFORM_PROJECTS },
@@ -49,7 +44,7 @@ export default function LandingHeader() {
             open={open === "services"}
             onOpen={() => setOpen(open === "services" ? null : "services")}
             label="Services"
-            items={NAV_SERVICES}
+            items={[NAV_SERVICES_OVERVIEW, ...NAV_SERVICES]}
           />
           <NavDropdown
             open={open === "projects"}
@@ -92,6 +87,7 @@ export default function LandingHeader() {
           <div className="mx-auto flex max-w-7xl flex-col px-4 py-3">
             <MobileLink href={PLATFORM_HOME} label="Home" onNavigate={() => setOpen(null)} />
             <p className="px-2 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-white/50">Services</p>
+            <MobileLink key={NAV_SERVICES_OVERVIEW.label} href={NAV_SERVICES_OVERVIEW.href} label={NAV_SERVICES_OVERVIEW.label} onNavigate={() => setOpen(null)} />
             {NAV_SERVICES.map((s) => (
               <MobileLink key={s.label} href={s.href} label={s.label} onNavigate={() => setOpen(null)} />
             ))}
