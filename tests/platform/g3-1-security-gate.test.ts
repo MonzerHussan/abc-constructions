@@ -90,7 +90,7 @@ import { PlatformAuditService } from "@/modules/platform/services/PlatformAuditS
 
 describe("G3-1 — Audit trail (100%)", () => {
   it("TEST-AUDIT-01: PlatformAuditService exposes append-only API", () => {
-    const proto = PlatformAuditService.prototype as Record<string, unknown>;
+    const proto = PlatformAuditService.prototype as unknown as Record<string, unknown>;
     expect(typeof proto.append).toBe("function");
     expect(proto.update).toBeUndefined();
     expect(proto.delete).toBeUndefined();

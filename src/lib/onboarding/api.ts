@@ -164,7 +164,18 @@ export async function submitOnboarding(
     };
   }
 
-  /* Dynamic survey validated in DynamicSurveyStep; answers saved via survey-data API */
+  /* Dynamic survey validated in DynamicSurveyStep; defense-in-depth before API calls */
+  const surveyComplete =
+    survey.selectedCategories.length > 0 ||
+    Boolean(survey.hasProjects) ||
+    Boolean(survey.budgetRange);
+  if (!surveyComplete) {
+    return {
+      success: false,
+      message: "Survey information is incomplete",
+      errors: { survey: "incomplete" },
+    };
+  }
 
   const { entityType, entitySubtype, crmClassification } =
     accountTypeToRegistry(accountType);

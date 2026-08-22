@@ -42,22 +42,22 @@ describe("coverage-gaps seed — contractor TRUST_PAYMENTS", () => {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    vi.mocked(prisma.onboardingSurveySection.upsert).mockImplementation(async ({ create }) => ({
-      id: `sec-${create.code}`,
-      templateId: create.templateId,
-      code: create.code,
-      titleEn: create.titleEn,
-      titleAr: create.titleAr,
+    vi.mocked(prisma.onboardingSurveySection.upsert).mockResolvedValue({
+      id: "sec-trust",
+      templateId: "tpl-contractor",
+      code: "TRUST_PAYMENTS",
+      titleEn: "Trust",
+      titleAr: "Trust",
       titleUr: null,
       descriptionEn: null,
       descriptionAr: null,
       descriptionUr: null,
-      sortOrder: create.sortOrder,
+      sortOrder: 1,
       isActive: true,
       showIf: null,
       createdAt: new Date(),
       updatedAt: new Date(),
-    }));
+    } as never);
     vi.mocked(prisma.onboardingSurveyQuestion.upsert).mockResolvedValue({} as never);
     vi.mocked(prisma.onboardingSurveyTemplate.updateMany).mockResolvedValue({ count: 9 });
   });

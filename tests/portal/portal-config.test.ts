@@ -37,22 +37,23 @@ describe('portal persona configs', () => {
 
   it('contractor config has 4 KPI slots and NBA rules', () => {
     const c = getPortalConfig('CONTRACTOR');
-    expect(c.kpiSlots).toHaveLength(4);
-    expect(c.nbaRules.length).toBeGreaterThanOrEqual(3);
-    expect(c.route).toBe('/projects/ABC/contractor');
+    expect(c).toBeDefined();
+    expect(c!.kpiSlots).toHaveLength(4);
+    expect(c!.nbaRules.length).toBeGreaterThanOrEqual(3);
+    expect(c!.route).toBe('/projects/ABC/contractor');
   });
 
   it('trader has distinction banner', () => {
-    expect(getPortalConfig('TRADER').distinctionBannerKey).toBe('portalTraderBanner');
+    expect(getPortalConfig('TRADER')!.distinctionBannerKey).toBe('portalTraderBanner');
   });
 
   it('entity has no procurement KPIs in slots', () => {
-    const slots = getPortalConfig('ENTITY').kpiSlots;
+    const slots = getPortalConfig('ENTITY')!.kpiSlots;
     expect(slots.every((s) => s.capability !== 'PROCUREMENT' || s.resolver === null)).toBe(true);
   });
 
   it('marks comingSoon routes where backend missing', () => {
-    const supplierCatalog = getPortalConfig('SUPPLIER').quickActions.find((a) => a.id === 'catalog');
+    const supplierCatalog = getPortalConfig('SUPPLIER')!.quickActions.find((a) => a.id === 'catalog');
     expect(supplierCatalog?.comingSoon).toBe(true);
   });
 });

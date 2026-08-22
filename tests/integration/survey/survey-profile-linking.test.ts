@@ -89,6 +89,7 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
         countryCode: 'AE',
         city: '',
         address: '',
+        jobTitle: '',
         requestIdentityVerification: false,
       },
       documents: [
@@ -147,6 +148,7 @@ describe('Automatic linking: Onboarding → POST /api/v1/entity-registry/sync-en
         countryCode: 'AE',
         city: '',
         address: '',
+        jobTitle: '',
         requestIdentityVerification: false,
       },
       documents: [
