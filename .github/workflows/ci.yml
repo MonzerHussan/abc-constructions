@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/i18n-encoding]
   pull_request:
     branches: [main]
 
