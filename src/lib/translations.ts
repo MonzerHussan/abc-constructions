@@ -953,7 +953,6 @@ export const translations = {
     portalNavSuppliers: "الموردين",
     portalComingSoon: "قريباً",
     portalNextBestAction: "الخطوة الأفضل التالية",
-    portalRecentActivity: "آخر النشاطات",
     portalRecentEmpty: "لا توجد نشاطات بعد",
     portalRecommendations: "التوصيات",
     portalLoadError: "تعذّر تحميل البوابة",
@@ -2605,7 +2604,6 @@ export const translations = {
     portalNavSuppliers: "Suppliers",
     portalComingSoon: "Coming soon",
     portalNextBestAction: "Next best action",
-    portalRecentActivity: "Recent activity",
     portalRecentEmpty: "No activity yet",
     portalRecommendations: "Recommendations",
     portalLoadError: "Failed to load portal",
@@ -4214,7 +4212,6 @@ export const translations = {
     portalNavSuppliers: "سپلائرز",
     portalComingSoon: "جلد",
     portalNextBestAction: "اگلا بہترین اقدام",
-    portalRecentActivity: "حالیہ سرگرمی",
     portalRecentEmpty: "ابھی کوئی سرگرمی نہیں",
     portalRecommendations: "سفارشات",
     portalLoadError: "پورٹل لوڈ نہیں ہو سکا",
@@ -4914,3 +4911,4 @@ export const translations = {
 } as const;
 
 export type TranslationKey = keyof (typeof translations.ar);
+export type AnyTranslationKey = TranslationKey | (string & {});
